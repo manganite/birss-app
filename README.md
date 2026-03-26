@@ -1,20 +1,25 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# The Birss App
 
-# Run and deploy your AI Studio app
+Analysis of crystallographic point groups and susceptibility tensors based on the principles of symmetry and magnetism established by R.R. Birss.
 
-This contains everything you need to run your app locally.
+### [Live Demo](https://thomaslottermoser.github.io/birss-app/)
 
-View your app in AI Studio: https://ai.studio/apps/50daa442-a890-47d7-84c5-1281b5aed42f
+## Features
+- **Point Group Analysis**: Detailed symmetry classification for all 32 crystallographic point groups.
+- **Tensor Calculation**: Automatic determination of non-zero and independent components for Electric Dipole (ED), Magnetic Dipole (MD), and Electric Quadrupole (EQ) tensors.
+- **SHG Source Terms**: Real-time calculation of induced nonlinear response for different propagation directions ($k \parallel x, y, z$).
+- **Symmetry-Aware Rendering**: Correct mathematical notation with subscripts and superscripts for all physical symbols.
+- **Responsive Design**: Optimized for both desktop and mobile viewing.
 
-## Run Locally
+## Tech Stack
+- **Developed with [Google AI Studio](https://ai.studio/build)** — Built, iterated, and deployed using natural language prompting.
+- **React 19** + **Vite**
+- **Tailwind CSS** for styling
+- **Lucide React** for iconography
+- **GitHub Actions** for automated deployment to GitHub Pages
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Running Locally
+1. Clone the repo: `git clone https://github.com/thomaslottermoser/birss-app.git`
+2. Install dependencies: `npm install`
+3. Start development server: `npm run dev`
+4. Build for production: `npm run build`
