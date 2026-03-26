@@ -1,6 +1,6 @@
 # The Birss App
 
-Analysis of crystallographic point groups and susceptibility tensors based on the principles of symmetry and magnetism established by R.R. Birss.
+Calculates non-zero susceptibility tensor components (Electric Dipole, Magnetic Dipole, Electric Quadrupole) and induced transverse Second Harmonic Generation (SHG) source terms for all 32 crystallographic and 122 magnetic point groups.
 
 ### [Live Demo](https://thomaslottermoser.github.io/birss-app/)
 

@@ -99,14 +99,13 @@ export default function App() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.2em] opacity-50">
               <Zap className="w-3 h-3" />
-              Crystallographic Analysis
+              SHG TENSOR CALCULATOR
             </div>
             <h1 className="text-6xl md:text-8xl font-serif italic tracking-tight leading-none">
               The Birss App
             </h1>
             <p className="max-w-xl text-sm opacity-70 leading-relaxed">
-              Analysis of crystallographic point groups and susceptibility tensors 
-              based on the principles of symmetry and magnetism established by R.R. Birss.
+              Calculates non-zero susceptibility tensor components (Electric Dipole, Magnetic Dipole, Electric Quadrupole) and induced transverse Second Harmonic Generation (SHG) source terms for all 32 crystallographic and 122 magnetic point groups.
             </p>
           </div>
           
@@ -342,19 +341,10 @@ export default function App() {
               <div className="p-8 border border-[#141414] border-opacity-10 space-y-4">
                 <h4 className="text-xs font-bold uppercase tracking-widest">Reference Note</h4>
                 <p className="text-xs opacity-60 leading-relaxed">
-                  The symmetry relations presented here follow the conventions of the International Tables for Crystallography 
-                  and the work of R.R. Birss on "Symmetry and Magnetism". 
+                  The symmetry relations presented here follow the conventions of the International Tables for Crystallography. 
                   {selectedTensorType === 'MD' && " Magnetic Dipole (Axial 3rd rank) tensors do not necessarily vanish in centrosymmetric groups."}
                   {selectedTensorType === 'EQ' && " Electric Quadrupole (Polar 4th rank) tensors survive inversion symmetry."}
                 </p>
-                <a 
-                  href="https://ethz.ch/content/dam/ethz/special-interest/matl/multi-ferroic-materials-dam/documents/education/Nonlinear%20Optics%20on%20Ferroic%20Materials/Birss%20Symmetry%20&%20Magnetism%20komplett.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block text-[10px] uppercase tracking-widest border-b border-[#141414] pb-1 hover:opacity-50 transition-opacity"
-                >
-                  View Reference PDF
-                </a>
               </div>
             </div>
           </motion.div>
@@ -364,7 +354,7 @@ export default function App() {
       {/* Footer */}
       <footer className="mt-24 border-t border-[#141414] p-8 text-center">
         <p className="text-[10px] uppercase tracking-[0.5em] opacity-30">
-          Birss Symmetry Analysis Tool &copy; 2026
+          The Birss App &copy; 2026
         </p>
       </footer>
 
