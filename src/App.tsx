@@ -5,7 +5,7 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Info, Layers, Zap, Hexagon, Box, Triangle, Minus, Compass } from 'lucide-react';
+import { Search, Info, Layers, Zap, Hexagon, Box, Triangle, Minus, Compass, Github } from 'lucide-react';
 import { POINT_GROUPS, PointGroupData } from './data/pointGroups';
 import { 
   calculateTensorComponents, 
@@ -206,8 +206,17 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#E4E3E0] text-[#141414] font-sans selection:bg-[#141414] selection:text-[#E4E3E0]">
       {/* Header */}
-      <header className="border-b border-[#141414] p-8 md:p-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <header className="border-b border-[#141414] p-8 md:p-12 relative">
+        <a 
+          href="https://github.com/thomaslottermoser/birss-app" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="absolute top-8 right-8 md:top-12 md:right-12 opacity-50 hover:opacity-100 transition-opacity"
+          title="View source on GitHub"
+        >
+          <Github className="w-6 h-6" />
+        </a>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8 mt-8 md:mt-0">
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.2em] opacity-50">
               <Zap className="w-3 h-3" />
