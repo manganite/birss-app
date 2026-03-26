@@ -1,0 +1,5 @@
+{
+  "name": "The Birss App",
+  "description": "A crystallographic tool for analyzing point group symmetry operations and nonlinear optical susceptibility tensors (chi) based on Birss symmetry principles.",
+  "requestFramePermissions": []
+}
