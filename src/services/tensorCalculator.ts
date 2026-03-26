@@ -539,3 +539,189 @@ function formatResults(basisResults: number[][], rank: number, isTimeOdd: boolea
 
   return output.length > 0 ? output : ["All components are zero."];
 }
+
+export function getSymmetryOperations(groupName: string): string[] {
+  const generators = GENERATORS[groupName];
+  if (!generators) return [];
+  const group = getFullGroup(generators);
+  
+  const symbols = group.map(m => {
+    const { m: mat, isAntiUnitary } = m;
+    const tr = Math.round(mat[0][0] + mat[1][1] + mat[2][2]);
+    const d = Math.round(det(m));
+    const prime = isAntiUnitary ? "'" : "";
+    let base = "";
+    let axis = "";
+    let sign = "";
+
+    const formatAxis = (x: number, y: number, z: number) => {
+      const max = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
+      if (max < 1e-5) return "";
+      let nx = x / max;
+      let ny = y / max;
+      let nz = z / max;
+      
+      if (nx < -1e-5 || (Math.abs(nx) < 1e-5 && ny < -1e-5) || (Math.abs(nx) < 1e-5 && Math.abs(ny) < 1e-5 && nz < -1e-5)) {
+        nx = -nx; ny = -ny; nz = -nz;
+      }
+      
+      if (Math.abs(nx - 1) < 1e-3 && Math.abs(ny) < 1e-3 && Math.abs(nz) < 1e-3) return "x";
+      if (Math.abs(nx) < 1e-3 && Math.abs(ny - 1) < 1e-3 && Math.abs(nz) < 1e-3) return "y";
+      if (Math.abs(nx) < 1e-3 && Math.abs(ny) < 1e-3 && Math.abs(nz - 1) < 1e-3) return "z";
+      
+      if (Math.abs(nz) < 1e-3) {
+        let angle = Math.round(Math.atan2(ny, nx) * 180 / Math.PI);
+        if (angle < 0) angle += 180;
+        if (angle === 180) angle = 0;
+        return `${angle}°`;
+      }
+
+      let bestMult = 1;
+      let minError = 100;
+      for (let mult = 1; mult <= 6; mult++) {
+         const err = Math.abs(nx*mult - Math.round(nx*mult)) + 
+                     Math.abs(ny*mult - Math.round(ny*mult)) + 
+                     Math.abs(nz*mult - Math.round(nz*mult));
+         if (err < minError) {
+            minError = err;
+            bestMult = mult;
+         }
+      }
+      
+      let rx, ry, rz;
+      if (minError < 0.1) {
+         rx = Math.round(nx * bestMult);
+         ry = Math.round(ny * bestMult);
+         rz = Math.round(nz * bestMult);
+         const formatNum = (n: number) => n < 0 ? `-${Math.abs(n)}` : `${n}`;
+         return `[${formatNum(rx)}${formatNum(ry)}${formatNum(rz)}]`;
+      } else {
+         rx = Number(nx.toFixed(2));
+         ry = Number(ny.toFixed(2));
+         rz = Number(nz.toFixed(2));
+         return `[${rx},${ry},${rz}]`;
+      }
+    };
+
+    if (d === 1) {
+      if (tr === 3) return "1" + prime;
+      if (tr === 2) base = "6";
+      if (tr === 1) base = "4";
+      if (tr === 0) base = "3";
+      if (tr === -1) base = "2";
+
+      if (base === "2") {
+        const rx = mat[0][0] + 1, ry = mat[1][0], rz = mat[2][0];
+        const cx = mat[0][1], cy = mat[1][1] + 1, cz = mat[2][1];
+        const bx = mat[0][2], by = mat[1][2], bz = mat[2][2] + 1;
+        let ax=0, ay=0, az=0;
+        if (Math.abs(rx)>1e-5 || Math.abs(ry)>1e-5 || Math.abs(rz)>1e-5) { ax=rx; ay=ry; az=rz; }
+        else if (Math.abs(cx)>1e-5 || Math.abs(cy)>1e-5 || Math.abs(cz)>1e-5) { ax=cx; ay=cy; az=cz; }
+        else { ax=bx; ay=by; az=bz; }
+        axis = formatAxis(ax, ay, az);
+      } else {
+        const vx = mat[2][1] - mat[1][2];
+        const vy = mat[0][2] - mat[2][0];
+        const vz = mat[1][0] - mat[0][1];
+        axis = formatAxis(vx, vy, vz);
+        
+        let nx = 0, ny = 0, nz = 0;
+        if (axis === "x") nx = 1;
+        else if (axis === "y") ny = 1;
+        else if (axis === "z") nz = 1;
+        else if (axis.includes("°")) {
+          const angle = parseInt(axis) * Math.PI / 180;
+          nx = Math.cos(angle);
+          ny = Math.sin(angle);
+        } else {
+          const match = axis.match(/\[(-?\d)(-?\d)(-?\d)\]/);
+          if (match) {
+            nx = parseInt(match[1]);
+            ny = parseInt(match[2]);
+            nz = parseInt(match[3]);
+          }
+        }
+        
+        const dot = vx * nx + vy * ny + vz * nz;
+        if (dot > 1e-5) sign = "⁺";
+        else if (dot < -1e-5) sign = "⁻";
+      }
+    } else {
+      if (tr === -3) return "-1" + prime;
+      if (tr === -2) base = "-6";
+      if (tr === -1) base = "-4";
+      if (tr === 0) base = "-3";
+      if (tr === 1) base = "m";
+
+      if (base === "m") {
+        const rx = 1 - mat[0][0], ry = -mat[1][0], rz = -mat[2][0];
+        const cx = -mat[0][1], cy = 1 - mat[1][1], cz = -mat[2][1];
+        const bx = -mat[0][2], by = -mat[1][2], bz = 1 - mat[2][2];
+        let ax=0, ay=0, az=0;
+        if (Math.abs(rx)>1e-5 || Math.abs(ry)>1e-5 || Math.abs(rz)>1e-5) { ax=rx; ay=ry; az=rz; }
+        else if (Math.abs(cx)>1e-5 || Math.abs(cy)>1e-5 || Math.abs(cz)>1e-5) { ax=cx; ay=cy; az=cz; }
+        else { ax=bx; ay=by; az=bz; }
+        axis = formatAxis(ax, ay, az);
+      } else {
+        const vx = -(mat[2][1] - mat[1][2]);
+        const vy = -(mat[0][2] - mat[2][0]);
+        const vz = -(mat[1][0] - mat[0][1]);
+        axis = formatAxis(vx, vy, vz);
+        
+        let nx = 0, ny = 0, nz = 0;
+        if (axis === "x") nx = 1;
+        else if (axis === "y") ny = 1;
+        else if (axis === "z") nz = 1;
+        else if (axis.includes("°")) {
+          const angle = parseInt(axis) * Math.PI / 180;
+          nx = Math.cos(angle);
+          ny = Math.sin(angle);
+        } else {
+          const match = axis.match(/\[(-?\d)(-?\d)(-?\d)\]/);
+          if (match) {
+            nx = parseInt(match[1]);
+            ny = parseInt(match[2]);
+            nz = parseInt(match[3]);
+          }
+        }
+        
+        const dot = vx * nx + vy * ny + vz * nz;
+        if (dot > 1e-5) sign = "⁺";
+        else if (dot < -1e-5) sign = "⁻";
+      }
+    }
+
+    return `${base}${axis ? '_' + axis : ''}${sign}${prime}`;
+  });
+
+  const order = ["1", "-1", "2", "3", "4", "6", "-3", "-4", "-6", "m"];
+  return symbols.sort((a, b) => {
+    const getBase = (s: string) => s.replace(/_.*$/, '').replace(/[⁺⁻']/, '');
+    const baseA = getBase(a);
+    const baseB = getBase(b);
+    const idxA = order.indexOf(baseA);
+    const idxB = order.indexOf(baseB);
+    if (idxA !== idxB) return idxA - idxB;
+    
+    const getAxis = (s: string) => {
+      const match = s.match(/_([a-z\[\]0-9-°]+)/);
+      return match ? match[1] : "";
+    };
+    const axisA = getAxis(a);
+    const axisB = getAxis(b);
+    if (axisA !== axisB) return axisA.localeCompare(axisB);
+    
+    const getSign = (s: string) => {
+      if (s.includes("⁺")) return 1;
+      if (s.includes("⁻")) return -1;
+      return 0;
+    };
+    const signA = getSign(a);
+    const signB = getSign(b);
+    if (signA !== signB) return signB - signA;
+    
+    const primeA = a.includes("'") ? 1 : 0;
+    const primeB = b.includes("'") ? 1 : 0;
+    return primeA - primeB;
+  });
+}

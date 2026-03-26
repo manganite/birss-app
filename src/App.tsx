@@ -13,8 +13,28 @@ import {
   isCentrosymmetric,
   calculateSHGExpressions,
   SHGExpression,
-  TensorType
+  TensorType,
+  getSymmetryOperations
 } from './services/tensorCalculator';
+
+const SymmetryOperation = ({ symbol }: { symbol: string }) => {
+  const match = symbol.match(/^(-?\d|m)(?:_([a-z\[\]0-9-°]+))?([⁺⁻])?(')?$/);
+  if (!match) return <span>{symbol}</span>;
+  
+  const [, base, axis, sign, prime] = match;
+  
+  return (
+    <span className="inline-flex items-center font-mono text-xs bg-white/50 px-2 py-1 border border-[#141414] border-opacity-10 rounded-sm">
+      <span>{base}</span>
+      {axis && <sub className="text-[0.7em] ml-0.5 mt-1">{axis}</sub>}
+      {(sign || prime) && (
+        <sup className="text-[0.7em] ml-0.5 -mt-2">
+          {sign === '⁺' ? '+' : sign === '⁻' ? '-' : ''}{prime || ''}
+        </sup>
+      )}
+    </span>
+  );
+};
 
 const TensorTerm = ({ term, isNull }: { term: string; isNull: boolean; key?: any }) => {
   // Split by parts that look like Symbol_Indices(Power)?
@@ -80,6 +100,11 @@ export default function App() {
     if (!selectedGroup) return [];
     return calculateTensorComponents(selectedGroup.name, selectedTensorType, selectedTimeReversal);
   }, [selectedGroup, selectedTensorType, selectedTimeReversal]);
+
+  const currentOperations = useMemo(() => {
+    if (!selectedGroup) return [];
+    return getSymmetryOperations(selectedGroup.name);
+  }, [selectedGroup]);
 
   const [selectedKDir, setSelectedKDir] = useState<'x' | 'y' | 'z'>('z');
 
@@ -190,6 +215,15 @@ export default function App() {
                       {isCentrosymmetric(selectedGroup.name) ? 'Centrosymmetric' : 'Non-Centrosymmetric'}
                     </p>
                     <p className="text-[10px] uppercase tracking-widest opacity-50">Symmetry Type</p>
+                  </div>
+                  
+                  <div className="p-4 border border-[#141414] border-opacity-10 space-y-3">
+                    <p className="text-[10px] uppercase tracking-widest opacity-50">Symmetry Operations ({currentOperations.length})</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {currentOperations.map((op, i) => (
+                        <SymmetryOperation key={i} symbol={op} />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </section>
