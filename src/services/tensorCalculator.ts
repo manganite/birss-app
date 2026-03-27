@@ -259,8 +259,24 @@ export function calculateTensorComponents(groupName: string, tensorType: 'ED' | 
 
   const basisResults: number[][] = [];
   for (let i = 0; i < dim; i++) {
+    const indices = getIndices(i, rank);
+    const swappedIndices = [...indices];
+    const temp = swappedIndices[rank - 1];
+    swappedIndices[rank - 1] = swappedIndices[rank - 2];
+    swappedIndices[rank - 2] = temp;
+    
+    let swappedIdx = 0;
+    for (let r = 0; r < rank; r++) {
+      swappedIdx += swappedIndices[r] * Math.pow(3, rank - 1 - r);
+    }
+    
+    if (i > swappedIdx) continue; // Only process unique pairs
+
     const basisVector = new Array(dim).fill(0);
     basisVector[i] = 1;
+    if (i !== swappedIdx) {
+      basisVector[swappedIdx] = 1; // Symmetrize
+    }
     const averaged = averageTensor(basisVector, group, rank, isAxial, isTimeOdd);
     
     let isNew = true;
@@ -353,7 +369,17 @@ function getIndices(idx: number, rank: number): number[] {
 
 function getLabel(indices: number[]): string {
   const chars = ['x', 'y', 'z'];
-  return 'χ_' + indices.map(i => chars[i]).join('');
+  const sortedIndices = [...indices];
+  if (sortedIndices.length >= 2) {
+    const last = sortedIndices.pop()!;
+    const secondLast = sortedIndices.pop()!;
+    if (last < secondLast) {
+      sortedIndices.push(last, secondLast);
+    } else {
+      sortedIndices.push(secondLast, last);
+    }
+  }
+  return 'χ_' + sortedIndices.map(i => chars[i]).join('');
 }
 
 export function isCentrosymmetric(groupName: string): boolean {
@@ -366,16 +392,23 @@ export function isCentrosymmetric(groupName: string): boolean {
 export interface SHGExpression {
   component: string;
   expression: string;
+  relation?: string;
+}
+
+export interface SHGResult {
+  induced: SHGExpression[];
+  source: SHGExpression[];
 }
 
 export function calculateSHGExpressions(
   groupName: string,
   tensorType: TensorType,
   trType: TensorTimeReversal,
-  kDir: 'x' | 'y' | 'z'
-): SHGExpression[] {
+  thetaX: number = 0,
+  thetaY: number = 0
+): SHGResult {
   const generators = GENERATORS[groupName];
-  if (!generators) return [];
+  if (!generators) return { induced: [], source: [] };
 
   const group = getFullGroup(generators);
   const rank = tensorType === 'EQ' ? 4 : 3;
@@ -383,143 +416,271 @@ export function calculateSHGExpressions(
   const isTimeOdd = trType === 'c';
   const dim = Math.pow(3, rank);
 
-  // Transverse indices
-  const transverse = kDir === 'x' ? [1, 2] : kDir === 'y' ? [0, 2] : [0, 1];
   const tLabels = ['x', 'y', 'z'];
+  
+  const cx = Math.cos(thetaX * Math.PI / 180);
+  const sx = Math.sin(thetaX * Math.PI / 180);
+  const cy = Math.cos(thetaY * Math.PI / 180);
+  const sy = Math.sin(thetaY * Math.PI / 180);
 
-  // We'll build the expressions for each output component
-  // For ED/MD: P_i or M_i (i=0,1,2)
-  // For EQ: Q_ij (i,j=0,1,2)
+  // R maps Crystal to Lab: V_lab = R * V_cryst
+  const R = [
+    [cy, sx * sy, cx * sy],
+    [0, cx, -sx],
+    [-sy, sx * cy, cx * cy]
+  ];
+
+  // E_vec_lab_in_cryst maps Lab E-field (E_X, E_Y, 0) to Crystal E-field
+  // E_cryst_i = R_0i E_X + R_1i E_Y
+  const E_vec_lab_in_cryst = [
+    [R[0][0], R[1][0], 0],
+    [R[0][1], R[1][1], 0],
+    [R[0][2], R[1][2], 0]
+  ];
+
+  const E_vec_full = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+
+  function multiplyLinear(A: number[], B: number[]): Record<string, number> {
+    const res: Record<string, number> = { '00': 0, '11': 0, '22': 0, '01': 0, '02': 0, '12': 0 };
+    for (let i=0; i<3; i++) {
+      for (let m=0; m<3; m++) {
+        const coeff = A[i] * B[m];
+        if (Math.abs(coeff) > 1e-6) {
+          const key = i <= m ? `${i}${m}` : `${m}${i}`;
+          res[key] += coeff;
+        }
+      }
+    }
+    return res;
+  }
+
+  type Poly = Map<string, Map<string, number>>;
+  
+  function addPoly(a: Poly, b: Poly, scaleB: number = 1): Poly {
+    const res: Poly = new Map();
+    const add = (p: Poly, scale: number) => {
+      for (const [chi, pairMap] of p.entries()) {
+        if (!res.has(chi)) res.set(chi, new Map());
+        const resPairMap = res.get(chi)!;
+        for (const [pair, coeff] of pairMap.entries()) {
+          resPairMap.set(pair, (resPairMap.get(pair) || 0) + coeff * scale);
+        }
+      }
+    };
+    add(a, 1);
+    add(b, scaleB);
+    return res;
+  }
+
+  function formatPoly(poly: Poly, isLabFrame: boolean = false): string {
+    const finalParts: string[] = [];
+    const sortedChis = Array.from(poly.keys()).sort();
+    const epsilon = 1e-6;
+
+    for (const chi of sortedChis) {
+      const pairMap = poly.get(chi)!;
+      const fieldParts: { pair: string, coeff: number }[] = [];
+      const sortedPairs = Array.from(pairMap.keys()).sort();
+      for (const pair of sortedPairs) {
+        let coeff = pairMap.get(pair)!;
+        if (Math.abs(coeff) > epsilon) {
+          fieldParts.push({ pair, coeff });
+        }
+      }
+      
+      if (fieldParts.length === 0) continue;
+
+      const fieldLabels: Record<string, string> = isLabFrame ? { 
+        '00': 'E_X²', '11': 'E_Y²', '22': 'E_Z²', 
+        '01': 'E_XE_Y', '02': 'E_XE_Z', '12': 'E_YE_Z' 
+      } : { 
+        '00': 'E_x²', '11': 'E_y²', '22': 'E_z²', 
+        '01': 'E_xE_y', '02': 'E_xE_z', '12': 'E_yE_z' 
+      };
+
+      if (fieldParts.length === 1) {
+        const { pair, coeff } = fieldParts[0];
+        const fieldStr = fieldLabels[pair];
+        if (Math.abs(coeff - 1) < epsilon) finalParts.push(`${chi}${fieldStr}`);
+        else if (Math.abs(coeff + 1) < epsilon) finalParts.push(`-${chi}${fieldStr}`);
+        else finalParts.push(`${Number(coeff.toFixed(3))}${chi}${fieldStr}`);
+      } else {
+        const innerExpr = fieldParts.map((fp, idx) => {
+          const fieldStr = fieldLabels[fp.pair];
+          const c = fp.coeff;
+          let term = "";
+          if (Math.abs(c - 1) < epsilon) term = fieldStr;
+          else if (Math.abs(c + 1) < epsilon) term = `-${fieldStr}`;
+          else term = `${Number(c.toFixed(3))}${fieldStr}`;
+          
+          if (idx > 0 && c > 0) return `+ ${term}`;
+          if (idx > 0 && c < 0) return `- ${term.substring(1)}`;
+          return term;
+        }).join(" ");
+        finalParts.push(`${chi}(${innerExpr})`);
+      }
+    }
+    return finalParts.length > 0 ? finalParts.join(" + ").replace(/\+ -/g, "- ") : "0";
+  }
+
   const outputCount = tensorType === 'EQ' ? 9 : 3;
-  const results: SHGExpression[] = [];
-
-  const longitudinal = kDir === 'x' ? 0 : kDir === 'y' ? 1 : 2;
+  const inducedPolys: Poly[] = [];
+  const inducedPolysLab: Poly[] = [];
+  const inducedExprs: SHGExpression[] = [];
 
   for (let outIdx = 0; outIdx < outputCount; outIdx++) {
     const outIndices = tensorType === 'EQ' ? [Math.floor(outIdx / 3), outIdx % 3] : [outIdx];
-    
     const outLabel = tensorType === 'EQ' ? `Q_${tLabels[outIndices[0]]}${tLabels[outIndices[1]]}` : `${tensorType === 'ED' ? 'P' : 'M'}_${tLabels[outIndices[0]]}`;
     
-    const terms: string[] = [];
-    const epsilon = 1e-6;
+    const terms: Poly = new Map();
+    const termsTransverse: Poly = new Map();
 
-    // Sum over transverse input fields
-    for (let j = 0; j < transverse.length; j++) {
-      for (let k = j; k < transverse.length; k++) {
-        const inJ = transverse[j];
-        const inK = transverse[k];
-        
-        const fullIndices = [...outIndices, inJ, inK];
+    for (let j = 0; j < 3; j++) {
+      for (let k = 0; k < 3; k++) {
+        const fullIndices = [...outIndices, j, k];
         let flatIdx = 0;
         for (let r = 0; r < rank; r++) {
           flatIdx += fullIndices[r] * Math.pow(3, rank - 1 - r);
         }
 
+        const swappedIndices = [...fullIndices];
+        const temp = swappedIndices[rank - 1];
+        swappedIndices[rank - 1] = swappedIndices[rank - 2];
+        swappedIndices[rank - 2] = temp;
+        
+        let swappedIdx = 0;
+        for (let r = 0; r < rank; r++) {
+          swappedIdx += swappedIndices[r] * Math.pow(3, rank - 1 - r);
+        }
+
         const basisVector = new Array(dim).fill(0);
         basisVector[flatIdx] = 1;
+        if (flatIdx !== swappedIdx) {
+          basisVector[swappedIdx] = 1;
+        }
         const averaged = averageTensor(basisVector, group, rank, isAxial, isTimeOdd);
         
-        // Find the "canonical" independent component this maps to
-        // We look for the first index in the averaged vector that is non-zero
-        let foundRelation = "";
+        let foundRelation: { label: string, coeff: number } | null = null;
         for (let i = 0; i < dim; i++) {
-          if (Math.abs(averaged[i]) > epsilon) {
+          if (Math.abs(averaged[i]) > 1e-6) {
             const label = getLabel(getIndices(i, rank));
-            // The value at averaged[i] is the projection. 
-            // If we want to express chi_flatIdx in terms of chi_i, 
-            // we need to know the ratio.
-            // Since averaged = (1/|G|) sum g(basisVector), 
-            // if chi_flatIdx = chi_i, then averaged[flatIdx] = averaged[i].
-            // The coefficient is averaged[flatIdx] / averaged[i] (if they are related)
-            // But wait, it's simpler: the independent components are the basis of the invariant subspace.
-            
             const coeff = averaged[flatIdx] / averaged[i];
-            const sign = coeff > 0 ? "" : "-";
-            const absCoeff = Math.abs(coeff);
-            const coeffStr = Math.abs(absCoeff - 1) < epsilon ? "" : Number(absCoeff.toFixed(2)).toString();
-            
-            const fieldPart = inJ === inK ? `E_${tLabels[inJ]}²` : `2E_${tLabels[inJ]}E_${tLabels[inK]}`;
-            foundRelation = `${sign}${coeffStr}${label}${fieldPart}`;
-            break; 
+            foundRelation = { label, coeff };
+            break;
           }
         }
-        
+
         if (foundRelation) {
-          terms.push(foundRelation);
+          const polyFull = multiplyLinear(E_vec_full[j], E_vec_full[k]);
+          for (const [pair, pCoeff] of Object.entries(polyFull)) {
+            if (Math.abs(pCoeff) > 1e-6) {
+              const totalCoeff = foundRelation.coeff * pCoeff;
+              if (!terms.has(foundRelation.label)) terms.set(foundRelation.label, new Map());
+              const pairMap = terms.get(foundRelation.label)!;
+              pairMap.set(pair, (pairMap.get(pair) || 0) + totalCoeff);
+            }
+          }
+
+          const polyLab = multiplyLinear(E_vec_lab_in_cryst[j], E_vec_lab_in_cryst[k]);
+          for (const [pair, pCoeff] of Object.entries(polyLab)) {
+            if (Math.abs(pCoeff) > 1e-6) {
+              const totalCoeff = foundRelation.coeff * pCoeff;
+              if (!termsTransverse.has(foundRelation.label)) termsTransverse.set(foundRelation.label, new Map());
+              const pairMap = termsTransverse.get(foundRelation.label)!;
+              pairMap.set(pair, (pairMap.get(pair) || 0) + totalCoeff);
+            }
+          }
         }
       }
     }
 
-    if (terms.length > 0) {
-      // Group by chi label to combine field terms
-      const grouped = new Map<string, string[]>();
-      for (const t of terms) {
-        // Match: [sign/coeff][chi_label][field_part]
-        const match = t.match(/^([+-]?[\d.]*)(χ_[xyz]+)(.*)$/);
-        if (match) {
-          const [, coeff, chi, fields] = match;
-          const current = grouped.get(chi) || [];
-          
-          // Handle cases where coeff is just "" or "+" or "-"
-          let c = coeff;
-          if (c === "" || c === "+") c = "1";
-          else if (c === "-") c = "-1";
-          
-          current.push(`${c}*${fields}`);
-          grouped.set(chi, current);
+    inducedPolys.push(terms);
+    inducedPolysLab.push(termsTransverse);
+    inducedExprs.push({
+      component: outLabel,
+      expression: formatPoly(terms)
+    });
+  }
+
+  const sourceExprs: SHGExpression[] = [];
+  
+  function formatRelation(coeffs: number[], labels: string[]): string {
+    const parts: string[] = [];
+    for (let i = 0; i < coeffs.length; i++) {
+      const c = coeffs[i];
+      if (Math.abs(c) > 1e-6) {
+        const absC = Math.abs(c);
+        const cStr = Math.abs(absC - 1) < 1e-6 ? "" : Number(absC.toFixed(3)).toString();
+        const sign = c > 0 ? (parts.length === 0 ? "" : "+ ") : (parts.length === 0 ? "-" : "- ");
+        parts.push(`${sign}${cStr}${labels[i]}`);
+      }
+    }
+    return parts.length > 0 ? parts.join(" ").replace(/\+ -/g, "- ") : "0";
+  }
+
+  const tLabelsLab = ['X', 'Y', 'Z'];
+  for (let I = 0; I < 3; I++) {
+    const outLabel = `S_${tLabelsLab[I]}`;
+    let sPoly: Poly = new Map();
+    let relation = "";
+
+    if (tensorType === 'ED') {
+      const labels = ['P_x', 'P_y', 'P_z'];
+      const coeffs = [0, 0, 0];
+      
+      for (let i = 0; i < 3; i++) {
+        const coeff = R[I][i];
+        coeffs[i] = coeff;
+        sPoly = addPoly(sPoly, inducedPolysLab[i], coeff);
+      }
+      relation = formatRelation(coeffs, labels);
+    } else if (tensorType === 'MD') {
+      const labels = ['M_x', 'M_y', 'M_z'];
+      const coeffs = [0, 0, 0];
+      if (I === 0) {
+        for (let i = 0; i < 3; i++) {
+          const coeff = -R[1][i];
+          coeffs[i] = coeff;
+          sPoly = addPoly(sPoly, inducedPolysLab[i], coeff);
+        }
+      } else if (I === 1) {
+        for (let i = 0; i < 3; i++) {
+          const coeff = R[0][i];
+          coeffs[i] = coeff;
+          sPoly = addPoly(sPoly, inducedPolysLab[i], coeff);
         }
       }
-
-      const finalParts = Array.from(grouped.entries()).map(([chi, fieldList]) => {
-        if (fieldList.length === 1) {
-          const [c, fields] = fieldList[0].split('*');
-          let numC = parseFloat(c);
-          let actualFields = fields;
-          const fieldMatch = fields.match(/^([\d.]+)(.*)$/);
-          if (fieldMatch) {
-            numC *= parseFloat(fieldMatch[1]);
-            actualFields = fieldMatch[2];
-          }
-          
-          if (Math.abs(numC - 1) < epsilon) return `${chi}${actualFields}`;
-          if (Math.abs(numC + 1) < epsilon) return `-${chi}${actualFields}`;
-          return `${numC}${chi}${actualFields}`;
+      
+      relation = formatRelation(coeffs, labels);
+    } else if (tensorType === 'EQ') {
+      const labels = ['Q_xx', 'Q_xy', 'Q_xz', 'Q_yx', 'Q_yy', 'Q_yz', 'Q_zx', 'Q_zy', 'Q_zz'];
+      const coeffs = new Array(9).fill(0);
+      
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          const coeff = R[2][i] * R[I][j];
+          const flatIdx = i * 3 + j;
+          coeffs[flatIdx] = coeff;
+          sPoly = addPoly(sPoly, inducedPolysLab[flatIdx], coeff);
         }
+      }
+      relation = formatRelation(coeffs, labels);
+    }
 
-        const fieldExpr = fieldList
-          .map((f, idx) => {
-            const [c, fields] = f.split('*');
-            const numC = parseFloat(c);
-            let term = "";
-            if (Math.abs(numC - 1) < epsilon) term = fields;
-            else if (Math.abs(numC + 1) < epsilon) term = `-${fields}`;
-            else term = `${numC}${fields}`;
-            
-            if (idx > 0 && numC > 0) {
-              return `+ ${term}`;
-            } else if (idx > 0 && numC < 0) {
-              return `- ${term.substring(1)}`;
-            }
-            return term;
-          })
-          .join(" ");
-        
-        return `${chi}(${fieldExpr})`;
-      });
-
-      results.push({
+    const expr = formatPoly(sPoly, true);
+    if (expr !== "0") {
+      sourceExprs.push({
         component: outLabel,
-        expression: finalParts.join(" + ").replace(/\+ -/g, "- ")
-      });
-    } else {
-      results.push({
-        component: outLabel,
-        expression: "0"
+        expression: expr,
+        relation
       });
     }
   }
 
-  return results;
+  return {
+    induced: inducedExprs,
+    source: sourceExprs
+  };
 }
 
 function formatResults(basisResults: number[][], rank: number, isTimeOdd: boolean): string[] {
@@ -530,15 +691,20 @@ function formatResults(basisResults: number[][], rank: number, isTimeOdd: boolea
   for (const basis of basisResults) {
     const members: string[] = [];
     let leadIdx = -1;
+    const addedLabels = new Set<string>();
     
     for (let i = 0; i < dim; i++) {
       if (Math.abs(basis[i]) > epsilon) {
+        const label = getLabel(getIndices(i, rank));
+        if (addedLabels.has(label)) continue;
+        addedLabels.add(label);
+
         if (leadIdx === -1) leadIdx = i;
         const scale = basis[i] / basis[leadIdx];
         const sign = scale > 0 ? (members.length === 0 ? "" : " = ") : " = -";
         const absScale = Math.abs(scale);
         const scaleStr = Math.abs(absScale - 1) < epsilon ? "" : Number(absScale.toFixed(2)).toString();
-        members.push(`${sign}${scaleStr}${getLabel(getIndices(i, rank))}`);
+        members.push(`${sign}${scaleStr}${label}`);
       }
     }
     

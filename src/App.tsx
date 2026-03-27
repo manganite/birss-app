@@ -44,7 +44,7 @@ const FormatPointGroup = ({ name }: { name: string }) => {
   );
 };
 
-const SymmetryOperation = ({ symbol }: { symbol: string }) => {
+const SymmetryOperation = ({ symbol }: { symbol: string; key?: any }) => {
   const match = symbol.match(/^(-?\d|m)(?:_([a-z\[\]0-9-°]+))?([⁺⁻])?(')?$/);
   if (!match) return <span>{symbol}</span>;
   
@@ -135,7 +135,8 @@ export default function App() {
     return getSymmetryOperations(selectedGroup.name);
   }, [selectedGroup]);
 
-  const [selectedKDir, setSelectedKDir] = useState<'x' | 'y' | 'z'>('z');
+  const [thetaX, setThetaX] = useState<number>(0);
+  const [thetaY, setThetaY] = useState<number>(0);
 
   const tensorMeta = {
     ED: { label: 'Electric Dipole', rank: 'RANK 3', type: 'POLAR' },
@@ -143,65 +144,10 @@ export default function App() {
     EQ: { label: 'Electric Quadrupole', rank: 'RANK 4', type: 'POLAR' },
   };
 
-  const currentExpressions = calculateSHGExpressions(selectedGroup?.name || "", selectedTensorType, selectedTimeReversal, selectedKDir);
+  const currentExpressions = calculateSHGExpressions(selectedGroup?.name || "", selectedTensorType, selectedTimeReversal, thetaX, thetaY);
 
-  const sourceTerms = useMemo(() => {
-    const getExpr = (comp: string) => currentExpressions.find(e => e.component === comp)?.expression || "0";
-    
-    if (selectedTensorType === 'ED') {
-      if (selectedKDir === 'x') {
-        return [
-          { component: 'S_y', expression: getExpr('P_y'), relation: 'P_y' },
-          { component: 'S_z', expression: getExpr('P_z'), relation: 'P_z' }
-        ];
-      } else if (selectedKDir === 'y') {
-        return [
-          { component: 'S_x', expression: getExpr('P_x'), relation: 'P_x' },
-          { component: 'S_z', expression: getExpr('P_z'), relation: 'P_z' }
-        ];
-      } else {
-        return [
-          { component: 'S_x', expression: getExpr('P_x'), relation: 'P_x' },
-          { component: 'S_y', expression: getExpr('P_y'), relation: 'P_y' }
-        ];
-      }
-    } else if (selectedTensorType === 'MD') {
-      if (selectedKDir === 'x') {
-        return [
-          { component: 'S_y', expression: negateExpression(getExpr('M_z')), relation: '-M_z' },
-          { component: 'S_z', expression: getExpr('M_y'), relation: 'M_y' }
-        ];
-      } else if (selectedKDir === 'y') {
-        return [
-          { component: 'S_x', expression: getExpr('M_z'), relation: 'M_z' },
-          { component: 'S_z', expression: negateExpression(getExpr('M_x')), relation: '-M_x' }
-        ];
-      } else {
-        return [
-          { component: 'S_x', expression: negateExpression(getExpr('M_y')), relation: '-M_y' },
-          { component: 'S_y', expression: getExpr('M_x'), relation: 'M_x' }
-        ];
-      }
-    } else if (selectedTensorType === 'EQ') {
-      if (selectedKDir === 'x') {
-        return [
-          { component: 'S_y', expression: getExpr('Q_yx'), relation: 'Q_yx' },
-          { component: 'S_z', expression: getExpr('Q_zx'), relation: 'Q_zx' }
-        ];
-      } else if (selectedKDir === 'y') {
-        return [
-          { component: 'S_x', expression: getExpr('Q_xy'), relation: 'Q_xy' },
-          { component: 'S_z', expression: getExpr('Q_zy'), relation: 'Q_zy' }
-        ];
-      } else {
-        return [
-          { component: 'S_x', expression: getExpr('Q_xz'), relation: 'Q_xz' },
-          { component: 'S_y', expression: getExpr('Q_yz'), relation: 'Q_yz' }
-        ];
-      }
-    }
-    return [];
-  }, [currentExpressions, selectedTensorType, selectedKDir]);
+  const sourceTerms = currentExpressions.source;
+  const inducedTerms = currentExpressions.induced;
 
   return (
     <div className="min-h-screen bg-[#E4E3E0] text-[#141414] font-sans selection:bg-[#141414] selection:text-[#E4E3E0]">
@@ -366,25 +312,6 @@ export default function App() {
                     ))}
                   </div>
                 </div>
-
-                <div className="space-y-3">
-                  <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Propagation Direction (k)</p>
-                  <div className="flex gap-3">
-                    {(['x', 'y', 'z'] as const).map((dir) => (
-                      <button
-                        key={dir}
-                        onClick={() => setSelectedKDir(dir)}
-                        className={`px-8 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-[#141414] ${
-                          selectedKDir === dir 
-                            ? 'bg-[#141414] text-[#E4E3E0]' 
-                            : 'hover:bg-[#141414] hover:text-[#E4E3E0] opacity-50 hover:opacity-100 border-opacity-20'
-                        }`}
-                      >
-                        k ∥ {dir}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
 
               <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
@@ -435,17 +362,17 @@ export default function App() {
 
               <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
                 <Compass className="w-3 h-3" />
-                {selectedTensorType === 'ED' ? 'Induced Polarization' : selectedTensorType === 'MD' ? 'Induced Magnetization' : 'Induced Quadrupole'} (k ∥ {selectedKDir})
+                {selectedTensorType === 'ED' ? 'Induced Polarization' : selectedTensorType === 'MD' ? 'Induced Magnetization' : 'Induced Quadrupole'}
               </div>
 
               <div className="bg-white/50 border border-[#141414] p-8 md:p-12 space-y-8">
                 <div className="flex justify-between items-start">
                   <h3 className="text-3xl font-serif italic">Induced Nonlinear Response</h3>
-                  <div className="text-[10px] font-mono opacity-50">TRANSVERSE FIELDS ONLY</div>
+                  <div className="text-[10px] font-mono opacity-50">FULL FIELD COMPONENTS</div>
                 </div>
 
                 <div className="space-y-6">
-                  {currentExpressions.map((expr, i) => {
+                  {inducedTerms.map((expr, i) => {
                     const isNull = expr.expression === "0";
                     return (
                       <div key={i} className="flex flex-col md:flex-row md:items-center gap-4 border-b border-[#141414] border-opacity-10 pb-4">
@@ -463,13 +390,13 @@ export default function App() {
 
                 <div className="p-4 border border-[#141414] border-dashed text-[10px] uppercase tracking-widest opacity-60 leading-relaxed">
                   Note: This calculation assumes two identical input fields E(ω). 
-                  The transverse condition is strictly enforced: E · k = 0 (E<sub>{selectedKDir}</sub> = 0).
+                  The full electric field vector is considered for the induced response.
                 </div>
               </div>
 
               <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
                 <Compass className="w-3 h-3" />
-                Source Term Components S<sub>i</sub>
+                Source Term Components S (Lab Frame)
               </div>
 
               <div className="bg-white/50 border border-[#141414] p-8 md:p-12 space-y-8">
@@ -478,6 +405,50 @@ export default function App() {
                   <div className="text-[10px] font-mono opacity-50">
                     {selectedTensorType === 'ED' ? 'S ∝ P' : selectedTensorType === 'MD' ? 'S ∝ ∇ × M' : 'S ∝ ∇ · Q'}
                   </div>
+                </div>
+
+                <div className="space-y-6 border-b border-[#141414] border-opacity-10 pb-8">
+                  <div className="flex flex-col md:flex-row gap-8">
+                    <div className="space-y-3">
+                      <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Rotation (θ_X)</p>
+                      <div className="flex gap-3">
+                        {[0, 45, 90].map((angle) => (
+                          <button
+                            key={`x-${angle}`}
+                            onClick={() => setThetaX(angle)}
+                            className={`px-6 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-[#141414] ${
+                              thetaX === angle 
+                                ? 'bg-[#141414] text-[#E4E3E0]' 
+                                : 'hover:bg-[#141414] hover:text-[#E4E3E0] opacity-50 hover:opacity-100 border-opacity-20'
+                            }`}
+                          >
+                            {angle}°
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Rotation (θ_Y)</p>
+                      <div className="flex gap-3">
+                        {[0, 45, 90].map((angle) => (
+                          <button
+                            key={`y-${angle}`}
+                            onClick={() => setThetaY(angle)}
+                            className={`px-6 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-[#141414] ${
+                              thetaY === angle 
+                                ? 'bg-[#141414] text-[#E4E3E0]' 
+                                : 'hover:bg-[#141414] hover:text-[#E4E3E0] opacity-50 hover:opacity-100 border-opacity-20'
+                            }`}
+                          >
+                            {angle}°
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-[9px] uppercase tracking-widest opacity-40 mt-2">
+                    (Rotations are applied in the Lab frame: first θ_X, then θ_Y)
+                  </p>
                 </div>
 
                 <div className="space-y-6">
