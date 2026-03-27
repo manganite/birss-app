@@ -16,6 +16,8 @@ import {
   TensorType,
   getSymmetryOperations
 } from './services/tensorCalculator';
+import 'katex/dist/katex.min.css';
+import { InlineMath } from 'react-katex';
 
 function negateExpression(expr: string): string {
   if (expr === "0") return "0";
@@ -68,29 +70,9 @@ const SymmetryOperation = ({ symbol }: { symbol: string; key?: any }) => {
 const TensorTerm = ({ term, isNull }: { term?: string; isNull: boolean; key?: any }) => {
   if (!term) return null;
   
-  // Split by parts that look like Symbol_Indices(Power)?
-  // e.g. χ_xyz, E_x, E_y², P_x, M_z, S_x, S_X, E_X²
-  // We restrict indices to x, y, z, X, Y, Z to prevent greedy matching of adjacent symbols
-  const parts = term.split(/([χPMQES]_[xyzXYZ]+²?)/);
-
   return (
     <span className={isNull ? 'opacity-30' : 'text-[#141414]'}>
-      {parts.map((part, i) => {
-        const match = part.match(/^([χPMQES])_([xyzXYZ]+)(²)?$/);
-        if (match) {
-          const [, symbol, indices, power] = match;
-          const isChi = symbol === 'χ';
-          
-          return (
-            <span key={i} className={isChi ? 'mr-1.5 inline-block' : ''}>
-              {symbol}
-              <sub className="text-[0.75em] leading-none ml-px font-sans italic">{indices}</sub>
-              {power && <sup className="text-[0.75em] leading-none">{power}</sup>}
-            </span>
-          );
-        }
-        return <span key={i}>{part}</span>;
-      })}
+      <InlineMath math={term} />
     </span>
   );
 };
@@ -329,22 +311,34 @@ export default function App() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                   {currentComponents.map((comp, i) => {
-                    const parts = comp.split('=').map(p => p.trim());
-                    const isNull = comp.toLowerCase().includes('zero') || comp.toLowerCase().includes('none');
+                    const isNull = comp.toLowerCase().includes('zero') || comp.toLowerCase().includes('none') || comp.includes('not supported');
+                    if (isNull) {
+                      return (
+                        <div key={i} className="group border-b border-[#141414] border-opacity-10 pb-4 hover:border-opacity-100 transition-all">
+                          <div className="text-lg font-mono tracking-tighter opacity-30">
+                            {comp}
+                          </div>
+                          <div className="text-[9px] uppercase tracking-[0.2em] opacity-30 mt-1 group-hover:opacity-100">
+                            Null State
+                          </div>
+                        </div>
+                      );
+                    }
                     
+                    const parts = comp.split('=').map(p => p.trim());
                     return (
                       <div key={i} className="group border-b border-[#141414] border-opacity-10 pb-4 hover:border-opacity-100 transition-all">
                         <div className="text-lg font-mono tracking-tighter flex flex-wrap items-baseline gap-2">
-                          <TensorTerm term={parts[0]} isNull={isNull} />
+                          <TensorTerm term={parts[0]} isNull={false} />
                           {parts.length > 1 && parts.slice(1).map((part, pi) => (
                             <div key={pi} className="flex items-baseline gap-2">
-                              <span className="text-xs opacity-30">=</span>
-                              <TensorTerm term={part} isNull={isNull} />
+                              <span className="text-xs opacity-30"><InlineMath math="=" /></span>
+                              <TensorTerm term={part} isNull={false} />
                             </div>
                           ))}
                         </div>
                         <div className="text-[9px] uppercase tracking-[0.2em] opacity-30 mt-1 group-hover:opacity-100">
-                          {isNull ? 'Null State' : 'Active Component'}
+                          Active Component
                         </div>
                       </div>
                     );
@@ -356,7 +350,7 @@ export default function App() {
                     <Info className="w-5 h-5" />
                     <p className="text-xs leading-relaxed italic">
                       In centrosymmetric point groups, all components of the second-order nonlinear susceptibility 
-                      tensor χ<sup>(2)</sup> (Electric Dipole) vanish under the inversion operation.
+                      tensor <InlineMath math="\chi^{(2)}" /> (Electric Dipole) vanish under the inversion operation.
                     </p>
                   </div>
                 )}
@@ -382,7 +376,7 @@ export default function App() {
                           <TensorTerm term={expr.component} isNull={isNull} />
                         </div>
                         <div className="flex-1 font-mono text-xl tracking-tight overflow-x-auto whitespace-nowrap pb-2 md:pb-0">
-                          <span className="opacity-30 mr-4">=</span>
+                          <span className="opacity-30 mr-4"><InlineMath math="=" /></span>
                           <TensorTerm term={expr.expression} isNull={isNull} />
                         </div>
                       </div>
@@ -391,7 +385,7 @@ export default function App() {
                 </div>
 
                 <div className="p-4 border border-[#141414] border-dashed text-[10px] uppercase tracking-widest opacity-60 leading-relaxed">
-                  Note: This calculation assumes two identical input fields E(ω). 
+                  Note: This calculation assumes two identical input fields <InlineMath math="E(\omega)" />. 
                   The full electric field vector is considered for the induced response.
                 </div>
               </div>
@@ -405,14 +399,14 @@ export default function App() {
                 <div className="flex justify-between items-start">
                   <h3 className="text-3xl font-serif italic">Effective Source Terms</h3>
                   <div className="text-[10px] font-mono opacity-50">
-                    {selectedTensorType === 'ED' ? 'S ∝ P' : selectedTensorType === 'MD' ? 'S ∝ ∇ × M' : 'S ∝ ∇ · Q'}
+                    {selectedTensorType === 'ED' ? <InlineMath math="S \propto P" /> : selectedTensorType === 'MD' ? <InlineMath math="S \propto \nabla \times M" /> : <InlineMath math="S \propto \nabla \cdot Q" />}
                   </div>
                 </div>
 
                 <div className="space-y-6 border-b border-[#141414] border-opacity-10 pb-8">
                   <div className="flex flex-col md:flex-row gap-8">
                     <div className="space-y-3">
-                      <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Rotation (θ_X)</p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Rotation (<InlineMath math="\theta_X" />)</p>
                       <div className="flex gap-3">
                         {[0, 45, 90].map((angle) => (
                           <button
@@ -430,7 +424,7 @@ export default function App() {
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Rotation (θ_Y)</p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Rotation (<InlineMath math="\theta_Y" />)</p>
                       <div className="flex gap-3">
                         {[0, 45, 90].map((angle) => (
                           <button
@@ -449,7 +443,7 @@ export default function App() {
                     </div>
                   </div>
                   <p className="text-[9px] uppercase tracking-widest opacity-40 mt-2">
-                    (Rotations are applied in the Lab frame: first θ_X, then θ_Y)
+                    (Rotations are applied in the Lab frame: first <InlineMath math="\theta_X" />, then <InlineMath math="\theta_Y" />)
                   </p>
                 </div>
 
@@ -462,9 +456,9 @@ export default function App() {
                           <TensorTerm term={expr.component} isNull={isNull} />
                         </div>
                         <div className="flex-1 font-mono text-xl tracking-tight overflow-x-auto whitespace-nowrap pb-2 md:pb-0">
-                          <span className="opacity-30 mr-4">∝</span>
+                          <span className="opacity-30 mr-4"><InlineMath math="\propto" /></span>
                           <span className="opacity-50 mr-4"><TensorTerm term={expr.relation} isNull={isNull} /></span>
-                          <span className="opacity-30 mr-4">=</span>
+                          <span className="opacity-30 mr-4"><InlineMath math="=" /></span>
                           <TensorTerm term={expr.expression} isNull={isNull} />
                         </div>
                       </div>
@@ -473,7 +467,7 @@ export default function App() {
                 </div>
 
                 <div className="p-4 border border-[#141414] border-dashed text-[10px] uppercase tracking-widest opacity-60 leading-relaxed">
-                  Note: The incoming light propagates along the Z-axis in the Lab Frame, meaning the electric field is purely transverse (E_Z = 0).
+                  Note: The incoming light propagates along the Z-axis in the Lab Frame, meaning the electric field is purely transverse (<InlineMath math="E_Z = 0" />).
                 </div>
               </div>
 

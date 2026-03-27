@@ -379,7 +379,7 @@ function getLabel(indices: number[]): string {
       sortedIndices.push(secondLast, last);
     }
   }
-  return 'χ_' + sortedIndices.map(i => chars[i]).join('');
+  return '\\chi_{' + sortedIndices.map(i => chars[i]).join('') + '}';
 }
 
 export function isCentrosymmetric(groupName: string): boolean {
@@ -491,11 +491,11 @@ export function calculateSHGExpressions(
       if (fieldParts.length === 0) continue;
 
       const fieldLabels: Record<string, string> = isLabFrame ? { 
-        '00': 'E_X²', '11': 'E_Y²', '22': 'E_Z²', 
-        '01': 'E_XE_Y', '02': 'E_XE_Z', '12': 'E_YE_Z' 
+        '00': 'E_X^2', '11': 'E_Y^2', '22': 'E_Z^2', 
+        '01': 'E_X E_Y', '02': 'E_X E_Z', '12': 'E_Y E_Z' 
       } : { 
-        '00': 'E_x²', '11': 'E_y²', '22': 'E_z²', 
-        '01': 'E_xE_y', '02': 'E_xE_z', '12': 'E_yE_z' 
+        '00': 'E_x^2', '11': 'E_y^2', '22': 'E_z^2', 
+        '01': 'E_x E_y', '02': 'E_x E_z', '12': 'E_y E_z' 
       };
 
       if (fieldParts.length === 1) {
@@ -653,7 +653,7 @@ export function calculateSHGExpressions(
       
       relation = formatRelation(coeffs, labels);
     } else if (tensorType === 'EQ') {
-      const labels = ['Q_xx', 'Q_xy', 'Q_xz', 'Q_yx', 'Q_yy', 'Q_yz', 'Q_zx', 'Q_zy', 'Q_zz'];
+      const labels = ['Q_{xx}', 'Q_{xy}', 'Q_{xz}', 'Q_{yx}', 'Q_{yy}', 'Q_{yz}', 'Q_{zx}', 'Q_{zy}', 'Q_{zz}'];
       const coeffs = new Array(9).fill(0);
       
       for (let i = 0; i < 3; i++) {
