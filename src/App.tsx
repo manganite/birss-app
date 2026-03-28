@@ -33,36 +33,41 @@ function negateExpression(expr: string): string {
 }
 
 const FormatPointGroup = ({ name }: { name: string }) => {
-  const parts = name.split(/(-[1-6])/);
-  return (
-    <>
-      {parts.map((part, i) => {
-        if (part.startsWith('-')) {
-          return <span key={i} className="overline">{part.slice(1)}</span>;
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </>
-  );
+  const latex = name.replace(/-([1-6])/g, '\\bar{$1}');
+  return <InlineMath math={latex} />;
 };
 
 const SymmetryOperation = ({ symbol }: { symbol: string; key?: any }) => {
   const match = symbol.match(/^(-?\d|m)(?:_([a-z\[\]0-9-°]+))?([⁺⁻])?(')?$/);
-  if (!match) return <span>{symbol}</span>;
+  if (!match) return <span className="inline-flex items-center text-xs bg-white/50 px-2 py-1 border border-[#141414] border-opacity-10 rounded-sm"><InlineMath math={symbol} /></span>;
   
   const [, base, axis, sign, prime] = match;
-  const displaySign = sign === '⁺' ? '+' : sign === '⁻' ? '-' : '';
+  
+  let latex = '';
+  
+  if (base.startsWith('-')) {
+    latex += `\\bar{${base.slice(1)}}`;
+  } else {
+    latex += base;
+  }
+  
+  if (axis) {
+    let cleanAxis = axis.replace('°', '^\\circ');
+    latex += `_{${cleanAxis}}`;
+  }
+  
+  let sup = '';
+  if (sign === '⁺') sup += '+';
+  if (sign === '⁻') sup += '-';
+  if (prime) sup += '\\prime';
+  
+  if (sup) {
+    latex += `^{${sup}}`;
+  }
   
   return (
-    <span className="inline-flex items-center font-mono text-xs bg-white/50 px-2 py-1 border border-[#141414] border-opacity-10 rounded-sm">
-      {displaySign && <span>{displaySign}</span>}
-      {base.startsWith('-') ? (
-        <span className="overline">{base.slice(1)}</span>
-      ) : (
-        <span>{base}</span>
-      )}
-      {axis && <sub className="text-[0.7em] ml-0.5 mt-1">{axis}</sub>}
-      {prime && <span className="text-[1.25em] leading-none ml-0.5 font-bold">′</span>}
+    <span className="inline-flex items-center text-xs bg-white/50 px-2 py-1 border border-[#141414] border-opacity-10 rounded-sm">
+      <InlineMath math={latex} />
     </span>
   );
 };
@@ -345,7 +350,7 @@ export default function App() {
                   })}
                 </div>
 
-                {selectedTensorType === 'ED' && selectedGroup.centrosymmetric && (
+                {selectedTensorType === 'ED' && isCentrosymmetric(selectedGroup.name) && (
                   <div className="p-6 border border-[#141414] border-dashed flex items-center gap-4 opacity-50">
                     <Info className="w-5 h-5" />
                     <p className="text-xs leading-relaxed italic">
