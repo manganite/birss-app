@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Box, Hexagon, Triangle, Layers } from 'lucide-react';
 import { POINT_GROUPS, PointGroupData } from '../data/pointGroups';
 import { FormatPointGroup } from './MathComponents';
 import { OperationsModal } from './OperationsModal';
@@ -20,6 +21,19 @@ interface PointGroupExplorerProps {
 
 export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExplorerProps) => {
   const [selectedGroup, setSelectedGroup] = useState<PointGroupData | null>(null);
+
+  const getCrystalIcon = (system: string) => {
+    switch (system.toLowerCase()) {
+      case 'cubic': return <Box className="w-5 h-5" />;
+      case 'hexagonal': return <Hexagon className="w-5 h-5" />;
+      case 'trigonal': return <Triangle className="w-5 h-5" />;
+      case 'tetragonal': return <Box className="w-5 h-5 scale-y-125" />;
+      case 'orthorhombic': return <Box className="w-5 h-5 scale-x-125" />;
+      case 'monoclinic': return <Box className="w-5 h-5 skew-x-12" />;
+      case 'triclinic': return <Box className="w-5 h-5 skew-x-12 skew-y-6" />;
+      default: return <Layers className="w-5 h-5" />;
+    }
+  };
 
   const groupsBySystem = useMemo(() => {
     const grouped: Record<string, { I: PointGroupData[], II: PointGroupData[], III: PointGroupData[] }> = {};
@@ -61,7 +75,8 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
 
           return (
             <div key={system} className="border border-[#141414]">
-              <div className="bg-[#141414] text-[#E4E3E0] p-4">
+              <div className="bg-[#141414] text-[#E4E3E0] p-4 flex items-center gap-3">
+                {getCrystalIcon(system)}
                 <h2 className="text-xl font-medium uppercase tracking-widest">{system}</h2>
               </div>
               
