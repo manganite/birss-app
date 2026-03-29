@@ -388,6 +388,7 @@ export interface SHGExpression {
   component: string;
   expression: string;
   relation?: string;
+  rawPoly?: Map<string, Map<string, number>>;
 }
 
 export interface SHGResult {
@@ -723,7 +724,8 @@ export function calculateSHGExpressions(
     sourceExprs.push({
       component: outLabel,
       expression: expr,
-      relation
+      relation,
+      rawPoly: sPoly
     });
   }
 

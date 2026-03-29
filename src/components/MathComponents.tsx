@@ -1,6 +1,16 @@
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 
+export const TensorTerm = ({ term, isNull }: { term?: string; isNull: boolean; key?: any }) => {
+  if (!term) return null;
+  
+  return (
+    <span className={isNull ? 'opacity-30' : 'text-[#141414]'}>
+      <InlineMath math={term} />
+    </span>
+  );
+};
+
 export const FormatPointGroup = ({ name }: { name: string }) => {
   const latex = name.replace(/-([1-6])/g, '\\bar{$1}');
   return <InlineMath math={latex} />;

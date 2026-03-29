@@ -19,7 +19,8 @@ import {
 } from './services/tensorCalculator';
 import { PointGroupExplorer } from './components/PointGroupExplorer';
 import { HelpPage } from './components/HelpPage';
-import { FormatPointGroup, SymmetryOperation } from './components/MathComponents';
+import { SimulatorPage } from './components/SimulatorPage';
+import { FormatPointGroup, SymmetryOperation, TensorTerm } from './components/MathComponents';
 import 'katex/dist/katex.min.css';
 import { InlineMath } from 'react-katex';
 
@@ -122,16 +123,6 @@ function getLabFrameVectors(tx: number, ty: number) {
   };
 }
 
-const TensorTerm = ({ term, isNull }: { term?: string; isNull: boolean; key?: any }) => {
-  if (!term) return null;
-  
-  return (
-    <span className={isNull ? 'opacity-30' : 'text-[#141414]'}>
-      <InlineMath math={term} />
-    </span>
-  );
-};
-
 const normalizeString = (str: string) => {
   return str
     .toLowerCase()
@@ -148,7 +139,7 @@ const getGroupCategory = (name: string): GroupCategory => {
 };
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'calculator' | 'explorer' | 'help'>('calculator');
+  const [currentView, setCurrentView] = useState<'calculator' | 'simulator' | 'explorer' | 'help'>('calculator');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [activeCategory, setActiveCategory] = useState<GroupCategory>('All');
@@ -243,6 +234,12 @@ export default function App() {
               className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'calculator' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
             >
               Calculator
+            </button>
+            <button 
+              onClick={() => setCurrentView('simulator')}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'simulator' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+            >
+              Simulator
             </button>
             <button 
               onClick={() => setCurrentView('explorer')}
@@ -341,6 +338,18 @@ export default function App() {
               setSelectedGroup(group);
               setCurrentView('calculator');
             }}
+          />
+        ) : currentView === 'simulator' ? (
+          <SimulatorPage 
+            selectedGroup={selectedGroup}
+            selectedTensorType={selectedTensorType}
+            setSelectedTensorType={setSelectedTensorType}
+            selectedTimeReversal={selectedTimeReversal}
+            setSelectedTimeReversal={setSelectedTimeReversal}
+            thetaX={thetaX}
+            setThetaX={setThetaX}
+            thetaY={thetaY}
+            setThetaY={setThetaY}
           />
         ) : !selectedGroup ? (
           <div className="h-[50vh] flex flex-col items-center justify-center text-center space-y-8">
