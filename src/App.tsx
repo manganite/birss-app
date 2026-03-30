@@ -170,7 +170,9 @@ export default function App() {
     setSelectedGroup(group);
     setSearchQuery('');
     setIsSearchFocused(false);
-    setCurrentView('calculator');
+    if (currentView === 'explorer' || currentView === 'help') {
+      setCurrentView('calculator');
+    }
   };
 
   const getCrystalIcon = (system: string) => {
