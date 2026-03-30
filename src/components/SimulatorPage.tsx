@@ -194,6 +194,12 @@ export function SimulatorPage({
     return { data, maxIntensity, maxParallel, maxCrossed, maxPolA0, maxPolA90, maxAnaP0, maxAnaP90 };
   }, [sourceTerms, amplitudes, phases]);
 
+  const formatPolarAngle = (val: number) => {
+    if (val === 0) return '0° (X)';
+    if (val === 90) return '90° (Y)';
+    return `${val}°`;
+  };
+
   if (!selectedGroup) {
     return (
       <div className="h-[50vh] flex flex-col items-center justify-center text-center space-y-8">
@@ -391,7 +397,7 @@ export function SimulatorPage({
                           <ResponsiveContainer width="100%" height="100%">
                             <RadarChart cx="50%" cy="50%" outerRadius="70%" data={simulationData.data}>
                               <PolarGrid gridType="circle" stroke="#141414" strokeOpacity={0.1} />
-                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={(val) => `${val}°`} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
+                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={formatPolarAngle} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
                               <PolarRadiusAxis angle={90} domain={[0, Math.max(1e-6, simulationData.maxIntensity) / 0.95]} tick={false} axisLine={false} />
                               <Radar name="Parallel" dataKey="parallel" stroke="#141414" strokeWidth={2} fill="#141414" fillOpacity={0.1} isAnimationActive={false} />
                               <Tooltip 
@@ -413,7 +419,7 @@ export function SimulatorPage({
                           <ResponsiveContainer width="100%" height="100%">
                             <RadarChart cx="50%" cy="50%" outerRadius="70%" data={simulationData.data}>
                               <PolarGrid gridType="circle" stroke="#141414" strokeOpacity={0.1} />
-                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={(val) => `${val}°`} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
+                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={formatPolarAngle} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
                               <PolarRadiusAxis angle={90} domain={[0, Math.max(1e-6, simulationData.maxIntensity) / 0.95]} tick={false} axisLine={false} />
                               <Radar name="Crossed" dataKey="crossed" stroke="#141414" strokeWidth={2} fill="#141414" fillOpacity={0.1} isAnimationActive={false} />
                               <Tooltip 
@@ -439,7 +445,7 @@ export function SimulatorPage({
                           <ResponsiveContainer width="100%" height="100%">
                             <RadarChart cx="50%" cy="50%" outerRadius="70%" data={simulationData.data}>
                               <PolarGrid gridType="circle" stroke="#141414" strokeOpacity={0.1} />
-                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={(val) => `${val}°`} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
+                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={formatPolarAngle} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
                               <PolarRadiusAxis angle={90} domain={[0, Math.max(1e-6, simulationData.maxIntensity) / 0.95]} tick={false} axisLine={false} />
                               <Radar name="Analyzer 0°" dataKey="pol_a0" stroke="#141414" strokeWidth={2} fill="#141414" fillOpacity={0.1} isAnimationActive={false} />
                               <Tooltip 
@@ -461,7 +467,7 @@ export function SimulatorPage({
                           <ResponsiveContainer width="100%" height="100%">
                             <RadarChart cx="50%" cy="50%" outerRadius="70%" data={simulationData.data}>
                               <PolarGrid gridType="circle" stroke="#141414" strokeOpacity={0.1} />
-                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={(val) => `${val}°`} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
+                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={formatPolarAngle} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
                               <PolarRadiusAxis angle={90} domain={[0, Math.max(1e-6, simulationData.maxIntensity) / 0.95]} tick={false} axisLine={false} />
                               <Radar name="Analyzer 90°" dataKey="pol_a90" stroke="#141414" strokeWidth={2} fill="#141414" fillOpacity={0.1} isAnimationActive={false} />
                               <Tooltip 
@@ -487,7 +493,7 @@ export function SimulatorPage({
                           <ResponsiveContainer width="100%" height="100%">
                             <RadarChart cx="50%" cy="50%" outerRadius="70%" data={simulationData.data}>
                               <PolarGrid gridType="circle" stroke="#141414" strokeOpacity={0.1} />
-                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={(val) => `${val}°`} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
+                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={formatPolarAngle} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
                               <PolarRadiusAxis angle={90} domain={[0, Math.max(1e-6, simulationData.maxIntensity) / 0.95]} tick={false} axisLine={false} />
                               <Radar name="Polarizer 0°" dataKey="ana_p0" stroke="#141414" strokeWidth={2} fill="#141414" fillOpacity={0.1} isAnimationActive={false} />
                               <Tooltip 
@@ -509,7 +515,7 @@ export function SimulatorPage({
                           <ResponsiveContainer width="100%" height="100%">
                             <RadarChart cx="50%" cy="50%" outerRadius="70%" data={simulationData.data}>
                               <PolarGrid gridType="circle" stroke="#141414" strokeOpacity={0.1} />
-                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={(val) => `${val}°`} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
+                              <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as any} tickFormatter={formatPolarAngle} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
                               <PolarRadiusAxis angle={90} domain={[0, Math.max(1e-6, simulationData.maxIntensity) / 0.95]} tick={false} axisLine={false} />
                               <Radar name="Polarizer 90°" dataKey="ana_p90" stroke="#141414" strokeWidth={2} fill="#141414" fillOpacity={0.1} isAnimationActive={false} />
                               <Tooltip 
@@ -527,7 +533,7 @@ export function SimulatorPage({
 
                   {independentComponents.length > 0 && (
                     <div className="mt-8 text-center text-xs opacity-50">
-                      Note: The angle shown in the plots represents the {activePolarimetryTab === 'polarizer' ? 'polarizer' : 'analyzer'} angle.
+                      Note: The angle shown in the plots represents the {activePolarimetryTab === 'polarizer' ? 'polarizer' : 'analyzer'} angle. 0° corresponds to the Lab X-axis, and 90° corresponds to the Lab Y-axis.
                     </div>
                   )}
                 </div>
