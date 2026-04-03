@@ -492,9 +492,11 @@ export function formatSubstitutedPolySum(
   const sortedChis = Array.from(allChis).sort();
   const finalParts: string[] = [];
   const epsilon = 1e-6;
+  const allMergedChiTerms: { chi: string, terms: { coeff: number, fieldStr: string }[] }[] = [];
 
   for (const chi of sortedChis) {
-    const chiTerms: { coeff: number, fieldStr: string }[] = [];
+    const powerChiTerms: { coeff: number, fieldStr: string }[] = [];
+    const harmonicChiTerms: { coeff: number, fieldStr: string }[] = [];
     
     for (const term of terms) {
       const pairMap = term.poly.get(chi);
@@ -504,62 +506,153 @@ export function formatSubstitutedPolySum(
       const mode = term.mode;
       const multiplyTrig = term.multiplyTrig;
       
-      let fieldLabels: Record<string, string>;
+      type HarmonicTerm = { harmonic: string, factor: number };
+      let powerMappings: Record<string, HarmonicTerm[]>;
+      let harmonicMappings: Record<string, HarmonicTerm[]>;
       
       if (mode === 'THETA') {
         if (multiplyTrig === '\\cos\\theta') {
-          fieldLabels = {
-            '00': '\\cos^3\\theta', '11': '\\cos\\theta \\sin^2\\theta', '22': '0',
-            '01': '\\cos^2\\theta \\sin\\theta', '02': '0', '12': '0'
+          powerMappings = {
+            '00': [{ harmonic: '\\cos^3\\theta', factor: 1 }],
+            '11': [{ harmonic: '\\cos\\theta \\sin^2\\theta', factor: 1 }],
+            '22': [],
+            '01': [{ harmonic: '\\cos^2\\theta \\sin\\theta', factor: 1 }],
+            '02': [], '12': []
+          };
+          harmonicMappings = {
+            '00': [{ harmonic: '\\cos\\theta', factor: 0.75 }, { harmonic: '\\cos 3\\theta', factor: 0.25 }],
+            '11': [{ harmonic: '\\cos\\theta', factor: 0.25 }, { harmonic: '\\cos 3\\theta', factor: -0.25 }],
+            '22': [],
+            '01': [{ harmonic: '\\sin\\theta', factor: 0.25 }, { harmonic: '\\sin 3\\theta', factor: 0.25 }],
+            '02': [], '12': []
           };
         } else if (multiplyTrig === '\\sin\\theta') {
-          fieldLabels = {
-            '00': '\\cos^2\\theta \\sin\\theta', '11': '\\sin^3\\theta', '22': '0',
-            '01': '\\cos\\theta \\sin^2\\theta', '02': '0', '12': '0'
+          powerMappings = {
+            '00': [{ harmonic: '\\cos^2\\theta \\sin\\theta', factor: 1 }],
+            '11': [{ harmonic: '\\sin^3\\theta', factor: 1 }],
+            '22': [],
+            '01': [{ harmonic: '\\cos\\theta \\sin^2\\theta', factor: 1 }],
+            '02': [], '12': []
+          };
+          harmonicMappings = {
+            '00': [{ harmonic: '\\sin\\theta', factor: 0.25 }, { harmonic: '\\sin 3\\theta', factor: 0.25 }],
+            '11': [{ harmonic: '\\sin\\theta', factor: 0.75 }, { harmonic: '\\sin 3\\theta', factor: -0.25 }],
+            '22': [],
+            '01': [{ harmonic: '\\cos\\theta', factor: 0.25 }, { harmonic: '\\cos 3\\theta', factor: -0.25 }],
+            '02': [], '12': []
           };
         } else {
-          fieldLabels = {
-            '00': '\\cos^2\\theta', '11': '\\sin^2\\theta', '22': '0',
-            '01': '\\cos\\theta \\sin\\theta', '02': '0', '12': '0'
+          powerMappings = {
+            '00': [{ harmonic: '\\cos^2\\theta', factor: 1 }],
+            '11': [{ harmonic: '\\sin^2\\theta', factor: 1 }],
+            '22': [],
+            '01': [{ harmonic: '\\cos\\theta \\sin\\theta', factor: 1 }],
+            '02': [], '12': []
+          };
+          harmonicMappings = {
+            '00': [{ harmonic: '1', factor: 0.5 }, { harmonic: '\\cos 2\\theta', factor: 0.5 }],
+            '11': [{ harmonic: '1', factor: 0.5 }, { harmonic: '\\cos 2\\theta', factor: -0.5 }],
+            '22': [],
+            '01': [{ harmonic: '\\sin 2\\theta', factor: 0.5 }],
+            '02': [], '12': []
           };
         }
       } else {
         const multiplied = multiplyTrig ? multiplyTrig : '1';
-        fieldLabels = {
-          '00': multiplied, '11': multiplied, '22': '0',
-          '01': '0', '02': '0', '12': '0'
+        powerMappings = {
+          '00': [{ harmonic: multiplied, factor: 1 }],
+          '11': [{ harmonic: multiplied, factor: 1 }],
+          '22': [], '01': [], '02': [], '12': []
         };
+        harmonicMappings = powerMappings;
       }
 
       const sortedPairs = Array.from(pairMap.keys()).sort();
       for (const pair of sortedPairs) {
-        let coeff = pairMap.get(pair)! * scale;
-        if (Math.abs(coeff) > epsilon) {
+        let baseCoeff = pairMap.get(pair)! * scale;
+        if (Math.abs(baseCoeff) > epsilon) {
           if (mode === 'ZERO' && pair !== '00') continue;
           if (mode === 'NINETY' && pair !== '11') continue;
-          chiTerms.push({ coeff, fieldStr: fieldLabels[pair] });
+          
+          const pMappings = powerMappings[pair] || [];
+          for (const mapping of pMappings) {
+            const coeff = baseCoeff * mapping.factor;
+            if (Math.abs(coeff) > epsilon) {
+              powerChiTerms.push({ coeff, fieldStr: mapping.harmonic });
+            }
+          }
+
+          const hMappings = harmonicMappings[pair] || [];
+          for (const mapping of hMappings) {
+            const coeff = baseCoeff * mapping.factor;
+            if (Math.abs(coeff) > epsilon) {
+              harmonicChiTerms.push({ coeff, fieldStr: mapping.harmonic });
+            }
+          }
         }
       }
     }
     
-    if (chiTerms.length === 0) continue;
-    
-    const combinedTerms = new Map<string, number>();
-    for (const ct of chiTerms) {
-      combinedTerms.set(ct.fieldStr, (combinedTerms.get(ct.fieldStr) || 0) + ct.coeff);
+    const combineTerms = (chiTerms: { coeff: number, fieldStr: string }[]) => {
+      const combined = new Map<string, number>();
+      for (const ct of chiTerms) {
+        combined.set(ct.fieldStr, (combined.get(ct.fieldStr) || 0) + ct.coeff);
+      }
+      const merged: { coeff: number, fieldStr: string }[] = [];
+      for (const [fieldStr, coeff] of combined.entries()) {
+        if (Math.abs(coeff) > epsilon) {
+          merged.push({ coeff, fieldStr });
+        }
+      }
+      return merged;
+    };
+
+    const mergedPower = combineTerms(powerChiTerms);
+    const mergedHarmonic = combineTerms(harmonicChiTerms);
+
+    if (mergedPower.length === 0 && mergedHarmonic.length === 0) continue;
+
+    let mergedChiTerms = mergedPower;
+    if (mergedHarmonic.length < mergedPower.length) {
+      mergedChiTerms = mergedHarmonic;
+    } else if (mergedHarmonic.length === mergedPower.length && mergedHarmonic.length === 1) {
+      mergedChiTerms = mergedHarmonic;
     }
     
-    const mergedChiTerms: { coeff: number, fieldStr: string }[] = [];
-    for (const [fieldStr, coeff] of combinedTerms.entries()) {
-      if (Math.abs(coeff) > epsilon) {
-        mergedChiTerms.push({ coeff, fieldStr });
+    const harmonicWeight = (h: string) => {
+      if (h === '1') return 0;
+      if (h === '\\cos\\theta') return 1;
+      if (h === '\\sin\\theta') return 2;
+      if (h === '\\cos^2\\theta') return 3;
+      if (h === '\\sin^2\\theta') return 4;
+      if (h === '\\cos\\theta \\sin\\theta') return 5;
+      if (h === '\\cos 2\\theta') return 6;
+      if (h === '\\sin 2\\theta') return 7;
+      if (h === '\\cos^3\\theta') return 8;
+      if (h === '\\sin^3\\theta') return 9;
+      if (h === '\\cos^2\\theta \\sin\\theta') return 10;
+      if (h === '\\cos\\theta \\sin^2\\theta') return 11;
+      if (h === '\\cos 3\\theta') return 12;
+      if (h === '\\sin 3\\theta') return 13;
+      return 20;
+    };
+    
+    mergedChiTerms.sort((a, b) => harmonicWeight(a.fieldStr) - harmonicWeight(b.fieldStr));
+    allMergedChiTerms.push({ chi, terms: mergedChiTerms });
+  }
+
+  if (allMergedChiTerms.length > 0) {
+    const firstChi = allMergedChiTerms[0];
+    if (firstChi.terms.length > 0 && firstChi.terms[0].coeff < 0) {
+      for (const chiObj of allMergedChiTerms) {
+        for (const term of chiObj.terms) {
+          term.coeff *= -1;
+        }
       }
     }
-    
-    if (mergedChiTerms.length === 0) continue;
-    
-    mergedChiTerms.sort((a, b) => b.fieldStr.localeCompare(a.fieldStr));
+  }
 
+  for (const { chi, terms: mergedChiTerms } of allMergedChiTerms) {
     if (mergedChiTerms.length === 1) {
       const { coeff, fieldStr } = mergedChiTerms[0];
       const sign = coeff < 0 ? "-" : "";
@@ -594,11 +687,17 @@ export function formatCoeff(c: number): string {
   const absC = Math.abs(c);
   if (absC < 1e-5) return "0";
   
-  // Check if it's an integer
   const rounded = Math.round(absC);
   if (Math.abs(absC - rounded) < 1e-5) {
     if (rounded === 1) return "";
     return rounded.toString();
+  }
+  
+  for (let d = 2; d <= 8; d++) {
+    const num = Math.round(absC * d);
+    if (Math.abs(absC - num / d) < 1e-5) {
+      return `\\frac{${num}}{${d}}`;
+    }
   }
 
   // Common fractions
