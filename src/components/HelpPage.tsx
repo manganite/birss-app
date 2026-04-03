@@ -275,6 +275,15 @@ export function HelpPage() {
                   The measured intensity is <InlineMath math="I_{\perp} \propto |E_{\perp}^{2\omega}|^2" />.
                 </p>
               </div>
+              <div className="pt-4 border-t border-[#141414] border-opacity-10">
+                <h4 className="font-medium text-sm">Formula Simplification</h4>
+                <p className="text-sm opacity-70 leading-relaxed mt-1">
+                  The expanded intensity formulas displayed in the simulator are mathematically simplified using power reduction and multiple-angle trigonometric identities (e.g., <InlineMath math="\sin^2\theta = \frac{1}{2}(1 - \cos 2\theta)" /> and <InlineMath math="\cos^3\theta = \frac{1}{4}(3\cos\theta + \cos 3\theta)" />).
+                </p>
+                <p className="text-sm opacity-70 leading-relaxed mt-2">
+                  This converts the trigonometric polynomials into a harmonic Fourier series representation, making the rotational symmetries of the crystal lattice (like 2-fold, 3-fold, or 4-fold symmetry) immediately obvious. A smart grouping algorithm automatically selects the most elegant representation (power vs. harmonic) to minimize the number of terms, and unnecessary minus signs are factored out of the absolute value expressions.
+                </p>
+              </div>
             </div>
           </div>
         </div>

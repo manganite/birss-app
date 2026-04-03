@@ -19,6 +19,8 @@ Calculates non-zero susceptibility tensor components (Electric Dipole, Magnetic 
   - Visualize expected SHG intensity polarimetry patterns.
   - Adjust crystal orientation, tensor component amplitudes, and phases to simulate parallel and crossed polarization configurations.
   - Interactive radar charts displaying SHG intensity as the analyzer angle is rotated.
+  - Mathematically simplified and summarized expanded formulas using harmonic Fourier series representation (power reduction and multiple-angle formulas).
+  - Smart grouping algorithm to automatically pick the most elegant representation (power vs harmonic) and minimize unnecessary minus signs.
 - **Help & Documentation**: 
   - Comprehensive physics background, mathematics behind the intensity calculations, and usage instructions.
 
