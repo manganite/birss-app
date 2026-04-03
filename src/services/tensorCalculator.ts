@@ -396,6 +396,200 @@ export interface SHGResult {
   source: SHGExpression[];
 }
 
+export function formatSubstitutedPoly(
+  poly: Map<string, Map<string, number>>,
+  mode: 'THETA' | 'ZERO' | 'NINETY',
+  scale: number = 1,
+  multiplyTrig?: '\\cos\\theta' | '\\sin\\theta'
+): string {
+  const finalParts: string[] = [];
+  const sortedChis = Array.from(poly.keys()).sort();
+  const epsilon = 1e-6;
+
+  for (const chi of sortedChis) {
+    const pairMap = poly.get(chi)!;
+    const fieldParts: { pair: string, coeff: number }[] = [];
+    const sortedPairs = Array.from(pairMap.keys()).sort();
+    for (const pair of sortedPairs) {
+      let coeff = pairMap.get(pair)! * scale;
+      if (Math.abs(coeff) > epsilon) {
+        if (mode === 'ZERO' && pair !== '00') continue;
+        if (mode === 'NINETY' && pair !== '11') continue;
+        fieldParts.push({ pair, coeff });
+      }
+    }
+    
+    if (fieldParts.length === 0) continue;
+
+    let fieldLabels: Record<string, string>;
+    
+    if (mode === 'THETA') {
+      if (multiplyTrig === '\\cos\\theta') {
+        fieldLabels = {
+          '00': '\\cos^3\\theta', '11': '\\sin^2\\theta \\cos\\theta', '22': '0',
+          '01': '\\cos^2\\theta \\sin\\theta', '02': '0', '12': '0'
+        };
+      } else if (multiplyTrig === '\\sin\\theta') {
+        fieldLabels = {
+          '00': '\\cos^2\\theta \\sin\\theta', '11': '\\sin^3\\theta', '22': '0',
+          '01': '\\cos\\theta \\sin^2\\theta', '02': '0', '12': '0'
+        };
+      } else {
+        fieldLabels = {
+          '00': '\\cos^2\\theta', '11': '\\sin^2\\theta', '22': '0',
+          '01': '\\cos\\theta \\sin\\theta', '02': '0', '12': '0'
+        };
+      }
+    } else {
+      const multiplied = multiplyTrig ? multiplyTrig : '1';
+      fieldLabels = {
+        '00': multiplied, '11': multiplied, '22': '0',
+        '01': '0', '02': '0', '12': '0'
+      };
+    }
+
+    if (fieldParts.length === 1) {
+      const { pair, coeff } = fieldParts[0];
+      const fieldStr = fieldLabels[pair];
+      const sign = coeff < 0 ? "-" : "";
+      const displayFieldStr = fieldStr === '1' ? '' : ` ${fieldStr}`;
+      finalParts.push(`${sign}${formatCoeff(coeff)}${chi} E_0^2${displayFieldStr}`);
+    } else {
+      const innerExpr = fieldParts.map((fp, idx) => {
+        const fieldStr = fieldLabels[fp.pair];
+        const c = fp.coeff;
+        const coeffStr = formatCoeff(c);
+        
+        let termStr = '';
+        if (fieldStr === '1') {
+          termStr = coeffStr === '' ? '1' : coeffStr;
+        } else {
+          termStr = coeffStr === '' ? fieldStr : `${coeffStr} ${fieldStr}`;
+        }
+        
+        if (idx === 0) {
+          return `${c < 0 ? '-' : ''}${termStr}`;
+        } else {
+          return `${c < 0 ? '-' : '+'} ${termStr}`;
+        }
+      }).join(" ");
+      finalParts.push(`${chi} E_0^2(${innerExpr})`);
+    }
+  }
+  return finalParts.length > 0 ? finalParts.join(" + ").replace(/\+ -/g, "- ") : "0";
+}
+
+export function formatSubstitutedPolySum(
+  terms: { poly: Map<string, Map<string, number>>, mode: 'THETA' | 'ZERO' | 'NINETY', scale?: number, multiplyTrig?: '\\cos\\theta' | '\\sin\\theta' }[]
+): string {
+  const allChis = new Set<string>();
+  for (const term of terms) {
+    for (const chi of term.poly.keys()) {
+      allChis.add(chi);
+    }
+  }
+  
+  const sortedChis = Array.from(allChis).sort();
+  const finalParts: string[] = [];
+  const epsilon = 1e-6;
+
+  for (const chi of sortedChis) {
+    const chiTerms: { coeff: number, fieldStr: string }[] = [];
+    
+    for (const term of terms) {
+      const pairMap = term.poly.get(chi);
+      if (!pairMap) continue;
+      
+      const scale = term.scale ?? 1;
+      const mode = term.mode;
+      const multiplyTrig = term.multiplyTrig;
+      
+      let fieldLabels: Record<string, string>;
+      
+      if (mode === 'THETA') {
+        if (multiplyTrig === '\\cos\\theta') {
+          fieldLabels = {
+            '00': '\\cos^3\\theta', '11': '\\sin^2\\theta \\cos\\theta', '22': '0',
+            '01': '\\cos^2\\theta \\sin\\theta', '02': '0', '12': '0'
+          };
+        } else if (multiplyTrig === '\\sin\\theta') {
+          fieldLabels = {
+            '00': '\\cos^2\\theta \\sin\\theta', '11': '\\sin^3\\theta', '22': '0',
+            '01': '\\cos\\theta \\sin^2\\theta', '02': '0', '12': '0'
+          };
+        } else {
+          fieldLabels = {
+            '00': '\\cos^2\\theta', '11': '\\sin^2\\theta', '22': '0',
+            '01': '\\cos\\theta \\sin\\theta', '02': '0', '12': '0'
+          };
+        }
+      } else {
+        const multiplied = multiplyTrig ? multiplyTrig : '1';
+        fieldLabels = {
+          '00': multiplied, '11': multiplied, '22': '0',
+          '01': '0', '02': '0', '12': '0'
+        };
+      }
+
+      const sortedPairs = Array.from(pairMap.keys()).sort();
+      for (const pair of sortedPairs) {
+        let coeff = pairMap.get(pair)! * scale;
+        if (Math.abs(coeff) > epsilon) {
+          if (mode === 'ZERO' && pair !== '00') continue;
+          if (mode === 'NINETY' && pair !== '11') continue;
+          chiTerms.push({ coeff, fieldStr: fieldLabels[pair] });
+        }
+      }
+    }
+    
+    if (chiTerms.length === 0) continue;
+    
+    const combinedTerms = new Map<string, number>();
+    for (const ct of chiTerms) {
+      combinedTerms.set(ct.fieldStr, (combinedTerms.get(ct.fieldStr) || 0) + ct.coeff);
+    }
+    
+    const mergedChiTerms: { coeff: number, fieldStr: string }[] = [];
+    for (const [fieldStr, coeff] of combinedTerms.entries()) {
+      if (Math.abs(coeff) > epsilon) {
+        mergedChiTerms.push({ coeff, fieldStr });
+      }
+    }
+    
+    if (mergedChiTerms.length === 0) continue;
+    
+    mergedChiTerms.sort((a, b) => b.fieldStr.localeCompare(a.fieldStr));
+
+    if (mergedChiTerms.length === 1) {
+      const { coeff, fieldStr } = mergedChiTerms[0];
+      const sign = coeff < 0 ? "-" : "";
+      const displayFieldStr = fieldStr === '1' ? '' : ` ${fieldStr}`;
+      finalParts.push(`${sign}${formatCoeff(coeff)}${chi} E_0^2${displayFieldStr}`);
+    } else {
+      const innerExpr = mergedChiTerms.map((ct, idx) => {
+        const fieldStr = ct.fieldStr;
+        const c = ct.coeff;
+        const coeffStr = formatCoeff(c);
+        
+        let termStr = '';
+        if (fieldStr === '1') {
+          termStr = coeffStr === '' ? '1' : coeffStr;
+        } else {
+          termStr = coeffStr === '' ? fieldStr : `${coeffStr} ${fieldStr}`;
+        }
+        
+        if (idx === 0) {
+          return `${c < 0 ? '-' : ''}${termStr}`;
+        } else {
+          return `${c < 0 ? '-' : '+'} ${termStr}`;
+        }
+      }).join(" ");
+      finalParts.push(`${chi} E_0^2(${innerExpr})`);
+    }
+  }
+  return finalParts.length > 0 ? finalParts.join(" + ").replace(/\+ -/g, "- ") : "0";
+}
+
 export function formatCoeff(c: number): string {
   const absC = Math.abs(c);
   if (absC < 1e-5) return "0";

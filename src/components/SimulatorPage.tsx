@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { PointGroupData } from '../data/pointGroups';
 import { TensorType, TensorTimeReversal, getLabFrameVectors } from '../services/tensorCalculator';
-import { calculateSHGExpressions } from '../services/tensorCalculator';
+import { calculateSHGExpressions, formatSubstitutedPoly, formatSubstitutedPolySum } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
 import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp } from 'lucide-react';
 import {
@@ -48,6 +48,7 @@ export function SimulatorPage({
 }: SimulatorPageProps) {
   const [activePolarimetryTab, setActivePolarimetryTab] = useState<'anisotropy' | 'polarizer' | 'analyzer'>('anisotropy');
   const [showEquations, setShowEquations] = useState(false);
+  const [verboseFormulas, setVerboseFormulas] = useState(false);
 
   const labFrame = useMemo(() => getLabFrameVectors(thetaX, thetaY), [thetaX, thetaY]);
 
@@ -74,6 +75,52 @@ export function SimulatorPage({
       'EX_EY'
     ).source;
   }, [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY]);
+
+  const expandedFormulas = useMemo(() => {
+    const sxTermTheta = sourceTerms.find(t => t.component === 'S_X')?.rawPoly;
+    const syTermTheta = sourceTerms.find(t => t.component === 'S_Y')?.rawPoly;
+    const sxTermExEy = sourceTermsExEy.find(t => t.component === 'S_X')?.rawPoly;
+    const syTermExEy = sourceTermsExEy.find(t => t.component === 'S_Y')?.rawPoly;
+
+    if (!sxTermTheta || !syTermTheta || !sxTermExEy || !syTermExEy) return null;
+
+    const aniParStr = formatSubstitutedPolySum([
+      { poly: sxTermTheta, mode: 'THETA', scale: 1, multiplyTrig: '\\cos\\theta' },
+      { poly: syTermTheta, mode: 'THETA', scale: 1, multiplyTrig: '\\sin\\theta' }
+    ]);
+
+    const aniPerpStr = formatSubstitutedPolySum([
+      { poly: sxTermTheta, mode: 'THETA', scale: -1, multiplyTrig: '\\sin\\theta' },
+      { poly: syTermTheta, mode: 'THETA', scale: 1, multiplyTrig: '\\cos\\theta' }
+    ]);
+
+    const polA0Str = formatSubstitutedPolySum([
+      { poly: sxTermTheta, mode: 'THETA' }
+    ]);
+
+    const polA90Str = formatSubstitutedPolySum([
+      { poly: syTermTheta, mode: 'THETA' }
+    ]);
+
+    const anaP0Str = formatSubstitutedPolySum([
+      { poly: sxTermExEy, mode: 'ZERO', scale: 1, multiplyTrig: '\\cos\\theta' },
+      { poly: syTermExEy, mode: 'ZERO', scale: 1, multiplyTrig: '\\sin\\theta' }
+    ]);
+
+    const anaP90Str = formatSubstitutedPolySum([
+      { poly: sxTermExEy, mode: 'NINETY', scale: 1, multiplyTrig: '\\cos\\theta' },
+      { poly: syTermExEy, mode: 'NINETY', scale: 1, multiplyTrig: '\\sin\\theta' }
+    ]);
+
+    return {
+      aniPar: `I_{\\parallel} = |${aniParStr}|^2`,
+      aniPerp: `I_{\\perp} = |${aniPerpStr}|^2`,
+      polA0: `I = |${polA0Str}|^2`,
+      polA90: `I = |${polA90Str}|^2`,
+      anaP0: `I = |${anaP0Str}|^2`,
+      anaP90: `I = |${anaP90Str}|^2`,
+    };
+  }, [sourceTerms, sourceTermsExEy]);
 
   // Extract unique independent tensor components from the raw polynomials
   const independentComponents = useMemo(() => {
@@ -632,7 +679,15 @@ export function SimulatorPage({
               </div>
 
               <div className="space-y-4 md:col-span-2">
-                <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50">3. Detected Intensity Formulas</h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50">3. Detected Intensity Formulas</h4>
+                  <button 
+                    onClick={() => setVerboseFormulas(!verboseFormulas)}
+                    className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity flex items-center gap-1"
+                  >
+                    {verboseFormulas ? 'Show Short' : 'Show Expanded'}
+                  </button>
+                </div>
                 <p className="text-sm opacity-70 leading-relaxed">
                   The plotted intensities <InlineMath math="I \propto |E_{out}|^2" /> correspond to the following configurations, where <InlineMath math="\theta" /> is the angle shown on the polar plot:
                 </p>
@@ -641,11 +696,11 @@ export function SimulatorPage({
                     <div className="text-xs font-bold uppercase tracking-widest opacity-50">Anisotropy</div>
                     <div className="space-y-2">
                       <div className="text-xs opacity-70">Parallel (<InlineMath math="\theta_{pol} = \theta_{ana} = \theta" />):</div>
-                      <div className="overflow-x-auto pb-2"><BlockMath math="I_{\parallel} = |S_X(\theta) \cos\theta + S_Y(\theta) \sin\theta|^2" /></div>
+                      <div className="overflow-x-auto pb-2"><BlockMath math={verboseFormulas && expandedFormulas ? expandedFormulas.aniPar : "I_{\\parallel} = |S_X(\\theta) \\cos\\theta + S_Y(\\theta) \\sin\\theta|^2"} /></div>
                     </div>
                     <div className="space-y-2">
                       <div className="text-xs opacity-70">Crossed (<InlineMath math="\theta_{pol} = \theta, \theta_{ana} = \theta + 90^\circ" />):</div>
-                      <div className="overflow-x-auto pb-2"><BlockMath math="I_{\perp} = |-S_X(\theta) \sin\theta + S_Y(\theta) \cos\theta|^2" /></div>
+                      <div className="overflow-x-auto pb-2"><BlockMath math={verboseFormulas && expandedFormulas ? expandedFormulas.aniPerp : "I_{\\perp} = |-S_X(\\theta) \\sin\\theta + S_Y(\\theta) \\cos\\theta|^2"} /></div>
                     </div>
                   </div>
                   
@@ -653,11 +708,11 @@ export function SimulatorPage({
                     <div className="text-xs font-bold uppercase tracking-widest opacity-50">Polarizer</div>
                     <div className="space-y-2">
                       <div className="text-xs opacity-70">Analyzer 0° (<InlineMath math="\theta_{ana} = 0^\circ, \theta_{pol} = \theta" />):</div>
-                      <div className="overflow-x-auto pb-2"><BlockMath math="I = |S_X(\theta)|^2" /></div>
+                      <div className="overflow-x-auto pb-2"><BlockMath math={verboseFormulas && expandedFormulas ? expandedFormulas.polA0 : "I = |S_X(\\theta)|^2"} /></div>
                     </div>
                     <div className="space-y-2">
                       <div className="text-xs opacity-70">Analyzer 90° (<InlineMath math="\theta_{ana} = 90^\circ, \theta_{pol} = \theta" />):</div>
-                      <div className="overflow-x-auto pb-2"><BlockMath math="I = |S_Y(\theta)|^2" /></div>
+                      <div className="overflow-x-auto pb-2"><BlockMath math={verboseFormulas && expandedFormulas ? expandedFormulas.polA90 : "I = |S_Y(\\theta)|^2"} /></div>
                     </div>
                   </div>
 
@@ -665,11 +720,11 @@ export function SimulatorPage({
                     <div className="text-xs font-bold uppercase tracking-widest opacity-50">Analyzer</div>
                     <div className="space-y-2">
                       <div className="text-xs opacity-70">Polarizer 0° (<InlineMath math="\theta_{pol} = 0^\circ, \theta_{ana} = \theta" />):</div>
-                      <div className="overflow-x-auto pb-2"><BlockMath math="I = |S_X(0^\circ) \cos\theta + S_Y(0^\circ) \sin\theta|^2" /></div>
+                      <div className="overflow-x-auto pb-2"><BlockMath math={verboseFormulas && expandedFormulas ? expandedFormulas.anaP0 : "I = |S_X(0^\\circ) \\cos\\theta + S_Y(0^\\circ) \\sin\\theta|^2"} /></div>
                     </div>
                     <div className="space-y-2">
                       <div className="text-xs opacity-70">Polarizer 90° (<InlineMath math="\theta_{pol} = 90^\circ, \theta_{ana} = \theta" />):</div>
-                      <div className="overflow-x-auto pb-2"><BlockMath math="I = |S_X(90^\circ) \cos\theta + S_Y(90^\circ) \sin\theta|^2" /></div>
+                      <div className="overflow-x-auto pb-2"><BlockMath math={verboseFormulas && expandedFormulas ? expandedFormulas.anaP90 : "I = |S_X(90^\\circ) \\cos\\theta + S_Y(90^\\circ) \\sin\\theta|^2"} /></div>
                     </div>
                   </div>
                 </div>
