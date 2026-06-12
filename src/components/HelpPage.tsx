@@ -1,6 +1,94 @@
 import React from 'react';
 import { InlineMath, BlockMath } from 'react-katex';
-import { BookOpen, Compass, Layers, Zap, Info, Activity } from 'lucide-react';
+import { BookOpen, Compass, Layers, Zap, Info, Activity, LucideIcon } from 'lucide-react';
+
+const FEATURES: { icon: LucideIcon; title: string; description: string; extra?: React.ReactNode }[] = [
+  {
+    icon: Zap,
+    title: 'Calculator',
+    description: 'Calculate non-zero tensor components for various physical properties (Electric Dipole, Magnetic Dipole, Electric Quadrupole) under different point group symmetries. Supports time-reversal symmetry toggles for magnetic groups.',
+  },
+  {
+    icon: Layers,
+    title: 'Explorer',
+    description: 'Browse all 122 crystallographic magnetic point groups. Filter by crystal system, group type (Ordinary, Gray, Black & White), and view their symmetry operations and properties.',
+  },
+  {
+    icon: Activity,
+    title: 'Simulator',
+    description: 'Visualize expected SHG intensity polarimetry patterns. Adjust crystal orientation, tensor component amplitudes, and phases to simulate various polarization configurations.',
+    extra: (
+      <ul className="text-sm opacity-70 list-disc list-inside space-y-1 ml-4">
+        <li><strong>Anisotropy:</strong> Parallel and Crossed configurations as a function of polarizer angle.</li>
+        <li><strong>Polarizer:</strong> Fixed analyzer at 0° and 90°, as a function of polarizer angle.</li>
+        <li><strong>Analyzer:</strong> Fixed polarizer at 0° and 90°, as a function of analyzer angle.</li>
+      </ul>
+    ),
+  },
+];
+
+const TENSOR_TYPES: { title: string; description: React.ReactNode }[] = [
+  {
+    title: 'Polar Tensors',
+    description: <>Transform like standard vectors under spatial inversion (<InlineMath math="\vec{r} \to -\vec{r}" />). Examples include electric dipole moments and polarization. Odd-rank polar tensors strictly vanish in centrosymmetric point groups.</>,
+  },
+  {
+    title: 'Axial Tensors',
+    description: <>Also known as pseudotensors. They do not change sign under spatial inversion (e.g., magnetic moments, angular momentum). Odd-rank axial tensors can survive in centrosymmetric groups.</>,
+  },
+  {
+    title: 'Time Reversal',
+    description: <>Tensors can be symmetric (i-type) or anti-symmetric (c-type) under time reversal (<InlineMath math="t \to -t" />). Magnetic properties are typically c-type, while electric properties are i-type.</>,
+  },
+];
+
+const SHG_MULTIPOLES: { title: string; description: React.ReactNode }[] = [
+  {
+    title: 'Electric Dipole (ED)',
+    description: <>The leading-order contribution. It is a polar 3rd-rank tensor (<InlineMath math="\chi^{(2)}_{ijk}" />). Because it is odd under spatial inversion, ED SHG strictly vanishes in centrosymmetric materials, making it a powerful probe for broken inversion symmetry.</>,
+  },
+  {
+    title: 'Magnetic Dipole (MD)',
+    description: <>A higher-order axial 3rd-rank tensor. Unlike ED, MD contributions do not necessarily vanish in centrosymmetric point groups, provided time-reversal symmetry is broken (e.g., in antiferromagnetic states).</>,
+  },
+  {
+    title: 'Electric Quadrupole (EQ)',
+    description: <>A higher-order polar 4th-rank tensor (<InlineMath math="\chi^{(2)}_{ijkl}" />). Because it is an even-rank tensor, EQ SHG survives inversion symmetry and can generate bulk SHG signals even in centrosymmetric crystals.</>,
+  },
+];
+
+const REFERENCES: { href: string; title: string; description: string }[] = [
+  {
+    href: 'https://doi.org/10.1107/97809553602060000114',
+    title: 'International Tables for Crystallography',
+    description: 'Volume A: Space-group symmetry. General crystal symmetry aspects and point group definitions.',
+  },
+  {
+    href: 'https://ethz.ch/content/dam/ethz/special-interest/matl/multi-ferroic-materials-dam/documents/education/Nonlinear%20Optics%20on%20Ferroic%20Materials/Birss%20Symmetry%20&%20Magnetism%20komplett.pdf',
+    title: 'Symmetry and Magnetism',
+    description: 'Birss, R. R. (1966). Comprehensive derivation of magnetic point groups and tensor properties.',
+  },
+  {
+    href: 'https://doi.org/10.1103/PhysRev.130.919',
+    title: 'Nonlinear Optical Properties of Solids',
+    description: 'Pershan, P. S. (1963). Nonlinear optical multipole contributions.',
+  },
+  {
+    href: 'https://doi.org/10.1007/s003400050650',
+    title: 'Nonlinear spectroscopy of antiferromagnetics',
+    description: 'Fröhlich, D., et al. (1999). Source term calculation.',
+  },
+  {
+    href: 'https://doi.org/10.1070/PU1966v009n02ABEH002879',
+    title: 'Macroscopic Symmetry and Properties of Crystals',
+    description: 'V. A. Koptsik (1966). Shubnikov groups and their physical applications.',
+  },
+  {
+    href: 'https://www.cryst.ehu.es/',
+    title: 'Bilbao Crystallographic Server',
+    description: 'Online tools for crystallography, magnetic symmetry, and group theory.',
+  },
+];
 
 export function HelpPage() {
   return (
@@ -17,38 +105,18 @@ export function HelpPage() {
       <section className="space-y-6">
         <h2 className="text-2xl font-serif italic border-b border-[#141414] pb-2">Feature Overview</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 border border-[#141414] border-opacity-10 space-y-3">
-            <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest">
-              <Zap className="w-4 h-4" />
-              Calculator
+          {FEATURES.map((feature) => (
+            <div key={feature.title} className="p-6 border border-[#141414] border-opacity-10 space-y-3">
+              <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest">
+                <feature.icon className="w-4 h-4" />
+                {feature.title}
+              </div>
+              <p className="text-sm opacity-70 leading-relaxed">
+                {feature.description}
+              </p>
+              {feature.extra}
             </div>
-            <p className="text-sm opacity-70 leading-relaxed">
-              Calculate non-zero tensor components for various physical properties (Electric Dipole, Magnetic Dipole, Electric Quadrupole) under different point group symmetries. Supports time-reversal symmetry toggles for magnetic groups.
-            </p>
-          </div>
-          <div className="p-6 border border-[#141414] border-opacity-10 space-y-3">
-            <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest">
-              <Layers className="w-4 h-4" />
-              Explorer
-            </div>
-            <p className="text-sm opacity-70 leading-relaxed">
-              Browse all 122 crystallographic magnetic point groups. Filter by crystal system, group type (Ordinary, Gray, Black & White), and view their symmetry operations and properties.
-            </p>
-          </div>
-          <div className="p-6 border border-[#141414] border-opacity-10 space-y-3">
-            <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest">
-              <Activity className="w-4 h-4" />
-              Simulator
-            </div>
-            <p className="text-sm opacity-70 leading-relaxed">
-              Visualize expected SHG intensity polarimetry patterns. Adjust crystal orientation, tensor component amplitudes, and phases to simulate various polarization configurations.
-            </p>
-            <ul className="text-sm opacity-70 list-disc list-inside space-y-1 ml-4">
-              <li><strong>Anisotropy:</strong> Parallel and Crossed configurations as a function of polarizer angle.</li>
-              <li><strong>Polarizer:</strong> Fixed analyzer at 0° and 90°, as a function of polarizer angle.</li>
-              <li><strong>Analyzer:</strong> Fixed polarizer at 0° and 90°, as a function of analyzer angle.</li>
-            </ul>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -115,24 +183,14 @@ export function HelpPage() {
           <div className="space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-widest">Tensor Types</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 border border-[#141414] border-opacity-10 space-y-2">
-                <h4 className="font-medium">Polar Tensors</h4>
-                <p className="text-xs opacity-70 leading-relaxed">
-                  Transform like standard vectors under spatial inversion (<InlineMath math="\vec{r} \to -\vec{r}" />). Examples include electric dipole moments and polarization. Odd-rank polar tensors strictly vanish in centrosymmetric point groups.
-                </p>
-              </div>
-              <div className="p-4 border border-[#141414] border-opacity-10 space-y-2">
-                <h4 className="font-medium">Axial Tensors</h4>
-                <p className="text-xs opacity-70 leading-relaxed">
-                  Also known as pseudotensors. They do not change sign under spatial inversion (e.g., magnetic moments, angular momentum). Odd-rank axial tensors can survive in centrosymmetric groups.
-                </p>
-              </div>
-              <div className="p-4 border border-[#141414] border-opacity-10 space-y-2">
-                <h4 className="font-medium">Time Reversal</h4>
-                <p className="text-xs opacity-70 leading-relaxed">
-                  Tensors can be symmetric (i-type) or anti-symmetric (c-type) under time reversal (<InlineMath math="t \to -t" />). Magnetic properties are typically c-type, while electric properties are i-type.
-                </p>
-              </div>
+              {TENSOR_TYPES.map((tensorType) => (
+                <div key={tensorType.title} className="p-4 border border-[#141414] border-opacity-10 space-y-2">
+                  <h4 className="font-medium">{tensorType.title}</h4>
+                  <p className="text-xs opacity-70 leading-relaxed">
+                    {tensorType.description}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -142,24 +200,14 @@ export function HelpPage() {
               <strong>Second Harmonic Generation (SHG)</strong> is a nonlinear optical process where two photons of frequency <InlineMath math="\omega" /> interact within a material to generate a single photon at twice the frequency (<InlineMath math="2\omega" />). The calculator focuses on three multipole contributions to this process:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 border border-[#141414] border-opacity-10 space-y-2">
-                <h4 className="font-medium">Electric Dipole (ED)</h4>
-                <p className="text-xs opacity-70 leading-relaxed">
-                  The leading-order contribution. It is a polar 3rd-rank tensor (<InlineMath math="\chi^{(2)}_{ijk}" />). Because it is odd under spatial inversion, ED SHG strictly vanishes in centrosymmetric materials, making it a powerful probe for broken inversion symmetry.
-                </p>
-              </div>
-              <div className="p-4 border border-[#141414] border-opacity-10 space-y-2">
-                <h4 className="font-medium">Magnetic Dipole (MD)</h4>
-                <p className="text-xs opacity-70 leading-relaxed">
-                  A higher-order axial 3rd-rank tensor. Unlike ED, MD contributions do not necessarily vanish in centrosymmetric point groups, provided time-reversal symmetry is broken (e.g., in antiferromagnetic states).
-                </p>
-              </div>
-              <div className="p-4 border border-[#141414] border-opacity-10 space-y-2">
-                <h4 className="font-medium">Electric Quadrupole (EQ)</h4>
-                <p className="text-xs opacity-70 leading-relaxed">
-                  A higher-order polar 4th-rank tensor (<InlineMath math="\chi^{(2)}_{ijkl}" />). Because it is an even-rank tensor, EQ SHG survives inversion symmetry and can generate bulk SHG signals even in centrosymmetric crystals.
-                </p>
-              </div>
+              {SHG_MULTIPOLES.map((multipole) => (
+                <div key={multipole.title} className="p-4 border border-[#141414] border-opacity-10 space-y-2">
+                  <h4 className="font-medium">{multipole.title}</h4>
+                  <p className="text-xs opacity-70 leading-relaxed">
+                    {multipole.description}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -296,42 +344,14 @@ export function HelpPage() {
           References
         </h2>
         <ul className="text-sm opacity-70 space-y-4 list-none">
-          <li className="p-4 border border-[#141414] border-opacity-10 hover:bg-[#141414]/5 transition-colors">
-            <a href="https://doi.org/10.1107/97809553602060000114" target="_blank" rel="noreferrer" className="block space-y-1">
-              <span className="font-medium underline">International Tables for Crystallography</span>
-              <span className="block opacity-80 text-xs">Volume A: Space-group symmetry. General crystal symmetry aspects and point group definitions.</span>
-            </a>
-          </li>
-          <li className="p-4 border border-[#141414] border-opacity-10 hover:bg-[#141414]/5 transition-colors">
-            <a href="https://ethz.ch/content/dam/ethz/special-interest/matl/multi-ferroic-materials-dam/documents/education/Nonlinear%20Optics%20on%20Ferroic%20Materials/Birss%20Symmetry%20&%20Magnetism%20komplett.pdf" target="_blank" rel="noreferrer" className="block space-y-1">
-              <span className="font-medium underline">Symmetry and Magnetism</span>
-              <span className="block opacity-80 text-xs">Birss, R. R. (1966). Comprehensive derivation of magnetic point groups and tensor properties.</span>
-            </a>
-          </li>
-          <li className="p-4 border border-[#141414] border-opacity-10 hover:bg-[#141414]/5 transition-colors">
-            <a href="https://doi.org/10.1103/PhysRev.130.919" target="_blank" rel="noreferrer" className="block space-y-1">
-              <span className="font-medium underline">Nonlinear Optical Properties of Solids</span>
-              <span className="block opacity-80 text-xs">Pershan, P. S. (1963). Nonlinear optical multipole contributions.</span>
-            </a>
-          </li>
-          <li className="p-4 border border-[#141414] border-opacity-10 hover:bg-[#141414]/5 transition-colors">
-            <a href="https://doi.org/10.1007/s003400050650" target="_blank" rel="noreferrer" className="block space-y-1">
-              <span className="font-medium underline">Nonlinear spectroscopy of antiferromagnetics</span>
-              <span className="block opacity-80 text-xs">Fröhlich, D., et al. (1999). Source term calculation.</span>
-            </a>
-          </li>
-          <li className="p-4 border border-[#141414] border-opacity-10 hover:bg-[#141414]/5 transition-colors">
-            <a href="https://doi.org/10.1070/PU1966v009n02ABEH002879" target="_blank" rel="noreferrer" className="block space-y-1">
-              <span className="font-medium underline">Macroscopic Symmetry and Properties of Crystals</span>
-              <span className="block opacity-80 text-xs">V. A. Koptsik (1966). Shubnikov groups and their physical applications.</span>
-            </a>
-          </li>
-          <li className="p-4 border border-[#141414] border-opacity-10 hover:bg-[#141414]/5 transition-colors">
-            <a href="https://www.cryst.ehu.es/" target="_blank" rel="noreferrer" className="block space-y-1">
-              <span className="font-medium underline">Bilbao Crystallographic Server</span>
-              <span className="block opacity-80 text-xs">Online tools for crystallography, magnetic symmetry, and group theory.</span>
-            </a>
-          </li>
+          {REFERENCES.map((reference) => (
+            <li key={reference.href} className="p-4 border border-[#141414] border-opacity-10 hover:bg-[#141414]/5 transition-colors">
+              <a href={reference.href} target="_blank" rel="noreferrer" className="block space-y-1">
+                <span className="font-medium underline">{reference.title}</span>
+                <span className="block opacity-80 text-xs">{reference.description}</span>
+              </a>
+            </li>
+          ))}
         </ul>
       </section>
     </div>
