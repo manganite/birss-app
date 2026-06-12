@@ -67,13 +67,14 @@ All cross-page state (selected group, tensor type, time-reversal, rotation angle
 ## Releases & Versioning
 
 - The app version (`package.json` `version`) is injected into the footer via Vite's `define` (`__APP_VERSION__`, declared in `src/vite-env.d.ts`). Bumping the version requires no other code changes — `package-lock.json`'s top-level `version` should be kept in sync (`npm install --package-lock-only`).
-- Follow [Semantic Versioning](https://semver.org/). On every notable change, add an entry under `## [Unreleased]` in `CHANGELOG.md`.
+- Follow [Semantic Versioning](https://semver.org/). On every user-facing change (behavior, UI, or capability — Added/Changed/Fixed/Removed in the Keep a Changelog sense), add an entry under `## [Unreleased]` in `CHANGELOG.md`. Internal-only changes (chores, tests, CI, tooling/config with no runtime effect) generally don't need an entry.
 - When cutting a release: bump `version` in `package.json`/`package-lock.json`, move the `Unreleased` changelog entries under a new `## [x.y.z] - YYYY-MM-DD` heading, update the compare/release links at the bottom of `CHANGELOG.md`, then tag (`vX.Y.Z`) and create a GitHub release.
 - License is MIT (`LICENSE` at repo root). Keep the `@license SPDX-License-Identifier: MIT` header in `App.tsx` consistent with this.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): lowercase summary`, e.g. `feat(simulator): add polarimetry tooltip`. Common types are `feat`, `fix`, `refactor`, `test`, `docs`, `chore`. Scope is optional and usually the affected component/module.
 
 ## Important Constraints
 
 - **No backend**: all tensor math runs client-side in `tensorCalculator.ts`. Do not add server-side routes.
 - **PWA**: the app registers a service worker (`vite-plugin-pwa`). Manifest assets (`favicon.svg`, `icon-192.svg`, `icon-512.svg`, `apple-touch-icon.png`, `mask-icon.svg`) live in `public/`. Do not rename or remove them.
-- **TypeScript strict mode is off** — no `strict: true` in `tsconfig.json`. Do not add it without testing.
+- **TypeScript strict mode is on** (`strict: true` in `tsconfig.json`), enforced by `npm run lint` in CI.
 - **Vitest is the test framework** — see `npm run test` above. Do not switch to Jest or another runner without explicit instruction.
