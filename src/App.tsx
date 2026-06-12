@@ -90,6 +90,7 @@ export default function App() {
   const [currentView, setCurrentView] = useState<'calculator' | 'simulator' | 'explorer' | 'help'>('calculator');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [activeCategory, setActiveCategory] = useState<GroupCategory>('All');
   const [selectedGroup, setSelectedGroup] = useState<PointGroupData | null>(null);
   const [selectedTensorType, setSelectedTensorType] = useState<'ED' | 'MD' | 'EQ'>('ED');
@@ -203,20 +204,44 @@ export default function App() {
             <div className="relative w-full lg:w-64">
               <div className="flex items-center bg-white/50 border border-[#141414] border-opacity-20 rounded-full px-3 py-1.5 focus-within:border-opacity-100 focus-within:bg-white transition-all">
                 <Search className="w-3.5 h-3.5 opacity-50" />
-                <input 
+                <input
                   type="text"
                   placeholder="Search groups (e.g., 4/m, 4'/m, 11')"
                   className="bg-transparent border-none outline-none w-full text-xs ml-2 placeholder:opacity-40"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => { setSearchQuery(e.target.value); setHighlightedIndex(-1); }}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  role="combobox"
+                  aria-expanded={isSearchFocused}
+                  aria-controls="group-search-listbox"
+                  aria-autocomplete="list"
+                  aria-activedescendant={highlightedIndex >= 0 ? `group-option-${filteredGroups[highlightedIndex]?.name}` : undefined}
+                  onKeyDown={(e) => {
+                    if (e.key === 'ArrowDown') {
+                      e.preventDefault();
+                      setHighlightedIndex(i => Math.min(i + 1, filteredGroups.length - 1));
+                    } else if (e.key === 'ArrowUp') {
+                      e.preventDefault();
+                      setHighlightedIndex(i => Math.max(i - 1, -1));
+                    } else if (e.key === 'Enter') {
+                      if (highlightedIndex >= 0 && filteredGroups[highlightedIndex]) {
+                        e.preventDefault();
+                        handleSelect(filteredGroups[highlightedIndex]);
+                      }
+                    } else if (e.key === 'Escape') {
+                      setIsSearchFocused(false);
+                      e.currentTarget.blur();
+                    }
+                  }}
                 />
               </div>
               
               <AnimatePresence>
                 {isSearchFocused && (
-                  <motion.div 
+                  <motion.div
+                    id="group-search-listbox"
+                    role="listbox"
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 5 }}
@@ -240,12 +265,15 @@ export default function App() {
                     </div>
                     
                     <div className="overflow-y-auto flex-1 p-2">
-                      {filteredGroups.length > 0 ? filteredGroups.map(group => (
+                      {filteredGroups.length > 0 ? filteredGroups.map((group, idx) => (
                         <button
                           key={group.name}
+                          id={`group-option-${group.name}`}
+                          role="option"
+                          aria-selected={idx === highlightedIndex}
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={() => handleSelect(group)}
-                          className="w-full text-left px-3 py-2 hover:bg-[#141414] hover:text-[#E4E3E0] transition-colors flex justify-between items-center group rounded-md"
+                          className={`w-full text-left px-3 py-2 hover:bg-[#141414] hover:text-[#E4E3E0] transition-colors flex justify-between items-center group rounded-md ${idx === highlightedIndex ? 'bg-[#141414]/10' : ''}`}
                         >
                           <span className="text-sm font-serif italic"><FormatPointGroup name={group.name} /></span>
                           <span className="text-[10px] uppercase tracking-widest opacity-50 group-hover:opacity-100">{group.crystalSystem}</span>

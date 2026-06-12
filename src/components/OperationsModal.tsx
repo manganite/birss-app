@@ -1,8 +1,10 @@
+import { useRef } from 'react';
 import { motion } from 'motion/react';
 import { X, Calculator } from 'lucide-react';
 import { getSymmetryOperations } from '../services/tensorCalculator';
 import { FormatPointGroup, SymmetryOperation } from './MathComponents';
 import { PointGroupData } from '../data/pointGroups';
+import { useDialogA11y } from '../hooks/useDialogA11y';
 
 interface OperationsModalProps {
   group: PointGroupData;
@@ -12,10 +14,17 @@ interface OperationsModalProps {
 
 export const OperationsModal = ({ group, onClose, onOpenInCalculator }: OperationsModalProps) => {
   const operations = getSymmetryOperations(group.name);
+  const containerRef = useRef<HTMLDivElement>(null);
+  useDialogA11y({ onClose, containerRef });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#141414]/80 backdrop-blur-sm" onClick={onClose}>
-      <motion.div 
+      <motion.div
+        ref={containerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="operations-modal-title"
+        tabIndex={-1}
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -24,7 +33,7 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
       >
         <div className="flex items-center justify-between p-4 border-b border-[#141414] shrink-0">
           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-medium tracking-tight">
+            <h2 id="operations-modal-title" className="text-xl font-medium tracking-tight">
               <FormatPointGroup name={group.name} />
             </h2>
             <div className="flex items-center gap-2 text-xs uppercase tracking-widest opacity-60 hidden sm:flex">
@@ -33,8 +42,9 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
               <span>Type {group.type}</span>
             </div>
           </div>
-          <button 
+          <button
             onClick={onClose}
+            aria-label="Close"
             className="p-2 hover:bg-[#141414]/10 transition-colors"
           >
             <X className="w-5 h-5" />
