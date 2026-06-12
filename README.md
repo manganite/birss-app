@@ -50,5 +50,8 @@ The symmetry relations and calculations presented in this app follow the convent
 3. Start development server: `npm run dev`
 4. Build for production: `npm run build`
 
+## Changelog
+See [CHANGELOG.md](CHANGELOG.md) for release history.
+
 ## License
 This project is licensed under the [MIT License](LICENSE).
