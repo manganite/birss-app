@@ -1,5 +1,5 @@
 {
-  "name": "react-example",
+  "name": "birss-app",
   "private": true,
   "version": "0.0.0",
   "homepage": "https://manganite.github.io/birss-app/",
@@ -23,7 +23,6 @@
     "react-dom": "19.0.0",
     "react-katex": "3.1.0",
     "recharts": "3.8.1",
-    "vite": "6.2.0",
     "vite-plugin-pwa": "1.2.0"
   },
   "devDependencies": {

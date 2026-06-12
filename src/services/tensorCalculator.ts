@@ -1,6 +1,6 @@
 /**
- * tensorService.ts
- * 
+ * tensorCalculator.ts
+ *
  * This service calculates the non-zero and independent components of a tensor
  * under the symmetry operations of a crystallographic point group.
  */
@@ -242,6 +242,16 @@ function getFullGroup(generators: Matrix3x3[]): Matrix3x3[] {
   return group;
 }
 
+const fullGroupCache = new Map<string, Matrix3x3[]>();
+function getCachedFullGroup(groupName: string, generators: Matrix3x3[]): Matrix3x3[] {
+  let group = fullGroupCache.get(groupName);
+  if (!group) {
+    group = getFullGroup(generators);
+    fullGroupCache.set(groupName, group);
+  }
+  return group;
+}
+
 function isSameMatrix(a: Matrix3x3, b: Matrix3x3): boolean {
   if ((a.isAntiUnitary || false) !== (b.isAntiUnitary || false)) return false;
   for (let i = 0; i < 3; i++) {
@@ -256,7 +266,7 @@ export function calculateTensorComponents(groupName: string, tensorType: 'ED' | 
   const generators = GENERATORS[groupName];
   if (!generators) return ["Point group not supported."];
 
-  const group = getFullGroup(generators);
+  const group = getCachedFullGroup(groupName, generators);
   const rank = tensorType === 'EQ' ? 4 : 3;
   const isAxial = tensorType === 'MD';
   const isTimeOdd = trType === 'c';
@@ -380,7 +390,7 @@ function getLabel(indices: number[]): string {
 export function isCentrosymmetric(groupName: string): boolean {
   const generators = GENERATORS[groupName];
   if (!generators) return false;
-  const group = getFullGroup(generators);
+  const group = getCachedFullGroup(groupName, generators);
   return group.some(m => isSameMatrix(m, inversion));
 }
 
@@ -394,89 +404,6 @@ export interface SHGExpression {
 export interface SHGResult {
   induced: SHGExpression[];
   source: SHGExpression[];
-}
-
-export function formatSubstitutedPoly(
-  poly: Map<string, Map<string, number>>,
-  mode: 'THETA' | 'ZERO' | 'NINETY',
-  scale: number = 1,
-  multiplyTrig?: '\\cos\\theta' | '\\sin\\theta'
-): string {
-  const finalParts: string[] = [];
-  const sortedChis = Array.from(poly.keys()).sort();
-  const epsilon = 1e-6;
-
-  for (const chi of sortedChis) {
-    const pairMap = poly.get(chi)!;
-    const fieldParts: { pair: string, coeff: number }[] = [];
-    const sortedPairs = Array.from(pairMap.keys()).sort();
-    for (const pair of sortedPairs) {
-      let coeff = pairMap.get(pair)! * scale;
-      if (Math.abs(coeff) > epsilon) {
-        if (mode === 'ZERO' && pair !== '00') continue;
-        if (mode === 'NINETY' && pair !== '11') continue;
-        fieldParts.push({ pair, coeff });
-      }
-    }
-    
-    if (fieldParts.length === 0) continue;
-
-    let fieldLabels: Record<string, string>;
-    
-    if (mode === 'THETA') {
-      if (multiplyTrig === '\\cos\\theta') {
-        fieldLabels = {
-          '00': '\\cos^3\\theta', '11': '\\cos\\theta \\sin^2\\theta', '22': '0',
-          '01': '\\cos^2\\theta \\sin\\theta', '02': '0', '12': '0'
-        };
-      } else if (multiplyTrig === '\\sin\\theta') {
-        fieldLabels = {
-          '00': '\\cos^2\\theta \\sin\\theta', '11': '\\sin^3\\theta', '22': '0',
-          '01': '\\cos\\theta \\sin^2\\theta', '02': '0', '12': '0'
-        };
-      } else {
-        fieldLabels = {
-          '00': '\\cos^2\\theta', '11': '\\sin^2\\theta', '22': '0',
-          '01': '\\cos\\theta \\sin\\theta', '02': '0', '12': '0'
-        };
-      }
-    } else {
-      const multiplied = multiplyTrig ? multiplyTrig : '1';
-      fieldLabels = {
-        '00': multiplied, '11': multiplied, '22': '0',
-        '01': '0', '02': '0', '12': '0'
-      };
-    }
-
-    if (fieldParts.length === 1) {
-      const { pair, coeff } = fieldParts[0];
-      const fieldStr = fieldLabels[pair];
-      const sign = coeff < 0 ? "-" : "";
-      const displayFieldStr = fieldStr === '1' ? '' : ` ${fieldStr}`;
-      finalParts.push(`${sign}${formatCoeff(coeff)}${chi} E_0^2${displayFieldStr}`);
-    } else {
-      const innerExpr = fieldParts.map((fp, idx) => {
-        const fieldStr = fieldLabels[fp.pair];
-        const c = fp.coeff;
-        const coeffStr = formatCoeff(c);
-        
-        let termStr = '';
-        if (fieldStr === '1') {
-          termStr = coeffStr === '' ? '1' : coeffStr;
-        } else {
-          termStr = coeffStr === '' ? fieldStr : `${coeffStr} ${fieldStr}`;
-        }
-        
-        if (idx === 0) {
-          return `${c < 0 ? '-' : ''}${termStr}`;
-        } else {
-          return `${c < 0 ? '-' : '+'} ${termStr}`;
-        }
-      }).join(" ");
-      finalParts.push(`${chi} E_0^2(${innerExpr})`);
-    }
-  }
-  return finalParts.length > 0 ? finalParts.join(" + ").replace(/\+ -/g, "- ") : "0";
 }
 
 export function formatSubstitutedPolySum(
@@ -761,7 +688,7 @@ export function calculateSHGExpressions(
   const generators = GENERATORS[groupName];
   if (!generators) return { induced: [], source: [] };
 
-  const group = getFullGroup(generators);
+  const group = getCachedFullGroup(groupName, generators);
   const rank = tensorType === 'EQ' ? 4 : 3;
   const isAxial = tensorType === 'MD';
   const isTimeOdd = trType === 'c';
@@ -1069,7 +996,7 @@ function formatResults(basisResults: number[][], rank: number, isTimeOdd: boolea
 export function getSymmetryOperations(groupName: string): string[] {
   const generators = GENERATORS[groupName];
   if (!generators) return [];
-  const group = getFullGroup(generators);
+  const group = getCachedFullGroup(groupName, generators);
   
   const symbols = group.map(m => {
     const { m: mat, isAntiUnitary } = m;
