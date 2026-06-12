@@ -32,7 +32,6 @@ The symmetry relations and calculations presented in this app follow the convent
 - **[Fröhlich, D., et al. (1999). Nonlinear spectroscopy of antiferromagnetics](https://doi.org/10.1007/s003400050650)**: Source term calculation.
 
 ## Tech Stack
-- **Developed with [Google AI Studio Build](https://ai.studio/build)** — Built, iterated, and deployed using natural language prompting.
 - **React 19** + **Vite**
 - **Tailwind CSS** for styling
 - **Lucide React** for iconography
