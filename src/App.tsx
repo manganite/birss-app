@@ -1,6 +1,6 @@
 /**
  * @license
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: MIT
  */
 
 import { useState, useMemo } from 'react';
@@ -640,6 +640,17 @@ export default function App() {
         </p>
         <p className="text-[10px] uppercase tracking-[0.2em] opacity-30">
           By Thomas Lottermoser
+        </p>
+        <p className="text-[10px] uppercase tracking-[0.2em] opacity-30">
+          v{__APP_VERSION__} &middot;{' '}
+          <a
+            href="https://github.com/manganite/birss-app/blob/main/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-100 transition-opacity"
+          >
+            MIT License
+          </a>
         </p>
       </footer>
 
