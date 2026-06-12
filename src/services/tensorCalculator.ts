@@ -5,6 +5,22 @@
  * under the symmetry operations of a crystallographic point group.
  */
 
+/** General tolerance for tensor/coefficient/matrix comparisons. */
+const EPSILON = 1e-6;
+/** Geometric tolerance for normalized axis-vector "is zero" / dot-product sign checks. */
+const AXIS_EPSILON = 1e-5;
+/** formatCoeff's "is this an integer / matches a simple fraction" tolerance (same value as AXIS_EPSILON, kept separate -- unrelated quantities). */
+const COEFF_EPSILON = 1e-5;
+/** Cardinal-axis / in-plane-axis detection tolerance in formatAxis. */
+const CARDINAL_AXIS_EPSILON = 1e-3;
+/** formatCoeff's irrational-root (sqrt) matching tolerance. */
+const ROOT_MATCH_EPSILON = 1e-4;
+/** Max per-component error when snapping a normalized axis to integer Miller indices. */
+const MILLER_ERROR_THRESHOLD = 0.1;
+
+/** Collapses "+ -X" into "- X" after joining signed terms into a display string. */
+const cleanupExpressionSigns = (s: string): string => s.replace(/\+ -/g, "- ");
+
 export type TensorType = 'ED' | 'MD' | 'EQ';
 export type TensorTimeReversal = 'i' | 'c'; // i = time-even, c = time-odd
 
@@ -256,7 +272,7 @@ function isSameMatrix(a: Matrix3x3, b: Matrix3x3): boolean {
   if ((a.isAntiUnitary || false) !== (b.isAntiUnitary || false)) return false;
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      if (Math.abs(a.m[i][j] - b.m[i][j]) > 1e-6) return false;
+      if (Math.abs(a.m[i][j] - b.m[i][j]) > EPSILON) return false;
     }
   }
   return true;
@@ -295,23 +311,22 @@ export function calculateTensorComponents(groupName: string, tensorType: 'ED' | 
     const averaged = averageTensor(basisVector, group, rank, isAxial, isTimeOdd);
     
     let isNew = true;
-    const epsilon = 1e-6;
-    
-    if (averaged.every(v => Math.abs(v) < epsilon)) {
+
+    if (averaged.every(v => Math.abs(v) < EPSILON)) {
       isNew = false;
     } else {
       for (const existing of basisResults) {
         let ratio = 0;
         let match = true;
         for (let k = 0; k < dim; k++) {
-          if (Math.abs(existing[k]) > epsilon) {
+          if (Math.abs(existing[k]) > EPSILON) {
             const r = averaged[k] / existing[k];
             if (ratio === 0) ratio = r;
-            else if (Math.abs(r - ratio) > epsilon) {
+            else if (Math.abs(r - ratio) > EPSILON) {
               match = false;
               break;
             }
-          } else if (Math.abs(averaged[k]) > epsilon) {
+          } else if (Math.abs(averaged[k]) > EPSILON) {
             match = false;
             break;
           }
@@ -360,7 +375,7 @@ function transformTensor(tensor: number[], g: Matrix3x3, rank: number, isAxial: 
   for (let idx = 0; idx < dim; idx++) {
     const indices = getIndices(idx, rank);
     for (let jdx = 0; jdx < dim; jdx++) {
-      if (Math.abs(tensor[jdx]) < 1e-6) continue;
+      if (Math.abs(tensor[jdx]) < EPSILON) continue;
       const jIndices = getIndices(jdx, rank);
       let rProd = factor;
       for (let r = 0; r < rank; r++) {
@@ -418,7 +433,6 @@ export function formatSubstitutedPolySum(
   
   const sortedChis = Array.from(allChis).sort();
   const finalParts: string[] = [];
-  const epsilon = 1e-6;
   const allMergedChiTerms: { chi: string, terms: { coeff: number, fieldStr: string }[] }[] = [];
 
   for (const chi of sortedChis) {
@@ -497,14 +511,14 @@ export function formatSubstitutedPolySum(
       const sortedPairs = Array.from(pairMap.keys()).sort();
       for (const pair of sortedPairs) {
         let baseCoeff = pairMap.get(pair)! * scale;
-        if (Math.abs(baseCoeff) > epsilon) {
+        if (Math.abs(baseCoeff) > EPSILON) {
           if (mode === 'ZERO' && pair !== '00') continue;
           if (mode === 'NINETY' && pair !== '11') continue;
-          
+
           const pMappings = powerMappings[pair] || [];
           for (const mapping of pMappings) {
             const coeff = baseCoeff * mapping.factor;
-            if (Math.abs(coeff) > epsilon) {
+            if (Math.abs(coeff) > EPSILON) {
               powerChiTerms.push({ coeff, fieldStr: mapping.harmonic });
             }
           }
@@ -512,7 +526,7 @@ export function formatSubstitutedPolySum(
           const hMappings = harmonicMappings[pair] || [];
           for (const mapping of hMappings) {
             const coeff = baseCoeff * mapping.factor;
-            if (Math.abs(coeff) > epsilon) {
+            if (Math.abs(coeff) > EPSILON) {
               harmonicChiTerms.push({ coeff, fieldStr: mapping.harmonic });
             }
           }
@@ -527,7 +541,7 @@ export function formatSubstitutedPolySum(
       }
       const merged: { coeff: number, fieldStr: string }[] = [];
       for (const [fieldStr, coeff] of combined.entries()) {
-        if (Math.abs(coeff) > epsilon) {
+        if (Math.abs(coeff) > EPSILON) {
           merged.push({ coeff, fieldStr });
         }
       }
@@ -607,22 +621,22 @@ export function formatSubstitutedPolySum(
       finalParts.push(`${chi} E_0^2(${innerExpr})`);
     }
   }
-  return finalParts.length > 0 ? finalParts.join(" + ").replace(/\+ -/g, "- ") : "0";
+  return finalParts.length > 0 ? cleanupExpressionSigns(finalParts.join(" + ")) : "0";
 }
 
 export function formatCoeff(c: number): string {
   const absC = Math.abs(c);
-  if (absC < 1e-5) return "0";
-  
+  if (absC < COEFF_EPSILON) return "0";
+
   const rounded = Math.round(absC);
-  if (Math.abs(absC - rounded) < 1e-5) {
+  if (Math.abs(absC - rounded) < COEFF_EPSILON) {
     if (rounded === 1) return "";
     return rounded.toString();
   }
-  
+
   for (let d = 2; d <= 8; d++) {
     const num = Math.round(absC * d);
-    if (Math.abs(absC - num / d) < 1e-5) {
+    if (Math.abs(absC - num / d) < COEFF_EPSILON) {
       return `\\frac{${num}}{${d}}`;
     }
   }
@@ -644,7 +658,7 @@ export function formatCoeff(c: number): string {
   ];
 
   for (const frac of fractions) {
-    if (Math.abs(absC - frac.val) < 1e-5) return frac.str;
+    if (Math.abs(absC - frac.val) < COEFF_EPSILON) return frac.str;
   }
 
   // Square roots and their combinations
@@ -671,7 +685,7 @@ export function formatCoeff(c: number): string {
   ];
 
   for (const root of roots) {
-    if (Math.abs(absC - root.val) < 1e-4) return root.str;
+    if (Math.abs(absC - root.val) < ROOT_MATCH_EPSILON) return root.str;
   }
 
   return Number(absC.toFixed(3)).toString();
@@ -723,7 +737,7 @@ export function calculateSHGExpressions(
     for (let i=0; i<3; i++) {
       for (let m=0; m<3; m++) {
         const coeff = A[i] * B[m];
-        if (Math.abs(coeff) > 1e-6) {
+        if (Math.abs(coeff) > EPSILON) {
           const key = i <= m ? `${i}${m}` : `${m}${i}`;
           res[key] += coeff;
         }
@@ -753,7 +767,6 @@ export function calculateSHGExpressions(
   function formatPoly(poly: Poly, isLabFrame: boolean = false): string {
     const finalParts: string[] = [];
     const sortedChis = Array.from(poly.keys()).sort();
-    const epsilon = 1e-6;
 
     for (const chi of sortedChis) {
       const pairMap = poly.get(chi)!;
@@ -761,7 +774,7 @@ export function calculateSHGExpressions(
       const sortedPairs = Array.from(pairMap.keys()).sort();
       for (const pair of sortedPairs) {
         let coeff = pairMap.get(pair)!;
-        if (Math.abs(coeff) > epsilon) {
+        if (Math.abs(coeff) > EPSILON) {
           fieldParts.push({ pair, coeff });
         }
       }
@@ -800,7 +813,7 @@ export function calculateSHGExpressions(
         finalParts.push(`${chi}(${innerExpr})`);
       }
     }
-    return finalParts.length > 0 ? finalParts.join(" + ").replace(/\+ -/g, "- ") : "0";
+    return finalParts.length > 0 ? cleanupExpressionSigns(finalParts.join(" + ")) : "0";
   }
 
   const outputCount = tensorType === 'EQ' ? 9 : 3;
@@ -842,7 +855,7 @@ export function calculateSHGExpressions(
         
         let foundRelation: { label: string, coeff: number } | null = null;
         for (let i = 0; i < dim; i++) {
-          if (Math.abs(averaged[i]) > 1e-6) {
+          if (Math.abs(averaged[i]) > EPSILON) {
             const label = getLabel(getIndices(i, rank));
             const coeff = averaged[flatIdx] / averaged[i];
             foundRelation = { label, coeff };
@@ -853,7 +866,7 @@ export function calculateSHGExpressions(
         if (foundRelation) {
           const polyFull = multiplyLinear(E_vec_full[j], E_vec_full[k]);
           for (const [pair, pCoeff] of Object.entries(polyFull)) {
-            if (Math.abs(pCoeff) > 1e-6) {
+            if (Math.abs(pCoeff) > EPSILON) {
               const totalCoeff = foundRelation.coeff * pCoeff;
               if (!terms.has(foundRelation.label)) terms.set(foundRelation.label, new Map());
               const pairMap = terms.get(foundRelation.label)!;
@@ -863,7 +876,7 @@ export function calculateSHGExpressions(
 
           const polyLab = multiplyLinear(E_vec_lab_in_cryst[j], E_vec_lab_in_cryst[k]);
           for (const [pair, pCoeff] of Object.entries(polyLab)) {
-            if (Math.abs(pCoeff) > 1e-6) {
+            if (Math.abs(pCoeff) > EPSILON) {
               const totalCoeff = foundRelation.coeff * pCoeff;
               if (!termsTransverse.has(foundRelation.label)) termsTransverse.set(foundRelation.label, new Map());
               const pairMap = termsTransverse.get(foundRelation.label)!;
@@ -888,13 +901,13 @@ export function calculateSHGExpressions(
     const parts: string[] = [];
     for (let i = 0; i < coeffs.length; i++) {
       const c = coeffs[i];
-      if (Math.abs(c) > 1e-6) {
+      if (Math.abs(c) > EPSILON) {
         const cStr = formatCoeff(c);
         const sign = c > 0 ? (parts.length === 0 ? "" : "+ ") : (parts.length === 0 ? "-" : "- ");
         parts.push(`${sign}${cStr}${labels[i]}`);
       }
     }
-    return parts.length > 0 ? parts.join(" ").replace(/\+ -/g, "- ") : "0";
+    return parts.length > 0 ? cleanupExpressionSigns(parts.join(" ")) : "0";
   }
 
   const tLabelsLab = ['X', 'Y', 'Z'];
@@ -964,15 +977,14 @@ export function calculateSHGExpressions(
 function formatResults(basisResults: number[][], rank: number, isTimeOdd: boolean): string[] {
   const dim = Math.pow(3, rank);
   const output: string[] = [];
-  const epsilon = 1e-6;
 
   for (const basis of basisResults) {
     const members: string[] = [];
     let leadIdx = -1;
     const addedLabels = new Set<string>();
-    
+
     for (let i = 0; i < dim; i++) {
-      if (Math.abs(basis[i]) > epsilon) {
+      if (Math.abs(basis[i]) > EPSILON) {
         const label = getLabel(getIndices(i, rank));
         if (addedLabels.has(label)) continue;
         addedLabels.add(label);
@@ -1007,53 +1019,59 @@ export function getSymmetryOperations(groupName: string): string[] {
     let axis = "";
     let sign = "";
 
-    const formatAxis = (x: number, y: number, z: number) => {
+    const formatAxis = (x: number, y: number, z: number): { label: string; nx: number; ny: number; nz: number } => {
       const max = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
-      if (max < 1e-5) return "";
+      if (max < AXIS_EPSILON) return { label: "", nx: 0, ny: 0, nz: 0 };
       let nx = x / max;
       let ny = y / max;
       let nz = z / max;
-      
-      if (nx < -1e-5 || (Math.abs(nx) < 1e-5 && ny < -1e-5) || (Math.abs(nx) < 1e-5 && Math.abs(ny) < 1e-5 && nz < -1e-5)) {
+
+      if (nx < -AXIS_EPSILON || (Math.abs(nx) < AXIS_EPSILON && ny < -AXIS_EPSILON) || (Math.abs(nx) < AXIS_EPSILON && Math.abs(ny) < AXIS_EPSILON && nz < -AXIS_EPSILON)) {
         nx = -nx; ny = -ny; nz = -nz;
       }
-      
-      if (Math.abs(nx - 1) < 1e-3 && Math.abs(ny) < 1e-3 && Math.abs(nz) < 1e-3) return "x";
-      if (Math.abs(nx) < 1e-3 && Math.abs(ny - 1) < 1e-3 && Math.abs(nz) < 1e-3) return "y";
-      if (Math.abs(nx) < 1e-3 && Math.abs(ny) < 1e-3 && Math.abs(nz - 1) < 1e-3) return "z";
-      
-      if (Math.abs(nz) < 1e-3) {
+
+      if (Math.abs(nx - 1) < CARDINAL_AXIS_EPSILON && Math.abs(ny) < CARDINAL_AXIS_EPSILON && Math.abs(nz) < CARDINAL_AXIS_EPSILON) return { label: "x", nx, ny, nz };
+      if (Math.abs(nx) < CARDINAL_AXIS_EPSILON && Math.abs(ny - 1) < CARDINAL_AXIS_EPSILON && Math.abs(nz) < CARDINAL_AXIS_EPSILON) return { label: "y", nx, ny, nz };
+      if (Math.abs(nx) < CARDINAL_AXIS_EPSILON && Math.abs(ny) < CARDINAL_AXIS_EPSILON && Math.abs(nz - 1) < CARDINAL_AXIS_EPSILON) return { label: "z", nx, ny, nz };
+
+      if (Math.abs(nz) < CARDINAL_AXIS_EPSILON) {
         let angle = Math.round(Math.atan2(ny, nx) * 180 / Math.PI);
         if (angle < 0) angle += 180;
         if (angle === 180) angle = 0;
-        return `${angle}°`;
+        return { label: `${angle}°`, nx, ny, nz };
       }
 
       let bestMult = 1;
       let minError = 100;
       for (let mult = 1; mult <= 6; mult++) {
-         const err = Math.abs(nx*mult - Math.round(nx*mult)) + 
-                     Math.abs(ny*mult - Math.round(ny*mult)) + 
+         const err = Math.abs(nx*mult - Math.round(nx*mult)) +
+                     Math.abs(ny*mult - Math.round(ny*mult)) +
                      Math.abs(nz*mult - Math.round(nz*mult));
          if (err < minError) {
             minError = err;
             bestMult = mult;
          }
       }
-      
-      let rx, ry, rz;
-      if (minError < 0.1) {
-         rx = Math.round(nx * bestMult);
-         ry = Math.round(ny * bestMult);
-         rz = Math.round(nz * bestMult);
+
+      if (minError < MILLER_ERROR_THRESHOLD) {
+         const rx = Math.round(nx * bestMult);
+         const ry = Math.round(ny * bestMult);
+         const rz = Math.round(nz * bestMult);
          const formatNum = (n: number) => n < 0 ? `-${Math.abs(n)}` : `${n}`;
-         return `[${formatNum(rx)}${formatNum(ry)}${formatNum(rz)}]`;
+         return { label: `[${formatNum(rx)}${formatNum(ry)}${formatNum(rz)}]`, nx, ny, nz };
       } else {
-         rx = Number(nx.toFixed(2));
-         ry = Number(ny.toFixed(2));
-         rz = Number(nz.toFixed(2));
-         return `[${rx},${ry},${rz}]`;
+         const rx = Number(nx.toFixed(2));
+         const ry = Number(ny.toFixed(2));
+         const rz = Number(nz.toFixed(2));
+         return { label: `[${rx},${ry},${rz}]`, nx, ny, nz };
       }
+    };
+
+    /** "⁺"/"⁻"/"" based on the sign of a dot product, using AXIS_EPSILON as the zero threshold. */
+    const signFromDot = (dot: number): string => {
+      if (dot > AXIS_EPSILON) return "⁺";
+      if (dot < -AXIS_EPSILON) return "⁻";
+      return "";
     };
 
     if (d === 1) {
@@ -1068,36 +1086,19 @@ export function getSymmetryOperations(groupName: string): string[] {
         const cx = mat[0][1], cy = mat[1][1] + 1, cz = mat[2][1];
         const bx = mat[0][2], by = mat[1][2], bz = mat[2][2] + 1;
         let ax=0, ay=0, az=0;
-        if (Math.abs(rx)>1e-5 || Math.abs(ry)>1e-5 || Math.abs(rz)>1e-5) { ax=rx; ay=ry; az=rz; }
-        else if (Math.abs(cx)>1e-5 || Math.abs(cy)>1e-5 || Math.abs(cz)>1e-5) { ax=cx; ay=cy; az=cz; }
+        if (Math.abs(rx)>AXIS_EPSILON || Math.abs(ry)>AXIS_EPSILON || Math.abs(rz)>AXIS_EPSILON) { ax=rx; ay=ry; az=rz; }
+        else if (Math.abs(cx)>AXIS_EPSILON || Math.abs(cy)>AXIS_EPSILON || Math.abs(cz)>AXIS_EPSILON) { ax=cx; ay=cy; az=cz; }
         else { ax=bx; ay=by; az=bz; }
-        axis = formatAxis(ax, ay, az);
+        axis = formatAxis(ax, ay, az).label;
       } else {
         const vx = mat[2][1] - mat[1][2];
         const vy = mat[0][2] - mat[2][0];
         const vz = mat[1][0] - mat[0][1];
-        axis = formatAxis(vx, vy, vz);
-        
-        let nx = 0, ny = 0, nz = 0;
-        if (axis === "x") nx = 1;
-        else if (axis === "y") ny = 1;
-        else if (axis === "z") nz = 1;
-        else if (axis.includes("°")) {
-          const angle = parseInt(axis) * Math.PI / 180;
-          nx = Math.cos(angle);
-          ny = Math.sin(angle);
-        } else {
-          const match = axis.match(/\[(-?\d)(-?\d)(-?\d)\]/);
-          if (match) {
-            nx = parseInt(match[1]);
-            ny = parseInt(match[2]);
-            nz = parseInt(match[3]);
-          }
-        }
-        
-        const dot = vx * nx + vy * ny + vz * nz;
-        if (dot > 1e-5) sign = "⁺";
-        else if (dot < -1e-5) sign = "⁻";
+        const result = formatAxis(vx, vy, vz);
+        axis = result.label;
+
+        const dot = vx * result.nx + vy * result.ny + vz * result.nz;
+        sign = signFromDot(dot);
       }
     } else {
       if (tr === -3) return "-1" + prime;
@@ -1111,36 +1112,19 @@ export function getSymmetryOperations(groupName: string): string[] {
         const cx = -mat[0][1], cy = 1 - mat[1][1], cz = -mat[2][1];
         const bx = -mat[0][2], by = -mat[1][2], bz = 1 - mat[2][2];
         let ax=0, ay=0, az=0;
-        if (Math.abs(rx)>1e-5 || Math.abs(ry)>1e-5 || Math.abs(rz)>1e-5) { ax=rx; ay=ry; az=rz; }
-        else if (Math.abs(cx)>1e-5 || Math.abs(cy)>1e-5 || Math.abs(cz)>1e-5) { ax=cx; ay=cy; az=cz; }
+        if (Math.abs(rx)>AXIS_EPSILON || Math.abs(ry)>AXIS_EPSILON || Math.abs(rz)>AXIS_EPSILON) { ax=rx; ay=ry; az=rz; }
+        else if (Math.abs(cx)>AXIS_EPSILON || Math.abs(cy)>AXIS_EPSILON || Math.abs(cz)>AXIS_EPSILON) { ax=cx; ay=cy; az=cz; }
         else { ax=bx; ay=by; az=bz; }
-        axis = formatAxis(ax, ay, az);
+        axis = formatAxis(ax, ay, az).label;
       } else {
         const vx = -(mat[2][1] - mat[1][2]);
         const vy = -(mat[0][2] - mat[2][0]);
         const vz = -(mat[1][0] - mat[0][1]);
-        axis = formatAxis(vx, vy, vz);
-        
-        let nx = 0, ny = 0, nz = 0;
-        if (axis === "x") nx = 1;
-        else if (axis === "y") ny = 1;
-        else if (axis === "z") nz = 1;
-        else if (axis.includes("°")) {
-          const angle = parseInt(axis) * Math.PI / 180;
-          nx = Math.cos(angle);
-          ny = Math.sin(angle);
-        } else {
-          const match = axis.match(/\[(-?\d)(-?\d)(-?\d)\]/);
-          if (match) {
-            nx = parseInt(match[1]);
-            ny = parseInt(match[2]);
-            nz = parseInt(match[3]);
-          }
-        }
-        
-        const dot = vx * nx + vy * ny + vz * nz;
-        if (dot > 1e-5) sign = "⁺";
-        else if (dot < -1e-5) sign = "⁻";
+        const result = formatAxis(vx, vy, vz);
+        axis = result.label;
+
+        const dot = vx * result.nx + vy * result.ny + vz * result.nz;
+        sign = signFromDot(dot);
       }
     }
 
@@ -1189,7 +1173,7 @@ export function getLabFrameVectors(tx: number, ty: number) {
     const terms = [];
     const labels = ['X', 'Y', 'Z'];
     for (let i = 0; i < 3; i++) {
-      if (Math.abs(v[i]) > 1e-5) {
+      if (Math.abs(v[i]) > AXIS_EPSILON) {
         const coeff = formatCoeff(v[i]);
         const sign = v[i] < 0 ? "-" : (terms.length > 0 ? "+" : "");
         terms.push(`${sign}${coeff}\\mathbf{${labels[i]}}_{LAB}`);
