@@ -69,6 +69,16 @@ const REFERENCES: { href: string; title: string; description: string }[] = [
     description: 'Birss, R. R. (1966). Comprehensive derivation of magnetic point groups and tensor properties.',
   },
   {
+    href: 'https://archive.org/details/yu.-i.-sirotin-m.-p.-shaskolskaya-fundamentals-of-crystal-physics-mir-1982',
+    title: 'Fundamentals of Crystal Physics',
+    description: "Sirotin, Yu. I. & Shaskol'skaya, M. P. (1982). Standard reference tables for tensor properties of crystals under point-group symmetry.",
+  },
+  {
+    href: 'https://www.sciencedirect.com/book/9780123694706/nonlinear-optics',
+    title: 'Nonlinear Optics',
+    description: 'Boyd, R. W. (2008). 3rd ed. Appendix tables of nonvanishing d-tensor components by point-group symmetry.',
+  },
+  {
     href: 'https://doi.org/10.1103/PhysRev.130.919',
     title: 'Nonlinear Optical Properties of Solids',
     description: 'Pershan, P. S. (1963). Nonlinear optical multipole contributions.',

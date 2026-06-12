@@ -9,10 +9,12 @@ npm install          # install dependencies
 npm run dev          # dev server on http://localhost:3000
 npm run build        # production build → dist/
 npm run lint         # TypeScript type-check only (tsc --noEmit)
+npm run test         # run the Vitest suite once
+npm run test:watch   # run Vitest in watch mode
 npm run deploy       # build + publish to GitHub Pages via gh-pages
 ```
 
-No test suite exists. Type-checking (`npm run lint`) is the only automated quality gate.
+`npm run lint` and `npm run test` are the automated quality gates (run in CI via `.github/workflows/ci.yml`). Tests for `tensorCalculator.ts` live in `src/services/tensorCalculator.test.ts` and cover: group-order sanity for all 122 point groups, parity invariants (e.g. ED vanishes for centrosymmetric groups, EQ never vanishes, grey groups `G1'` reproduce `G` for i-type), `formatCoeff`/`isCentrosymmetric` unit tests, and a small but growing set of literature-verified "golden" component relations (see Sirotin & Shaskol'skaya / Boyd references in `HelpPage.tsx`).
 
 ## Architecture
 
@@ -74,4 +76,4 @@ All cross-page state (selected group, tensor type, time-reversal, rotation angle
 - **No backend**: all tensor math runs client-side in `tensorCalculator.ts`. Do not add server-side routes.
 - **PWA**: the app registers a service worker (`vite-plugin-pwa`). Manifest assets (`favicon.svg`, `icon-192.svg`, `icon-512.svg`, `apple-touch-icon.png`, `mask-icon.svg`) live in `public/`. Do not rename or remove them.
 - **TypeScript strict mode is off** — no `strict: true` in `tsconfig.json`. Do not add it without testing.
-- **No test framework** — do not add Jest/Vitest configuration without explicit instruction.
+- **Vitest is the test framework** — see `npm run test` above. Do not switch to Jest or another runner without explicit instruction.
