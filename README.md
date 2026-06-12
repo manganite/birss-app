@@ -1,5 +1,9 @@
 # The Birss App
 
+[![Deploy](https://github.com/manganite/birss-app/actions/workflows/deploy.yml/badge.svg)](https://github.com/manganite/birss-app/actions/workflows/deploy.yml)
+[![Release](https://img.shields.io/github/v/release/manganite/birss-app)](https://github.com/manganite/birss-app/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Calculates non-zero susceptibility tensor components (Electric Dipole, Magnetic Dipole, Electric Quadrupole) and induced transverse Second Harmonic Generation (SHG) source terms for all 32 crystallographic and 122 magnetic point groups.
 
 ### [Live Demo](https://manganite.github.io/birss-app/)
@@ -45,3 +49,6 @@ The symmetry relations and calculations presented in this app follow the convent
 2. Install dependencies: `npm install`
 3. Start development server: `npm run dev`
 4. Build for production: `npm run build`
+
+## License
+This project is licensed under the [MIT License](LICENSE).
