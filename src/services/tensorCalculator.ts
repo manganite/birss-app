@@ -1170,7 +1170,7 @@ export function getLabFrameVectors(tx: number, ty: number) {
   const sy = Math.sin(ty * Math.PI / 180);
 
   const formatVec = (v: number[]) => {
-    const terms = [];
+    const terms: string[] = [];
     const labels = ['X', 'Y', 'Z'];
     for (let i = 0; i < 3; i++) {
       if (Math.abs(v[i]) > AXIS_EPSILON) {

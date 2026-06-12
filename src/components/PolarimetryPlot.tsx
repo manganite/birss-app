@@ -51,7 +51,7 @@ export function PolarimetryPlot({
             <PolarRadiusAxis angle={90} domain={[0, Math.max(1e-6, domainMax) / 0.95]} tick={false} axisLine={false} />
             <Radar name={radarName} dataKey={dataKey} stroke="#141414" strokeWidth={2} fill="#141414" fillOpacity={0.1} isAnimationActive={false} />
             <Tooltip
-              formatter={(value: number) => value.toFixed(4)}
+              formatter={(value) => (typeof value === 'number' ? value.toFixed(4) : value)}
               labelFormatter={(label) => `${labelPrefix} Angle: ${label}°`}
               contentStyle={{ backgroundColor: '#E4E3E0', border: '1px solid #141414', borderRadius: '0px' }}
             />
