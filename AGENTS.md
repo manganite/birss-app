@@ -22,18 +22,46 @@ npm run deploy       # build + publish to GitHub Pages via gh-pages
 
 ```
 src/
-  data/pointGroups.ts          # Static registry of all 122 magnetic point groups
-  services/tensorCalculator.ts # All physics logic: tensor algebra, SHG source terms, Fourier simplification
+  data/pointGroups.ts            # Static registry of all 122 magnetic point groups
+  services/
+    tensorCalculator.ts          # Thin barrel re-exporting the public API below
+    symmetryGroups.ts            # Matrix algebra, GENERATORS table, group closure, getSymmetryOperations
+    tensorProjection.ts          # Numeric tensor projection (transform/average/basis), SHG polynomials, lab-frame vectors
+    latexFormatting.ts           # LaTeX rendering: calculateTensorComponents, formatSubstitutedPolySum
   components/
-    MathComponents.tsx         # Shared KaTeX render helpers (TensorTerm, FormatPointGroup, SymmetryOperation)
-    PointGroupExplorer.tsx     # Explorer page — browse & filter the 122 groups
-    OperationsModal.tsx        # Modal showing symmetry operations for a selected group
-    SimulatorPage.tsx          # Simulator page — radar chart polarimetry, Fourier series formulas
-    HelpPage.tsx               # Physics background & usage docs
-  App.tsx                      # Root: global state, tab routing, Calculator page UI
+    MathComponents.tsx           # Shared KaTeX render helpers (TensorTerm, FormatPointGroup, SymmetryOperation)
+    PointGroupExplorer.tsx       # Explorer page — browse & filter the 122 groups
+    OperationsModal.tsx          # Modal showing symmetry operations for a selected group
+    SimulatorPage.tsx            # Simulator page — radar chart polarimetry, Fourier series formulas
+    HelpPage.tsx                 # Physics background & usage docs
+  App.tsx                        # Root: global state, tab routing, Calculator page UI
 ```
 
 All cross-page state (selected group, tensor type, time-reversal, rotation angles, amplitudes, phases) lives in `App.tsx` and is passed down as props. There is no state management library.
+
+### `services/` module dependency direction
+
+`tensorCalculator.ts` is a barrel: it only re-exports symbols from the three modules
+below and should stay short. Dependencies flow one way —
+**`latexFormatting` → `tensorProjection` → `symmetryGroups`** (formatting may import
+physics, never the reverse):
+
+- **`symmetryGroups.ts`** — `Matrix3x3`, the `GENERATORS` table, matrix algebra
+  (`multiply`/`det`), group closure + caching, `isCentrosymmetric`,
+  `getSymmetryOperations`, and the shared `EPSILON`/`AXIS_EPSILON` constants. No
+  dependencies on the other two modules.
+- **`tensorProjection.ts`** — the numeric projection core
+  (`calculateTensorBasisResults`, `calculateSHGExpressions`, `getLabFrameVectors`,
+  `transformTensor`/`averageTensor`), plus four dependency-free leaf helpers
+  (`getIndices`, `getLabel`, `formatCoeff`, `cleanupExpressionSigns`). These leaves
+  are needed by both this module (`calculateSHGExpressions`, `getLabFrameVectors`)
+  and by `latexFormatting.ts` (`formatResults`, `formatSubstitutedPolySum`); per the
+  "shared utilities live in the lower module" rule they're defined here rather than
+  in `latexFormatting.ts`, so that `latexFormatting` can depend on `tensorProjection`
+  without creating a reverse dependency. Depends only on `symmetryGroups`.
+- **`latexFormatting.ts`** — `calculateTensorComponents` (thin wrapper around
+  `calculateTensorBasisResults` + a local `formatResults`) and
+  `formatSubstitutedPolySum`. Depends on `tensorProjection` and `symmetryGroups`.
 
 ## Key Conventions
 
