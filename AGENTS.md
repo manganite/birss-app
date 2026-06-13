@@ -66,6 +66,7 @@ All cross-page state (selected group, tensor type, time-reversal, rotation angle
 
 ## Releases & Versioning
 
+- **Branching policy**: `main` always reflects the last published release and is what's deployed live — real users depend on it. All unreleased/in-progress work happens on feature branches and is only merged into `main` as part of cutting a release.
 - The app version (`package.json` `version`) is injected into the footer via Vite's `define` (`__APP_VERSION__`, declared in `src/vite-env.d.ts`). Bumping the version requires no other code changes — `package-lock.json`'s top-level `version` should be kept in sync (`npm install --package-lock-only`).
 - Follow [Semantic Versioning](https://semver.org/). On every user-facing change (behavior, UI, or capability — Added/Changed/Fixed/Removed in the Keep a Changelog sense), add an entry under `## [Unreleased]` in `CHANGELOG.md`. Internal-only changes (chores, tests, CI, tooling/config with no runtime effect) generally don't need an entry.
 - When cutting a release: bump `version` in `package.json`/`package-lock.json`, move the `Unreleased` changelog entries under a new `## [x.y.z] - YYYY-MM-DD` heading, update the compare/release links at the bottom of `CHANGELOG.md`, then tag (`vX.Y.Z`) and create a GitHub release.
