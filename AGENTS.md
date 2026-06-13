@@ -94,14 +94,67 @@ physics, never the reverse):
 ### Path aliases
 - `@/*` maps to the project root (defined in both `tsconfig.json` and `vite.config.ts`).
 
-## Releases & Versioning
+## Git Workflow & Releases
 
-- **Branching policy**: `main` always reflects the last published release and is what's deployed live — real users depend on it. All unreleased/in-progress work happens on feature branches and is only merged into `main` as part of cutting a release.
-- The app version (`package.json` `version`) is injected into the footer via Vite's `define` (`__APP_VERSION__`, declared in `src/vite-env.d.ts`). Bumping the version requires no other code changes — `package-lock.json`'s top-level `version` should be kept in sync (`npm install --package-lock-only`).
-- Follow [Semantic Versioning](https://semver.org/). On every user-facing change (behavior, UI, or capability — Added/Changed/Fixed/Removed in the Keep a Changelog sense), add an entry under `## [Unreleased]` in `CHANGELOG.md`. Internal-only changes (chores, tests, CI, tooling/config with no runtime effect) generally don't need an entry.
-- When cutting a release: bump `version` in `package.json`/`package-lock.json`, move the `Unreleased` changelog entries under a new `## [x.y.z] - YYYY-MM-DD` heading, update the compare/release links at the bottom of `CHANGELOG.md`, then tag (`vX.Y.Z`) and create a GitHub release.
-- License is MIT (`LICENSE` at repo root). Keep the `@license SPDX-License-Identifier: MIT` header in `App.tsx` consistent with this.
-- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): lowercase summary`, e.g. `feat(simulator): add polarimetry tooltip`. Common types are `feat`, `fix`, `refactor`, `test`, `docs`, `chore`. Scope is optional and usually the affected component/module.
+Single-maintainer project using **GitHub Flow + Semantic Versioning**. `main` is
+always shippable and is what's deployed live (GitHub Pages, on every push to `main`
+— see `.github/workflows/deploy.yml`), so real users are affected immediately.
+**Never commit directly to `main`.**
+
+### Branches
+- Every change goes through a short-lived branch, merged back into `main` with
+  `--no-ff` (keeps a merge commit marking the change as a unit) and deleted
+  afterward. There is no `develop` branch.
+- Prefixes (lowercase, words separated by hyphens):
+
+  | Prefix     | Purpose                                   | Example                    |
+  |------------|--------------------------------------------|----------------------------|
+  | `feature/` | New functionality                          | `feature/domain-export`    |
+  | `fix/`     | Bug fix                                     | `fix/phase-angle-rounding` |
+  | `hotfix/`  | Urgent fix applied directly to a release   | `hotfix/crash-on-export`   |
+
+```bash
+git switch main && git pull
+git switch -c feature/<short-name>
+# ... work, commit (Conventional Commits — see below) ...
+git switch main && git pull
+git merge --no-ff feature/<short-name>
+git branch -d feature/<short-name>
+```
+
+### Versioning
+- The app version (`package.json` `version`) is injected into the footer via Vite's `define` (`__APP_VERSION__`, declared in `src/vite-env.d.ts`). Keep `package-lock.json`'s top-level `version` in sync (`npm install --package-lock-only`).
+- Follow [Semantic Versioning](https://semver.org/):
+
+  | Change                                        | Bump  | Example           |
+  |------------------------------------------------|-------|-------------------|
+  | New feature                                     | MINOR | `v1.2.0 → v1.3.0` |
+  | Corrected error in calculated output            | PATCH | `v1.3.0 → v1.3.1` |
+  | Incompatible change to output format/values     | MAJOR | `v1.3.1 → v2.0.0` |
+
+### Changelog
+- On every user-facing change (behavior, UI, or capability — Added/Changed/Fixed/Removed in the Keep a Changelog sense), add an entry under `## [Unreleased]` in `CHANGELOG.md`. For corrections to calculated output, record **what** was wrong and **from which version** it's fixed — needed to interpret old results correctly later. Internal-only changes (chores, tests, CI, tooling/config with no runtime effect) generally don't need an entry.
+
+### Cutting a release
+1. Bump `version` in `package.json`/`package-lock.json`.
+2. Move the `Unreleased` entries under a new `## [x.y.z] - YYYY-MM-DD` heading, and update the compare/release links at the bottom of `CHANGELOG.md`.
+3. Commit, then on `main`: `git tag -a vX.Y.Z -m "..."` and `git push origin main --tags`.
+4. Pushing the tag triggers `.github/workflows/release.yml`, which creates the GitHub Release automatically, using the matching `## [x.y.z]` section of `CHANGELOG.md` as the release notes.
+
+### Commit messages
+- [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): lowercase summary`, e.g. `feat(simulator): add polarimetry tooltip`. Common types are `feat`, `fix`, `refactor`, `test`, `docs`, `chore`. Scope is optional and usually the affected component/module. Keep the summary line short (~72 chars); use the body for details.
+- For fixes affecting calculated output, mention which output values are affected.
+
+### License
+- MIT (`LICENSE` at repo root). Keep the `@license SPDX-License-Identifier: MIT` header in `App.tsx` consistent with this.
+
+### Release checklist
+- [ ] All feature/fix branches merged (`--no-ff`) and deleted
+- [ ] `main` up to date locally (`git pull`)
+- [ ] `npm run lint && npm run test` pass
+- [ ] Version bumped per SemVer
+- [ ] `CHANGELOG.md` updated
+- [ ] Tag created and pushed with `--tags` (triggers the GitHub Release via `release.yml`)
 
 ## Important Constraints
 
