@@ -1,9 +1,12 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
+# Deploys on release tags, so the live site always matches a tagged,
+# changelogged release rather than every commit merged to main.
 on:
   push:
-    branches: ["main"]
+    tags:
+      - "v*.*.*"
   workflow_dispatch:
 
 permissions:

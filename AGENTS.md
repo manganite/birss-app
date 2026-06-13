@@ -97,9 +97,11 @@ physics, never the reverse):
 ## Git Workflow & Releases
 
 Single-maintainer project using **GitHub Flow + Semantic Versioning**. `main` is
-always shippable and is what's deployed live (GitHub Pages, on every push to `main`
-— see `.github/workflows/deploy.yml`), so real users are affected immediately.
-**Never commit directly to `main`.**
+always shippable (and CI-checked via `.github/workflows/ci.yml`), but merging to it
+does **not** by itself go live — the deployed site only updates on a `vX.Y.Z` release
+tag (see `.github/workflows/deploy.yml`). This decouples "merged" from "released":
+`main` can accumulate tested changes, and going live is the deliberate act of cutting
+a release (see "Cutting a release" below). **Never commit directly to `main`.**
 
 ### Branches
 - Every change goes through a short-lived branch, merged back into `main` with
@@ -139,7 +141,7 @@ git branch -d feature/<short-name>
 1. Bump `version` in `package.json`/`package-lock.json`.
 2. Move the `Unreleased` entries under a new `## [x.y.z] - YYYY-MM-DD` heading, and update the compare/release links at the bottom of `CHANGELOG.md`.
 3. Commit, then on `main`: `git tag -a vX.Y.Z -m "..."` and `git push origin main --tags`.
-4. Pushing the tag triggers `.github/workflows/release.yml`, which creates the GitHub Release automatically, using the matching `## [x.y.z]` section of `CHANGELOG.md` as the release notes.
+4. Pushing the tag triggers two workflows: `release.yml` creates the GitHub Release automatically, using the matching `## [x.y.z]` section of `CHANGELOG.md` as the release notes; `deploy.yml` builds and publishes the tagged commit to GitHub Pages — this is the point where the live site actually updates.
 
 ### Commit messages
 - [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): lowercase summary`, e.g. `feat(simulator): add polarimetry tooltip`. Common types are `feat`, `fix`, `refactor`, `test`, `docs`, `chore`. Scope is optional and usually the affected component/module. Keep the summary line short (~72 chars); use the body for details.
@@ -154,7 +156,7 @@ git branch -d feature/<short-name>
 - [ ] `npm run lint && npm run test` pass
 - [ ] Version bumped per SemVer
 - [ ] `CHANGELOG.md` updated
-- [ ] Tag created and pushed with `--tags` (triggers the GitHub Release via `release.yml`)
+- [ ] Tag created and pushed with `--tags` (triggers the GitHub Release via `release.yml` and the live deploy via `deploy.yml`)
 
 ## Important Constraints
 
