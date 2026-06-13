@@ -1,5 +1,6 @@
 # The Birss App
 
+[![CI](https://github.com/manganite/birss-app/actions/workflows/ci.yml/badge.svg)](https://github.com/manganite/birss-app/actions/workflows/ci.yml)
 [![Deploy](https://github.com/manganite/birss-app/actions/workflows/deploy.yml/badge.svg)](https://github.com/manganite/birss-app/actions/workflows/deploy.yml)
 [![Release](https://img.shields.io/github/v/release/manganite/birss-app)](https://github.com/manganite/birss-app/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -35,6 +36,13 @@ The symmetry relations and calculations presented in this app follow the convent
 - **[Pershan, P. S. (1963). Nonlinear Optical Properties of Solids](https://doi.org/10.1103/PhysRev.130.919)**: Nonlinear optical multipole contributions.
 - **[Fröhlich, D., et al. (1999). Nonlinear spectroscopy of antiferromagnetics](https://doi.org/10.1007/s003400050650)**: Source term calculation.
 
+## Validation & Testing
+The tensor-calculation engine (`src/services/`) is covered by a Vitest suite of 470+ tests, organized in tiers of increasing specificity:
+- **Tier 1 — group order**: for all 122 magnetic point groups, `getSymmetryOperations` returns a group of the expected order.
+- **Tier 1b — true closure**: for all 122 groups, every pairwise product of elements in the closed group is itself a member, independently verifying the floating-point-hardened closure algorithm in `symmetryGroups.ts`.
+- **Tier 2 — parity invariants**: for all 122 groups, structural invariants such as "ED vanishes for centrosymmetric groups", "EQ never vanishes", and "grey groups `G1'` reproduce `G` for i-type tensors".
+- **Tier 3 — golden component relations**: ~30 literature-derived fixtures pinning down the exact independent-component relations for specific (group, tensor type, time-reversal) combinations, including every Type-III crystal family, c-type ED (e.g. the canonical Cr₂O₃ `-3'm'` magnetoelectric tensor), and axial (MD) tensors. See `src/services/goldenTensors.fixtures.ts` for sources and `// VERIFY:` notes pending human sign-off against the printed Birss tables.
+
 ## Tech Stack
 - **React 19** + **Vite**
 - **Tailwind CSS** for styling
@@ -49,6 +57,9 @@ The symmetry relations and calculations presented in this app follow the convent
 2. Install dependencies: `npm install`
 3. Start development server: `npm run dev`
 4. Build for production: `npm run build`
+
+## Project History
+This repository was originally bootstrapped from a Google AI Studio app export; the application has since been fully rewritten and no scaffold code remains.
 
 ## Changelog
 See [CHANGELOG.md](CHANGELOG.md) for release history.
