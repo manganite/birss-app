@@ -14,7 +14,9 @@ npm run test:watch   # run Vitest in watch mode
 npm run deploy       # build + publish to GitHub Pages via gh-pages
 ```
 
-`npm run lint` and `npm run test` are the automated quality gates (run in CI via `.github/workflows/ci.yml`). Tests for `tensorCalculator.ts` live in `src/services/tensorCalculator.test.ts` and cover: group-order sanity for all 122 point groups, parity invariants (e.g. ED vanishes for centrosymmetric groups, EQ never vanishes, grey groups `G1'` reproduce `G` for i-type), `formatCoeff`/`isCentrosymmetric` unit tests, and a small but growing set of literature-verified "golden" component relations (see Sirotin & Shaskol'skaya / Boyd references in `HelpPage.tsx`).
+`npm run lint` and `npm run test` are the automated quality gates (run in CI via `.github/workflows/ci.yml`). Tests for `tensorCalculator.ts` live in `src/services/tensorCalculator.test.ts` and cover: group-order sanity for all 122 point groups, parity invariants (e.g. ED vanishes for centrosymmetric groups, EQ never vanishes, grey groups `G1'` reproduce `G` for i-type), and `formatCoeff`/`isCentrosymmetric` unit tests, plus a small set of literature-verified "golden" ED i-type component relations for six Type-I groups (see Sirotin & Shaskol'skaya / Boyd references in `HelpPage.tsx`).
+
+`src/services/goldenTensors.fixtures.ts` + `goldenTensors.test.ts` extend this with golden component-relation fixtures for **every Type-III crystal family**, c-type ED (incl. the canonical Cr2O3 `-3'm'` magnetoelectric SHG tensor), and the axial (MD) `det(g)` branch — each pinning down the *identity* of a hand-curated `GENERATORS` entry, not just its order or invariants. Most of these fixtures are derived directly from each group's generators via the rank-3/4 transformation law (Birss, *Symmetry and Magnetism* (1966), eq. 3.22/3.27), independently re-implemented and calibrated against the six pre-existing fixtures; see each fixture's `source`/`note` for the citation and any group-theory cross-checks. Treat these as `// VERIFY:`-class fixtures pending human sign-off against the printed Birss tables.
 
 ## Architecture
 
