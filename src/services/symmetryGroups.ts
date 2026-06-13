@@ -14,6 +14,12 @@ export const AXIS_EPSILON = 1e-5;
 const CARDINAL_AXIS_EPSILON = 1e-3;
 /** Max per-component error when snapping a normalized axis to integer Miller indices. */
 const MILLER_ERROR_THRESHOLD = 0.1;
+/** Matrix-entry values every group element is expected to be an exact combination of. */
+const SNAP_VALUES = [0, 1, -1, 0.5, -0.5, Math.SQRT2 / 2, -Math.SQRT2 / 2, Math.sqrt(3) / 2, -Math.sqrt(3) / 2];
+/** Tolerance for snapping a matrix entry to one of SNAP_VALUES during group closure. */
+const SNAP_EPSILON = 1e-9;
+/** Safety cap on closure size -- no magnetic point group exceeds 96 elements (e.g. m-3m1'). */
+const MAX_GROUP_SIZE = 200;
 
 export interface Matrix3x3 {
   m: number[][];
@@ -230,16 +236,32 @@ export const GENERATORS: Record<string, Matrix3x3[]> = {
   "m3m'": [inversion, { m: [[0, 0, 1], [1, 0, 0], [0, 1, 0]] }, multiply(getRotationZ(90), timeReversal)],
 };
 
-export function getFullGroup(generators: Matrix3x3[]): Matrix3x3[] {
-  const group = [...generators];
+/** Snaps each matrix entry to the nearest SNAP_VALUES member (within SNAP_EPSILON), to stop floating-point drift from accumulating across repeated products during closure. */
+function snapMatrix(a: Matrix3x3): Matrix3x3 {
+  return {
+    m: a.m.map(row => row.map(v => {
+      for (const snap of SNAP_VALUES) {
+        if (Math.abs(v - snap) < SNAP_EPSILON) return snap;
+      }
+      return v;
+    })),
+    isAntiUnitary: a.isAntiUnitary,
+  };
+}
+
+export function getFullGroup(generators: Matrix3x3[], groupName = '<unknown>'): Matrix3x3[] {
+  const group = generators.map(snapMatrix);
   let changed = true;
   while (changed) {
     changed = false;
     const currentSize = group.length;
     for (let i = 0; i < currentSize; i++) {
       for (let j = 0; j < currentSize; j++) {
-        const prod = multiply(group[i], group[j]);
+        const prod = snapMatrix(multiply(group[i], group[j]));
         if (!group.some(m => isSameMatrix(m, prod))) {
+          if (group.length >= MAX_GROUP_SIZE) {
+            throw new Error(`Group closure failed to terminate for ${groupName} — check GENERATORS entry`);
+          }
           group.push(prod);
           changed = true;
         }
@@ -253,13 +275,13 @@ const fullGroupCache = new Map<string, Matrix3x3[]>();
 export function getCachedFullGroup(groupName: string, generators: Matrix3x3[]): Matrix3x3[] {
   let group = fullGroupCache.get(groupName);
   if (!group) {
-    group = getFullGroup(generators);
+    group = getFullGroup(generators, groupName);
     fullGroupCache.set(groupName, group);
   }
   return group;
 }
 
-function isSameMatrix(a: Matrix3x3, b: Matrix3x3): boolean {
+export function isSameMatrix(a: Matrix3x3, b: Matrix3x3): boolean {
   if ((a.isAntiUnitary || false) !== (b.isAntiUnitary || false)) return false;
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
