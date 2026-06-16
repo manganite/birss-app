@@ -106,7 +106,7 @@ The book defines a fixed pool of 10 named matrices σ(0)–σ(9) (conventions-re
 | σ(1) [inversion] | diag(-1,-1,-1) | `inversion` | ✅ exact match |
 | σ(2) [2_y] | diag(-1,+1,-1) | `getRotationX(180)` = [2_x] | ❌ different axis (see above) |
 | σ(3) [2_z] | diag(-1,-1,+1) | `getRotationZ(180)` | ✅ exact match |
-| σ(4) [-2_y] | diag(+1,-1,+1) | `{m:[[-1,0,0],[0,1,0],[0,0,1]]}` = [-2_x] | ❌ different axis (see above) |
+| σ(4) [-2_y] | diag(+1,-1,+1) | `{m:[[-1,0,0],[0,1,0],[0,0,1]]}` = [-2_x] | ❌ different axis for 3m/-3m; for -6m2, book's corrected σ(4) and app's [2_x] both orient vertex at x via different element types |
 | σ(5) [-2_z] | diag(+1,+1,-1) | `{m:[[1,0,0],[0,1,0],[0,0,-1]]}` | ✅ exact match (used for group `m`) |
 | σ(6) [3_z, −120°] | R_z(−120°) | `getRotationZ(120)` = R_z(+120°) | Inverse — generates same cyclic group ✅ |
 | σ(7) [4_z, −90°] | R_z(−90°) | `getRotationZ(90)` = R_z(+90°) | Inverse — generates same cyclic group ✅ |
@@ -124,6 +124,8 @@ The book defines a fixed pool of 10 named matrices σ(0)–σ(9) (conventions-re
 | 9 | σ(8): app's -4_z matrix differs in phase from book's | Notation variant — both -4_z, same group |
 | 10 | σ(9): app uses inverse cyclic permutation (x→z→y) | Notation variant — inverse generators, same cubic group |
 | 4–6 | σ(2)/σ(4): app uses x-axis, book uses y-axis | **Bug** (trigonal groups only — see above) |
+| 13 | 6mm: book originally listed σ(4),σ(4),σ(6) — two identical generators; corrected to σ(3),σ(4),σ(6). App uses `getRotationZ(60)` (= +60°, a C₆ element) + [-2_x] mirror, which correctly generates C₆v regardless of the misprint | Notation variant — app unaffected; book corrected |
+| 12 | -6m2: book corrected from σ(2),σ(5),σ(6) to σ(4),σ(5),σ(6). App uses [-6_z] + [2_x] (vertex at x). Corrected book uses σ(4)=[-2_y] (mirror, vertex at x). Same orientation, different generating elements | Notation variant (after correction) |
 
 ---
 
@@ -153,6 +155,17 @@ The convention is fixed by the **secondary symmetry elements** that appear in th
 
 In both cases the Birss book nominates **y** as the reference secondary direction; the app
 consistently uses **x**.
+
+**The -3m generator subtlety** (from conventions-reference.md §2):
+
+Class **-3m** (D₃d) uses σ(2)=[2_y] as its secondary generator — the same as class **32**. The
+second symbol in "-3m" is **m** (a mirror), yet the generator is a C₂ rotation. This is not a
+contradiction: -3m contains inversion σ(1), so σ(1)·σ(2) = σ(4) = [-2_y] is also in the group —
+a vertical mirror with normal along y. So y is simultaneously the 2-fold axis *and* the mirror
+normal in D₃d. The "m" in the name refers to this mirror; Table 4a's `2//y` records which
+generator was used to *define* y. The finding remains (app uses 2_x, book defines y via 2_y),
+but the reason the mirror symbol appears in the name while the σ(N) generator is a rotation is
+now fully explained.
 
 **Why it matters only for trigonal, not hexagonal:**
 
@@ -199,28 +212,29 @@ vertex is "the reference vertex."
 
 ---
 
-### Internal inconsistency in birss-book for -6m2
+### Internal inconsistency in birss-book for -6m2 (RESOLVED)
 
-The two book tables give **contradictory axis conventions** for -6m2:
+The original (printed) `table-3.md` listed generators σ(2), σ(5), σ(6) for -6m2, which was
+**inconsistent** with `table-4a.md`:
 
 | Source | Entry | Implied vertex direction |
 |---|---|---|
-| `table-3.md` generators | σ(2), σ(5), σ(6) — using σ(2) = [2_y] (C₂ along y) | Vertex at **y** (90° from x) |
+| `table-3.md` generators (original, misprint) | σ(2), σ(5), σ(6) — using σ(2) = [2_y] (C₂ along y) | Vertex at **y** (90° from x) |
 | `table-4a.md` orientation | `3//z, -2//y` — mirror normal along y → mirror plane = xz | Vertex at **x** (0° from x) |
 
-Because C₂ lies inside the vertical mirror, these two statements cannot both be true for
-the same physical crystal: "C₂ along y" places the vertex at y, while "mirror normal along y"
+Because C₂ lies inside the vertical mirror, these two statements cannot both be true for the
+same physical crystal: "C₂ along y" places the vertex at y, while "mirror normal along y"
 places the mirror plane in xz and the vertex at x. They are **30° apart**.
 
-**Root cause:** `table-3.md` chose σ(2) = [2_y] as generator (making it consistent with how
-class 32 is oriented — both 32 and -6m2 use σ(2), so both have vertex at y). `table-4a.md`
-instead describes the orientation in terms of the mirror element ("-2//y"), which is consistent
-with how class 3m is oriented (3m uses σ(4) = [-2_y], vertex at x).
+**This was a misprint in Birss's printed Table 3.** The `table-3.md` transcription has been
+corrected to σ(4), σ(5), σ(6) — replacing σ(2)=[2_y] (C₂ along y) with σ(4)=[-2_y] (mirror
+with normal along y). The correction is confirmed by Table 6 (which independently lists
+generators for the same 32 classical groups). With the correction, both tables agree:
+y is the mirror-normal direction and the vertex lies at **x**.
 
-This reflects the crystallographic fact that **32 and 3m are different subgroups of D₃h,
-oriented 30° apart from each other** — the C₂ axes of 32 and the vertical mirrors of 3m
-interleave. Birss keeps each group's "y" pointing at its own secondary element, so -6m2
-cannot satisfy both conventions at once.
+The conventions-reference.md §2 explains the corrected generators:
+> σ(4) = [-2_y] defines y as the mirror normal, σ(5) = [-2_z] is the horizontal mirror, and
+> σ(6) = [3_z] is the 3-fold; the horizontal C₂ axes at x are derived operations.
 
 ---
 
@@ -230,20 +244,24 @@ The International Tables for Crystallography (ITA) puts **x along the crystallog
 axis**. In D₃h (−6m2), the C₂ axes coincide with the a-axes (a₁, a₂, a₃). This places the
 **vertex at x** (0°, 120°, 240° from x), with vertical mirrors in the xz-plane (normal y).
 
-| Convention | -6m2 vertex direction | Source |
-|---|---|---|
-| ITA standard | **x** | a₁ ∥ x by definition |
-| Birss `table-4a.md` | **x** | `-2//y` → mirror plane = xz → vertex at x |
-| App (labeled `-62m`) | **x** | generator [2_x] → C₂ along x → vertex at x |
-| Birss `table-3.md` | **y** | generator σ(2) = [2_y] → C₂ along y |
+| Convention | -6m2 vertex direction | Generator element | Source |
+|---|---|---|---|
+| ITA standard | **x** | C₂ along x (a₁ ∥ x by definition) | |
+| Birss `table-4a.md` | **x** | σ(4) = [-2_y] → mirror plane = xz → vertex at x | |
+| Birss `table-3.md` (corrected) | **x** | σ(4) = [-2_y] → mirror normal y → vertex at x | σ(2) was a misprint |
+| App (labeled `-62m`) | **x** | [2_x] → C₂ along x → vertex at x | |
 
-The app's generator choice for this group (C₂ along x) is **consistent with ITA and with
-Birss's own table-4a**, and inconsistent with Birss's table-3. The app still carries the
-wrong **name** (`-62m` instead of `-6m2`) — see Finding 1 from Pass 1.
+All four conventions now agree: the vertex is at **x**. The app uses C₂ along x ([2_x]) as its
+generator, while the corrected book uses the vertical mirror with normal along y (σ(4)=[-2_y]).
+Both are elements of D₃h that orient the crystal identically — they are different generator
+choices for the same group at the same orientation. This is a notation variant.
+
+The app still carries the wrong **name** (`-62m` instead of `-6m2`) — see Finding 1 from Pass 1.
 
 | # | Finding | Classification |
 |---|---|---|
-| 11 | `table-3.md` generator σ(2)=[2_y] for -6m2 is inconsistent with `table-4a.md` orientation `-2//y` — these place the reference vertex at y and x respectively | **Bug in birss-book** |
-| 12 | App generator [2_x] for `-62m` places vertex at x, matching ITA and `table-4a.md`, but contradicting `table-3.md` | Notation variant relative to table-4a; bug relative to table-3 |
+| 11 | `table-3.md` generator σ(2)=[2_y] for -6m2 was inconsistent with `table-4a.md` `-2//y` — misprint now corrected to σ(4)=[-2_y] | **RESOLVED** — birss-book corrected |
+| 12 | App generator [2_x] for `-62m` (vertex at x) now matches corrected `table-3.md`, `table-4a.md`, and ITA; differs only in choice of generating element (C₂ vs mirror) | Notation variant |
+| 13 | `table-3.md` originally listed σ(4),σ(4),σ(6) for 6mm — two identical generators cannot generate C₆v; corrected to σ(3),σ(4),σ(6) | **Resolved** — birss-book corrected; app was unaffected (used correct generators) |
 
 <!-- Add future comparison passes below this line -->
