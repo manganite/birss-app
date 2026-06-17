@@ -264,4 +264,470 @@ The app still carries the wrong **name** (`-62m` instead of `-6m2`) — see Find
 | 12 | App generator [2_x] for `-62m` (vertex at x) now matches corrected `table-3.md`, `table-4a.md`, and ITA; differs only in choice of generating element (C₂ vs mirror) | Notation variant |
 | 13 | `table-3.md` originally listed σ(4),σ(4),σ(6) for 6mm — two identical generators cannot generate C₆v; corrected to σ(3),σ(4),σ(6) | **Resolved** — birss-book corrected; app was unaffected (used correct generators) |
 
+---
+
+## Pass 3 — Magnetic Point Group Names (Type II grey + Type III black-and-white)
+
+**Source:** `birss-book/table-6.md` vs. `src/data/pointGroups.ts`
+
+---
+
+### Type II grey groups (32)
+
+Grey groups are formed as Type I + `1'`. All 32 names are present and correctly typed. Three
+inherit the Type I name discrepancies from Pass 1:
+
+| # | Book | App | Inherited from |
+|---|---|---|---|
+| 14a | `-6m21'` | `-62m1'` | Finding 1 |
+| 14b | `m31'` | `m-31'` | Finding 2 |
+| 14c | `m3m1'` | `m-3m1'` | Finding 3 |
+
+Classification: same as the parent findings (Bug / Notation variant / Notation variant).
+
+### Type III black-and-white groups (58)
+
+57 of 58 names match exactly. One new discrepancy:
+
+| # | System | Book (`table-6.md`) | App | Classification |
+|---|---|---|---|---|
+| 15 | Tetragonal | `-4'm2'` | `-4'2'm` | **Bug** (name only — operations match, see Pass 5) |
+
+**Finding 15 — `-4'm2'` written as `-4'2'm`**
+
+The book writes `-4'm2'` (the `-4m2` setting of D₂d: mirror in 2nd HM position, 2-fold in
+3rd). The app writes `-4'2'm` (the `-42m` setting: 2-fold in 2nd position, mirror in 3rd).
+Unpriming gives `-4m2` (book) vs. `-42m` (app) — these are two different standard settings of
+D₂d with C₂ axes and mirror planes exchanged between the (x,y) and (xy,−xy) directions.
+
+The operation comparison in Pass 5 confirmed that the underlying group is actually the same
+(same unprimed subgroup mm2 with diagonal mirrors, same primed elements). The discrepancy is
+the **name only** — the app generates the correct group for what the book calls `-4'm2'` but
+labels it `-4'2'm`. This parallels Finding 1 (`-6m2` vs. `-62m`) for the tetragonal system.
+
+### Internal naming inconsistency (cubic bar notation)
+
+| # | Finding | Classification |
+|---|---|---|
+| 16 | Type I/II cubic groups use bar notation (`m-3`, `m-3m`, `m-31'`, `m-3m1'`) but Type III derivatives drop it (`m'3`, `m'3m'`, `m'3m`, `m3m'` — not `m'-3`, etc.). The Type III names match the book; the Type I/II names are the outliers. | Notation inconsistency (internal to app) |
+
+---
+
+## Pass 4 — Magnetic Point Group Generators (Type II grey + Type III black-and-white)
+
+**Source:** `birss-book/table-6.md` (columns "Generating matrices of subgroup" and "Additional
+generating matrix") vs. `src/services/symmetryGroups.ts` (GENERATORS table, lines 144–237)
+
+---
+
+### Generator encoding convention
+
+The book splits each black-and-white group's generators into **subgroup generators** (unprimed
+σ(N), generating the classical subgroup H) and one **additional primed generator** (σ'(N),
+extending H to the full magnetic group M). The app uses flat generator lists where each entry
+is optionally combined with `timeReversal` via `multiply()`. Both approaches are valid — group
+closure via `getFullGroup()` produces the same result regardless of how generators are
+partitioned.
+
+### Type II grey groups (32)
+
+Grey group generators are the Type I spatial generators plus `timeReversal`. They inherit all
+Type I discrepancies from Pass 2:
+
+- σ(2)/σ(4) x-axis vs. y-axis — the trigonal 30° bug (Findings 4–6)
+- σ(6)/(7)/(8)/(9) inverse/phase differences — notation variants (Findings 7–10)
+
+No new findings.
+
+| # | Finding | Classification |
+|---|---|---|
+| 18 | All 32 Type II grey groups inherit Type I generator discrepancies unchanged | Same as Findings 4–10 |
+
+### Type III black-and-white groups — trigonal 30° offset propagation
+
+The x/y axis bug (Findings 4–6) propagates into Type III magnetic groups wherever σ(2)=[2_y]
+or σ(4)=[-2_y] appears and the effective rotational symmetry is only 3-fold. The app
+substitutes [2_x] for σ(2) and [-2_x] for σ(4), rotating the secondary elements 30° in the
+basal plane.
+
+**5 of 6 trigonal BW groups are affected** (only -3' is unaffected — it uses only σ(6) and
+σ'(1), neither of which involves the secondary axis):
+
+| Group | Book generators | Affected σ(N) | Subgroup H |
+|---|---|---|---|
+| 32' | σ(6), σ'(2) | σ'(2)=[2_y]' → app uses [2_x]' | 3 |
+| 3m' | σ(6), σ'(4) | σ'(4)=[-2_y]' → app uses [-2_x]' | 3 |
+| -3m' | σ(1), σ(6), σ'(2) | σ'(2) | -3 |
+| -3'm' | σ(2), σ(6), σ'(1) | σ(2) | 32 |
+| -3'm | σ(4), σ(6), σ'(1) | σ(4) | 3m |
+
+**6 hexagonal BW groups are also affected** — their classical subgroup H is a trigonal group
+(32, 3m, -3m, or -6m2), so the subgroup generators inherit the 30° offset:
+
+| Group | Subgroup H | Affected σ(N) in H |
+|---|---|---|
+| 6'22' | 32 | σ(2) |
+| 6'mm' | 3m | σ(4) |
+| -6'2m' | 32 | σ(2) |
+| -6'm2' | 3m | σ(4) |
+| 6'/m'mm' | -3m | σ(2), σ'(2) |
+| 6'/mm'm | -6m2 | σ(4) |
+
+**Total groups affected by the trigonal 30° offset across all types:**
+
+| Type | Affected | Groups |
+|---|---|---|
+| I (classical) | 3 | 32, 3m, -3m |
+| II (grey) | 3 | 321', 3m1', -3m1' |
+| III (trigonal BW) | 5 | 32', 3m', -3m', -3'm', -3'm |
+| III (hexagonal BW with trigonal H) | 6 | 6'22', 6'mm', -6'2m', -6'm2', 6'/m'mm', 6'/mm'm |
+| **Total** | **17** | |
+
+| # | Finding | Classification |
+|---|---|---|
+| 17 | The trigonal 30° axis offset (Findings 4–6) propagates to 11 additional Type III groups (5 trigonal + 6 hexagonal) via their subgroup H, plus 3 Type II groups — 17 groups total | **Bug** — extends Findings 4–6 |
+
+### Type III — `-4'm2'` generators confirm Finding 15
+
+The book's `-4'm2'` has subgroup H = mm2, generated by σ(3)=[2_z] and σ(4)=[-2_y], with
+additional generator σ'(8)=[-4'_z]. The app's `-4'2'm` uses generators `[-4'_z, 2'_x]` — both
+primed. The unprimed subgroup H from the app's generators:
+
+- `[-4'_z]²` = `[2_z]` (unprimed, since anti-unitary × anti-unitary = unitary)
+- `[-4'_z]·[2'_x]` = `[2_{-xy}]` (unprimed)
+
+So the app's H = {1, 2_z, 2_xy, 2_{-xy}} — a variant of 222 with axes along z and the face
+diagonals. The book's H = {1, 2_z, -2_x, -2_y} = mm2 with mirrors along x and y. These are
+**different classical subgroups**, confirming that `-4'm2'` and `-4'2'm` are genuinely different
+magnetic point groups with different time-reversal structure and c-tensor forms.
+
+| # | Finding | Classification |
+|---|---|---|
+| 15 | `-4'm2'` (book) vs. `-4'2'm` (app): name only — Pass 5 confirmed the operations match (same H = mm2 with diagonal mirrors, same primed elements). The HM symbol order is wrong but the underlying group is correct. | **Bug** (name only) |
+
+### Type III — σ'(7)/σ'(8)/σ'(9) inverse/phase variants
+
+11 BW groups use primed versions of σ(7), σ(8), or σ(9). The app's spatial matrices are the
+same inverse/phase variants identified in Pass 2 (Findings 7–10), now with time reversal
+attached. Since the inverse generators produce the same cyclic subgroups, the closed magnetic
+groups are identical.
+
+| # | Finding | Classification |
+|---|---|---|
+| 19 | σ'(7)/σ'(8)/σ'(9) in 11 Type III groups use the same inverse/phase variants as Type I | Notation variant |
+
+---
+
+## Pass 5 — Magnetic Point Group Symmetry Operations (Type II + Type III)
+
+**Source:** `birss-book/table-6.md` (column "Symmetry operators") vs. `src/services/symmetryGroups.ts`
+(`getSymmetryOperations()` output for all 90 magnetic groups)
+
+---
+
+### Operation counts (group orders)
+
+All 90 magnetic groups (32 Type II + 58 Type III) produce the correct number of operations.
+Type II grey groups have exactly 2× their parent Type I order. Type III BW groups have
+|M| = |G| where G = unprime(M). ✅
+
+### Notation differences (same as Pass 1)
+
+The same four systematic notation differences from Pass 1 apply uniformly to all magnetic
+group operations, with the addition of prime placement:
+
+| Aspect | Book | App | Classification |
+|---|---|---|---|
+| Mirror planes | `-2_axis` / `-2'_axis` | `m_axis` / `m_axis'` | Notation variant |
+| Diagonal in-plane axes | `xy` / `-xy` | `45°` / `135°` | Notation variant |
+| Rotation pairs | `±n_z` / `±n'_z` | `n_z⁺` / `n_z⁻` (and primed) | Notation variant |
+| Grouped operations | `3(2⊥)`, `6(-2'⊥)` | listed individually | Notation variant |
+| Prime placement | after rotation digit: `2'_z` | at end of label: `2_z'` | Notation variant |
+
+### Name swap in 6/mmm family
+
+| # | Finding | Classification |
+|---|---|---|
+| 20 | App's `6'/mmm'` and `6'/m'mm'` have their names swapped relative to the book; additionally `6'/mm'm` is missing as a name. (Note: a typo in birss-book Table 7 that wrote `6'/mmm'` instead of `6'/m'mm'` for the H=-3m group has been corrected — see Pass 6, Finding 21.) | **Bug** |
+
+**Finding 20 — `6'/mmm'` / `6'/m'mm'` / `6'/mm'm` name swap**
+
+The app generates two groups in the 6/mmm BW family with swapped names:
+
+| App name | App's H (from operations) | Book name | Book's H |
+|---|---|---|---|
+| `6'/mmm'` | D₃d = -3m (12 ops: 1, -1, 3_z±, -3_z±, 2_x, 2_60°, 2_120°, m_x, m_60°, m_120°) | `6'/m'mm'` | -3m |
+| `6'/m'mm'` | D₃h = -6m2 (12 ops: 1, -6_z±, 3_z±, -2_z, 2_y, 2_30°, 2_150°, m_x, m_60°, m_120°) | `6'/mm'm` | -6m2 |
+
+The underlying groups and their operations appear to be correctly generated from the
+generators — only the labels are wrong. The book's name `6'/mm'm` does not appear in the
+app at all; instead, the group that should carry that name is labeled `6'/m'mm'`.
+
+In the HM symbol `6'/XYZ`, the prime positions encode which symmetry elements carry time
+reversal. Swapping the names means the wrong operations are flagged as time-reversed in the
+symbol, which would mislead any downstream lookup into Table 7 for i-/c-tensor symbol classes.
+
+### Trigonal axis offset visible in operation labels
+
+The 30° trigonal offset (Findings 4–6, extended in Finding 17) is directly visible in the
+operation labels. For example, in group `32'`:
+
+| Convention | Secondary C₂ axes | Vertical mirrors |
+|---|---|---|
+| Book (2_y) | 30°, 90°(=y), 150° | — |
+| App (2_x) | 0°(=x), 60°, 120° | — |
+
+The app's operations are correct for the x-axis convention but differ from the book's y-axis
+convention by 30°. This affects the same 17 groups identified in Finding 17.
+
+### `-4'2'm` vs `-4'm2'` operation content
+
+The operation comparison confirms Finding 15. The app's `-4'2'm` generates:
+
+- H (unprimed): {1, 2_z, m_45°, m_135°} = mm2 with mirrors along xy diagonals
+- Primed: {2_x', 2_y', ±-4_z'} = C₂ axes along x,y and S₄ primed
+
+The book's `-4'm2'` lists:
+
+- H (unprimed): {1, 2_z, -2_xy, -2_{-xy}} = mm2 with mirrors along xy diagonals
+- Primed: {2'_x, 2'_y, ±-4'_z}
+
+The unprimed subgroups are in fact the **same** mm2 variant (mirrors at xy diagonals), and the
+primed elements are also the same (C₂ at x,y and S₄). The operation CONTENT matches — the
+discrepancy is purely in the group NAME (`-4'2'm` vs `-4'm2'`). The app generates the correct
+group for what the book calls `-4'm2'`, but labels it with the wrong HM symbol.
+
+This downgrades Finding 15 from "genuinely different magnetic group" to **naming bug only** —
+the generators and operations are correct, only the name is wrong.
+
+| # | Finding (revised) | Classification |
+|---|---|---|
+| 15 | `-4'm2'` (book) labeled as `-4'2'm` (app) — operations match, name is wrong. The HM symbol order (m-before-2 vs 2-before-m) is significant but the underlying group is the same. | **Bug** (name only, not generators/operations) |
+
+---
+
+## Pass 6 — Cross-reference: ITA Table 1.5.2.3 vs Book Tables 6 and 7 (all 90 magnetic point groups)
+
+**Source:** International Tables for Crystallography Vol. D, Chapter 1.5, Table 1.5.2.3
+(Borovik-Romanov, Grimmer & Kenzelmann, 2013) vs. `birss-book/table-6.md` and
+`birss-book/table-7.md`
+
+---
+
+### Scope
+
+All 90 non-grey magnetic point groups (32 Type I classical + 58 Type III black-and-white)
+were compared across three sources: the ITA (authoritative modern reference), the book's
+Table 6, and the book's Table 7. The comparison covered HM symbols and symmetry operators.
+
+### Result: 87 of 90 groups match across all three sources
+
+The only differences are:
+- 6 cubic groups (`m3`, `m3m` and their BW derivatives) use `m3` in the book vs `m-3` in the
+  ITA — a notation convention, not a physics difference.
+- 3 groups in Table 7 are parenthesized — `(2'm'm)`, `(-4'm2')`, `(-6'2m')` — to flag
+  non-standard axis orientations. The names themselves match.
+
+### The only 2 genuine discrepancies — both in the 6/mmm family
+
+| # | Schoenflies | H | ITA | Table 6 | Table 7 | Status |
+|---|---|---|---|---|---|---|
+| 75 | D₆ₕ(D₃d) | -3m | `6'/m'mm'` | `6'/m'mm'` | `6'/m'mm'` | **RESOLVED** — Table 7 previously had `6'/mmm'` (missing prime on horizontal mirror), now corrected to `6'/m'mm'` matching ITA and Table 6 |
+| 79 | D₆ₕ(D₃ₕ) | -6m2 | `6'/mmm'` | `6'/mm'm` | `6'/mm'm` | Convention difference (see below) |
+
+### Finding 21 — `6'/mmm'` (ITA) vs `6'/mm'm` (book) for D₆ₕ(D₃ₕ)
+
+The ITA and the Birss book assign different HM positions to the two inequivalent sets of
+vertical mirrors in D₆ₕ(D₃ₕ). Both sources agree on the physics: the horizontal mirror (σ_h)
+is unprimed (it's in H = D₃h), the 6-fold is primed, one set of 3 vertical mirrors is primed
+and the other is unprimed. The disagreement is purely about **which HM position** (2nd vs 3rd)
+corresponds to which set of mirrors.
+
+**Root cause — the y-axis vs x-axis secondary convention:**
+
+In the hexagonal system, there are two sets of basal-plane symmetry directions:
+- Set 1: 0°, 60°, 120° from x (containing the crystallographic a-axes)
+- Set 2: 30°, 90°, 150° from x (containing the y direction)
+
+| Convention | Secondary (2nd HM position) | Tertiary (3rd HM position) |
+|---|---|---|
+| ITA (x-secondary) | Set 1 (a-axis type, [2-1-10]) | Set 2 ([10-10]) |
+| Birss (y-secondary) | Set 2 (y direction) | Set 1 |
+
+For H = D₃ₕ = -6m2: the unprimed mirrors have normals in Set 2 (the y-type directions in
+Birss convention). The primed mirrors have normals in Set 1.
+
+- **Birss**: 2nd position = Set 2 = unprimed → `m`; 3rd position = Set 1 = primed → `m'` → `6'/mm'm`
+- **ITA**: 2nd position = Set 1 = primed → `m'`?
+
+Actually, both notations place the prime on the tertiary position: the ITA writes `6'/mmm'`
+(prime on 3rd m) and Birss writes `6'/mm'm` (prime on 2nd m). The apparent discrepancy
+arises because what Birss calls "2nd position" the ITA calls "3rd position" and vice versa,
+due to the different secondary axis assignments. Both describe the same physical group with
+the same primed/unprimed operation split.
+
+| # | Finding | Classification |
+|---|---|---|
+| 21 | `6'/mmm'` (ITA) vs `6'/mm'm` (book) for D₆ₕ(D₃ₕ): same group, different axis convention determines which HM position receives the prime. Neither is wrong. | Convention difference |
+
+### Why the axis convention produces only one naming discrepancy
+
+The y-secondary (Birss) vs x-secondary (ITA) axis convention swaps which set of basal-plane
+directions maps to the 2nd vs 3rd HM position. One might expect this to produce discrepancies
+for many hexagonal groups. In fact, it only affects two groups in the 6/mmm family (75 and 79)
+because of the interplay of three conditions:
+
+**Condition 1 — identical letters in both positions.** In the parent symbol `-6m2`, the 2nd
+position is `m` (mirror) and the 3rd is `2` (C₂ axis) — different letters. Swapping which set
+of directions maps to which position changes the symbol visibly: `-6m2` becomes `-62m`. This
+is precisely why Birss uses parenthesized symbols like `(-62m)` — to flag the alternate
+setting. The name inside the parentheses is unambiguous regardless of convention. The same
+applies to `(-4m2)` / `-42m` and `(m2m)` / `mm2`. All three parenthesized groups in column 2
+of Table 7 — `(-6'2m')`, `(-4'm2')`, `(2'm'm)` — have **different letters** in the two HM
+positions, so the swapped convention is visible in the symbol and handled by the parenthesis
+flag. No naming discrepancy arises.
+
+In contrast, `6/mmm` has `m` in both the 2nd and 3rd positions — the same letter. Swapping
+which set of directions maps to which position produces **the same parent symbol** `6/mmm`.
+The swap becomes visible only through the **prime placement** on BW derivatives.
+
+**Condition 2 — the two sets of mirrors must be inequivalent.** In D₆ₕ = 6/mmm, the 6-fold
+rotation maps Set 1 onto Set 2, making them equivalent. But in the BW derivatives, time
+reversal breaks this equivalence: one set is primed and the other is not. Whether the prime
+lands on the 2nd or 3rd `m` depends on which set is assigned to which position — i.e., on the
+axis convention. This is why the discrepancy only appears in BW derivatives, not in the
+unprimed parent `6/mmm`.
+
+**Condition 3 — the subgroup H must have only 3-fold symmetry.** Three of the five 6/mmm BW
+groups have H with 6-fold symmetry (H = C₆ₕ, D₆, C₆ᵥ for groups 76, 77, 78). The 6-fold
+symmetry of H makes both sets of vertical mirrors either all primed or all unprimed — the
+swap has no effect because both positions get the same prime status. Only when H has 3-fold
+symmetry (H = D₃d for group 75, H = D₃ₕ for group 79) does H contain mirrors from one set
+but not the other, creating an asymmetric prime pattern that depends on the axis convention.
+
+**Summary:** The axis convention discrepancy requires ALL THREE conditions simultaneously:
+(1) identical letters in both HM positions, (2) a BW derivative that breaks the equivalence
+of the two positions via priming, and (3) a subgroup H with only 3-fold (not 6-fold) symmetry.
+Only groups 75 and 79 of the 6/mmm family satisfy all three. For group 75, the ITA and Birss
+book agree on `6'/m'mm'` (because the horizontal mirror prime makes the symbol
+distinguishable without relying on the vertical mirror positions). For group 79, the different
+axis conventions lead to `6'/mmm'` (ITA) vs `6'/mm'm` (book).
+
+### Note on the 1962 paper
+
+The 1962 Birss paper (*Proc. Phys. Soc.* **79**, 946) predates the systematic prime-placement
+conventions of the 1966 book. It uses `6'/mmm'` for the H = -6m2 group (matching the ITA
+convention) but also uses the same symbol for the H = -3m group (where it should have an
+additional prime on the horizontal mirror). The book's Table 7 inherited the H = -3m symbol
+from the paper without correction — this was the typo fixed above (group 75).
+
+The paper's Table 2(a) also lacks the systematic parenthesization of alternate-axis settings
+(`(-62m)`, `(-42m)`, etc.) that the book introduced in Table 7 to flag non-standard
+orientations of associated classical groups A and B.
+
+---
+
+## Final Evaluation: Birss, ITC and birss-app — Conventions, Discrepancies and Common Ground
+
+*Cross-referencing: Birss, *Symmetry and Magnetism* (1964); ITC Vol. A, Chapter 3.2
+(point groups and crystal classes); ITC Vol. D, Section 1.5 (magnetic properties);
+birss-book/birss-itc-comparison.md; and the birss-app codebase.*
+
+---
+
+### Common ground: what all three sources agree on
+
+**The 32 classical point groups.** All three sources (Birss, ITC, app) use the same 32 short
+HM symbols, crystal system assignments, and symmetry operations — with the exception of
+the notation variants documented in Passes 1–2 (mirror notation `-2` vs `m`, rotation pair
+notation `±n` vs `n⁺/n⁻`, diagonal axis labels `xy` vs degree angles, and the cubic bar
+convention `m3` vs `m-3`).
+
+**The 90 magnetic point groups.** 87 of 90 HM names match across ITC Table 1.5.2.3, Birss
+Table 6, and Birss Table 7 (after the Table 7 typo correction). The 3 non-matching entries
+are all in the 6/mmm family and are fully explained by the axis convention difference
+(Finding 21) and the now-corrected Table 7 typo. The Schoenflies symbols, Shubnikov
+symbols, and symmetry operator content are consistent across all sources.
+
+**Tensor symbol classes.** The 21-letter A–U tensor classification scheme (Tables 4a–4f / Table 7)
+is internally consistent between the book's tables and the 1962 paper's Table 2(a), after
+the corrections applied during the birss-book transcription passes.
+
+---
+
+### Convention differences between Birss and ITC
+
+These are documented in detail in `birss-book/birss-itc-comparison.md`. The key differences:
+
+| Convention | Birss | ITC | Impact on app |
+|---|---|---|---|
+| **Monoclinic unique axis** | z | b (= y) | App uses z (matches Birss) |
+| **Hexagonal secondary axis** | y (σ(2)=[2_y], σ(4)=[-2_y]) | x (along a₁, [100]-type) | App uses x (matches ITC, not Birss) |
+| **Mirror notation** | -2_axis (roto-inversion) | m_axis | App uses m_axis (matches ITC) |
+| **Cubic bar notation** | m3 (abbreviated) | m-3 (explicit bar) | App uses m-3 for Type I/II but m'3 (no bar) for Type III — internally inconsistent (Finding 16) |
+| **D₃h setting** | -6m2 (Tables 3, 6, 7) | -62m (Vol. A primary) / -6m2 (Vol. D) | App uses -62m (Finding 1) |
+| **6/mmm BW prime placement** | 6'/mm'm (y-secondary) | 6'/mmm' (x-secondary) | Same physical group, different HM position assignment (Finding 21) |
+
+**The app's axis convention is a hybrid.** It uses the ITC's x-secondary convention for the
+basal-plane axis (getRotationX for σ(2)-type generators) but follows Birss's -6m2 symbol
+(not ITC Vol. A's -62m). This hybrid creates the trigonal 30° offset (Findings 4–6, 17): the
+app generates correct groups at the correct orientation for the ITC convention, but the
+resulting tensor components are rotated 30° relative to the Birss tables.
+
+---
+
+### Discrepancies between the app and both authoritative sources
+
+**Naming bugs (app vs both Birss and ITC):**
+
+| # | App name | Correct name | Type | Impact |
+|---|---|---|---|---|
+| 1 | `-62m` | `-6m2` | Wrong HM symbol order | Users matching against either Birss or ITC Vol. D will not find this group |
+| 15 | `-4'2'm` | `-4'm2'` | Wrong HM symbol order | Same issue for BW derivative of -42m |
+| 20 | `6'/mmm'` ↔ `6'/m'mm'` swapped | See below | Name swap | Downstream Table 7 lookups would yield wrong tensor classes |
+
+For Finding 20: the app's `6'/mmm'` generates H = -3m (should be called `6'/m'mm'` per both
+Birss and ITC), and the app's `6'/m'mm'` generates H = -6m2 (should be called `6'/mm'm` per
+Birss, or `6'/mmm'` per ITC). The operations are correct; only the labels are wrong.
+
+**Trigonal axis orientation (app vs Birss; app matches ITC):**
+
+| # | Finding | Groups affected | Impact |
+|---|---|---|---|
+| 4–6, 17 | App uses 2_x / -2_x where Birss uses 2_y / -2_y | 17 groups (3 Type I + 3 Type II + 5 trigonal III + 6 hexagonal III) | Tensor components for 32, 3m, -3m and their magnetic derivatives are in a coordinate frame rotated 30° about z from Birss's tables |
+
+This is the most physically significant discrepancy. The app's convention matches the ITC
+standard (x along a₁), so users comparing against ITC data will see agreement. But users
+comparing against the Birss tensor tables (4b–4f) will see components in different index
+positions for these 17 groups.
+
+**Generator variants (app vs Birss; no physics impact):**
+
+| # | Finding | Classification |
+|---|---|---|
+| 7–10, 19 | σ(6)/(7)/(8)/(9) inverse/phase variants | Notation variant — same closed groups |
+| 12–13 | -6m2 and 6mm generator element type differs | Notation variant — same group orientation |
+| 18 | Type II grey groups inherit all Type I variants | Same as above |
+
+---
+
+### Summary
+
+The Birss book, the ITC, and the birss-app all describe the same 122 magnetic point groups
+with the same physics. The differences between them fall into three categories:
+
+1. **Pure notation variants** (mirror symbols, rotation pair notation, cubic bar convention,
+   inverse generators) — no impact on tensor forms or physical predictions. These are the
+   majority of findings.
+
+2. **Axis convention differences** (Birss y-secondary vs ITC/app x-secondary for
+   trigonal/hexagonal) — affects the mapping from HM symbol positions to physical
+   directions, producing one naming discrepancy (Finding 21) and the 30° tensor component
+   offset for trigonal groups (Findings 4–6, 17). Neither convention is wrong; they are
+   different choices for the same physics.
+
+3. **App bugs** (Findings 1, 15, 16, 20) — genuine errors in the app's HM symbols that need
+   fixing regardless of which convention is followed. These are naming-only bugs; the
+   underlying group generators and symmetry operations are correct.
+
 <!-- Add future comparison passes below this line -->
