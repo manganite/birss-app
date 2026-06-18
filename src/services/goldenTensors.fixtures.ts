@@ -268,9 +268,9 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     note: 'Hexagonal Type-III family check, centrosymmetric member (c-type ED SHG tensor).',
   },
 
-  // --- Cubic family: m'3 / 4'32' ------------------------------------------------------
+  // --- Cubic family: m'-3' / 4'32' ------------------------------------------------------
   {
-    group: "m'3",
+    group: "m'-3'",
     tensor: 'ED',
     tr: 'c',
     expected: ['\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx} = \\chi_{zxy} = \\chi_{zyx}'],
@@ -278,12 +278,12 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     note: 'Cubic Type-III family check (c-type ED SHG tensor) -- the single fully-antisymmetric-index cubic invariant.',
   },
   {
-    group: "m'3",
+    group: "m'-3'",
     tensor: 'MD',
     tr: 'i',
     expected: ['\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx} = \\chi_{zxy} = \\chi_{zyx}'],
     source: GENERATOR_DERIVATION,
-    note: "i-type results depend only on the rotation parts, so m'3(MD,i) = m-3(MD,i), the cubic axial-tensor analogue of the relation above.",
+    note: "i-type results depend only on the rotation parts, so m'-3'(MD,i) = m-3(MD,i), the cubic axial-tensor analogue of the relation above.",
   },
   {
     group: "4'32'",
@@ -291,7 +291,7 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     tr: 'c',
     expected: ['\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx} = \\chi_{zxy} = \\chi_{zyx}'],
     source: GENERATOR_DERIVATION,
-    note: "Additional cubic Type-III coverage -- a different generator combination (chiral 432-based) reduces to the same invariant as m'3(ED,c).",
+    note: "Additional cubic Type-III coverage -- a different generator combination (chiral 432-based) reduces to the same invariant as m'-3'(ED,c).",
   },
 
   // --- MD (axial, i-type) coverage for Type-I groups ---------------------------------
@@ -317,7 +317,7 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     tr: 'i',
     expected: ['All components are zero.'],
     source: GENERATOR_DERIVATION,
-    note: "Cubic m-3m has no non-zero axial rank-3 invariant (its mirrors forbid the m'3-style fully-antisymmetric form), unlike the lower-symmetry groups above -- a useful negative case for the det(g) branch.",
+    note: "Cubic m-3m has no non-zero axial rank-3 invariant (its mirrors forbid the m'-3'-style fully-antisymmetric form), unlike the lower-symmetry groups above -- a useful negative case for the det(g) branch.",
   },
 
   // --- EQ (rank-4) coverage ------------------------------------------------------------
