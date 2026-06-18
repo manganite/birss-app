@@ -105,9 +105,9 @@ a release (see "Cutting a release" below). **Never commit directly to `main`.**
 
 ### GitHub hygiene
 Regularly check the GitHub repository for items that need attention:
-- **PR review comments** (Copilot, CodeQL, human reviewers) — address before merging.
+- **PR review comments** (Copilot, human reviewers) — address before merging.
 - **Code scanning alerts** — fix promptly; CodeQL runs on every push to `main` and weekly.
-- **Dependabot alerts and PRs** — review and update vulnerable dependencies.
+- **Dependabot alerts and PRs** — review vulnerability alerts and routine version-update PRs.
 - **Open issues** — triage and respond.
 
 ### Branches
