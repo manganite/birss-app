@@ -149,7 +149,7 @@ git switch main && git pull
 git branch -d feature/<short-name>
 ```
 
-**Local merge workflow:**
+**Local merge workflow** (still merges a branch — never commit directly on main):
 ```bash
 # Before merging: ensure `npm run lint && npm run test` pass locally
 git switch main && git pull

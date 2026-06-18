@@ -744,16 +744,16 @@ with the same physics. The differences between them fall into three categories:
 | 16 | Cubic bar inconsistency | Normalized to `m'-3'`, `m'-3'm'`, `m'-3'm`, `m-3m'` |
 | 20 | `6'/mmm'` ↔ `6'/m'mm'` swap | Corrected to `6'/m'mm'` (H=-3m) and `6'/mm'm` (H=-6m2) |
 
-### Open issues — NOT addressed (convention differences, not bugs)
+### Remaining issues — convention differences and their resolution status
 
 | # | Finding | Status | Reason |
 |---|---|---|---|
 | 2–3 | `m3`/`m3m` (Birss) vs `m-3`/`m-3m` (app/ITC) | **Won't fix** | Notation variant; app follows ITC convention |
-| 4–6 | Trigonal secondary axis: 2_y (Birss) vs 2_x (app/ITC) | **RESOLVED** | Generators switched to y-secondary (Birss convention) in `fix/trigonal-y-axis-convention` |
+| 4–6 | Trigonal secondary axis: 2_y (Birss) vs 2_x (app/ITC) | **RESOLVED** | Generators switched to y-secondary (Birss convention) — see PR #6 |
 | 7–10, 19 | σ(6)/(7)/(8)/(9) inverse/phase generator variants | **Won't fix** | Notation variant; same closed groups generated |
 | 11–13 | birss-book internal issues (now resolved in book repo) | **Resolved in birss-tables** | Table 3 misprints corrected |
-| 17 | 30° trigonal offset propagated to 14 additional magnetic groups | **RESOLVED** | All 17 groups now use y-secondary generators |
-| 18 | Type II grey groups inherit all Type I variants | **RESOLVED** | Grey groups updated alongside Type I |
+| 17 | 30° trigonal offset propagated to 14 additional magnetic groups | **RESOLVED** | All 17 groups now use y-secondary generators — see PR #6 |
+| 18 | Type II grey groups inherit all Type I variants | **RESOLVED** | Grey groups updated alongside Type I — see PR #6 |
 | 21 | `6'/mmm'` (ITC) vs `6'/mm'm` (Birss/app) for D₆h(D₃h) | **By design** | Convention difference between ITC x-secondary and Birss y-secondary axis assignments; app follows Birss convention for this group |
 
 ### Tensor verification status
