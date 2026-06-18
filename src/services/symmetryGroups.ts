@@ -237,7 +237,7 @@ export const GENERATORS: Record<string, Matrix3x3[]> = {
 };
 
 /** Snaps each matrix entry to the nearest SNAP_VALUES member (within SNAP_EPSILON), to stop floating-point drift from accumulating across repeated products during closure. */
-function snapMatrix(a: Matrix3x3): Matrix3x3 {
+export function snapMatrix(a: Matrix3x3): Matrix3x3 {
   return {
     m: a.m.map(row => row.map(v => {
       for (const snap of SNAP_VALUES) {
@@ -426,7 +426,7 @@ export function getSymmetryOperations(groupName: string): string[] {
 
   const order = ["1", "-1", "2", "3", "4", "6", "-3", "-4", "-6", "m"];
   return symbols.sort((a, b) => {
-    const getBase = (s: string) => s.replace(/_.*$/, '').replace(/[⁺⁻']/, '');
+    const getBase = (s: string) => s.replace(/_.*$/, '').replace(/[⁺⁻']/g, '');
     const baseA = getBase(a);
     const baseB = getBase(b);
     const idxA = order.indexOf(baseA);

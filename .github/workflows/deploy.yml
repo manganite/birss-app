@@ -25,6 +25,13 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - name: Validate semver tag
+        if: github.event_name == 'push'
+        run: |
+          if [[ ! "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag '${GITHUB_REF_NAME}' is not strict semver (vX.Y.Z). Skipping deploy."
+            exit 1
+          fi
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Node

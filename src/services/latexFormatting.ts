@@ -19,7 +19,7 @@ import {
 export function calculateTensorComponents(groupName: string, tensorType: 'ED' | 'MD' | 'EQ', trType: TensorTimeReversal): string[] {
   const result = calculateTensorBasisResults(groupName, tensorType, trType);
   if (!result) return ["Point group not supported."];
-  return formatResults(result.basisResults, result.rank, trType === 'c');
+  return formatResults(result.basisResults, result.rank);
 }
 
 export function formatSubstitutedPolySum(
@@ -225,7 +225,7 @@ export function formatSubstitutedPolySum(
   return finalParts.length > 0 ? cleanupExpressionSigns(finalParts.join(" + ")) : "0";
 }
 
-function formatResults(basisResults: number[][], rank: number, isTimeOdd: boolean): string[] {
+function formatResults(basisResults: number[][], rank: number): string[] {
   const dim = Math.pow(3, rank);
   const output: string[] = [];
 
