@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Systematic tensor verification: 21 golden fixtures covering all Birss Table 4e
+  symbol classes (A3–U3) at rank 3, confirming the app reproduces every row of
+  the Birss polar rank-3 tensor table exactly.
+
 ### Changed
 - Switched all trigonal and hexagonal generators from x-secondary (ITC convention)
   to y-secondary (Birss convention): σ(2)=[2_y] and σ(4)=[-2_y]. This changes
