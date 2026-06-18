@@ -7,12 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Systematic tensor verification: 21 golden fixtures covering all Birss Table 4e
+  symbol classes (A3–U3) at rank 3, confirming the app reproduces every row of
+  the Birss polar rank-3 tensor table exactly.
+
 ### Changed
 - Switched all trigonal and hexagonal generators from x-secondary (ITC convention)
   to y-secondary (Birss convention): σ(2)=[2_y] and σ(4)=[-2_y]. This changes
   tensor component output for 17 groups (32, 3m, -3m and their 14 magnetic
   derivatives) to match the Birss tables exactly. Hexagonal 6-fold groups are
   also updated for generator fidelity (no tensor output change).
+
+### Fixed
+- Corrected -6m2 and -6m21' generators: changed from σ(2)=[2_y] (C₂ rotation)
+  to σ(4)=[-2_y] (mirror with normal y), matching Birss Table 3. The previous
+  generator produced the wrong tensor component family (L3-type instead of
+  R3-type) for this group (since v0.1.0).
 
 ### Fixed
 - Corrected Hermann–Mauguin symbols for 10 magnetic point groups (since v0.1.0):

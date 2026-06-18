@@ -27,6 +27,12 @@ const GENERATOR_DERIVATION =
   '"Symmetry and Magnetism" (1966), eq. 3.22 / 3.27) and last-two-index symmetrization; ' +
   're-implementation calibrated against the six pre-existing Tier-3 fixtures.';
 
+const TABLE_4E_VERIFICATION =
+  'Verified against Birss, "Symmetry and Magnetism" (1966), Table 4e (rank-3 polar ' +
+  'tensor components), via the birss-tables repo (github.com/manganite/birss-tables). ' +
+  'Table 4a maps each group to a symbol class (A_n–U_n); Table 4e gives the independent ' +
+  'components for each class at rank n=3.';
+
 export const GOLDEN_FIXTURES: GoldenFixture[] = [
   // --- Trigonal: -3'm' (Cr2O3) -----------------------------------------------------
   {
@@ -332,5 +338,180 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     ],
     source: GENERATOR_DERIVATION,
     note: 'Rank-4 EQ fixture for the highest-symmetry cubic group: three independent invariants (the cubic analogue of the elastic constants C11/C12/C44 pattern, here without Voigt symmetry between the two middle indices).',
+  },
+
+  // =============================================================================
+  // Birss Table 4e verification: all 21 symbol classes at rank 3 (ED i-type)
+  // One representative group per symbol class (A_n through U_n).
+  // =============================================================================
+
+  {
+    group: '1', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxx}', '\\chi_{xxy} = \\chi_{xyx}', '\\chi_{xxz} = \\chi_{xzx}',
+      '\\chi_{xyy}', '\\chi_{xyz} = \\chi_{xzy}', '\\chi_{xzz}',
+      '\\chi_{yxx}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{yxz} = \\chi_{yzx}',
+      '\\chi_{yyy}', '\\chi_{yyz} = \\chi_{yzy}', '\\chi_{yzz}',
+      '\\chi_{zxx}', '\\chi_{zxy} = \\chi_{zyx}', '\\chi_{zxz} = \\chi_{zzx}',
+      '\\chi_{zyy}', '\\chi_{zyz} = \\chi_{zzy}', '\\chi_{zzz}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row A3 (18 independent components).',
+  },
+  {
+    group: '2', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxz} = \\chi_{xzx}', '\\chi_{xyz} = \\chi_{xzy}',
+      '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{yyz} = \\chi_{yzy}',
+      '\\chi_{zxx}', '\\chi_{zxy} = \\chi_{zyx}', '\\chi_{zyy}', '\\chi_{zzz}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row B3 (8 independent components).',
+  },
+  {
+    group: 'm', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxx}', '\\chi_{xxy} = \\chi_{xyx}', '\\chi_{xyy}', '\\chi_{xzz}',
+      '\\chi_{yxx}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{yyy}', '\\chi_{yzz}',
+      '\\chi_{zxz} = \\chi_{zzx}', '\\chi_{zyz} = \\chi_{zzy}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row C3 (10 independent components).',
+  },
+  {
+    group: '222', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xyz} = \\chi_{xzy}', '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{zxy} = \\chi_{zyx}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row D3 (3 independent components).',
+  },
+  {
+    group: 'mm2', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xxz} = \\chi_{xzx}', '\\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx}', '\\chi_{zyy}', '\\chi_{zzz}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row E3 (5 independent components).',
+  },
+  {
+    group: '4', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}',
+      '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}',
+      '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row F3 (4 independent components).',
+  },
+  {
+    group: '-4', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxz} = \\chi_{xzx} = -\\chi_{yyz} = -\\chi_{yzy}',
+      '\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx}',
+      '\\chi_{zxx} = -\\chi_{zyy}', '\\chi_{zxy} = \\chi_{zyx}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row G3 (4 independent components).',
+  },
+  {
+    group: '422', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row H3 (1 independent component).',
+  },
+  {
+    group: '4mm', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row I3 (3 independent components).',
+  },
+  {
+    group: '-42m', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx}', '\\chi_{zxy} = \\chi_{zyx}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row J3 (2 independent components).',
+  },
+  {
+    group: '3', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}',
+      '\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}',
+      '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}',
+      '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}',
+      '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row K3 (6 independent components).',
+  },
+  {
+    group: '32', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}',
+      '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row L3 (2 independent components).',
+  },
+  {
+    group: '3m', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}',
+      '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}',
+      '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row M3 (4 independent components).',
+  },
+  {
+    group: '6', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}',
+      '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}',
+      '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row N3 (4 independent components).',
+  },
+  {
+    group: '-6', tensor: 'ED', tr: 'i',
+    expected: [
+      '\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}',
+      '\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}',
+    ],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row O3 (2 independent components).',
+  },
+  {
+    group: '622', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row P3 (1 independent component).',
+  },
+  {
+    group: '6mm', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row Q3 (3 independent components).',
+  },
+  {
+    group: '-6m2', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row R3 (1 independent component).',
+  },
+  {
+    group: '23', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx} = \\chi_{zxy} = \\chi_{zyx}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row S3 (1 independent component).',
+  },
+  {
+    group: '432', tensor: 'ED', tr: 'i',
+    expected: ['All components are zero.'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row T3 (all zero — piezoelectricity forbidden in 432).',
+  },
+  {
+    group: '-43m', tensor: 'ED', tr: 'i',
+    expected: ['\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx} = \\chi_{zxy} = \\chi_{zyx}'],
+    source: TABLE_4E_VERIFICATION,
+    note: 'Birss Table 4e row U3 (1 independent component).',
   },
 ];
