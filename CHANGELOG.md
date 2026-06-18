@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   also updated for generator fidelity (no tensor output change).
 
 ### Fixed
+- Corrected -6m2 and -6m21' generators: changed from σ(2)=[2_y] (C₂ rotation)
+  to σ(4)=[-2_y] (mirror with normal y), matching Birss Table 3. The previous
+  generator produced the wrong tensor component family (L3-type instead of
+  R3-type) for this group (since v0.1.0).
+
+### Fixed
 - Corrected Hermann–Mauguin symbols for 10 magnetic point groups (since v0.1.0):
   `-62m` → `-6m2` (Type I, and grey `-62m1'` → `-6m21'`);
   `-4'2'm` → `-4'm2'`;
