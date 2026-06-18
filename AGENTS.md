@@ -103,6 +103,13 @@ tag (see `.github/workflows/deploy.yml`). This decouples "merged" from "released
 `main` can accumulate tested changes, and going live is the deliberate act of cutting
 a release (see "Cutting a release" below). **Never commit directly to `main`.**
 
+### GitHub hygiene
+Regularly check the GitHub repository for items that need attention:
+- **PR review comments** (Copilot, CodeQL, human reviewers) — address before merging.
+- **Code scanning alerts** — fix promptly; CodeQL runs on every push to `main` and weekly.
+- **Dependabot alerts and PRs** — review and update vulnerable dependencies.
+- **Open issues** — triage and respond.
+
 ### Branches
 - Every change goes through a short-lived branch, merged back into `main` with
   `--no-ff` (keeps a merge commit marking the change as a unit) and deleted
