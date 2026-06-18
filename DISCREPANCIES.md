@@ -730,4 +730,39 @@ with the same physics. The differences between them fall into three categories:
    fixing regardless of which convention is followed. These are naming-only bugs; the
    underlying group generators and symmetry operations are correct.
 
+---
+
+## Resolution Status
+
+### RESOLVED — naming bugs fixed in `fix/magnetic-group-names`
+
+| # | Finding | Fix applied |
+|---|---|---|
+| 1 | `-62m` → `-6m2` | Renamed in pointGroups.ts, symmetryGroups.ts, tests |
+| 14a | `-62m1'` → `-6m21'` | Grey group name updated |
+| 15 | `-4'2'm` → `-4'm2'` | Renamed in pointGroups.ts, symmetryGroups.ts |
+| 16 | Cubic bar inconsistency | Normalized to `m'-3'`, `m'-3'm'`, `m'-3'm`, `m-3m'` |
+| 20 | `6'/mmm'` ↔ `6'/m'mm'` swap | Corrected to `6'/m'mm'` (H=-3m) and `6'/mm'm` (H=-6m2) |
+
+### Open issues — NOT addressed (convention differences, not bugs)
+
+| # | Finding | Status | Reason |
+|---|---|---|---|
+| 2–3 | `m3`/`m3m` (Birss) vs `m-3`/`m-3m` (app/ITC) | **Won't fix** | Notation variant; app follows ITC convention |
+| 4–6 | Trigonal secondary axis: 2_y (Birss) vs 2_x (app/ITC) | **Won't fix** | Valid convention choice; app matches ITC. Changing would alter all trigonal/hexagonal tensor output |
+| 7–10, 19 | σ(6)/(7)/(8)/(9) inverse/phase generator variants | **Won't fix** | Notation variant; same closed groups generated |
+| 11–13 | birss-book internal issues (now resolved in book repo) | **Resolved in birss-tables** | Table 3 misprints corrected |
+| 17 | 30° trigonal offset propagated to 14 additional magnetic groups | **Won't fix** | Consequence of Finding 4–6; same convention choice |
+| 18 | Type II grey groups inherit all Type I variants | **Won't fix** | Consequence of above |
+| 21 | `6'/mmm'` (ITC) vs `6'/mm'm` (Birss/app) for D₆h(D₃h) | **By design** | Convention difference between ITC x-secondary and Birss y-secondary axis assignments; app follows Birss convention for this group |
+
+### Tensor verification status
+
+The golden tensor fixtures in `goldenTensors.fixtures.ts` verify component relations for
+representative groups across all crystal families. These fixtures confirm that the generators
+produce correct tensor forms. However, **systematic verification of all 122 groups against
+the printed Birss tables (Tables 4b–4f via Table 7)** has not yet been performed. The
+trigonal groups (32, 3m, -3m and their magnetic derivatives) would show different component
+positions compared to the Birss tables due to the 30° axis offset (Findings 4–6).
+
 <!-- Add future comparison passes below this line -->

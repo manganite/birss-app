@@ -17,12 +17,12 @@ const TYPE_I_ORDER: Record<string, number> = {
   '222': 4, 'mm2': 4, 'mmm': 8,
   '4': 4, '-4': 4, '4/m': 8, '422': 8, '4mm': 8, '-42m': 8, '4/mmm': 16,
   '3': 3, '-3': 6, '32': 6, '3m': 6, '-3m': 12,
-  '6': 6, '-6': 6, '6/m': 12, '622': 12, '6mm': 12, '-62m': 12, '6/mmm': 24,
+  '6': 6, '-6': 6, '6/m': 12, '622': 12, '6mm': 12, '-6m2': 12, '6/mmm': 24,
   '23': 12, 'm-3': 24, '432': 24, '-43m': 24, 'm-3m': 48,
 };
 
 /** Alternative Hermann-Mauguin spellings that appear once primes are stripped from Type III symbols. */
-const FAMILY_ALIASES: Record<string, string> = { 'm3': 'm-3', 'm3m': 'm-3m', '2mm': 'mm2', '-6m2': '-62m' };
+const FAMILY_ALIASES: Record<string, string> = { 'm3': 'm-3', 'm3m': 'm-3m', '2mm': 'mm2', '-62m': '-6m2', '-4m2': '-42m' };
 
 /**
  * Expected order of a magnetic point group:
@@ -112,7 +112,7 @@ describe('isCentrosymmetric', () => {
     }
   );
 
-  it.each(['1', '2', 'm', '222', 'mm2', '4', '-4', '422', '4mm', '-42m', '3', '32', '3m', '6', '-6', '622', '6mm', '-62m', '23', '432', '-43m'])(
+  it.each(['1', '2', 'm', '222', 'mm2', '4', '-4', '422', '4mm', '-42m', '3', '32', '3m', '6', '-6', '622', '6mm', '-6m2', '23', '432', '-43m'])(
     '%s is not centrosymmetric',
     (name) => {
       expect(isCentrosymmetric(name)).toBe(false);
