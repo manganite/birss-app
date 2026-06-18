@@ -119,6 +119,9 @@ a release (see "Cutting a release" below). **Never commit directly to `main`.**
 git switch main && git pull
 git switch -c feature/<short-name>
 # ... work, commit (Conventional Commits — see below) ...
+# Before merging: check that all PR review comments (Copilot, CodeQL,
+# human reviewers) are addressed and resolved — once merged, inline
+# review threads become read-only and cannot be resolved.
 git switch main && git pull
 git merge --no-ff feature/<short-name>
 git branch -d feature/<short-name>
