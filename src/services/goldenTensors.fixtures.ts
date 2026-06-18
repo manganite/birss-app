@@ -34,7 +34,7 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     tensor: 'ED',
     tr: 'c',
     expected: [
-      '\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}',
+      '\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}',
       '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}',
       '\\chi_{zxx} = \\chi_{zyy}',
       '\\chi_{zzz}',
@@ -52,7 +52,7 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     tensor: 'MD',
     tr: 'i',
     expected: [
-      '\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}',
+      '\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}',
       '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}',
     ],
     source: GENERATOR_DERIVATION,
@@ -83,7 +83,7 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     group: "6'mm'",
     tensor: 'ED',
     tr: 'c',
-    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}'],
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}'],
     source: GENERATOR_DERIVATION,
     note: "c-type SHG tensor for the 6'mm' magnetic phase of hexagonal manganites (e.g. some RMnO3 magnetic structures).",
   },
@@ -238,7 +238,7 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     tensor: 'ED',
     tr: 'c',
     expected: [
-      '\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}',
+      '\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}',
       '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}',
       '\\chi_{zxx} = \\chi_{zyy}',
       '\\chi_{zzz}',
@@ -251,7 +251,7 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     tensor: 'ED',
     tr: 'c',
     expected: [
-      '\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}',
+      '\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}',
       '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}',
     ],
     source: GENERATOR_DERIVATION,

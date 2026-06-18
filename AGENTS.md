@@ -126,12 +126,36 @@ Regularly check the GitHub repository for items that need attention:
 git switch main && git pull
 git switch -c feature/<short-name>
 # ... work, commit (Conventional Commits — see below) ...
-# Before merging: check that all PR review comments (Copilot, CodeQL,
-# human reviewers) are addressed and resolved — once merged, inline
-# review threads become read-only and cannot be resolved.
+```
+
+### Merging: local merge vs. pull request
+
+Use the merge method that fits the risk level of the change:
+
+| Change type | Method | Why |
+|---|---|---|
+| Physics output (generators, tensor logic, group data) | **Pull request** | Gets Copilot review, CodeQL runs pre-merge, creates auditable record for changes that affect calculated results |
+| New features, UI changes, refactors touching multiple files | **Pull request** | Benefits from automated review and a visible diff summary |
+| Chores (CI config, dependency bumps, doc formatting, typos) | **Local merge** | Low risk, no review needed, faster |
+
+**Pull request workflow:**
+```bash
+git push -u origin feature/<short-name>
+gh pr create --title "..." --body "..."
+# Wait for Copilot review + CI checks; address comments
+# Merge via GitHub UI (use "Create a merge commit", not squash)
+# Delete remote branch via GitHub UI
+git switch main && git pull
+git branch -d feature/<short-name>
+```
+
+**Local merge workflow** (still merges a branch — never commit directly on main):
+```bash
+# Before merging: ensure `npm run lint && npm run test` pass locally
 git switch main && git pull
 git merge --no-ff feature/<short-name>
 git branch -d feature/<short-name>
+git push origin main
 ```
 
 ### Versioning

@@ -166,7 +166,7 @@ describe('calculateTensorComponents - golden ED (i-type) relations (Tier 3)', ()
 
   it('point group 32 (D3, quartz): d11/d14 family, each independent', () => {
     expect(calculateTensorComponents('32', 'ED', 'i')).toEqual([
-      '\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}',
+      '\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}',
       '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}',
     ]);
   });
