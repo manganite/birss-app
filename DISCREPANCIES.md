@@ -758,11 +758,52 @@ with the same physics. The differences between them fall into three categories:
 
 ### Tensor verification status
 
-The golden tensor fixtures in `goldenTensors.fixtures.ts` verify component relations for
-representative groups across all crystal families. These fixtures confirm that the generators
-produce correct tensor forms. However, **systematic verification of all 122 groups against
-the printed Birss tables (Tables 4b–4f via Table 7)** has not yet been performed. The
-trigonal groups (32, 3m, -3m and their magnetic derivatives) would show different component
-positions compared to the Birss tables due to the 30° axis offset (Findings 4–6).
+**Birss Table 4e (rank-3 polar tensor): FULLY VERIFIED** — All 21 symbol classes
+(A3–U3) tested via golden fixtures in `goldenTensors.fixtures.ts` (PR #7). Each
+fixture verifies the exact component relations for one representative classical
+group per symbol class against the printed Birss table. 492 tests pass.
 
-<!-- Add future comparison passes below this line -->
+During this verification, one additional generator bug was found and fixed: the
+`-6m2` generator was σ(2)=[2_y] (C₂ rotation) instead of the correct σ(4)=[-2_y]
+(mirror). This caused -6m2 to produce the L3 pattern instead of R3. Fixed in PR #7.
+
+**Remaining verification scope** (not yet done):
+- Tables 4b (rank 0), 4c (rank 1), 4d (rank 2), 4f (rank 4) — not yet tested
+  via golden fixtures, though the Tier 1 test suite covers group orders and
+  parity invariants for all 122 groups at all ranks
+- Magnetic group tensor verification via Table 7 — the existing golden fixtures
+  cover representative magnetic groups, but systematic Table 7 coverage is not
+  yet complete
+
+---
+
+## Closing Summary (v0.1.1)
+
+This document tracked a systematic comparison of the birss-app against the Birss
+book (*Symmetry and Magnetism*, 1966) and the International Tables for
+Crystallography (ITC Vol. A and Vol. D). The comparison covered all 122 magnetic
+point group names, generators, symmetry operations, and tensor component output.
+
+**All identified bugs have been resolved:**
+
+| PR | Scope | Findings resolved |
+|---|---|---|
+| (merged to main) | 10 HM symbol corrections | 1, 14a–c, 15, 16, 20 |
+| PR #6 | Trigonal/hexagonal y-axis convention | 4–6, 17, 18 |
+| PR #7 | -6m2 generator fix + Table 4e verification | (generator bug found during verification) |
+
+**Accepted convention choices (not bugs):**
+
+| Finding | Decision | Rationale |
+|---|---|---|
+| 2–3 | `m-3`/`m-3m` (app) vs `m3`/`m3m` (Birss) | Notation variant; app uses ITC-style explicit bar |
+| 7–10, 19 | Inverse rotation generators (σ(6)/(7)/(8)/(9)) | Same groups generated; no tensor impact |
+| 21 | `6'/mm'm` (Birss) vs `6'/mmm'` (ITC) for D₆h(D₃h) | y-vs-x secondary axis convention; app follows Birss |
+
+**The app now reproduces Birss Table 4e (rank-3 polar tensor) exactly for all 21
+symbol classes**, verified by 21 golden fixtures. The generators match Birss
+Tables 3 and 6 for σ(2) and σ(4) (y-axis convention). The inverse rotation
+variants σ(6)/(7)/(8)/(9) differ in rotation direction but generate identical
+groups and tensor output.
+
+Reference tables: [manganite/birss-tables](https://github.com/manganite/birss-tables) (public)

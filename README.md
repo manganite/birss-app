@@ -29,19 +29,21 @@ Calculates non-zero susceptibility tensor components (Electric Dipole, Magnetic 
 - **Help & Documentation**: 
   - Comprehensive physics background, mathematics behind the intensity calculations, and usage instructions.
 
-## References
-The symmetry relations and calculations presented in this app follow the conventions established in the following literature:
-- **[International Tables for Crystallography](https://doi.org/10.1107/97809553602060000114)**: General crystal symmetry aspects.
-- **[Birss, R. R. (1966). Symmetry and Magnetism](https://ethz.ch/content/dam/ethz/special-interest/matl/multi-ferroic-materials-dam/documents/education/Nonlinear%20Optics%20on%20Ferroic%20Materials/Birss%20Symmetry%20&%20Magnetism%20komplett.pdf)**: Magnetic point groups and tensor component calculation.
+## Conventions & References
+
+The tensor component output follows the conventions of **Birss, *Symmetry and Magnetism* (1966)**: the y-axis secondary convention for trigonal and hexagonal groups (σ(2)=[2_y], σ(4)=[-2_y]), and the z-unique monoclinic setting. The app's rank-3 polar tensor output has been verified against all 21 rows of Birss Table 4e. Point group names use Hermann–Mauguin notation with ITC-style rendering (overbars for roto-inversions, primes for time-reversed operations).
+
+- **[Birss, R. R. (1966). Symmetry and Magnetism](https://ethz.ch/content/dam/ethz/special-interest/matl/multi-ferroic-materials-dam/documents/education/Nonlinear%20Optics%20on%20Ferroic%20Materials/Birss%20Symmetry%20&%20Magnetism%20komplett.pdf)**: Authoritative source for magnetic point groups and tensor component calculation. Reference tables typeset in [manganite/birss-tables](https://github.com/manganite/birss-tables).
+- **[International Tables for Crystallography](https://doi.org/10.1107/97809553602060000114)**: General crystal symmetry aspects. See [DISCREPANCIES.md](DISCREPANCIES.md) for a detailed comparison of Birss vs ITC conventions.
 - **[Pershan, P. S. (1963). Nonlinear Optical Properties of Solids](https://doi.org/10.1103/PhysRev.130.919)**: Nonlinear optical multipole contributions.
 - **[Fröhlich, D., et al. (1999). Nonlinear spectroscopy of antiferromagnetics](https://doi.org/10.1007/s003400050650)**: Source term calculation.
 
 ## Validation & Testing
-The tensor-calculation engine (`src/services/`) is covered by a Vitest suite of 470+ tests, organized in tiers of increasing specificity:
+The tensor-calculation engine (`src/services/`) is covered by a Vitest suite of 490+ tests, organized in tiers of increasing specificity:
 - **Tier 1 — group order**: for all 122 magnetic point groups, `getSymmetryOperations` returns a group of the expected order.
 - **Tier 1b — true closure**: for all 122 groups, every pairwise product of elements in the closed group is itself a member, independently verifying the floating-point-hardened closure algorithm in `symmetryGroups.ts`.
 - **Tier 2 — parity invariants**: for all 122 groups, structural invariants such as "ED vanishes for centrosymmetric groups", "EQ never vanishes", and "grey groups `G1'` reproduce `G` for i-type tensors".
-- **Tier 3 — golden component relations**: ~30 literature-derived fixtures pinning down the exact independent-component relations for specific (group, tensor type, time-reversal) combinations, including every Type-III crystal family, c-type ED (e.g. the canonical Cr₂O₃ `-3'm'` magnetoelectric tensor), and axial (MD) tensors. See `src/services/goldenTensors.fixtures.ts` for sources and `// VERIFY:` notes pending human sign-off against the printed Birss tables.
+- **Tier 3 — golden component relations**: 40+ fixtures pinning down the exact independent-component relations for specific (group, tensor type, time-reversal) combinations. Includes all 21 Birss Table 4e symbol classes (A3–U3) at rank 3, every Type-III crystal family, c-type ED (e.g. the canonical Cr₂O₃ `-3'm'` magnetoelectric tensor), axial (MD) tensors, and rank-4 EQ. See `src/services/goldenTensors.fixtures.ts` for sources and citations.
 
 ## Tech Stack
 - **React 19** + **Vite**
