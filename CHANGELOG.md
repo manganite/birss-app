@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Switched all trigonal and hexagonal generators from x-secondary (ITC convention)
+  to y-secondary (Birss convention): σ(2)=[2_y] and σ(4)=[-2_y]. This changes
+  tensor component output for 17 groups (32, 3m, -3m and their 14 magnetic
+  derivatives) to match the Birss tables exactly. Hexagonal 6-fold groups are
+  also updated for generator fidelity (no tensor output change).
+
 ### Fixed
 - Corrected Hermann–Mauguin symbols for 10 magnetic point groups (since v0.1.0):
   `-62m` → `-6m2` (Type I, and grey `-62m1'` → `-6m21'`);
