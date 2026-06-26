@@ -60,23 +60,23 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
           if (maxRows === 0) return null;
 
           return (
-            <div key={system} className="border border-[#141414]">
-              <div className="bg-[#141414] text-[#E4E3E0] p-4 flex items-center gap-3">
+            <div key={system} className="border border-ink">
+              <div className="bg-ink text-paper p-4 flex items-center gap-3">
                 {getCrystalIcon(system)}
                 <h2 className="text-xl font-medium uppercase tracking-widest">{system}</h2>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#141414]">
+              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-ink">
                 {/* Column Headers */}
-                <div className="hidden md:block p-4 border-b border-[#141414] bg-white/30">
+                <div className="hidden md:block p-4 border-b border-ink bg-white/30">
                   <h3 className="text-xs uppercase tracking-[0.2em] font-bold">Type I (Ordinary)</h3>
                   <p className="text-[10px] opacity-60 mt-1">32 crystallographic point groups</p>
                 </div>
-                <div className="hidden md:block p-4 border-b border-[#141414] bg-white/30">
+                <div className="hidden md:block p-4 border-b border-ink bg-white/30">
                   <h3 className="text-xs uppercase tracking-[0.2em] font-bold">Type II (Gray)</h3>
                   <p className="text-[10px] opacity-60 mt-1">32 groups with time-reversal</p>
                 </div>
-                <div className="hidden md:block p-4 border-b border-[#141414] bg-white/30">
+                <div className="hidden md:block p-4 border-b border-ink bg-white/30">
                   <h3 className="text-xs uppercase tracking-[0.2em] font-bold">Type III (Black & White)</h3>
                   <p className="text-[10px] opacity-60 mt-1">58 magnetic point groups</p>
                 </div>
@@ -85,7 +85,7 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
                 
                 {/* Type I Column */}
                 <div className="flex flex-col">
-                  <div className="md:hidden p-4 border-b border-[#141414] bg-white/30">
+                  <div className="md:hidden p-4 border-b border-ink bg-white/30">
                     <h3 className="text-xs uppercase tracking-[0.2em] font-bold">Type I (Ordinary)</h3>
                   </div>
                   <div className="p-4 flex flex-wrap gap-2">
@@ -93,7 +93,7 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
                       <button
                         key={group.name}
                         onClick={() => setSelectedGroup(group)}
-                        className="px-3 py-2 border border-[#141414] hover:bg-[#141414] hover:text-[#E4E3E0] transition-colors text-lg min-w-[3rem]"
+                        className="px-3 py-2 border border-ink hover:bg-ink hover:text-paper transition-colors text-lg min-w-[3rem]"
                       >
                         <FormatPointGroup name={group.name} />
                       </button>
@@ -103,7 +103,7 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
 
                 {/* Type II Column */}
                 <div className="flex flex-col">
-                  <div className="md:hidden p-4 border-b border-[#141414] bg-white/30">
+                  <div className="md:hidden p-4 border-b border-ink bg-white/30">
                     <h3 className="text-xs uppercase tracking-[0.2em] font-bold">Type II (Gray)</h3>
                   </div>
                   <div className="p-4 flex flex-wrap gap-2">
@@ -111,7 +111,7 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
                       <button
                         key={group.name}
                         onClick={() => setSelectedGroup(group)}
-                        className="px-3 py-2 border border-[#141414] hover:bg-[#141414] hover:text-[#E4E3E0] transition-colors text-lg min-w-[3rem]"
+                        className="px-3 py-2 border border-ink hover:bg-ink hover:text-paper transition-colors text-lg min-w-[3rem]"
                       >
                         <FormatPointGroup name={group.name} />
                       </button>
@@ -121,7 +121,7 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
 
                 {/* Type III Column */}
                 <div className="flex flex-col">
-                  <div className="md:hidden p-4 border-b border-[#141414] bg-white/30">
+                  <div className="md:hidden p-4 border-b border-ink bg-white/30">
                     <h3 className="text-xs uppercase tracking-[0.2em] font-bold">Type III (Black & White)</h3>
                   </div>
                   <div className="p-4 flex flex-wrap gap-2">
@@ -129,7 +129,7 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
                       <button
                         key={group.name}
                         onClick={() => setSelectedGroup(group)}
-                        className="px-3 py-2 border border-[#141414] hover:bg-[#141414] hover:text-[#E4E3E0] transition-colors text-lg min-w-[3rem]"
+                        className="px-3 py-2 border border-ink hover:bg-ink hover:text-paper transition-colors text-lg min-w-[3rem]"
                       >
                         <FormatPointGroup name={group.name} />
                       </button>

@@ -113,10 +113,10 @@ export function HelpPage() {
 
       {/* Feature Overview */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-serif italic border-b border-[#141414] pb-2">Feature Overview</h2>
+        <h2 className="text-2xl font-serif italic border-b border-ink pb-2">Feature Overview</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {FEATURES.map((feature) => (
-            <div key={feature.title} className="p-6 border border-[#141414] border-opacity-10 space-y-3">
+            <div key={feature.title} className="p-6 border border-ink border-opacity-10 space-y-3">
               <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest">
                 <feature.icon className="w-4 h-4" />
                 {feature.title}
@@ -132,7 +132,7 @@ export function HelpPage() {
 
       {/* Conventions & Notations */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-serif italic border-b border-[#141414] pb-2">Notations & Conventions</h2>
+        <h2 className="text-2xl font-serif italic border-b border-ink pb-2">Notations & Conventions</h2>
         
         <div className="space-y-8">
           <div className="space-y-3">
@@ -182,10 +182,10 @@ export function HelpPage() {
 
       {/* Physics Background */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-serif italic border-b border-[#141414] pb-2">Physics & Group Theory</h2>
+        <h2 className="text-2xl font-serif italic border-b border-ink pb-2">Physics & Group Theory</h2>
         
         <div className="space-y-6">
-          <div className="p-6 bg-[#141414]/5 border border-[#141414] border-opacity-10 space-y-4">
+          <div className="p-6 bg-ink/5 border border-ink border-opacity-10 space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-widest">Neumann's Principle</h3>
             <p className="text-sm opacity-70 leading-relaxed">
               The fundamental principle underlying this calculator is Neumann's Principle, which states that the symmetry elements of any physical property of a crystal must include the symmetry elements of the point group of the crystal.
@@ -205,7 +205,7 @@ export function HelpPage() {
             <h3 className="text-sm font-bold uppercase tracking-widest">Tensor Types</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {TENSOR_TYPES.map((tensorType) => (
-                <div key={tensorType.title} className="p-4 border border-[#141414] border-opacity-10 space-y-2">
+                <div key={tensorType.title} className="p-4 border border-ink border-opacity-10 space-y-2">
                   <h4 className="font-medium">{tensorType.title}</h4>
                   <p className="text-xs opacity-70 leading-relaxed">
                     {tensorType.description}
@@ -215,14 +215,14 @@ export function HelpPage() {
             </div>
           </div>
 
-          <div className="space-y-4 pt-4 border-t border-[#141414] border-opacity-10">
+          <div className="space-y-4 pt-4 border-t border-ink border-opacity-10">
             <h3 className="text-sm font-bold uppercase tracking-widest">Nonlinear Optics & SHG</h3>
             <p className="text-sm opacity-70 leading-relaxed">
               <strong>Second Harmonic Generation (SHG)</strong> is a nonlinear optical process where two photons of frequency <InlineMath math="\omega" /> interact within a material to generate a single photon at twice the frequency (<InlineMath math="2\omega" />). The calculator focuses on three multipole contributions to this process:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {SHG_MULTIPOLES.map((multipole) => (
-                <div key={multipole.title} className="p-4 border border-[#141414] border-opacity-10 space-y-2">
+                <div key={multipole.title} className="p-4 border border-ink border-opacity-10 space-y-2">
                   <h4 className="font-medium">{multipole.title}</h4>
                   <p className="text-xs opacity-70 leading-relaxed">
                     {multipole.description}
@@ -232,12 +232,12 @@ export function HelpPage() {
             </div>
           </div>
 
-          <div className="p-6 bg-[#141414]/5 border border-[#141414] border-opacity-10 space-y-4">
+          <div className="p-6 bg-ink/5 border border-ink border-opacity-10 space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-widest">Source Terms & Transverse Fields</h3>
             <p className="text-sm opacity-70 leading-relaxed">
               The incident light field induces multipole moments in the material. These induced moments act as the <strong>source terms</strong> (<InlineMath math="S_i" />) that radiate the SHG signal. The effective nonlinear source term (or effective polarization) is a combination of these different multipole contributions:
             </p>
-            <div className="space-y-3 pl-4 border-l-2 border-[#141414] border-opacity-20 my-4">
+            <div className="space-y-3 pl-4 border-l-2 border-ink border-opacity-20 my-4">
               <p className="text-sm opacity-70 leading-relaxed">
                 <strong>Electric Dipole:</strong> Contributes directly (linearly) to the source term.<br/>
                 <span className="inline-block mt-1"><InlineMath math="S_i^{\text{ED}} \propto P_i" /></span>
@@ -263,7 +263,7 @@ export function HelpPage() {
 
       {/* Simulation Feature */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-serif italic border-b border-[#141414] pb-2">Simulation Feature</h2>
+        <h2 className="text-2xl font-serif italic border-b border-ink pb-2">Simulation Feature</h2>
         
         <div className="space-y-6">
           <div className="space-y-3">
@@ -300,7 +300,7 @@ export function HelpPage() {
             </ul>
           </div>
 
-          <div className="p-6 bg-[#141414]/5 border border-[#141414] border-opacity-10 space-y-4">
+          <div className="p-6 bg-ink/5 border border-ink border-opacity-10 space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-widest">A bit of mathematics: Calculating intensity</h3>
             <p className="text-sm opacity-70 leading-relaxed">
               Let <InlineMath math="\theta" /> be the polarizer angle. The incident electric field <InlineMath math="\vec{E}^\omega" /> induces nonlinear source terms <InlineMath math="S_X" /> and <InlineMath math="S_Y" /> in the material. The measured intensity is proportional to the square of the projected source term along the analyzer direction.
@@ -326,7 +326,7 @@ export function HelpPage() {
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-[#141414] border-opacity-10">
+              <div className="pt-4 border-t border-ink border-opacity-10">
                 <h4 className="font-medium text-sm">Crossed Configuration</h4>
                 <p className="text-sm opacity-70 leading-relaxed mt-1">
                   The analyzer is at <InlineMath math="\theta + 90^\circ" />. The incident field components are:
@@ -344,7 +344,7 @@ export function HelpPage() {
                   The measured intensity is <InlineMath math="I_{\perp} \propto |E_{\perp}^{2\omega}|^2" />.
                 </p>
               </div>
-              <div className="pt-4 border-t border-[#141414] border-opacity-10">
+              <div className="pt-4 border-t border-ink border-opacity-10">
                 <h4 className="font-medium text-sm">Formula Simplification</h4>
                 <p className="text-sm opacity-70 leading-relaxed mt-1">
                   The expanded intensity formulas displayed in the simulator are mathematically simplified using power reduction and multiple-angle trigonometric identities (e.g., <InlineMath math="\sin^2\theta = \frac{1}{2}(1 - \cos 2\theta)" /> and <InlineMath math="\cos^3\theta = \frac{1}{4}(3\cos\theta + \cos 3\theta)" />).
@@ -360,13 +360,13 @@ export function HelpPage() {
 
       {/* References */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-serif italic border-b border-[#141414] pb-2 flex items-center gap-3">
+        <h2 className="text-2xl font-serif italic border-b border-ink pb-2 flex items-center gap-3">
           <BookOpen className="w-6 h-6" />
           References
         </h2>
         <ul className="text-sm opacity-70 space-y-4 list-none">
           {REFERENCES.map((reference) => (
-            <li key={reference.href} className="p-4 border border-[#141414] border-opacity-10 hover:bg-[#141414]/5 transition-colors">
+            <li key={reference.href} className="p-4 border border-ink border-opacity-10 hover:bg-ink/5 transition-colors">
               <a href={reference.href} target="_blank" rel="noreferrer" className="block space-y-1">
                 <span className="font-medium underline">{reference.title}</span>
                 <span className="block opacity-80 text-xs">{reference.description}</span>

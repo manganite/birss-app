@@ -60,7 +60,7 @@ export function SimulatorPage({
   if (!selectedGroup) {
     return (
       <div className="h-[50vh] flex flex-col items-center justify-center text-center space-y-8">
-        <div className="w-24 h-24 border border-[#141414] border-dashed rounded-full flex items-center justify-center animate-spin-slow">
+        <div className="w-24 h-24 border border-ink border-dashed rounded-full flex items-center justify-center animate-spin-slow">
           <Activity className="w-8 h-8 opacity-20" />
         </div>
         <div className="space-y-2">
@@ -74,7 +74,7 @@ export function SimulatorPage({
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       {/* Top Controls */}
-      <div className="bg-white/50 border border-[#141414] p-6 md:p-8 space-y-8">
+      <div className="bg-white/50 border border-ink p-6 md:p-8 space-y-8">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-1 space-y-4">
             <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
@@ -85,10 +85,10 @@ export function SimulatorPage({
                 <button
                   key={type}
                   onClick={() => setSelectedTensorType(type)}
-                  className={`px-4 py-2 text-xs font-medium transition-colors border border-[#141414] ${
+                  className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
                     selectedTensorType === type 
-                      ? 'bg-[#141414] text-[#E4E3E0]' 
-                      : 'hover:bg-[#141414]/5 opacity-50 hover:opacity-100 border-opacity-20'
+                      ? 'bg-ink text-paper' 
+                      : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
                   }`}
                 >
                   {type === 'ED' ? 'Electric Dipole' : type === 'MD' ? 'Magnetic Dipole' : 'Electric Quadrupole'}
@@ -106,10 +106,10 @@ export function SimulatorPage({
                 <button
                   key={tr}
                   onClick={() => setSelectedTimeReversal(tr)}
-                  className={`px-4 py-2 text-xs font-medium transition-colors border border-[#141414] ${
+                  className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
                     selectedTimeReversal === tr 
-                      ? 'bg-[#141414] text-[#E4E3E0]' 
-                      : 'hover:bg-[#141414]/5 opacity-50 hover:opacity-100 border-opacity-20'
+                      ? 'bg-ink text-paper' 
+                      : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
                   }`}
                 >
                   {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
@@ -119,7 +119,7 @@ export function SimulatorPage({
           </div>
         </div>
 
-        <div className="space-y-4 border-t border-[#141414] border-opacity-10 pt-6">
+        <div className="space-y-4 border-t border-ink border-opacity-10 pt-6">
           <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
             <Compass className="w-3 h-3" /> Crystal Orientation (k vector)
           </h4>
@@ -131,10 +131,10 @@ export function SimulatorPage({
                   setThetaX(ori.tx);
                   setThetaY(ori.ty);
                 }}
-                className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-[#141414] ${
+                className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-ink ${
                   thetaX === ori.tx && thetaY === ori.ty
-                    ? 'bg-[#141414] text-[#E4E3E0]' 
-                    : 'hover:bg-[#141414] hover:text-[#E4E3E0] opacity-50 hover:opacity-100 border-opacity-20'
+                    ? 'bg-ink text-paper' 
+                    : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
                 }`}
               >
                 <InlineMath math={ori.math} />
@@ -158,19 +158,19 @@ export function SimulatorPage({
           </div>
 
           {(selectedGroup.crystalSystem === 'Triclinic' || selectedGroup.crystalSystem === 'Monoclinic') && (
-            <div className="p-3 border border-[#141414] border-opacity-10 bg-[#141414]/5 text-xs opacity-70 leading-relaxed">
+            <div className="p-3 border border-ink border-opacity-10 bg-ink/5 text-xs opacity-70 leading-relaxed">
               Component values and polarimetry orientations depend on the in-plane Cartesian convention (see Help). Different monoclinic angles are represented by adjusting component values, not a separate control. Birefringence is not modeled.
             </div>
           )}
 
-          <div className="bg-white/50 border border-[#141414] p-6 space-y-8">
+          <div className="bg-white/50 border border-ink p-6 space-y-8">
             {independentComponents.length === 0 ? (
               <div className="text-sm opacity-50 italic text-center py-8">
                 No non-zero components for this configuration.
               </div>
             ) : (
               independentComponents.map(comp => (
-                <div key={comp} className="space-y-4 border-b border-[#141414] border-opacity-10 pb-6 last:border-0 last:pb-0">
+                <div key={comp} className="space-y-4 border-b border-ink border-opacity-10 pb-6 last:border-0 last:pb-0">
                   <div className="font-mono text-lg font-medium">
                     <TensorTerm term={comp} isNull={false} />
                   </div>
@@ -185,7 +185,7 @@ export function SimulatorPage({
                       min="0" max="1" step="0.01"
                       value={amplitudes[comp] ?? 1}
                       onChange={(e) => setAmplitudes(p => ({ ...p, [comp]: parseFloat(e.target.value) }))}
-                      className="w-full accent-[#141414]"
+                      className="w-full accent-ink"
                     />
                   </div>
 
@@ -199,7 +199,7 @@ export function SimulatorPage({
                       min="0" max="360" step="1"
                       value={phases[comp] ?? 0}
                       onChange={(e) => setPhases(p => ({ ...p, [comp]: parseInt(e.target.value, 10) }))}
-                      className="w-full accent-[#141414]"
+                      className="w-full accent-ink"
                     />
                   </div>
                 </div>
@@ -215,24 +215,24 @@ export function SimulatorPage({
             SHG Intensity Polarimetry
           </div>
 
-          <div className="bg-white/50 border border-[#141414] overflow-hidden">
+          <div className="bg-white/50 border border-ink overflow-hidden">
             {/* Tab Menu */}
-            <div className="flex overflow-x-auto border-b border-[#141414] border-opacity-20 bg-white/30 hide-scrollbar">
+            <div className="flex overflow-x-auto border-b border-ink border-opacity-20 bg-white/30 hide-scrollbar">
               <button
                 onClick={() => setActivePolarimetryTab('anisotropy')}
-                className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activePolarimetryTab === 'anisotropy' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+                className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activePolarimetryTab === 'anisotropy' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
               >
                 Anisotropy
               </button>
               <button
                 onClick={() => setActivePolarimetryTab('polarizer')}
-                className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-[#141414] border-opacity-10 ${activePolarimetryTab === 'polarizer' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+                className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activePolarimetryTab === 'polarizer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
               >
                 Polarizer
               </button>
               <button
                 onClick={() => setActivePolarimetryTab('analyzer')}
-                className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-[#141414] border-opacity-10 ${activePolarimetryTab === 'analyzer' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+                className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activePolarimetryTab === 'analyzer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
               >
                 Analyzer
               </button>
@@ -334,7 +334,7 @@ export function SimulatorPage({
       </div>
 
       {/* Equations Section */}
-      <div className="mt-12 border-t border-[#141414] border-opacity-10 pt-8">
+      <div className="mt-12 border-t border-ink border-opacity-10 pt-8">
         <button 
           onClick={() => setShowEquations(!showEquations)}
           className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity mx-auto"
@@ -344,7 +344,7 @@ export function SimulatorPage({
         </button>
 
         {showEquations && (
-          <div className="mt-8 bg-white/50 border border-[#141414] p-6 md:p-8 space-y-8 animate-in slide-in-from-top-4 duration-300">
+          <div className="mt-8 bg-white/50 border border-ink p-6 md:p-8 space-y-8 animate-in slide-in-from-top-4 duration-300">
             <div className="space-y-4">
               <h3 className="text-lg font-serif italic">Mathematical Model</h3>
               <p className="text-sm opacity-70 leading-relaxed">
@@ -358,7 +358,7 @@ export function SimulatorPage({
                 <p className="text-sm opacity-70 leading-relaxed">
                   The incident light propagates along the Lab Z-axis. The electric field vector is defined by the polarizer angle <InlineMath math="\theta_{pol}" />:
                 </p>
-                <div className="bg-[#141414]/5 p-4 overflow-x-auto">
+                <div className="bg-ink/5 p-4 overflow-x-auto">
                   <BlockMath math="\vec{E}_{in} = \begin{pmatrix} E_X \\ E_Y \\ 0 \end{pmatrix} = E_0 \begin{pmatrix} \cos(\theta_{pol}) \\ \sin(\theta_{pol}) \\ 0 \end{pmatrix}" />
                 </div>
               </div>
@@ -368,7 +368,7 @@ export function SimulatorPage({
                 <p className="text-sm opacity-70 leading-relaxed">
                   For the selected point group and crystal orientation, the source terms evaluate to:
                 </p>
-                <div className="bg-[#141414]/5 p-4 overflow-x-auto space-y-6">
+                <div className="bg-ink/5 p-4 overflow-x-auto space-y-6">
                   <div className="space-y-4">
                     <div className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2">As functions of <InlineMath math="E_X, E_Y" /></div>
                     {sourceTermsExEy.filter(term => term.component === 'S_X' || term.component === 'S_Y').map((term, i) => (
@@ -379,7 +379,7 @@ export function SimulatorPage({
                       </div>
                     ))}
                   </div>
-                  <div className="space-y-4 pt-4 border-t border-[#141414]/10">
+                  <div className="space-y-4 pt-4 border-t border-ink/10">
                     <div className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2">As functions of <InlineMath math="\theta_{pol}" /></div>
                     {sourceTerms.filter(term => term.component === 'S_X' || term.component === 'S_Y').map((term, i) => (
                       <div key={`theta-${i}`} className="flex items-center gap-4 font-mono text-sm whitespace-nowrap">
@@ -406,7 +406,7 @@ export function SimulatorPage({
                   The plotted intensities <InlineMath math="I \propto |E_{out}|^2" /> correspond to the following configurations, where <InlineMath math="\theta" /> is the angle shown on the polar plot:
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-[#141414]/5 p-4 space-y-4">
+                  <div className="bg-ink/5 p-4 space-y-4">
                     <div className="text-xs font-bold uppercase tracking-widest opacity-50">Anisotropy</div>
                     <div className="space-y-2">
                       <div className="text-xs opacity-70">Parallel (<InlineMath math="\theta_{pol} = \theta_{ana} = \theta" />):</div>
@@ -418,7 +418,7 @@ export function SimulatorPage({
                     </div>
                   </div>
                   
-                  <div className="bg-[#141414]/5 p-4 space-y-4">
+                  <div className="bg-ink/5 p-4 space-y-4">
                     <div className="text-xs font-bold uppercase tracking-widest opacity-50">Polarizer</div>
                     <div className="space-y-2">
                       <div className="text-xs opacity-70">Analyzer 0° (<InlineMath math="\theta_{ana} = 0^\circ, \theta_{pol} = \theta" />):</div>
@@ -430,7 +430,7 @@ export function SimulatorPage({
                     </div>
                   </div>
 
-                  <div className="bg-[#141414]/5 p-4 space-y-4">
+                  <div className="bg-ink/5 p-4 space-y-4">
                     <div className="text-xs font-bold uppercase tracking-widest opacity-50">Analyzer</div>
                     <div className="space-y-2">
                       <div className="text-xs opacity-70">Polarizer 0° (<InlineMath math="\theta_{pol} = 0^\circ, \theta_{ana} = \theta" />):</div>

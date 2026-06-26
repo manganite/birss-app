@@ -22,7 +22,7 @@ export const K_ORIENTATION_PRESETS = [
 ];
 
 export const LabFrameOrientation = ({ labFrame }: { labFrame: { X: string; Y: string; Z: string } }) => (
-  <div className="flex-1 bg-[#141414]/5 p-4 border border-[#141414]/10 rounded-sm w-full">
+  <div className="flex-1 bg-ink/5 p-4 border border-ink/10 rounded-sm w-full">
     <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 mb-3">Crystal Orientation in Lab Frame</h4>
     <div className="flex flex-col gap-3 text-sm font-mono">
       <div className="flex flex-wrap gap-x-6 gap-y-2">
@@ -38,7 +38,7 @@ export const TensorTerm = ({ term, isNull }: { term?: string; isNull: boolean })
   if (!term) return null;
   
   return (
-    <span className={isNull ? 'opacity-30' : 'text-[#141414]'}>
+    <span className={isNull ? 'opacity-30' : 'text-ink'}>
       <InlineMath math={term} />
     </span>
   );
@@ -51,7 +51,7 @@ export const FormatPointGroup = ({ name }: { name: string }) => {
 
 export const SymmetryOperation = ({ symbol }: { symbol: string }) => {
   const match = symbol.match(/^(-?\d|m)(?:_([a-z\[\]0-9-°]+))?([⁺⁻])?(')?$/);
-  if (!match) return <span className="inline-flex items-center text-xs bg-white/50 px-2 py-1 border border-[#141414] border-opacity-10 rounded-sm"><InlineMath math={symbol} /></span>;
+  if (!match) return <span className="inline-flex items-center text-xs bg-white/50 px-2 py-1 border border-ink border-opacity-10 rounded-sm"><InlineMath math={symbol} /></span>;
   
   const [, base, axis, sign, prime] = match;
   
@@ -78,7 +78,7 @@ export const SymmetryOperation = ({ symbol }: { symbol: string }) => {
   }
   
   return (
-    <span className="inline-flex items-center text-xs bg-white/50 px-2 py-1 border border-[#141414] border-opacity-10 rounded-sm">
+    <span className="inline-flex items-center text-xs bg-white/50 px-2 py-1 border border-ink border-opacity-10 rounded-sm">
       <InlineMath math={latex} />
     </span>
   );

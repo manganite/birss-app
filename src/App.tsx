@@ -68,7 +68,7 @@ function AxisOrientationInfo({ crystalSystem }: { crystalSystem: string }) {
   if (!content) return null;
 
   return (
-    <div className="p-4 border border-[#141414] border-opacity-10 space-y-2 bg-[#141414]/5">
+    <div className="p-4 border border-ink border-opacity-10 space-y-2 bg-ink/5">
       <p className="text-[10px] uppercase tracking-widest opacity-50 flex items-center gap-1.5">
         <Compass className="w-3 h-3" />
         Axis Orientation
@@ -168,9 +168,9 @@ export default function App() {
   const inducedTerms = currentExpressions.induced;
 
   return (
-    <div className="min-h-screen bg-[#E4E3E0] text-[#141414] font-sans selection:bg-[#141414] selection:text-[#E4E3E0]">
+    <div className="min-h-screen bg-paper text-ink font-sans selection:bg-ink selection:text-paper">
       {/* Header */}
-      <header className="border-b border-[#141414] bg-[#E4E3E0] px-6 py-4 sticky top-0 z-40">
+      <header className="border-b border-ink bg-paper px-6 py-4 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           
           {/* Left: Title & Tagline */}
@@ -178,34 +178,34 @@ export default function App() {
             <h1 className="text-2xl font-serif italic tracking-tight leading-none">
               The Birss App
             </h1>
-            <span className="hidden md:inline-block text-xs opacity-60 ml-4 border-l border-[#141414] border-opacity-20 pl-4">
+            <span className="hidden md:inline-block text-xs opacity-60 ml-4 border-l border-ink border-opacity-20 pl-4">
               Nonlinear optical tensors for magnetic point groups
             </span>
           </div>
 
           {/* Center: Navigation Pills */}
-          <div className="flex items-center bg-white/40 border border-[#141414] border-opacity-10 rounded-full p-1 self-start lg:self-auto">
+          <div className="flex items-center bg-white/40 border border-ink border-opacity-10 rounded-full p-1 self-start lg:self-auto">
             <button
               onClick={() => setCurrentView('explorer')}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'explorer' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'explorer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
             >
               Explorer
             </button>
             <button
               onClick={() => setCurrentView('calculator')}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'calculator' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'calculator' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
             >
               Calculator
             </button>
             <button
               onClick={() => setCurrentView('simulator')}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'simulator' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'simulator' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
             >
               Simulator
             </button>
             <button
               onClick={() => setCurrentView('help')}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'help' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'help' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
             >
               Help
             </button>
@@ -214,7 +214,7 @@ export default function App() {
           {/* Right: Search & GitHub */}
           <div className="flex items-center gap-4 self-start lg:self-auto w-full lg:w-auto">
             <div className="relative w-full lg:w-64">
-              <div className="flex items-center bg-white/50 border border-[#141414] border-opacity-20 rounded-full px-3 py-1.5 focus-within:border-opacity-100 focus-within:bg-white transition-all">
+              <div className="flex items-center bg-white/50 border border-ink border-opacity-20 rounded-full px-3 py-1.5 focus-within:border-opacity-100 focus-within:bg-white transition-all">
                 <Search className="w-3.5 h-3.5 opacity-50" />
                 <input
                   type="text"
@@ -257,19 +257,19 @@ export default function App() {
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 5 }}
-                    className="absolute top-[calc(100%+8px)] right-0 w-full lg:w-80 bg-[#E4E3E0] border border-[#141414] rounded-lg z-50 shadow-xl flex flex-col max-h-[400px] overflow-hidden"
+                    className="absolute top-[calc(100%+8px)] right-0 w-full lg:w-80 bg-paper border border-ink rounded-lg z-50 shadow-xl flex flex-col max-h-[400px] overflow-hidden"
                   >
-                    <div className="p-3 border-b border-[#141414] border-opacity-10 bg-white/30 text-[10px] opacity-60 leading-tight">
+                    <div className="p-3 border-b border-ink border-opacity-10 bg-white/30 text-[10px] opacity-60 leading-tight">
                       Use an apostrophe (') for time-reversed elements (Black & White) and append 1' for Gray groups.
                     </div>
                     
-                    <div className="p-2 border-b border-[#141414]/10 flex flex-wrap gap-1 bg-white/10 sticky top-0 z-10">
+                    <div className="p-2 border-b border-ink/10 flex flex-wrap gap-1 bg-white/10 sticky top-0 z-10">
                       {(['All', 'Ordinary', 'Gray', 'Black & White'] as GroupCategory[]).map(cat => (
                         <button
                           key={cat}
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={() => setActiveCategory(cat)}
-                          className={`text-[10px] uppercase tracking-wider px-2 py-1 rounded-full transition-colors ${activeCategory === cat ? 'bg-[#141414] text-[#E4E3E0]' : 'bg-transparent text-[#141414] hover:bg-[#141414]/10'}`}
+                          className={`text-[10px] uppercase tracking-wider px-2 py-1 rounded-full transition-colors ${activeCategory === cat ? 'bg-ink text-paper' : 'bg-transparent text-ink hover:bg-ink/10'}`}
                         >
                           {cat}
                         </button>
@@ -285,7 +285,7 @@ export default function App() {
                           aria-selected={idx === highlightedIndex}
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={() => handleSelect(group)}
-                          className={`w-full text-left px-3 py-2 hover:bg-[#141414] hover:text-[#E4E3E0] transition-colors flex justify-between items-center group rounded-md ${idx === highlightedIndex ? 'bg-[#141414]/10' : ''}`}
+                          className={`w-full text-left px-3 py-2 hover:bg-ink hover:text-paper transition-colors flex justify-between items-center group rounded-md ${idx === highlightedIndex ? 'bg-ink/10' : ''}`}
                         >
                           <span className="text-sm font-serif italic"><FormatPointGroup name={group.name} /></span>
                           <span className="text-[10px] uppercase tracking-widest opacity-50 group-hover:opacity-100">{group.crystalSystem}</span>
@@ -346,7 +346,7 @@ export default function App() {
           />
         ) : !selectedGroup ? (
           <div className="h-[50vh] flex flex-col items-center justify-center text-center space-y-8">
-            <div className="w-24 h-24 border border-[#141414] border-dashed rounded-full flex items-center justify-center animate-spin-slow">
+            <div className="w-24 h-24 border border-ink border-dashed rounded-full flex items-center justify-center animate-spin-slow">
               <Layers className="w-8 h-8 opacity-20" />
             </div>
             <div className="space-y-2">
@@ -375,21 +375,21 @@ export default function App() {
                       {selectedGroup.type === 'I' ? 'Standard' : selectedGroup.type === 'II' ? 'Gray' : 'Magnetic'} Point Group
                     </p>
                   </div>
-                  <div className="flex items-center gap-3 p-4 border border-[#141414] border-opacity-10">
+                  <div className="flex items-center gap-3 p-4 border border-ink border-opacity-10">
                     {getCrystalIcon(selectedGroup.crystalSystem)}
                     <div>
                       <p className="text-sm font-medium">{selectedGroup.crystalSystem}</p>
                       <p className="text-[10px] uppercase tracking-widest opacity-50">Crystal System</p>
                     </div>
                   </div>
-                  <div className={`p-4 border border-[#141414] ${isCentrosymmetric(selectedGroup.name) ? 'bg-[#141414] text-[#E4E3E0]' : 'border-opacity-10'}`}>
+                  <div className={`p-4 border border-ink ${isCentrosymmetric(selectedGroup.name) ? 'bg-ink text-paper' : 'border-opacity-10'}`}>
                     <p className="text-sm font-medium">
                       {isCentrosymmetric(selectedGroup.name) ? 'Centrosymmetric' : 'Non-Centrosymmetric'}
                     </p>
                     <p className="text-[10px] uppercase tracking-widest opacity-50">Symmetry Type</p>
                   </div>
                   
-                  <div className="p-4 border border-[#141414] border-opacity-10 space-y-3">
+                  <div className="p-4 border border-ink border-opacity-10 space-y-3">
                     <p className="text-[10px] uppercase tracking-widest opacity-50">Symmetry Operations ({currentOperations.length})</p>
                     <div className="flex flex-wrap gap-1.5">
                       {currentOperations.map((op, i) => (
@@ -406,7 +406,7 @@ export default function App() {
             {/* Main Content: Tensor Components */}
             <div className="lg:col-span-2 space-y-8">
               {/* Tensor Type Selector */}
-              <div className="flex flex-col gap-6 border-b border-[#141414] border-opacity-10 pb-8">
+              <div className="flex flex-col gap-6 border-b border-ink border-opacity-10 pb-8">
                 <div className="space-y-3">
                   <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Tensor Classification</p>
                   <div className="flex flex-wrap gap-3">
@@ -414,10 +414,10 @@ export default function App() {
                       <button
                         key={type}
                         onClick={() => setSelectedTensorType(type)}
-                        className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-[#141414] ${
+                        className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
                           selectedTensorType === type 
-                            ? 'bg-[#141414] text-[#E4E3E0]' 
-                            : 'hover:bg-[#141414] hover:text-[#E4E3E0] opacity-50 hover:opacity-100 border-opacity-20'
+                            ? 'bg-ink text-paper' 
+                            : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
                         }`}
                       >
                         {tensorMeta[type].label}
@@ -433,10 +433,10 @@ export default function App() {
                       <button
                         key={tr}
                         onClick={() => setSelectedTimeReversal(tr)}
-                        className={`px-6 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-[#141414] ${
+                        className={`px-6 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
                           selectedTimeReversal === tr 
-                            ? 'bg-[#141414] text-[#E4E3E0]' 
-                            : 'hover:bg-[#141414] hover:text-[#E4E3E0] opacity-50 hover:opacity-100 border-opacity-20'
+                            ? 'bg-ink text-paper' 
+                            : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
                         }`}
                       >
                         {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
@@ -446,24 +446,24 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="bg-white/50 border border-[#141414] overflow-hidden">
+              <div className="bg-white/50 border border-ink overflow-hidden">
                 {/* Tab Menu */}
-                <div className="flex overflow-x-auto border-b border-[#141414] border-opacity-20 bg-white/30 hide-scrollbar">
+                <div className="flex overflow-x-auto border-b border-ink border-opacity-20 bg-white/30 hide-scrollbar">
                   <button
                     onClick={() => setActiveResultTab('components')}
-                    className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activeResultTab === 'components' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+                    className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activeResultTab === 'components' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
                   >
                     Tensor Components
                   </button>
                   <button
                     onClick={() => setActiveResultTab('induced')}
-                    className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-[#141414] border-opacity-10 ${activeResultTab === 'induced' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+                    className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activeResultTab === 'induced' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
                   >
                     Induced Response
                   </button>
                   <button
                     onClick={() => setActiveResultTab('source')}
-                    className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-[#141414] border-opacity-10 ${activeResultTab === 'source' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+                    className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activeResultTab === 'source' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
                   >
                     Source Terms
                   </button>
@@ -473,7 +473,7 @@ export default function App() {
                 <div className="p-6 md:p-8 min-h-[400px]">
                   {activeResultTab === 'components' && (
                     <div className="space-y-6 animate-in fade-in duration-300">
-                      <div className="flex justify-between items-center border-b border-[#141414] border-opacity-10 pb-4">
+                      <div className="flex justify-between items-center border-b border-ink border-opacity-10 pb-4">
                         <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
                           <Zap className="w-3 h-3" />
                           {tensorMeta[selectedTensorType].label} Tensor ({tensorMeta[selectedTensorType].type})
@@ -486,7 +486,7 @@ export default function App() {
                           const isNull = comp.toLowerCase().includes('zero') || comp.toLowerCase().includes('none') || comp.includes('not supported');
                           if (isNull) {
                             return (
-                              <div key={i} className="group border-b border-[#141414] border-opacity-10 pb-4 hover:border-opacity-100 transition-all">
+                              <div key={i} className="group border-b border-ink border-opacity-10 pb-4 hover:border-opacity-100 transition-all">
                                 <div className="text-lg font-mono tracking-tighter opacity-30">
                                   {comp}
                                 </div>
@@ -499,7 +499,7 @@ export default function App() {
                           
                           const parts = comp.split('=').map(p => p.trim());
                           return (
-                            <div key={i} className="group border-b border-[#141414] border-opacity-10 pb-4 hover:border-opacity-100 transition-all">
+                            <div key={i} className="group border-b border-ink border-opacity-10 pb-4 hover:border-opacity-100 transition-all">
                               <div className="text-lg font-mono tracking-tighter flex flex-wrap items-baseline gap-2">
                                 <TensorTerm term={parts[0]} isNull={false} />
                                 {parts.length > 1 && parts.slice(1).map((part, pi) => (
@@ -518,7 +518,7 @@ export default function App() {
                       </div>
 
                       {selectedTensorType === 'ED' && isCentrosymmetric(selectedGroup.name) && (
-                        <div className="p-6 border border-[#141414] border-dashed flex items-center gap-4 opacity-50 mt-8">
+                        <div className="p-6 border border-ink border-dashed flex items-center gap-4 opacity-50 mt-8">
                           <Info className="w-5 h-5" />
                           <p className="text-xs leading-relaxed italic">
                             In centrosymmetric point groups, all components of the second-order nonlinear susceptibility 
@@ -531,7 +531,7 @@ export default function App() {
 
                   {activeResultTab === 'induced' && (
                     <div className="space-y-6 animate-in fade-in duration-300">
-                      <div className="flex justify-between items-center border-b border-[#141414] border-opacity-10 pb-4">
+                      <div className="flex justify-between items-center border-b border-ink border-opacity-10 pb-4">
                         <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
                           <Compass className="w-3 h-3" />
                           {selectedTensorType === 'ED' ? 'Induced Polarization' : selectedTensorType === 'MD' ? 'Induced Magnetization' : 'Induced Quadrupole'} (CRYSTAL FRAME)
@@ -543,7 +543,7 @@ export default function App() {
                         {inducedTerms.map((expr, i) => {
                           const isNull = expr.expression === "0";
                           return (
-                            <div key={i} className="flex flex-col md:flex-row md:items-center gap-4 border-b border-[#141414] border-opacity-10 pb-4">
+                            <div key={i} className="flex flex-col md:flex-row md:items-center gap-4 border-b border-ink border-opacity-10 pb-4">
                               <div className="w-16 font-mono text-xl">
                                 <TensorTerm term={expr.component} isNull={isNull} />
                               </div>
@@ -556,7 +556,7 @@ export default function App() {
                         })}
                       </div>
 
-                      <div className="p-4 border border-[#141414] border-dashed text-[10px] uppercase tracking-widest opacity-60 leading-relaxed mt-8">
+                      <div className="p-4 border border-ink border-dashed text-[10px] uppercase tracking-widest opacity-60 leading-relaxed mt-8">
                         Note: This calculation assumes two identical input fields <InlineMath math="E(\omega)" />. 
                         The full electric field vector is considered for the induced response.
                       </div>
@@ -565,7 +565,7 @@ export default function App() {
 
                   {activeResultTab === 'source' && (
                     <div className="space-y-6 animate-in fade-in duration-300">
-                      <div className="flex justify-between items-center border-b border-[#141414] border-opacity-10 pb-4">
+                      <div className="flex justify-between items-center border-b border-ink border-opacity-10 pb-4">
                         <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
                           <Compass className="w-3 h-3" />
                           Source Term Components S (Lab Frame)
@@ -575,7 +575,7 @@ export default function App() {
                         </div>
                       </div>
 
-                      <div className="space-y-6 border-b border-[#141414] border-opacity-10 pb-6">
+                      <div className="space-y-6 border-b border-ink border-opacity-10 pb-6">
                         <div className="space-y-3">
                           <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">
                             Select the direction of light propagation relative to the crystal axes
@@ -588,10 +588,10 @@ export default function App() {
                                   setThetaX(ori.tx);
                                   setThetaY(ori.ty);
                                 }}
-                                className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-[#141414] ${
+                                className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-ink ${
                                   thetaX === ori.tx && thetaY === ori.ty
-                                    ? 'bg-[#141414] text-[#E4E3E0]' 
-                                    : 'hover:bg-[#141414] hover:text-[#E4E3E0] opacity-50 hover:opacity-100 border-opacity-20'
+                                    ? 'bg-ink text-paper' 
+                                    : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
                                 }`}
                               >
                                 <InlineMath math={ori.math} />
@@ -608,7 +608,7 @@ export default function App() {
                         {sourceTerms.map((expr, i) => {
                           const isNull = expr.expression === "0";
                           return (
-                            <div key={i} className="flex flex-col md:flex-row md:items-center gap-4 border-b border-[#141414] border-opacity-10 pb-4">
+                            <div key={i} className="flex flex-col md:flex-row md:items-center gap-4 border-b border-ink border-opacity-10 pb-4">
                               <div className="w-16 font-mono text-xl">
                                 <TensorTerm term={expr.component} isNull={isNull} />
                               </div>
@@ -623,7 +623,7 @@ export default function App() {
                         })}
                       </div>
 
-                      <div className="p-4 border border-[#141414] border-dashed text-[10px] uppercase tracking-widest opacity-60 leading-relaxed mt-8">
+                      <div className="p-4 border border-ink border-dashed text-[10px] uppercase tracking-widest opacity-60 leading-relaxed mt-8">
                         Note: The incoming light propagates along the Z-axis in the Lab Frame, meaning the electric field is purely transverse: <InlineMath math="\vec{E} = (E_X, E_Y, 0)" />.
                       </div>
                     </div>
@@ -631,7 +631,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="p-8 border border-[#141414] border-opacity-10 space-y-4">
+              <div className="p-8 border border-ink border-opacity-10 space-y-4">
                 <h4 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
                   <Info className="w-4 h-4" />
                   Tensor Notes
@@ -652,7 +652,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-24 border-t border-[#141414] p-8 text-center space-y-2">
+      <footer className="mt-24 border-t border-ink p-8 text-center space-y-2">
         <p className="text-[10px] uppercase tracking-[0.5em] opacity-30">
           The Birss App &copy; 2026
         </p>
