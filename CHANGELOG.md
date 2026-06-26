@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Document the oblique-axis Cartesian convention (Hausühl/IRE) for triclinic and
+  monoclinic systems: `AxisOrientationInfo` now shows axis assignments for both
+  systems (triclinic previously showed nothing), Help page includes triclinic/monoclinic
+  entries and a "Why no β control?" explanation, Simulator shows an info note for
+  low-symmetry groups about convention dependence and scope.
+- Explorer is now the default landing view (tab order: Explorer → Calculator →
+  Simulator → Help), replacing the empty Calculator state.
+
+### Fixed
+
+- Polar plot orientation: 0° (X) is now at the right with angles increasing
+  anticlockwise (standard optics/SHG convention). Previously 0° was at the top
+  with clockwise progression (since v0.1.0).
+
 ## [0.1.1] - 2026-06-18
 
 ### Added

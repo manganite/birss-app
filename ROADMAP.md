@@ -130,7 +130,7 @@ Wave 4:  2 ←── Feature 2 spike
 
 ### 1A. Fix Polar Plot Orientation
 
-**Status:** Planning — ship as its own PR
+**Status:** PR open (#9) — `startAngle={0} endAngle={360}` + `PolarRadiusAxis angle={0}`
 **Priority:** High — ~3-line change, ship immediately
 
 Currently 0° (x) is on the vertical axis and 90° (y) is horizontal. Swap so that 0° is on the horizontal axis (right) and angles increase anticlockwise (mathematical positive sense).
@@ -601,7 +601,7 @@ Two existing selection patterns; the mobile question is which carries over:
 
 ## 7. Oblique-Axis Transparency (Triclinic & Monoclinic)
 
-**Status:** Planning
+**Status:** PR open (#10) — AxisOrientationInfo, HelpPage, Simulator info note implemented
 **Priority:** Medium — documentation/UX only, no engine changes; can ship independently at any time
 **Prerequisite for:** golden fixtures for triclinic/monoclinic groups; Feature 3 Phase 2 monoclinic axis choice
 
@@ -762,10 +762,12 @@ The app uses `text-[10px] uppercase tracking-[0.2em]` for virtually all labels: 
 
 #### E — Tab order change: Explorer as default view
 
+**Status:** PR open (#8)
+
 See Standing decisions: Explorer → Calculator → Simulator → Help. The Explorer replaces the empty "Select a point group" landing page as the default view. Implement as part of this overhaul or independently — it's a one-line change (`useState` default + tab order).
 
-- [ ] Change default view from Calculator to Explorer
-- [ ] Reorder navigation tabs: Explorer → Calculator → Simulator → Help
+- [x] Change default view from Calculator to Explorer
+- [x] Reorder navigation tabs: Explorer → Calculator → Simulator → Help
 
 ### Relationship to other features
 
