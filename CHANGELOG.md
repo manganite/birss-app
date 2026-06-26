@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Simulator: rotation sliders for φ_x (±90°), φ_y (±90°), and ψ (±180°) with
+  coupled numeric inputs, in a collapsible Crystal Rotation section below k-vector
+  presets. Polar plots update live as sliders change.
+- Simulator: sticky plot column on desktop — plots stay visible while scrolling
+  the component list for low-symmetry groups with many independent components.
+- Simulator: condensed component blocks — phase collapsed by default when φ=0
+  (non-zero value shown in collapsed header), amplitude and phase sliders have
+  coupled numeric inputs for exact value entry, phase slider shows tick marks
+  at 0/90/180/270/360°.
+
+### Changed
+- Calculator source terms now always display at base orientation (φ_x = φ_y = ψ = 0).
+  When rotation is active in the Simulator, an info note explains this and points
+  to the future symbolic φ-dependent expressions.
+
 ## [0.3.0] - 2026-06-26
 
 ### Added
