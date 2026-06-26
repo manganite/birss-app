@@ -516,7 +516,7 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     note: 'Birss Table 4e row U3 (1 independent component).',
   },
 
-  // Alternate-setting fixtures (Mechanism B, setting 2)
+  // Alternate-setting fixtures — Phase 1 (Mechanism B, setting 2)
   // Similarity transform S·G·S⁻¹ swaps σ_v ↔ σ_d mirror families.
   // i-type tensors are identical between settings (Mechanism B);
   // only c-type tensors differ — the component families swap.
@@ -544,5 +544,172 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     group: "6'/mm'm", tensor: 'ED', tr: 'c', setting: 2,
     expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}'],
     source: 'Similarity transform Rz(30°); swaps d₁₁→d₂₂ family.',
+  },
+
+  // Alternate-setting fixtures — Phase 2, Mechanism A (classical setting ambiguity)
+  // Rz(45°/30°) swaps ⟨100⟩ ↔ ⟨110⟩ (tetragonal) or ⟨100⟩ ↔ ⟨210⟩ (trigonal/hexagonal).
+  // Both i-type and c-type may differ (the swap changes the spatial element assignment).
+
+  // Tetragonal Mechanism A — Rz(45°)
+  {
+    group: "-4'2m'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxz} = \\chi_{xzx} = -\\chi_{yyz} = -\\chi_{yzy}', '\\chi_{zxx} = -\\chi_{zyy}'],
+    source: 'Similarity transform Rz(45°); swaps d₁₄→d₁₅ family (i-type).',
+  },
+  {
+    group: "-4'm2'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxz} = \\chi_{xzx} = -\\chi_{yyz} = -\\chi_{yzy}', '\\chi_{zxx} = -\\chi_{zyy}'],
+    source: 'Similarity transform Rz(45°); swaps d₁₄→d₁₅ family (i-type). Table-7 cross-check: (-4\'m2\') i-tensor polar odd = (J_n), consistent with 2 independent components.',
+  },
+  {
+    group: "-42'm'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxz} = \\chi_{xzx} = -\\chi_{yyz} = -\\chi_{yzy}', '\\chi_{zxx} = -\\chi_{zyy}'],
+    source: 'Similarity transform Rz(45°); swaps d₁₄→d₁₅ family (i-type).',
+  },
+  {
+    group: "-42'm'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx}', '\\chi_{zxy} = \\chi_{zyx}'],
+    source: 'Similarity transform Rz(45°); swaps d₁₅→d₁₄ family (c-type).',
+  },
+
+  // Trigonal Mechanism A — Rz(30°)
+  {
+    group: "32'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}', '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}'],
+    source: 'Similarity transform Rz(30°); swaps d₂₂→d₁₁ plus d₁₄ families.',
+  },
+  {
+    group: "32'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}', '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Similarity transform Rz(30°); c-type acquires 3m-like 4-component tensor.',
+  },
+  {
+    group: "3m'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}', '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Similarity transform Rz(30°); i-type acquires 3m-like 4-component tensor.',
+  },
+  {
+    group: "3m'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}', '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}'],
+    source: 'Similarity transform Rz(30°); c-type acquires 32-like 2-component tensor.',
+  },
+  {
+    group: "-3'm", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}', '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Similarity transform Rz(30°); c-type acquires 3m-like 4-component tensor.',
+  },
+  {
+    group: "-3'm'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}', '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Similarity transform Rz(30°); c-type acquires 3m-like 4-component tensor.',
+  },
+
+  // Hexagonal Mechanism A — Rz(30°)
+  {
+    group: "-6'2m'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}'],
+    source: 'Similarity transform Rz(30°); swaps d₂₂→d₁₁ family. Table-7 cross-check: (-6\'2m\') i-tensor polar odd = R_n, consistent with 1 independent component.',
+  },
+  {
+    group: "-6'm2'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}'],
+    source: 'Similarity transform Rz(30°); swaps d₁₁→d₂₂ family.',
+  },
+  {
+    group: "-6m'2'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}'],
+    source: 'Similarity transform Rz(30°); swaps d₁₁→d₂₂ family.',
+  },
+  {
+    group: "-6m'2'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}'],
+    source: 'Similarity transform Rz(30°); swaps d₂₂→d₁₁ family (c-type).',
+  },
+
+  // Alternate-setting fixtures — Phase 2, Orthorhombic axis orientation
+  // Cyclic permutation (setting 2 = a-unique) and reverse cyclic (setting 3 = b-unique).
+  // Table-7 cross-check: (2'm'm) i-tensor polar odd = (E_n), 5 components — consistent.
+  {
+    group: "2'2'2", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{zxz} = \\chi_{zzx}'],
+    source: 'Cyclic axis permutation; c-type acquires mm2-like tensor with x as unique axis.',
+  },
+  {
+    group: "2'2'2", tensor: 'ED', tr: 'c', setting: 3,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{yxx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Reverse cyclic axis permutation; c-type acquires mm2-like tensor with y as unique axis.',
+  },
+  {
+    group: "2'm'm", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{zxz} = \\chi_{zzx}'],
+    source: 'Cyclic axis permutation; i-type rotates mm2 tensor to a-unique.',
+  },
+  {
+    group: "2'm'm", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{yxx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Cyclic axis permutation; c-type rotates to b-unique.',
+  },
+  {
+    group: "2'm'm", tensor: 'ED', tr: 'i', setting: 3,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{yxx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Reverse cyclic axis permutation; i-type rotates mm2 tensor to b-unique.',
+  },
+  {
+    group: "2'm'm", tensor: 'ED', tr: 'c', setting: 3,
+    expected: ['\\chi_{xxz} = \\chi_{xzx}', '\\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx}', '\\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Reverse cyclic axis permutation; c-type rotates to c-unique (mm2 base form).',
+  },
+  {
+    group: "m'm'2", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{zxz} = \\chi_{zzx}'],
+    source: 'Cyclic axis permutation; i-type rotates to a-unique.',
+  },
+  {
+    group: "m'm'2", tensor: 'ED', tr: 'i', setting: 3,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{yxx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Reverse cyclic axis permutation; i-type rotates to b-unique.',
+  },
+  {
+    group: "m'm'm", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{zxz} = \\chi_{zzx}'],
+    source: 'Cyclic axis permutation; c-type rotates to a-unique.',
+  },
+  {
+    group: "m'm'm", tensor: 'ED', tr: 'c', setting: 3,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{yxx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Reverse cyclic axis permutation; c-type rotates to b-unique.',
+  },
+
+  // Alternate-setting fixtures — Phase 2, Monoclinic axis choice (z→b unique)
+  // MONO_YZ_SWAP swaps y↔z (with x-flip for det=+1), converting z-unique (Birss) to b-unique (ITC).
+  {
+    group: "2'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{xyz} = \\chi_{xzy}', '\\chi_{yxx}', '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zxy} = \\chi_{zyx}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Monoclinic y↔z swap; i-type rotates 2-fold from z to y (b-unique ITC convention).',
+  },
+  {
+    group: "2'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xxz} = \\chi_{xzx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx}', '\\chi_{zxz} = \\chi_{zzx}', '\\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Monoclinic y↔z swap; c-type rotates m from ⊥z to ⊥y (b-unique ITC convention).',
+  },
+  {
+    group: "m'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xxz} = \\chi_{xzx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx}', '\\chi_{zxz} = \\chi_{zzx}', '\\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Monoclinic y↔z swap; i-type rotates mirror normal from z to y (b-unique ITC convention).',
+  },
+  {
+    group: "m'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{xyz} = \\chi_{xzy}', '\\chi_{yxx}', '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zxy} = \\chi_{zyx}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Monoclinic y↔z swap; c-type rotates 2-fold from z to y.',
+  },
+  {
+    group: "2'/m", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xxz} = \\chi_{xzx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx}', '\\chi_{zxz} = \\chi_{zzx}', '\\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Monoclinic y↔z swap; c-type rotates mirror normal from z to y (b-unique ITC convention).',
+  },
+  {
+    group: "2/m'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{xyz} = \\chi_{xzy}', '\\chi_{yxx}', '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zxy} = \\chi_{zyx}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Monoclinic y↔z swap; c-type rotates 2-fold from z to y.',
   },
 ];

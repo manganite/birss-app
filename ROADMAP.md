@@ -14,7 +14,7 @@ The `#` column is a **feature identifier** (used for cross-references throughout
 | 1B | Rotation engine + tests | **Done** (v0.3.0) | Lab-frame rotation with phiX, phiY, psi |
 | 1C | Rotation UI + mobile | **Done** (v0.4.0, PR #16, #17, #18) | Desktop + mobile split |
 | 2 | Symbolic source terms | **Done** (v0.5.0, PR #19) | TrigPoly algebra + symbolic pipeline + formatter + UI |
-| 3 | Alternate settings (Phase 1) | **Done** (PR #15) | 8 Mechanism-B groups |
+| 3 | Alternate settings | **Done** (P1: PR #15, P2: v0.6.0) | P1: 8 Mechanism-B groups; P2: 21 remaining (Mech A + ortho + mono) |
 | 4 | Color tokens | **Done** | Housekeeping |
 | 5 | Explorer: tabs + enrichment | Deferred | Per-system tabs + enriched popups; after 1–3 settle |
 | 6 | Help & documentation | Deferred | Inline help ships with each feature |
@@ -58,9 +58,9 @@ Features group into four waves based on their dependencies. Within each wave, it
 
 | Feature | Branch | Method | SemVer |
 |---|---|---|---|
-| **2** — Symbolic source terms | `feature/symbolic-source-terms` | PR (physics output) | MINOR (v0.5.0) |
+| **2** — Symbolic source terms | `feature/symbolic-source-terms` | PR #19 | MINOR (v0.5.0) — Merged |
+| **3 Phase 2** — Remaining settings | `feature/alternate-settings-p2` | PR | MINOR (v0.6.0) |
 | **5** — Explorer restructure + enrichment | `feature/explorer-enrichment` | PR (UI changes) | MINOR |
-| **3 Phase 2** — Remaining settings | `feature/alternate-settings-p2` | PR (physics output) | MINOR |
 | **8 A/B** — Desktop layout overhaul | `feature/desktop-layout` | PR (UI changes) | MINOR |
 | **9 Phase 2** — Free [hkl] input | `feature/hkl-input` | PR (UI changes) | MINOR |
 | **6** — Help & documentation | `docs/help-content` | Local merge (docs-only) | — (no bump) |
@@ -387,7 +387,7 @@ The symbolic engine shares a core with the Python `curve_fit` export (parking lo
 
 ## 3. Alternate Point Group Settings
 
-**Status:** Phase 1 done (v0.4.0, PR #15); Phase 2 open
+**Status:** Phase 1 done (v0.4.0, PR #15); Phase 2 done (v0.6.0)
 **Priority:** High — correctness issue; phased approach (spike first, then general system). Phase 1 is independent of Features 1B, 1C, and 2 — can land at any time, like the color-token feature.
 
 The app's `GENERATORS` hardcode one orientation per group. A user whose crystal matches a different setting cannot currently obtain the correct tensor — this is a correctness gap.
@@ -434,9 +434,9 @@ The remaining 29 BW groups are single-setting. The 32 classical and 32 grey grou
 
 #### Phase 2: remaining groups
 
-- [ ] Classical-inherited (Mechanism A): 11 groups (tetragonal, trigonal, hexagonal)
-- [ ] Orthorhombic axis orientation: 5 groups (3 settings each)
-- [ ] Monoclinic axis choice (b/c): 5 groups — the app uses z-unique (Birss convention); expose the b vs c choice (2 options, not 3 — the a-unique setting is not used in practice). The in-plane Cartesian convention (Feature 7) must be documented first, and the first↔second-setting axis permutation (Matthies & Wenk eqs. 1–4, 23) applied when switching to b-unique
+- [x] Classical-inherited (Mechanism A): 11 groups (tetragonal, trigonal, hexagonal)
+- [x] Orthorhombic axis orientation: 5 groups (3 settings each)
+- [x] Monoclinic axis choice (b/c): 5 groups — the app uses z-unique (Birss convention); expose the b vs c choice (2 options, not 3 — the a-unique setting is not used in practice). The in-plane Cartesian convention (Feature 7) must be documented first, and the first↔second-setting axis permutation (Matthies & Wenk eqs. 1–4, 23) applied when switching to b-unique
 - [ ] Classical groups: inherit the same mechanism
 
 ### Interaction with rotation (Features 1B–1C/2)
