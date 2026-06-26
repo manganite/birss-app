@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PointGroupData } from '../data/pointGroups';
-import { TensorType, TensorTimeReversal, isCentrosymmetric } from '../services/tensorCalculator';
+import { TensorType, TensorTimeReversal, isCentrosymmetric, type SymbolicSHGResult, formatSymbolicSourceTerm } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
 import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
 import { TensorTerm, FormatPointGroup, getPresetsForSystem, LabFrameOrientation } from './MathComponents';
@@ -24,6 +24,7 @@ interface SimulatorPageProps {
   psi: number;
   setPsi: (v: number) => void;
   selectedSetting: number;
+  symbolicExpressions: SymbolicSHGResult | null;
   amplitudes: Record<string, number>;
   setAmplitudes: React.Dispatch<React.SetStateAction<Record<string, number>>>;
   phases: Record<string, number>;
@@ -47,6 +48,7 @@ export function SimulatorPage({
   psi,
   setPsi,
   selectedSetting,
+  symbolicExpressions,
   amplitudes,
   setAmplitudes,
   phases,
@@ -542,7 +544,24 @@ export function SimulatorPage({
                   For the selected point group and crystal orientation, the source terms evaluate to:
                 </p>
                 <div className="bg-ink/5 p-4 overflow-x-auto space-y-6">
-                  <div className="space-y-4">
+                  {symbolicExpressions && (
+                    <div className="space-y-4">
+                      <div className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2">
+                        Symbolic (<InlineMath math="\varphi_x, \varphi_y, \psi" /> dependence)
+                      </div>
+                      {symbolicExpressions.source.filter(term => term.component === 'S_X' || term.component === 'S_Y').map((term, i) => {
+                        const formatted = formatSymbolicSourceTerm(term.symbolicPoly);
+                        return (
+                          <div key={`sym-${i}`} className="flex items-center gap-4 font-mono text-sm whitespace-nowrap">
+                            <div><TensorTerm term={term.component} isNull={formatted === '0'} /></div>
+                            <div>=</div>
+                            <div><TensorTerm term={formatted} isNull={formatted === '0'} /></div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                  <div className="space-y-4 pt-4 border-t border-ink/10">
                     <div className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2">As functions of <InlineMath math="E_X, E_Y" /></div>
                     {sourceTermsExEy.filter(term => term.component === 'S_X' || term.component === 'S_Y').map((term, i) => (
                       <div key={`exey-${i}`} className="flex items-center gap-4 font-mono text-sm whitespace-nowrap">

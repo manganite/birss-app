@@ -18,6 +18,8 @@ import {
   getLabFrameVectors,
   getAlternateSettings,
   getFutureSettingCount,
+  calculateSymbolicSHGExpressions,
+  formatSymbolicSourceTerm,
 } from './services/tensorCalculator';
 import { PointGroupExplorer } from './components/PointGroupExplorer';
 import { HelpPage } from './components/HelpPage';
@@ -171,6 +173,11 @@ export default function App() {
   const labFrameBase = useMemo(() => getLabFrameVectors({ thetaX, thetaY, phiX: 0, phiY: 0, psi: 0 }), [thetaX, thetaY]);
   const currentExpressions = useMemo(
     () => calculateSHGExpressions({ groupName: selectedGroup?.name || "", tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY, phiX: 0, phiY: 0, psi: 0, setting: selectedSetting }),
+    [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, selectedSetting]
+  );
+
+  const symbolicExpressions = useMemo(
+    () => selectedGroup ? calculateSymbolicSHGExpressions({ groupName: selectedGroup.name, tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY, setting: selectedSetting }) : null,
     [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, selectedSetting]
   );
 
@@ -350,6 +357,7 @@ export default function App() {
             psi={psi}
             setPsi={setPsi}
             selectedSetting={selectedSetting}
+            symbolicExpressions={symbolicExpressions}
             amplitudes={amplitudes}
             setAmplitudes={setAmplitudes}
             phases={phases}
@@ -716,33 +724,25 @@ export default function App() {
                           </div>
                         </div>
 
-                        {rotationActive && (
-                          <div className="flex items-start gap-3 p-4 border border-ink/20 bg-ink/5 text-xs leading-relaxed opacity-70">
-                            <Info className="w-4 h-4 mt-0.5 shrink-0" />
-                            <span>Rotation active in Simulator — source terms shown at base orientation. Symbolic φ-dependent expressions will arrive with a future update.</span>
-                          </div>
-                        )}
-
                         <div className="space-y-6">
-                          {sourceTerms.map((expr, i) => {
-                            const isNull = expr.expression === "0";
+                          {symbolicExpressions?.source.map((symExpr, i) => {
+                            const formatted = formatSymbolicSourceTerm(symExpr.symbolicPoly);
+                            const isNull = formatted === '0';
                             return (
                               <div key={i} className="flex flex-col md:flex-row md:items-center gap-4 border-b border-ink border-opacity-10 pb-4">
                                 <div className="w-16 font-mono text-xl">
-                                  <TensorTerm term={expr.component} isNull={isNull} />
+                                  <TensorTerm term={symExpr.component} isNull={isNull} />
                                 </div>
                                 <div className="flex-1 font-mono text-xl tracking-tight overflow-x-auto whitespace-nowrap pb-2 md:pb-0">
                                   <span className="opacity-30 mr-4"><InlineMath math="\propto" /></span>
-                                  <span className="opacity-50 mr-4"><TensorTerm term={expr.relation} isNull={isNull} /></span>
-                                  <span className="opacity-30 mr-4"><InlineMath math="=" /></span>
-                                  <TensorTerm term={expr.expression} isNull={isNull} />
+                                  <TensorTerm term={formatted} isNull={isNull} />
                                 </div>
                               </div>
                             );
                           })}
                         </div>
 
-                        {sourceTerms.length > 0 && sourceTerms.every(t => t.expression === "0") && (
+                        {symbolicExpressions && symbolicExpressions.source.length > 0 && symbolicExpressions.source.every(t => t.symbolicPoly.size === 0) && (
                           <div className="p-6 border border-ink border-opacity-10 bg-ink/5 space-y-4 mt-2">
                             <div className="flex items-start gap-3">
                               <Info className="w-4 h-4 mt-0.5 shrink-0 opacity-60" />
