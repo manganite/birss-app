@@ -8,7 +8,7 @@
  * cleanupExpressionSigns) shared by both this module and latexFormatting.ts.
  */
 
-import { type Matrix3x3, EPSILON, AXIS_EPSILON, GENERATORS, getCachedFullGroup, det } from './symmetryGroups';
+import { type Matrix3x3, EPSILON, AXIS_EPSILON, GENERATORS, getCachedFullGroup, det, getTransformedGenerators } from './symmetryGroups';
 
 export type TensorType = 'ED' | 'MD' | 'EQ';
 export type TensorTimeReversal = 'i' | 'c'; // i = time-even, c = time-odd
@@ -174,11 +174,14 @@ function averageTensor(tensor: number[], group: Matrix3x3[], rank: number, isAxi
  * Computes the independent, symmetrized tensor-component basis vectors for a group.
  * Returns null if the group is not in GENERATORS (caller decides how to report that).
  */
-export function calculateTensorBasisResults(groupName: string, tensorType: TensorType, trType: TensorTimeReversal): { basisResults: number[][]; rank: number } | null {
-  const generators = GENERATORS[groupName];
-  if (!generators) return null;
+export function calculateTensorBasisResults(groupName: string, tensorType: TensorType, trType: TensorTimeReversal, setting: number = 1): { basisResults: number[][]; rank: number } | null {
+  const generators = setting > 1
+    ? getTransformedGenerators(groupName, setting)
+    : GENERATORS[groupName];
+  if (!generators || generators.length === 0) return null;
 
-  const group = getCachedFullGroup(groupName, generators);
+  const cacheKey = setting > 1 ? `${groupName}::setting${setting}` : groupName;
+  const group = getCachedFullGroup(cacheKey, generators);
   const rank = tensorType === 'EQ' ? 4 : 3;
   const isAxial = tensorType === 'MD';
   const isTimeOdd = trType === 'c';
@@ -263,15 +266,19 @@ export interface SHGOptions {
   phiX?: number;
   phiY?: number;
   psi?: number;
+  setting?: number;
   labFrameDisplayMode?: 'EX_EY' | 'E0_THETA';
 }
 
 export function calculateSHGExpressions(options: SHGOptions): SHGResult {
-  const { groupName, tensorType, trType, thetaX = 0, thetaY = 0, phiX = 0, phiY = 0, psi = 0, labFrameDisplayMode = 'EX_EY' } = options;
-  const generators = GENERATORS[groupName];
-  if (!generators) return { induced: [], source: [] };
+  const { groupName, tensorType, trType, thetaX = 0, thetaY = 0, phiX = 0, phiY = 0, psi = 0, setting = 1, labFrameDisplayMode = 'EX_EY' } = options;
+  const generators = setting > 1
+    ? getTransformedGenerators(groupName, setting)
+    : GENERATORS[groupName];
+  if (!generators || generators.length === 0) return { induced: [], source: [] };
 
-  const group = getCachedFullGroup(groupName, generators);
+  const cacheKey = setting > 1 ? `${groupName}::setting${setting}` : groupName;
+  const group = getCachedFullGroup(cacheKey, generators);
   const rank = tensorType === 'EQ' ? 4 : 3;
   const isAxial = tensorType === 'MD';
   const isTimeOdd = trType === 'c';
