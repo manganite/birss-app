@@ -9,6 +9,7 @@
 export {
   isCentrosymmetric,
   getSymmetryOperations,
+  getGeneratorSymbols,
   getAlternateSettings,
   getFutureSettingCount,
   getTransformedGenerators,

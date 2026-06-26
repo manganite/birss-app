@@ -24,65 +24,8 @@ import {
 import { PointGroupExplorer } from './components/PointGroupExplorer';
 import { HelpPage } from './components/HelpPage';
 import { SimulatorPage } from './components/SimulatorPage';
-import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPresetsForSystem, LabFrameOrientation } from './components/MathComponents';
+import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPresetsForSystem, LabFrameOrientation, AxisOrientationInfo } from './components/MathComponents';
 import { InlineMath } from 'react-katex';
-
-function AxisOrientationInfo({ crystalSystem }: { crystalSystem: string }) {
-  let content = null;
-  switch (crystalSystem) {
-    case 'Triclinic':
-      content = (
-        <>
-          <span className="font-mono font-medium">z</span> ∥ <InlineMath math="c" /><br/>
-          <span className="font-mono font-medium">y</span> ∥ (<InlineMath math="c \times a" />) (∥ <InlineMath math="b^*" />)<br/>
-          <span className="font-mono font-medium">x</span> = <InlineMath math="y \times z" /> (projection of <InlineMath math="a" /> onto plane ⊥ <InlineMath math="c" />)
-        </>
-      );
-      break;
-    case 'Monoclinic':
-      content = (
-        <>
-          <span className="font-mono font-medium">z</span> ∥ <InlineMath math="c" /> (unique axis: ∥ 2-fold or ⊥ mirror)<br/>
-          <span className="font-mono font-medium">x</span> ∥ <InlineMath math="a" /><br/>
-          <span className="font-mono font-medium">y</span> ∥ <InlineMath math="b^*" /> (completing the right-handed frame)
-        </>
-      );
-      break;
-    case 'Orthorhombic':
-    case 'Tetragonal':
-    case 'Cubic':
-      content = (
-        <>
-          <span className="font-mono font-medium">x</span> ∥ <InlineMath math="[100]" />, <span className="font-mono font-medium">y</span> ∥ <InlineMath math="[010]" />, <span className="font-mono font-medium">z</span> ∥ <InlineMath math="[001]" />
-        </>
-      );
-      break;
-    case 'Trigonal':
-    case 'Hexagonal':
-      content = (
-        <>
-          <span className="font-mono font-medium">z</span> ∥ <InlineMath math="[001]" /> / <InlineMath math="[0001]" /> (c-axis)<br/>
-          <span className="font-mono font-medium">x</span> ∥ <InlineMath math="[100]" /> / <InlineMath math="[2\bar{1}\bar{1}0]" /> (a-axis)<br/>
-          <span className="font-mono font-medium">y</span> ∥ <InlineMath math="[120]" /> / <InlineMath math="[01\bar{1}0]" />
-        </>
-      );
-      break;
-  }
-
-  if (!content) return null;
-
-  return (
-    <div className="p-4 border border-ink border-opacity-10 space-y-2 bg-ink/5">
-      <p className="text-[10px] uppercase tracking-widest opacity-50 flex items-center gap-1.5">
-        <Compass className="w-3 h-3" />
-        Axis Orientation
-      </p>
-      <p className="text-xs leading-relaxed opacity-70">
-        {content}
-      </p>
-    </div>
-  );
-}
 
 const normalizeString = (str: string) => {
   return str

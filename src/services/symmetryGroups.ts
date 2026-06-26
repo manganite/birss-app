@@ -384,22 +384,14 @@ export function getTransformedGenerators(groupName: string, setting: number): Ma
   });
 }
 
-export function getSymmetryOperations(groupName: string, setting?: number): string[] {
-  const generators = setting && setting > 1
-    ? getTransformedGenerators(groupName, setting)
-    : GENERATORS[groupName];
-  if (!generators || generators.length === 0) return [];
-  const cacheKey = setting && setting > 1 ? `${groupName}::setting${setting}` : groupName;
-  const group = getCachedFullGroup(cacheKey, generators);
-
-  const symbols = group.map(m => {
-    const { m: mat, isAntiUnitary } = m;
-    const tr = Math.round(mat[0][0] + mat[1][1] + mat[2][2]);
-    const d = Math.round(det(m));
-    const prime = isAntiUnitary ? "'" : "";
-    let base = "";
-    let axis = "";
-    let sign = "";
+function formatMatrixSymbol(m: Matrix3x3): string {
+  const { m: mat, isAntiUnitary } = m;
+  const tr = Math.round(mat[0][0] + mat[1][1] + mat[2][2]);
+  const d = Math.round(det(m));
+  const prime = isAntiUnitary ? "'" : "";
+  let base = "";
+  let axis = "";
+  let sign = "";
 
     const formatAxis = (x: number, y: number, z: number): { label: string; nx: number; ny: number; nz: number } => {
       const max = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
@@ -510,8 +502,18 @@ export function getSymmetryOperations(groupName: string, setting?: number): stri
       }
     }
 
-    return `${base}${axis ? '_' + axis : ''}${sign}${prime}`;
-  });
+  return `${base}${axis ? '_' + axis : ''}${sign}${prime}`;
+}
+
+export function getSymmetryOperations(groupName: string, setting?: number): string[] {
+  const generators = setting && setting > 1
+    ? getTransformedGenerators(groupName, setting)
+    : GENERATORS[groupName];
+  if (!generators || generators.length === 0) return [];
+  const cacheKey = setting && setting > 1 ? `${groupName}::setting${setting}` : groupName;
+  const group = getCachedFullGroup(cacheKey, generators);
+
+  const symbols = group.map(formatMatrixSymbol);
 
   const order = ["1", "-1", "2", "3", "4", "6", "-3", "-4", "-6", "m"];
   return symbols.sort((a, b) => {
@@ -543,4 +545,10 @@ export function getSymmetryOperations(groupName: string, setting?: number): stri
     const primeB = b.includes("'") ? 1 : 0;
     return primeA - primeB;
   });
+}
+
+export function getGeneratorSymbols(groupName: string): string[] {
+  const generators = GENERATORS[groupName];
+  if (!generators || generators.length === 0) return [];
+  return generators.map(formatMatrixSymbol);
 }
