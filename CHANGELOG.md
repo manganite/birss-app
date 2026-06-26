@@ -7,16 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-06-26
+
 ### Added
 - Simulator: rotation sliders for φ_x (±90°), φ_y (±90°), and ψ (±180°) with
   coupled numeric inputs, in a collapsible Crystal Rotation section below k-vector
   presets. Polar plots update live as sliders change.
-- Simulator: sticky plot column on desktop — plots stay visible while scrolling
-  the component list for low-symmetry groups with many independent components.
+- Simulator: sticky plot column — plots stay visible while scrolling the component
+  list for low-symmetry groups with many independent components.
 - Simulator: condensed component blocks — phase collapsed by default when φ=0
   (non-zero value shown in collapsed header), amplitude and phase sliders have
   coupled numeric inputs for exact value entry, phase slider shows tick marks
   at 0/90/180/270/360°.
+- Crystal-system-aware cut presets: k-vector buttons now show crystallographic
+  labels ([001], [100], [010]) instead of abstract k∥z / k∥x / k∥y. Cubic groups
+  get [110] and [111] presets; tetragonal gets [110].
+- Alternate settings for 8 Mechanism-B magnetic point groups (4 tetragonal + 4
+  hexagonal) where time-reversal breaks the mirror-plane equivalence. A setting
+  selector appears when multiple settings exist; groups with future settings
+  show a passive indicator.
+- Contextual explanations for zero-result SHG states: when all source terms
+  vanish (centrosymmetric + ED + i-type, or grey + c-type), an inline explanation
+  with quick-action buttons (Try c-type / Try EQ / Try MD) replaces the blank
+  result. Applies to both Calculator and Simulator.
 
 ### Changed
 - Calculator source terms now always display at base orientation (φ_x = φ_y = ψ = 0).
@@ -32,6 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Classification sidebar and Tensor Notes collapse on mobile.
 - Mobile: Tensor Type / Time Reversal selectors collapse to a summary when at
   defaults (ED + i-type).
+- Hardcoded color values (#141414, #E4E3E0) replaced with semantic `ink`/`paper`
+  theme tokens throughout the codebase (~194 occurrences). No visual change.
 
 ## [0.3.0] - 2026-06-26
 
@@ -111,7 +126,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/manganite/birss-app/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/manganite/birss-app/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/manganite/birss-app/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/manganite/birss-app/compare/v0.1.0...v0.1.1
