@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-26
+
 ### Added
 - Document the oblique-axis Cartesian convention (Hausühl/IRE) for triclinic and
   monoclinic systems: `AxisOrientationInfo` now shows axis assignments for both
@@ -58,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/manganite/birss-app/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/manganite/birss-app/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/manganite/birss-app/releases/tag/v0.1.0
