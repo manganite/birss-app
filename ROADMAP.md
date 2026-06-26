@@ -12,15 +12,15 @@ The `#` column is a **feature identifier** (used for cross-references throughout
 |---|---------|--------|-------|
 | 1A | Polar plot fix | **Done** (v0.2.0) | ~3-line change |
 | 1B | Rotation engine + tests | **Done** (v0.3.0) | Lab-frame rotation with phiX, phiY, psi |
-| 1C | Rotation UI + mobile | Planning | Sliders, layout, controls |
+| 1C | Rotation UI + mobile | **In review** (PR #16, #17) | Desktop + mobile split |
 | 2 | Symbolic source terms | Planning | Largest feature; not blocked on 1 |
-| 3 | Alternate settings (Phase 1) | Planning | 8 Mechanism-B groups |
-| 4 | Color tokens | Planning | Housekeeping |
+| 3 | Alternate settings (Phase 1) | **Done** (PR #15) | 8 Mechanism-B groups |
+| 4 | Color tokens | **Done** | Housekeeping |
 | 5 | Explorer: tabs + enrichment | Deferred | Per-system tabs + enriched popups; after 1–3 settle |
 | 6 | Help & documentation | Deferred | Inline help ships with each feature |
 | 7 | Oblique-axis transparency | **Done** (v0.2.0) | Docs/UX only; no engine changes |
-| 8 | Desktop layout overhaul | Deferred (8E **Done**) | Unified controls, collapsible sidebar; after 1C settles |
-| 9 | [hkl] surface orientation | Planning | Curated presets (Phase 1), free Miller-index input (Phase 2) |
+| 8 | Desktop layout overhaul | Deferred (8C **Done**, 8E **Done**) | Unified controls, collapsible sidebar; after 1C settles |
+| 9 | [hkl] surface orientation | **Done** (PR #14) | Curated presets Phase 1; Phase 2 (free [hkl]) deferred |
 
 ## Implementation sequence
 
@@ -45,15 +45,14 @@ Features group into four waves based on their dependencies. Within each wave, it
 
 ### Wave 3 — parallel after 1B
 
-| Feature | Branch | Method | SemVer |
-|---|---|---|---|
-| **1C** — Rotation UI + mobile | `feature/rotation-ui-mobile` | PR (UI changes) | MINOR |
-| **3 Phase 1** — Alternate settings | `feature/alternate-settings` | PR (physics output) | MINOR |
-| **4** — Color tokens | `chore/color-tokens` | Local merge (no behavior change) | — (no bump) |
-| **9 Phase 1** — Curated cut presets | `feature/cut-presets` | PR (UI changes) | MINOR |
-| **8C** — Zero-result states | `feature/zero-result-states` | PR (UI changes) | MINOR |
-
-These are all independent of each other. 1C is the largest and should start first. Feature 3 Phase 1 is the other high-value item — it closes a correctness gap. Feature 4 is a chore with no user-visible change (same colors, different CSS classes) — local merge, no version bump. Features 9 Phase 1 and 8C are small and can fill gaps.
+| Feature | PR | Status |
+|---|---|---|
+| **4** — Color tokens | (local merge) | Merged |
+| **8C** — Zero-result states | #13 | Merged |
+| **9 Phase 1** — Curated cut presets | #14 | Merged |
+| **3 Phase 1** — Alternate settings | #15 | Merged |
+| **1C** — Rotation UI (desktop) | #16 | In review |
+| **1C** — Rotation UI (mobile) | #17 | In review |
 
 ### Wave 4 — after Wave 3 settles
 
@@ -216,7 +215,7 @@ With R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset, the mapping is **preset-ind
 
 ### 1C. Rotation UI + Mobile
 
-**Status:** Planning — ship after 1B engine is green
+**Status:** In review — PR #16 (desktop), PR #17 (mobile)
 **Priority:** High
 
 Sliders, numeric inputs, mobile layout, the Calculator interim state, and the Simulator component-list fix. This is where the user-facing rotation experience lives — no engine changes. The component-list and slider improvements are cross-platform (they improve desktop directly) and are prerequisite for a usable mobile layout.
@@ -227,11 +226,11 @@ The Calculator does not apply the rotation and shows source terms at the base pr
 
 #### Simulator controls
 
-- [ ] Add three sliders per preset (two tilt axes + azimuthal rotation), independently togglable. Ranges: tilts φ_x, φ_y ±90° (hemisphere of normal directions); azimuth ψ ±180° (full rotation about k — only repeats after 360°, any shorter period is group-specific)
-- [ ] Add coupled numeric input next to each slider for precise values (e.g. exact 45°)
-- [ ] Add "Reset orientation" button to return to the preset angles (phi = 0)
-- [ ] Polar plots update live as rotation sliders change
-- [ ] All three rotation axes can be active simultaneously
+- [x] Add three sliders per preset (two tilt axes + azimuthal rotation), independently togglable. Ranges: tilts φ_x, φ_y ±90° (hemisphere of normal directions); azimuth ψ ±180° (full rotation about k — only repeats after 360°, any shorter period is group-specific)
+- [x] Add coupled numeric input next to each slider for precise values (e.g. exact 45°)
+- [x] Add "Reset orientation" button to return to the preset angles (phi = 0)
+- [x] Polar plots update live as rotation sliders change
+- [x] All three rotation axes can be active simultaneously
 - [ ] Mathematical Model section shows numeric formulas for now — symbolic phi comes with Feature 2
 
 #### Component-list layout fix (cross-platform, prerequisite for mobile)
@@ -244,8 +243,8 @@ A defect that is not mobile-specific but is worst on mobile: at low-symmetry gro
 
 **A — Sticky plot column.** The plot column gets `position: sticky; top: 0` so it stays in view while the component list scrolls. Structural fix for "I can't see the effect." On mobile this becomes the layout flip (plot sticky on top, list below).
 
-- [ ] Add `position: sticky; top: 0` to the plot column (desktop: right column stays visible while scrolling the left component list)
-- [ ] On mobile: plot on top (sticky), scrollable component list below
+- [x] Add `position: sticky; top: 0` to the plot column (desktop: right column stays visible while scrolling the left component list)
+- [x] On mobile: plot on top (sticky), scrollable component list below
 
 **B — Condensed component blocks.** Collapse each block from ~6 line-heights to ~3:
 
@@ -257,9 +256,9 @@ A defect that is not mobile-specific but is worst on mobile: at low-symmetry gro
 
 The space saving comes from *collapsing the phase by default*, not from putting two sliders on one line — that keeps each slider at full width and avoids the too-narrow-to-drag problem. Amplitude always occupies a full-width row.
 
-- [ ] Collapse phase section by default when φ = 0
-- [ ] Show phase value in collapsed header when φ ≠ 0 (e.g. `▸ Phase: 90°`) — never hide a non-zero value
-- [ ] When φ ≠ 0, the value stays surfaced in the header (and the block may default to expanded)
+- [x] Collapse phase section by default when φ = 0
+- [x] Show phase value in collapsed header when φ ≠ 0 (e.g. `▸ Phase: 90°`) — never hide a non-zero value
+- [x] When φ ≠ 0, the value stays surfaced in the header (and the block may default to expanded)
 
 #### Slider behavior (applies to all slider types: amplitude, phase, rotation)
 
@@ -279,15 +278,15 @@ Pre-existing layout problems observed at iPhone X width (375px), independent of 
 
 **A — Calculator tab bar: invisible third tab.** The three Calculator tabs ("TENSOR COMPONENTS", "INDUCED RESPONSE", "SOURCE TERMS") exceed 375px. The tab bar has `overflow-x: auto` with `hide-scrollbar` — technically scrollable, but with **zero visual affordance** that a third tab exists. "SOURCE TERMS" is entirely off-screen; a user who doesn't think to swipe will never find it. Affects every group, not just low-symmetry. The planned mobile Calculator redesign (single scroll page, no tabs) eliminates this, but until that ships the current state is a discoverable UX defect.
 
-- [ ] Near-term fix: either add a scroll fade/gradient affordance to the tab bar, or abbreviate tab labels on mobile ("Components" / "Induced" / "Source")
+- [x] Near-term fix: either add a scroll fade/gradient affordance to the tab bar, or abbreviate tab labels on mobile ("Components" / "Induced" / "Source")
 
 **B — Simulator polarimetry tab "ANALYZER" truncates to "ANAL...".** The three polarimetry tabs ("ANISOTROPY", "POLARIZER", "ANALYZER") overflow similarly. Unlike the Calculator tabs, these polarimetry tabs are **not** removed by the planned mobile redesign — they'll still exist after 1C. The truncation is awkward at any symmetry.
 
-- [ ] Abbreviate to "Aniso" / "Pol" / "Ana" on mobile, or use icons, or add scroll affordance
+- [x] Abbreviate to "Aniso" / "Pol" / "Ana" on mobile, or use icons, or add scroll affordance
 
 **C — Formula overflow on existing numeric formulas.** The induced-response formulas for low-symmetry groups already overflow the viewport — e.g. `P_x = χ_xxx E_x² + 2χ_xxy E_x E_y +` hard-clips at the right edge with the trailing `+` dangling. This is the *current* numeric output, not the future symbolic phi-dependent formulas (Feature 2). The roadmap only flags formula width as a Feature 2 concern, but it exists today for triclinic/monoclinic groups. Acceptable if scrollable with a visible affordance; the current hard-clip with no indication is the problem.
 
-- [ ] Add `overflow-x: auto` to formula containers with a visible scroll indicator (gradient fade or scrollbar)
+- [x] Add `overflow-x: auto` to formula containers with a visible scroll indicator (gradient fade or scrollbar)
 
 #### Mobile layout
 
@@ -315,23 +314,23 @@ The component-list fix (sticky plot on top, scrollable component list below, con
 
 **Compact setup summary (highest-impact mobile change).** The Simulator re-renders the full setup panel (Tensor Classification, Time Reversal, k-vector presets, Lab Frame orientation) that the Calculator already shows. The state is shared in App.tsx — only the UI is duplicated. On desktop the duplication is convenient (no tab-switching to change a preset). On mobile it means the **entire first viewport is setup controls** with zero plots or sliders visible (verified at 375px). Replace the full setup panel with a one-line summary on mobile — e.g. `3m · ED · i-type · k∥z [Change]`. Tapping "Change" either expands the full controls inline or navigates to the Calculator. This eliminates ~800px of vertical space before the first slider or plot, and stacks with the sticky-plot fix rather than competing with it.
 
-- [ ] Compact setup summary line on mobile Simulator (group · tensor type · TR symmetry · k-preset), with expand/change affordance
-- [ ] Collapse Lab Frame orientation info (`x_crys = X_LAB` etc.) on mobile — expert context, not needed for the "glance at a plot" use case; show on tap
+- [x] Compact setup summary line on mobile Simulator (group · tensor type · TR symmetry · k-preset), with expand/change affordance
+- [x] Collapse Lab Frame orientation info (`x_crys = X_LAB` etc.) on mobile — expert context, not needed for the "glance at a plot" use case; show on tap
 - [ ] Deduplicate the polarimetry explanatory note ("The angle shown in the plots represents the polarizer angle. 0° corresponds to the Lab X-axis…") — currently repeated below every plot pair; show once at the bottom or as a ⓘ tooltip on the plot heading
 
 ##### Mobile slimming targets (ranked by impact)
 
-- [ ] **Compact Simulator setup summary** (see above) — largest single vertical saving on the Simulator page
-- [ ] **Setup bar — collapse at defaults.** TENSOR CLASSIFICATION (default Electric Dipole) and TIME-REVERSAL SYMMETRY (default i-Type) collapse to a compact indicator on mobile when defaults are active; expand on tap. Both defaults confirmed: Electric Dipole is the standard; i-Type is an acceptable default. Largest vertical saving on the Calculator — keeps components near the top.
-- [ ] **Classification sidebar — collapsed below result.** Point-group number, crystal system, symmetry type, operations, axis orientation are bonus info (#4 in hierarchy). On mobile they move *below* the components/induced result, inside a collapsed expandable.
-- [ ] **Tensor Notes — collapse.** The help-pointer notes box becomes a collapsed expandable on mobile.
+- [x] **Compact Simulator setup summary** (see above) — largest single vertical saving on the Simulator page
+- [x] **Setup bar — collapse at defaults.** TENSOR CLASSIFICATION (default Electric Dipole) and TIME-REVERSAL SYMMETRY (default i-Type) collapse to a compact indicator on mobile when defaults are active; expand on tap. Both defaults confirmed: Electric Dipole is the standard; i-Type is an acceptable default. Largest vertical saving on the Calculator — keeps components near the top.
+- [x] **Classification sidebar — collapsed below result.** Point-group number, crystal system, symmetry type, operations, axis orientation are bonus info (#4 in hierarchy). On mobile they move *below* the components/induced result, inside a collapsed expandable.
+- [x] **Tensor Notes — collapse.** The help-pointer notes box becomes a collapsed expandable on mobile.
 
 ##### Layout implementation
 
-- [ ] Flip mobile layout: plots above controls (sticky plot on top, component list below)
+- [x] Flip mobile layout: plots above controls (sticky plot on top, component list below)
 - [ ] Use existing `motion` library for accordion/collapse transitions (no new dependency); respect `prefers-reduced-motion`
-- [ ] `hidden md:block` for source-term tab on mobile; tab bar itself hidden on mobile (single scroll page)
-- [ ] Caveat: `hidden md:block` keeps DOM elements mounted; only if a mobile-irrelevant component is genuinely expensive (e.g. heavy KaTeX rendering) consider a breakpoint-gated lazy mount — a point optimization, not an architecture change
+- [x] `hidden md:block` for source-term tab on mobile; tab bar itself hidden on mobile (single scroll page)
+- [x] Caveat: `hidden md:block` keeps DOM elements mounted; only if a mobile-irrelevant component is genuinely expensive (e.g. heavy KaTeX rendering) consider a breakpoint-gated lazy mount — a point optimization, not an architecture change
 
 #### Acceptance criteria (1C)
 
