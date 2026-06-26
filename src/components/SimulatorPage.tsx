@@ -3,7 +3,7 @@ import { PointGroupData } from '../data/pointGroups';
 import { TensorType, TensorTimeReversal, isCentrosymmetric } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
 import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
-import { TensorTerm, getPresetsForSystem, LabFrameOrientation } from './MathComponents';
+import { TensorTerm, FormatPointGroup, getPresetsForSystem, LabFrameOrientation } from './MathComponents';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
 
@@ -57,8 +57,11 @@ export function SimulatorPage({
   const [verboseFormulas, setVerboseFormulas] = useState(false);
   const [showRotation, setShowRotation] = useState(phiX !== 0 || phiY !== 0 || psi !== 0);
   const [collapsedPhases, setCollapsedPhases] = useState<Set<string>>(new Set());
+  const [mobileSetupExpanded, setMobileSetupExpanded] = useState(false);
 
   const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
+
+  const activePreset = getPresetsForSystem(selectedGroup?.crystalSystem ?? '').find(p => p.tx === thetaX && p.ty === thetaY);
 
   const { labFrame, sourceTerms, sourceTermsExEy, expandedFormulas, independentComponents, simulationData } =
     useSimulatorState(selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, selectedSetting, amplitudes, setAmplitudes, phases, setPhases);
@@ -81,78 +84,100 @@ export function SimulatorPage({
     <div className="space-y-8 animate-in fade-in duration-500">
       {/* Top Controls */}
       <div className="bg-white/50 border border-ink p-6 md:p-8 space-y-8">
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="flex-1 space-y-4">
-            <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-              <Zap className="w-3 h-3" /> Tensor Classification
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {(['ED', 'MD', 'EQ'] as const).map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setSelectedTensorType(type)}
-                  className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                    selectedTensorType === type 
-                      ? 'bg-ink text-paper' 
-                      : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
-                  }`}
-                >
-                  {type === 'ED' ? 'Electric Dipole' : type === 'MD' ? 'Magnetic Dipole' : 'Electric Quadrupole'}
-                </button>
-              ))}
+        {/* Mobile compact summary */}
+        <button
+          type="button"
+          aria-expanded={mobileSetupExpanded}
+          onClick={() => setMobileSetupExpanded(!mobileSetupExpanded)}
+          className="md:hidden flex items-center justify-between w-full"
+        >
+          <span className="text-sm font-medium">
+            <span className="font-serif italic"><FormatPointGroup name={selectedGroup.name} /></span>
+            <span className="opacity-50 mx-1">·</span>
+            <span className="text-xs">{selectedTensorType === 'ED' ? 'ED' : selectedTensorType === 'MD' ? 'MD' : 'EQ'}</span>
+            <span className="opacity-50 mx-1">·</span>
+            <span className="text-xs">{selectedTimeReversal}-type</span>
+            <span className="opacity-50 mx-1">·</span>
+            <span className="text-xs">{activePreset ? activePreset.label : 'Custom'}</span>
+          </span>
+          {mobileSetupExpanded ? <ChevronUp className="w-4 h-4 opacity-50" /> : <ChevronDown className="w-4 h-4 opacity-50" />}
+        </button>
+
+        {/* Full controls — always on desktop, expandable on mobile */}
+        <div className={mobileSetupExpanded ? '' : 'hidden md:block'}>
+          <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex-1 space-y-4">
+              <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+                <Zap className="w-3 h-3" /> Tensor Classification
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {(['ED', 'MD', 'EQ'] as const).map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setSelectedTensorType(type)}
+                    className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
+                      selectedTensorType === type
+                        ? 'bg-ink text-paper'
+                        : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
+                    }`}
+                  >
+                    {type === 'ED' ? 'Electric Dipole' : type === 'MD' ? 'Magnetic Dipole' : 'Electric Quadrupole'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex-1 space-y-4">
+              <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+                <Activity className="w-3 h-3" /> Time Reversal Symmetry
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {(['i', 'c'] as const).map((tr) => (
+                  <button
+                    key={tr}
+                    onClick={() => setSelectedTimeReversal(tr)}
+                    className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
+                      selectedTimeReversal === tr
+                        ? 'bg-ink text-paper'
+                        : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
+                    }`}
+                  >
+                    {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="flex-1 space-y-4">
+          <div className="space-y-4 border-t border-ink border-opacity-10 pt-6 mt-8">
             <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-              <Activity className="w-3 h-3" /> Time Reversal Symmetry
+              <Compass className="w-3 h-3" /> Crystal Orientation (k vector)
             </h4>
-            <div className="flex flex-wrap gap-2">
-              {(['i', 'c'] as const).map((tr) => (
+            <div className="flex flex-wrap gap-3">
+              {getPresetsForSystem(selectedGroup.crystalSystem).map((ori) => (
                 <button
-                  key={tr}
-                  onClick={() => setSelectedTimeReversal(tr)}
-                  className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                    selectedTimeReversal === tr 
-                      ? 'bg-ink text-paper' 
-                      : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
+                  key={ori.label}
+                  onClick={() => {
+                    setThetaX(ori.tx);
+                    setThetaY(ori.ty);
+                  }}
+                  className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-ink ${
+                    thetaX === ori.tx && thetaY === ori.ty
+                      ? 'bg-ink text-paper'
+                      : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
                   }`}
                 >
-                  {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
+                  <InlineMath math={ori.math} />
                 </button>
               ))}
+            </div>
+            <div className="flex flex-col md:flex-row gap-8 items-start mt-6">
+              <LabFrameOrientation labFrame={labFrame} />
             </div>
           </div>
         </div>
 
-        <div className="space-y-4 border-t border-ink border-opacity-10 pt-6">
-          <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-            <Compass className="w-3 h-3" /> Crystal Orientation (k vector)
-          </h4>
-          <div className="flex flex-wrap gap-3">
-            {getPresetsForSystem(selectedGroup.crystalSystem).map((ori) => (
-              <button
-                key={ori.label}
-                onClick={() => {
-                  setThetaX(ori.tx);
-                  setThetaY(ori.ty);
-                }}
-                className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-ink ${
-                  thetaX === ori.tx && thetaY === ori.ty
-                    ? 'bg-ink text-paper' 
-                    : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
-                }`}
-              >
-                <InlineMath math={ori.math} />
-              </button>
-            ))}
-          </div>
-          <div className="flex flex-col md:flex-row gap-8 items-start mt-6">
-            <LabFrameOrientation labFrame={labFrame} />
-          </div>
-        </div>
-
-        <div className="space-y-4 border-t border-ink border-opacity-10 pt-6">
+        <div className="hidden md:block space-y-4 border-t border-ink border-opacity-10 pt-6">
           <button
             onClick={() => setShowRotation(!showRotation)}
             className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-50 hover:opacity-100 transition-opacity w-full"
@@ -220,8 +245,8 @@ export function SimulatorPage({
       {/* Main Simulator Area */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* Left Column: Sliders */}
-        <div className="lg:col-span-4 space-y-6">
+        {/* Left Column: Sliders — below plots on mobile */}
+        <div className="lg:col-span-4 order-last lg:order-first space-y-6">
           <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
             <Sliders className="w-3 h-3" />
             Independent Tensor Components
@@ -346,8 +371,8 @@ export function SimulatorPage({
           </div>
         </div>
 
-        {/* Right Column: Polar Plots */}
-        <div className="lg:col-span-8 lg:sticky lg:top-20 lg:self-start space-y-6">
+        {/* Right Column: Polar Plots — sticky on both mobile and desktop */}
+        <div className="lg:col-span-8 sticky top-16 md:top-20 self-start z-10 space-y-6">
           <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
             <Activity className="w-3 h-3" />
             SHG Intensity Polarimetry
@@ -358,21 +383,24 @@ export function SimulatorPage({
             <div className="flex overflow-x-auto border-b border-ink border-opacity-20 bg-white/30 hide-scrollbar">
               <button
                 onClick={() => setActivePolarimetryTab('anisotropy')}
-                className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activePolarimetryTab === 'anisotropy' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
+                className={`px-4 md:px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activePolarimetryTab === 'anisotropy' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
               >
-                Anisotropy
+                <span className="md:hidden">Aniso</span>
+                <span className="hidden md:inline">Anisotropy</span>
               </button>
               <button
                 onClick={() => setActivePolarimetryTab('polarizer')}
-                className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activePolarimetryTab === 'polarizer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
+                className={`px-4 md:px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activePolarimetryTab === 'polarizer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
               >
-                Polarizer
+                <span className="md:hidden">Pol</span>
+                <span className="hidden md:inline">Polarizer</span>
               </button>
               <button
                 onClick={() => setActivePolarimetryTab('analyzer')}
-                className={`px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activePolarimetryTab === 'analyzer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
+                className={`px-4 md:px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activePolarimetryTab === 'analyzer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
               >
-                Analyzer
+                <span className="md:hidden">Ana</span>
+                <span className="hidden md:inline">Analyzer</span>
               </button>
             </div>
 
