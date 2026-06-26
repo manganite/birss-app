@@ -55,8 +55,8 @@ export function SimulatorPage({
   const [activePolarimetryTab, setActivePolarimetryTab] = useState<'anisotropy' | 'polarizer' | 'analyzer'>('anisotropy');
   const [showEquations, setShowEquations] = useState(false);
   const [verboseFormulas, setVerboseFormulas] = useState(false);
-  const [showRotation, setShowRotation] = useState(false);
-  const [expandedPhases, setExpandedPhases] = useState<Set<string>>(new Set());
+  const [showRotation, setShowRotation] = useState(phiX !== 0 || phiY !== 0 || psi !== 0);
+  const [collapsedPhases, setCollapsedPhases] = useState<Set<string>>(new Set());
 
   const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
 
@@ -157,7 +157,7 @@ export function SimulatorPage({
             onClick={() => setShowRotation(!showRotation)}
             className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-50 hover:opacity-100 transition-opacity w-full"
           >
-            {showRotation || rotationActive ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            {showRotation ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
             <span>Crystal Rotation</span>
             {rotationActive && !showRotation && (
               <span className="normal-case tracking-normal text-[11px] ml-2 opacity-70">
@@ -166,7 +166,7 @@ export function SimulatorPage({
             )}
           </button>
 
-          {(showRotation || rotationActive) && (
+          {showRotation && (
             <div className="space-y-3">
               {([
                 { label: '\\varphi_x', value: phiX, setValue: setPhiX, min: -90, max: 90, desc: 'Tilt about lab-x' },
@@ -264,7 +264,7 @@ export function SimulatorPage({
             ) : (
               independentComponents.map(comp => {
                 const phaseVal = phases[comp] ?? 0;
-                const phaseExpanded = expandedPhases.has(comp) || phaseVal !== 0;
+                const phaseExpanded = collapsedPhases.has(comp) ? false : (phaseVal !== 0);
                 return (
                   <div key={comp} className="space-y-2 border-b border-ink border-opacity-10 pb-4 last:border-0 last:pb-0">
                     <div className="flex items-center justify-between">
@@ -294,10 +294,10 @@ export function SimulatorPage({
                     </div>
 
                     <button
-                      onClick={() => setExpandedPhases(prev => {
+                      onClick={() => setCollapsedPhases(prev => {
                         const next = new Set(prev);
-                        if (next.has(comp)) next.delete(comp);
-                        else next.add(comp);
+                        if (phaseExpanded) next.add(comp);
+                        else next.delete(comp);
                         return next;
                       })}
                       className="flex items-center gap-1 text-xs opacity-50 hover:opacity-100 transition-opacity"
