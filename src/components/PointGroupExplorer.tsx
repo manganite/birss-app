@@ -20,7 +20,7 @@ interface PointGroupExplorerProps {
 
 export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExplorerProps) => {
   const [selectedGroup, setSelectedGroup] = useState<PointGroupData | null>(null);
-  const [activeSystem, setActiveSystem] = useState('Triclinic');
+  const [activeSystem, setActiveSystem] = useState(CRYSTAL_SYSTEMS[0]);
 
   const groupsBySystem = useMemo(() => {
     const grouped: Record<string, { I: PointGroupData[], II: PointGroupData[], III: PointGroupData[] }> = {};

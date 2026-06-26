@@ -547,8 +547,10 @@ export function getSymmetryOperations(groupName: string, setting?: number): stri
   });
 }
 
-export function getGeneratorSymbols(groupName: string): string[] {
-  const generators = GENERATORS[groupName];
+export function getGeneratorSymbols(groupName: string, setting?: number): string[] {
+  const generators = setting && setting > 1
+    ? getTransformedGenerators(groupName, setting)
+    : GENERATORS[groupName];
   if (!generators || generators.length === 0) return [];
   return generators.map(formatMatrixSymbol);
 }
