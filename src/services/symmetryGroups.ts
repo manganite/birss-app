@@ -303,7 +303,12 @@ export interface SettingDef {
   rotation: Matrix3x3;
 }
 
+const ORTHO_CYCLIC: Matrix3x3 = { m: [[0,0,1],[1,0,0],[0,1,0]] };
+const ORTHO_REVERSE: Matrix3x3 = { m: [[0,1,0],[0,0,1],[1,0,0]] };
+const MONO_YZ_SWAP: Matrix3x3 = { m: [[-1,0,0],[0,0,1],[0,1,0]] };
+
 const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
+  // Phase 1 — Mechanism B (time-reversal-broken equivalence)
   "4'mm'":    [{ name: "σ_d primed", rotation: getRotationZ(45) }],
   "4'22'":    [{ name: "C₂' along ⟨110⟩", rotation: getRotationZ(45) }],
   "4'/m'm'm": [{ name: "σ_d primed", rotation: getRotationZ(45) }],
@@ -312,14 +317,36 @@ const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   "6'22'":    [{ name: "C₂' along ⟨210⟩", rotation: getRotationZ(30) }],
   "6'/m'mm'": [{ name: "σ_d primed", rotation: getRotationZ(30) }],
   "6'/mm'm":  [{ name: "σ_d' along ⟨210⟩", rotation: getRotationZ(30) }],
+
+  // Phase 2 — Mechanism A (classical setting ambiguity)
+  "-4'2m'":  [{ name: "σ' along ⟨100⟩", rotation: getRotationZ(45) }],
+  "-4'm2'":  [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(45) }],
+  "-42'm'":  [{ name: "C₂' along ⟨110⟩", rotation: getRotationZ(45) }],
+  "32'":     [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(30) }],
+  "3m'":     [{ name: "σ_d' mirrors", rotation: getRotationZ(30) }],
+  "-3'm":    [{ name: "σ_d mirrors", rotation: getRotationZ(30) }],
+  "-3'm'":   [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(30) }],
+  "-3m'":    [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(30) }],
+  "-6'2m'":  [{ name: "C₂ along ⟨100⟩", rotation: getRotationZ(30) }],
+  "-6'm2'":  [{ name: "σ_d mirrors", rotation: getRotationZ(30) }],
+  "-6m'2'":  [{ name: "σ_d' mirrors", rotation: getRotationZ(30) }],
+
+  // Phase 2 — Orthorhombic axis orientation (3 settings)
+  "2'2'2":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  "2'm'm":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  "m'm'2":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  "m'm'm":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  "mmm'":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+
+  // Phase 2 — Monoclinic axis choice (z-unique Birss → b-unique ITC)
+  "2'":     [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "m'":     [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "2'/m":   [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "2'/m'":  [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "2/m'":   [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
 };
 
 const GROUPS_WITH_FUTURE_SETTINGS: Record<string, number> = {
-  "-4'2m'": 2, "-4'm2'": 2, "-42'm'": 2,
-  "32'": 2, "3m'": 2, "-3'm": 2, "-3'm'": 2, "-3m'": 2,
-  "-6'2m'": 2, "-6'm2'": 2, "-6m'2'": 2,
-  "2'2'2": 3, "2'm'm": 3, "m'm'2": 3, "m'm'm": 3, "mmm'": 3,
-  "2'": 2, "m'": 2, "2'/m": 2, "2'/m'": 2, "2/m'": 2,
 };
 
 export function getAlternateSettings(groupName: string): SettingDef[] | null {

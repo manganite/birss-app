@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { GENERATORS, getCachedFullGroup, multiply, isSameMatrix, snapMatrix } from './symmetryGroups';
+import { GENERATORS, getCachedFullGroup, multiply, isSameMatrix, snapMatrix, getAlternateSettings, identity } from './symmetryGroups';
 import { POINT_GROUPS } from '../data/pointGroups';
 
 /**
@@ -10,6 +10,26 @@ import { POINT_GROUPS } from '../data/pointGroups';
  * the element-snapping in getFullGroup is meant to guarantee despite floating-point
  * drift across repeated products.
  */
+describe('ALTERNATE_SETTINGS - S·Sᵀ = I for every transformation matrix', () => {
+  const allSettings: { group: string; name: string; rotation: { m: number[][] } }[] = [];
+  for (const pg of POINT_GROUPS) {
+    const settings = getAlternateSettings(pg.name);
+    if (settings) {
+      for (const s of settings) {
+        allSettings.push({ group: pg.name, name: s.name, rotation: s.rotation });
+      }
+    }
+  }
+
+  for (const { group, name, rotation } of allSettings) {
+    it(`${group} setting "${name}": S·Sᵀ = I`, () => {
+      const S = rotation;
+      const SSt = multiply(S, { m: [[S.m[0][0], S.m[1][0], S.m[2][0]], [S.m[0][1], S.m[1][1], S.m[2][1]], [S.m[0][2], S.m[1][2], S.m[2][2]]] });
+      expect(isSameMatrix(SSt, identity)).toBe(true);
+    });
+  }
+});
+
 describe('getCachedFullGroup - true closure (Tier 1b)', () => {
   for (const pg of POINT_GROUPS) {
     it(`${pg.name} (type ${pg.type}) is closed under multiplication`, () => {

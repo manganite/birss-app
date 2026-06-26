@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-06-26
+
+### Added
+- Alternate settings for all 21 remaining multi-setting magnetic point groups
+  (Phase 2): 11 Mechanism A groups (tetragonal/trigonal/hexagonal via Rz(45°/30°)),
+  5 orthorhombic groups with 3 axis-orientation settings (c/a/b-unique), and
+  5 monoclinic groups with z-unique (Birss) / b-unique (ITC) settings. The setting
+  selector UI now covers all 29 multi-setting groups (8 from Phase 1 + 21 new).
+- 64 new tests: S·Sᵀ=I verification for every transformation matrix and golden
+  tensor-relation fixtures for all new settings, cross-checked against Birss
+  Table 7 for the three validation-anchor groups (2'm'm), (-4'm2'), (-6'2m').
+
 ## [0.5.0] - 2026-06-26
 
 ### Added
@@ -152,7 +164,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/manganite/birss-app/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/manganite/birss-app/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/manganite/birss-app/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/manganite/birss-app/compare/v0.2.0...v0.3.0
