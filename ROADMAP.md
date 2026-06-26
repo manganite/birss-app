@@ -2,7 +2,7 @@
 
 Feature ideas, design decisions, and implementation notes for birss-app. This document serves as a living design notebook — it records not just what to build and in what order, but the reasoning behind decisions, verified constraints, and brainstorming context that informs future work. Items are roughly ordered by priority.
 
-This roadmap builds on the completed `services/` split (`tensorCalculator.ts` barrel + `symmetryGroups.ts` / `tensorProjection.ts` / `latexFormatting.ts`) and the golden-fixture test suite (492 tests). Both are prerequisites, not items below.
+This roadmap builds on the completed `services/` split (`tensorCalculator.ts` barrel + `symmetryGroups.ts` / `tensorProjection.ts` / `latexFormatting.ts`) and the golden-fixture test suite (517 tests). Both are prerequisites, not items below.
 
 ## Feature index
 
@@ -125,10 +125,10 @@ Currently 0° (x) is on the vertical axis and 90° (y) is horizontal. Swap so th
 
 The Recharts `RadarChart` currently uses defaults (no explicit `startAngle`/`endAngle`). The fix:
 
-- [ ] Set `startAngle` and `endAngle` on the `RadarChart` component to place 0° at the right with angles increasing anticlockwise — verify exact prop values by testing (Recharts docs and actual behavior should be confirmed, not assumed)
-- [ ] Update `PolarRadiusAxis angle` to match the new 0°-at-right layout (likely `{0}`, currently `{90}`) — confirm by testing
-- [ ] `RADAR_TICKS` and `formatPolarAngle` remain unchanged — labels (0°=X, 90°=Y) are already correct
-- [ ] No data changes needed — `useSimulatorState` already uses `Ex=cos(angle)`, `Ey=sin(angle)` which is consistent with the standard convention
+- [x] Set `startAngle` and `endAngle` on the `RadarChart` component to place 0° at the right with angles increasing anticlockwise — verify exact prop values by testing (Recharts docs and actual behavior should be confirmed, not assumed)
+- [x] Update `PolarRadiusAxis angle` to match the new 0°-at-right layout (likely `{0}`, currently `{90}`) — confirm by testing
+- [x] `RADAR_TICKS` and `formatPolarAngle` remain unchanged — labels (0°=X, 90°=Y) are already correct
+- [x] No data changes needed — `useSimulatorState` already uses `Ex=cos(angle)`, `Ey=sin(angle)` which is consistent with the standard convention
 
 #### Convention confirmation
 
@@ -154,9 +154,9 @@ This piece covers the engine extension (lab-frame user rotations), rotated-path 
 
 The 492 existing tests all run at orientation (0,0) — the rotated code path has zero coverage. Before changing the rotation composition, capture golden references for rotated outputs:
 
-- [ ] Add tests for k||x (0, −90) and k||y (90, 0) presets against known results
-- [ ] Ideally include at least one oblique-angle case from the literature
-- [ ] These tests become the regression baseline for the engine change
+- [x] Add tests for k||x (0, −90) and k||y (90, 0) presets against known results
+- [x] Ideally include at least one oblique-angle case from the literature
+- [x] These tests become the regression baseline for the engine change
 
 #### Engine extension: lab-frame user rotations
 
@@ -172,14 +172,14 @@ Verified: rank 3 at all presets (no gimbal lock). ψ is the azimuth about lab-z 
 
 Changes required (ordered — signature migration first, then engine extension):
 
-- [ ] **1B.0 — Signature migration (behavior-preserving).** Migrate `calculateSHGExpressions` from positional args to an options object (`{ groupName, tensorType, trType, thetaX, thetaY, labFrameDisplayMode }`) *before* adding new parameters. The current 6-positional-arg signature with `labFrameDisplayMode` as a trailing optional is already fragile; adding three more angles to it creates an 8-arg trap. This is an isolated, behavior-preserving refactor guarded by the existing 492 tests — the ideal first commit of 1B.
-- [ ] **Matrix primitives.** Introduce small, tested `rotX`/`rotY`/`rotZ` + `mat3mul` functions rather than extending the current hand-expanded inline matrix literal (`tensorProjection.ts:256-259`). The new composition `R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset` needs real matrix multiplication; hand-expanding a 4-matrix product would be error-prone. The primitives also make `R_preset` trivially swappable for the future `[hkl]` generalization.
-- [ ] `tensorProjection.ts`: build `R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset` using the new primitives
-- [ ] `App.tsx`: add φ_x, φ_y, ψ state (the lab-frame rotation angles; no `thetaZ` exists currently — these are new state alongside the existing `thetaX`/`thetaY` preset angles)
-- [ ] `useSimulatorState.ts`: pass user rotation angles through
-- [ ] `getLabFrameVectors`: update to the same lab-frame composition
-- [ ] All existing presets: (φ_x, φ_y, ψ) = (0, 0, 0) by default (no behavioral change)
-- [ ] Architect R_preset to accept arbitrary alignment rotations (near-zero cost — one rotation matrix), so the later [hkl] generalization is a UI/input change, not an engine rewrite
+- [x] **1B.0 — Signature migration (behavior-preserving).** Migrate `calculateSHGExpressions` from positional args to an options object (`{ groupName, tensorType, trType, thetaX, thetaY, labFrameDisplayMode }`) *before* adding new parameters. The current 6-positional-arg signature with `labFrameDisplayMode` as a trailing optional is already fragile; adding three more angles to it creates an 8-arg trap. This is an isolated, behavior-preserving refactor guarded by the existing 492 tests — the ideal first commit of 1B.
+- [x] **Matrix primitives.** Introduce small, tested `rotX`/`rotY`/`rotZ` + `mat3mul` functions rather than extending the current hand-expanded inline matrix literal (`tensorProjection.ts:256-259`). The new composition `R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset` needs real matrix multiplication; hand-expanding a 4-matrix product would be error-prone. The primitives also make `R_preset` trivially swappable for the future `[hkl]` generalization.
+- [x] `tensorProjection.ts`: build `R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset` using the new primitives
+- [x] `App.tsx`: add φ_x, φ_y, ψ state (the lab-frame rotation angles; no `thetaZ` exists currently — these are new state alongside the existing `thetaX`/`thetaY` preset angles)
+- [x] `useSimulatorState.ts`: pass user rotation angles through
+- [x] `getLabFrameVectors`: update to the same lab-frame composition
+- [x] All existing presets: (φ_x, φ_y, ψ) = (0, 0, 0) by default (no behavioral change)
+- [x] Architect R_preset to accept arbitrary alignment rotations (near-zero cost — one rotation matrix), so the later [hkl] generalization is a UI/input change, not an engine rewrite
 
 #### Available rotation axes per preset
 
@@ -195,16 +195,16 @@ With R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset, the mapping is **preset-ind
 
 #### Preset cleanup
 
-- [ ] Remove the three diagonal presets (k||xy, k||xz, k||yz) from `K_ORIENTATION_PRESETS` in `MathComponents.tsx`
-- [ ] Remove any references to diagonal presets throughout the app
-- [ ] Only k||x, k||y, k||z remain
-- [ ] Document equivalences (k||xy = k||y + φ_y = −45°, etc.) in help or changelog
+- [x] Remove the three diagonal presets (k||xy, k||xz, k||yz) from `K_ORIENTATION_PRESETS` in `MathComponents.tsx`
+- [x] Remove any references to diagonal presets throughout the app
+- [x] Only k||x, k||y, k||z remain
+- [x] Document equivalences (k||xy = k||y + φ_y = −45°, etc.) in help or changelog
 
 #### Implementation
 
-- [ ] Build R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset for all presets
-- [ ] Verify rank 3 at each preset (regression test on generator rank)
-- [ ] Update crystal orientation / lab frame info to reflect rotation
+- [x] Build R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset for all presets
+- [x] Verify rank 3 at each preset (regression test on generator rank)
+- [x] Update crystal orientation / lab frame info to reflect rotation
 
 #### Acceptance criteria (1B)
 
@@ -668,10 +668,10 @@ This is recorded as a standing decision at the top of this document; it must be 
 
 ### Actions
 
-- [ ] **`AxisOrientationInfo` (App.tsx:26–65):** replace the triclinic `return null` with the convention (z ∥ c, y ∥ b*, x = projection of a ⊥ c); add the in-plane x, y anchor to the monoclinic case (x ∥ a, y ∥ b*)
-- [ ] **HelpPage (coordinate system section):** add the triclinic entry and complete the monoclinic entry to match
-- [ ] **Simulator explainer (low-symmetry groups):** a short note or tooltip stating that (a) component values and polarimetry orientation are tied to the in-plane convention; (b) different β is represented by changing component values, not by a separate control; (c) birefringence/refraction is not modeled
-- [ ] **Help entry "Why is there no β control?":** a 3–4 sentence explanation (see draft below)
+- [x] **`AxisOrientationInfo` (App.tsx:26–65):** replace the triclinic `return null` with the convention (z ∥ c, y ∥ b*, x = projection of a ⊥ c); add the in-plane x, y anchor to the monoclinic case (x ∥ a, y ∥ b*)
+- [x] **HelpPage (coordinate system section):** add the triclinic entry and complete the monoclinic entry to match
+- [x] **Simulator explainer (low-symmetry groups):** a short note or tooltip stating that (a) component values and polarimetry orientation are tied to the in-plane convention; (b) different β is represented by changing component values, not by a separate control; (c) birefringence/refraction is not modeled
+- [x] **Help entry "Why is there no β control?":** a 3–4 sentence explanation (see draft below)
 - [ ] **Golden fixture provenance:** record the in-plane convention in the provenance note for any triclinic/monoclinic polarimetry fixture (guards reproducibility)
 
 ### Draft help text
