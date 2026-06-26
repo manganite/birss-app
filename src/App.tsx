@@ -326,7 +326,8 @@ export default function App() {
             <button
               type="button"
               aria-expanded={mobileClassificationExpanded}
-              onClick={() => setMobileClassificationExpanded(!mobileClassificationExpanded)}
+              aria-controls="classification-panel"
+              onClick={() => setMobileClassificationExpanded(prev => !prev)}
               className="flex items-center justify-between w-full p-4 border border-ink border-opacity-10 bg-white/30"
             >
               <div className="flex items-center gap-3">
@@ -343,7 +344,7 @@ export default function App() {
 
             {/* Expandable classification panel */}
             {mobileClassificationExpanded && (
-              <section className="space-y-4 border border-ink border-opacity-10 p-6">
+              <section id="classification-panel" className="space-y-4 border border-ink border-opacity-10 p-6">
                 <div className="text-xs uppercase tracking-[0.2em] opacity-50 font-semibold flex items-center gap-2">
                   <Info className="w-3 h-3" />
                   Classification
