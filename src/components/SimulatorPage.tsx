@@ -86,6 +86,8 @@ export function SimulatorPage({
       <div className="bg-white/50 border border-ink p-6 md:p-8 space-y-8">
         {/* Mobile compact summary */}
         <button
+          type="button"
+          aria-expanded={mobileSetupExpanded}
           onClick={() => setMobileSetupExpanded(!mobileSetupExpanded)}
           className="md:hidden flex items-center justify-between w-full"
         >

@@ -377,6 +377,8 @@ export default function App() {
               {/* Mobile: compact group indicator always visible */}
               <div className="lg:hidden">
                 <button
+                  type="button"
+                  aria-expanded={mobileClassificationExpanded}
                   onClick={() => setMobileClassificationExpanded(!mobileClassificationExpanded)}
                   className="flex items-center justify-between w-full p-4 border border-ink border-opacity-10 bg-white/30"
                 >
@@ -440,6 +442,8 @@ export default function App() {
                 {/* Mobile compact indicator when at defaults */}
                 {selectedTensorType === 'ED' && selectedTimeReversal === 'i' && !mobileSetupExpanded && (
                   <button
+                    type="button"
+                    aria-expanded={false}
                     onClick={() => setMobileSetupExpanded(true)}
                     className="md:hidden flex items-center justify-between p-3 border border-ink/10 bg-white/30 text-xs"
                   >
@@ -659,6 +663,8 @@ export default function App() {
                   {/* Source Terms — disclosure on mobile, tab-controlled on desktop */}
                   <div className={activeResultTab !== 'source' ? 'md:hidden' : ''}>
                     <button
+                      type="button"
+                      aria-expanded={mobileSourceExpanded}
                       onClick={() => setMobileSourceExpanded(!mobileSourceExpanded)}
                       className="md:hidden flex items-center justify-between w-full pt-4 border-t border-ink/10 pb-2"
                     >
@@ -794,18 +800,25 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="p-8 md:p-8 border border-ink border-opacity-10 space-y-4">
+              <div className="p-8 border border-ink border-opacity-10 space-y-4">
+                {/* Mobile: collapsible button; Desktop: static header */}
+                <div className="hidden md:block">
+                  <h4 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                    <Info className="w-4 h-4" />
+                    Tensor Notes
+                  </h4>
+                </div>
                 <button
+                  type="button"
+                  aria-expanded={mobileTensorNotesExpanded}
                   onClick={() => setMobileTensorNotesExpanded(!mobileTensorNotesExpanded)}
-                  className="md:pointer-events-none flex items-center justify-between w-full"
+                  className="md:hidden flex items-center justify-between w-full"
                 >
                   <h4 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
                     <Info className="w-4 h-4" />
                     Tensor Notes
                   </h4>
-                  <span className="md:hidden">
-                    {mobileTensorNotesExpanded ? <ChevronUp className="w-3.5 h-3.5 opacity-50" /> : <ChevronDown className="w-3.5 h-3.5 opacity-50" />}
-                  </span>
+                  {mobileTensorNotesExpanded ? <ChevronUp className="w-3.5 h-3.5 opacity-50" /> : <ChevronDown className="w-3.5 h-3.5 opacity-50" />}
                 </button>
                 <div className={mobileTensorNotesExpanded ? '' : 'hidden md:block'}>
                   {(selectedTensorType === 'MD' || selectedTensorType === 'EQ') && (
