@@ -56,6 +56,7 @@ export function SimulatorPage({
   const [showEquations, setShowEquations] = useState(false);
   const [verboseFormulas, setVerboseFormulas] = useState(false);
   const [showRotation, setShowRotation] = useState(false);
+  const [expandedPhases, setExpandedPhases] = useState<Set<string>>(new Set());
 
   const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
 
@@ -261,41 +262,86 @@ export function SimulatorPage({
                 </div>
               </div>
             ) : (
-              independentComponents.map(comp => (
-                <div key={comp} className="space-y-4 border-b border-ink border-opacity-10 pb-6 last:border-0 last:pb-0">
-                  <div className="font-mono text-lg font-medium">
-                    <TensorTerm term={comp} isNull={false} />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-xs opacity-60">
-                      <span>Amplitude</span>
-                      <span className="font-mono">{amplitudes[comp]?.toFixed(2) || '1.00'}</span>
+              independentComponents.map(comp => {
+                const phaseVal = phases[comp] ?? 0;
+                const phaseExpanded = expandedPhases.has(comp) || phaseVal !== 0;
+                return (
+                  <div key={comp} className="space-y-2 border-b border-ink border-opacity-10 pb-4 last:border-0 last:pb-0">
+                    <div className="flex items-center justify-between">
+                      <div className="font-mono text-lg font-medium">
+                        <TensorTerm term={comp} isNull={false} />
+                      </div>
                     </div>
-                    <input 
-                      type="range" 
-                      min="0" max="1" step="0.01"
-                      value={amplitudes[comp] ?? 1}
-                      onChange={(e) => setAmplitudes(p => ({ ...p, [comp]: parseFloat(e.target.value) }))}
-                      className="w-full accent-ink"
-                    />
-                  </div>
 
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-xs opacity-60">
-                      <span>Phase (deg)</span>
-                      <span className="font-mono">{phases[comp] ?? 0}°</span>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="range"
+                        min="0" max="1" step="0.01"
+                        value={amplitudes[comp] ?? 1}
+                        onChange={(e) => setAmplitudes(p => ({ ...p, [comp]: parseFloat(e.target.value) }))}
+                        className="flex-1 accent-ink"
+                      />
+                      <input
+                        type="number"
+                        min="0" max="1" step="0.01"
+                        value={amplitudes[comp] ?? 1}
+                        onChange={(e) => {
+                          const v = parseFloat(e.target.value);
+                          if (!isNaN(v)) setAmplitudes(p => ({ ...p, [comp]: Math.max(0, Math.min(1, v)) }));
+                        }}
+                        className="w-16 text-right text-xs font-mono bg-white/50 border border-ink/20 px-2 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
+                      />
                     </div>
-                    <input 
-                      type="range" 
-                      min="0" max="360" step="1"
-                      value={phases[comp] ?? 0}
-                      onChange={(e) => setPhases(p => ({ ...p, [comp]: parseInt(e.target.value, 10) }))}
-                      className="w-full accent-ink"
-                    />
+
+                    <button
+                      onClick={() => setExpandedPhases(prev => {
+                        const next = new Set(prev);
+                        if (next.has(comp)) next.delete(comp);
+                        else next.add(comp);
+                        return next;
+                      })}
+                      className="flex items-center gap-1 text-xs opacity-50 hover:opacity-100 transition-opacity"
+                    >
+                      {phaseExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                      Phase{!phaseExpanded && phaseVal !== 0 ? `: ${phaseVal}°` : ''}
+                    </button>
+
+                    {phaseExpanded && (
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 relative">
+                          <input
+                            type="range"
+                            min="0" max="360" step="1"
+                            value={phaseVal}
+                            onChange={(e) => setPhases(p => ({ ...p, [comp]: parseInt(e.target.value, 10) }))}
+                            className="w-full accent-ink"
+                          />
+                          <div className="flex justify-between text-[9px] opacity-30 px-0.5 -mt-1" aria-hidden="true">
+                            <span>0</span>
+                            <span>90</span>
+                            <span>180</span>
+                            <span>270</span>
+                            <span>360</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <input
+                            type="number"
+                            min="0" max="360" step="1"
+                            value={phaseVal}
+                            onChange={(e) => {
+                              const v = parseInt(e.target.value, 10);
+                              if (!isNaN(v)) setPhases(p => ({ ...p, [comp]: Math.max(0, Math.min(360, v)) }));
+                            }}
+                            className="w-16 text-right text-xs font-mono bg-white/50 border border-ink/20 px-2 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
+                          />
+                          <span className="text-xs opacity-50">°</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
