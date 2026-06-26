@@ -8,33 +8,31 @@ This roadmap builds on the completed `services/` split (`tensorCalculator.ts` ba
 
 The `#` column is a **feature identifier** (used for cross-references throughout this document), not a priority rank. The actual implementation order is given in the implementation sequence below.
 
-| # | Feature | Ships independently? | Notes |
-|---|---------|---------------------|-------|
-| 1A | Polar plot fix | Yes — ship immediately | ~3-line change |
-| 1B | Rotation engine + tests | Yes — after 1A | Correctness risk lives here |
-| 1C | Rotation UI + mobile | Yes — after 1B | Sliders, layout, controls |
-| 2 | Symbolic source terms | Yes — spike first | Largest feature; not blocked on 1 |
-| 3 | Alternate settings (Phase 1) | Yes — anytime | 8 Mechanism-B groups |
-| 4 | Color tokens | Yes — anytime | Housekeeping |
+| # | Feature | Status | Notes |
+|---|---------|--------|-------|
+| 1A | Polar plot fix | **Done** (v0.2.0) | ~3-line change |
+| 1B | Rotation engine + tests | Planning | Correctness risk lives here |
+| 1C | Rotation UI + mobile | Planning | Sliders, layout, controls |
+| 2 | Symbolic source terms | Planning | Largest feature; not blocked on 1 |
+| 3 | Alternate settings (Phase 1) | Planning | 8 Mechanism-B groups |
+| 4 | Color tokens | Planning | Housekeeping |
 | 5 | Explorer: tabs + enrichment | Deferred | Per-system tabs + enriched popups; after 1–3 settle |
 | 6 | Help & documentation | Deferred | Inline help ships with each feature |
-| 7 | Oblique-axis transparency | Yes — anytime | Docs/UX only; no engine changes |
-| 8 | Desktop layout overhaul | Deferred | Unified controls, collapsible sidebar; after 1C settles |
-| 9 | [hkl] surface orientation | Yes — after 1B | Curated presets (Phase 1), free Miller-index input (Phase 2) |
+| 7 | Oblique-axis transparency | **Done** (v0.2.0) | Docs/UX only; no engine changes |
+| 8 | Desktop layout overhaul | Deferred (8E **Done**) | Unified controls, collapsible sidebar; after 1C settles |
+| 9 | [hkl] surface orientation | Planning | Curated presets (Phase 1), free Miller-index input (Phase 2) |
 
 ## Implementation sequence
 
 Features group into four waves based on their dependencies. Within each wave, items are independent and can be worked in parallel or in any order. Branch prefixes, merge methods, and SemVer bumps follow `AGENTS.md` — summarized per item below.
 
-### Wave 1 — ship now (no dependencies, no engine changes)
+### Wave 1 — done (shipped in v0.2.0)
 
-| Feature | Branch | Method | SemVer | Effort |
-|---|---|---|---|---|
-| **1A** — Polar plot fix | `fix/polar-plot-orientation` | PR (visual output change) | PATCH | ~1 hour |
-| **7** — Oblique-axis transparency | `docs/oblique-axis-convention` | PR (touches `App.tsx` component) | MINOR | ~1 day |
-| **8E** — Explorer as default view | `feature/explorer-default-view` | PR (UI change) | MINOR | ~1 hour |
-
-These are trivially independent. Each is its own branch + PR. 1A is a PATCH (corrects visual rendering, no change to calculated values). Feature 7 and 8E are MINOR (new UI content / behavior). Can be released together as one MINOR bump (highest wins).
+| Feature | PR | Status |
+|---|---|---|
+| **1A** — Polar plot fix | #9 | Merged |
+| **7** — Oblique-axis transparency | #10 | Merged |
+| **8E** — Explorer as default view | #8 | Merged |
 
 ### Wave 2 — the engine foundation (1B)
 
