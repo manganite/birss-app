@@ -19,30 +19,30 @@ export function useSimulatorState(
   phases: Record<string, number>,
   setPhases: React.Dispatch<React.SetStateAction<Record<string, number>>>,
 ) {
-  const labFrame = useMemo(() => getLabFrameVectors(thetaX, thetaY), [thetaX, thetaY]);
+  const labFrame = useMemo(() => getLabFrameVectors({ thetaX, thetaY }), [thetaX, thetaY]);
 
   const sourceTerms = useMemo(() => {
     if (!selectedGroup) return [];
-    return calculateSHGExpressions(
-      selectedGroup.name,
-      selectedTensorType,
-      selectedTimeReversal,
+    return calculateSHGExpressions({
+      groupName: selectedGroup.name,
+      tensorType: selectedTensorType,
+      trType: selectedTimeReversal,
       thetaX,
       thetaY,
-      'E0_THETA'
-    ).source;
+      labFrameDisplayMode: 'E0_THETA',
+    }).source;
   }, [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY]);
 
   const sourceTermsExEy = useMemo(() => {
     if (!selectedGroup) return [];
-    return calculateSHGExpressions(
-      selectedGroup.name,
-      selectedTensorType,
-      selectedTimeReversal,
+    return calculateSHGExpressions({
+      groupName: selectedGroup.name,
+      tensorType: selectedTensorType,
+      trType: selectedTimeReversal,
       thetaX,
       thetaY,
-      'EX_EY'
-    ).source;
+      labFrameDisplayMode: 'EX_EY',
+    }).source;
   }, [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY]);
 
   const expandedFormulas = useMemo(() => {

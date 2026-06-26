@@ -155,9 +155,9 @@ export default function App() {
     EQ: { label: 'Electric Quadrupole', rank: 'RANK 4', type: 'POLAR' },
   };
 
-  const labFrame = useMemo(() => getLabFrameVectors(thetaX, thetaY), [thetaX, thetaY]);
+  const labFrame = useMemo(() => getLabFrameVectors({ thetaX, thetaY }), [thetaX, thetaY]);
   const currentExpressions = useMemo(
-    () => calculateSHGExpressions(selectedGroup?.name || "", selectedTensorType, selectedTimeReversal, thetaX, thetaY),
+    () => calculateSHGExpressions({ groupName: selectedGroup?.name || "", tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY }),
     [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY]
   );
 
