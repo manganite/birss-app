@@ -16,11 +16,11 @@ The `#` column is a **feature identifier** (used for cross-references throughout
 | 2 | Symbolic source terms | **Done** (v0.5.0, PR #19) | TrigPoly algebra + symbolic pipeline + formatter + UI |
 | 3 | Alternate settings | **Done** (P1: PR #15, P2: v0.6.0) | P1: 8 Mechanism-B groups; P2: 21 remaining (Mech A + ortho + mono) |
 | 4 | Color tokens | **Done** | Housekeeping |
-| 5 | Explorer: tabs + enrichment | Deferred | Per-system tabs + enriched popups; after 1–3 settle |
-| 6 | Help & documentation | Deferred | Inline help ships with each feature |
+| 5 | Explorer: tabs + enrichment | **Done** (v0.7.0, PR #23) | Per-system tabs + generators in popup |
+| 6 | Help & documentation | **Done** (v0.7.0) | i/c-type, rotation, settings topics |
 | 7 | Oblique-axis transparency | **Done** (v0.2.0) | Docs/UX only; no engine changes |
-| 8 | Desktop layout overhaul | Deferred (8C **Done**, 8E **Done**) | Unified controls, collapsible sidebar; after 1C settles |
-| 9 | [hkl] surface orientation | **Done** (PR #14) | Curated presets Phase 1; Phase 2 (free [hkl]) deferred |
+| 8 | Desktop layout overhaul | **Done** (8C PR #13, 8E PR #8, 8AD v0.7.0 PR #25) | Collapsible sidebar, label hierarchy |
+| 9 | [hkl] surface orientation | **Done** (P1: PR #14, P2: v0.7.0 PR #24) | Curated presets + free [hkl] input |
 
 ## Implementation sequence
 
@@ -59,13 +59,13 @@ Features group into four waves based on their dependencies. Within each wave, it
 | Feature | Branch | Method | SemVer |
 |---|---|---|---|
 | **2** — Symbolic source terms | `feature/symbolic-source-terms` | PR #19 | MINOR (v0.5.0) — Merged |
-| **3 Phase 2** — Remaining settings | `feature/alternate-settings-p2` | PR | MINOR (v0.6.0) |
-| **5** — Explorer restructure + enrichment | `feature/explorer-enrichment` | PR (UI changes) | MINOR |
-| **8 A/B** — Desktop layout overhaul | `feature/desktop-layout` | PR (UI changes) | MINOR |
-| **9 Phase 2** — Free [hkl] input | `feature/hkl-input` | PR (UI changes) | MINOR |
-| **6** — Help & documentation | `docs/help-content` | Local merge (docs-only) | — (no bump) |
+| **3 Phase 2** — Remaining settings | `feature/alternate-settings-p2` | PR #22 | MINOR (v0.6.0) — Merged |
+| **5** — Explorer restructure + enrichment | `feature/explorer-enrichment` | PR #23 | MINOR (v0.7.0) — Merged |
+| **9 Phase 2** — Free [hkl] input | `feature/hkl-input` | PR #24 | MINOR (v0.7.0) — Merged |
+| **8 A/D** — Desktop layout overhaul | `feature/desktop-layout` | PR #25 | MINOR (v0.7.0) — Merged |
+| **6** — Help & documentation | `docs/help-content` | Local merge | — (v0.7.0) — Merged |
 
-Feature 2 is the priority here — it's the single largest feature and unlocks the symbolic Calculator experience. Feature 5 and Feature 3 Phase 2 can proceed in parallel. Feature 8 A/B and Feature 6 are the tail.
+Wave 4 complete. All features shipped across v0.5.0–v0.7.0.
 
 ### Release cadence
 

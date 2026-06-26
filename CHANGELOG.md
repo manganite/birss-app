@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-06-26
+
+### Added
+- Explorer: per-crystal-system tab strip replaces the vertical scroll of all
+  7 systems. Each tab shows the group grid for one system with an axis-orientation
+  reference panel below. Group popup now displays generators above the full
+  symmetry operations list. (PR #23)
+- Free [hkl] Miller-index input alongside curated cut presets in the Calculator.
+  Type any Miller indices (e.g. "1 2 3") to orient the crystal with that surface
+  normal along the beam direction — no engine changes, computed via Euler angle
+  decomposition of the existing R_preset architecture. (PR #24)
+- Help page: new "Deeper Topics" section covering i-type vs c-type tensors,
+  lab-frame rotation angles (phiX, phiY, psi), and alternate settings concepts.
+
+### Changed
+- Calculator: classification sidebar replaced with a compact one-line group
+  indicator that expands on click. Main content area now uses full viewport
+  width on all screen sizes. (PR #25)
+- Two-level label hierarchy: primary section headers (tensor components, induced
+  response, source terms) promoted to larger/bolder styling; secondary labels
+  (controls, settings) stay compact. (PR #25)
+
 ## [0.6.0] - 2026-06-26
 
 ### Added
@@ -164,7 +186,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/manganite/birss-app/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/manganite/birss-app/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/manganite/birss-app/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/manganite/birss-app/compare/v0.3.0...v0.4.0
