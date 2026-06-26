@@ -3,7 +3,7 @@ import { PointGroupData } from '../data/pointGroups';
 import { TensorType, TensorTimeReversal, isCentrosymmetric } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
 import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp, Info } from 'lucide-react';
-import { TensorTerm, K_ORIENTATION_PRESETS, LabFrameOrientation } from './MathComponents';
+import { TensorTerm, getPresetsForSystem, LabFrameOrientation } from './MathComponents';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
 
@@ -124,7 +124,7 @@ export function SimulatorPage({
             <Compass className="w-3 h-3" /> Crystal Orientation (k vector)
           </h4>
           <div className="flex flex-wrap gap-3">
-            {K_ORIENTATION_PRESETS.map((ori) => (
+            {getPresetsForSystem(selectedGroup.crystalSystem).map((ori) => (
               <button
                 key={ori.label}
                 onClick={() => {

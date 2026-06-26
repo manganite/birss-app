@@ -15,11 +15,35 @@ export const getCrystalIcon = (system: string) => {
   }
 };
 
-export const K_ORIENTATION_PRESETS = [
-  { label: 'k || z', math: 'k \\parallel z', tx: 0, ty: 0 },
-  { label: 'k || x', math: 'k \\parallel x', tx: 0, ty: -90 },
-  { label: 'k || y', math: 'k \\parallel y', tx: 90, ty: 0 },
+export interface KPreset {
+  label: string;
+  math: string;
+  tx: number;
+  ty: number;
+}
+
+const PRINCIPAL_PRESETS: KPreset[] = [
+  { label: '[001]', math: 'k \\parallel [001]', tx: 0, ty: 0 },
+  { label: '[100]', math: 'k \\parallel [100]', tx: 0, ty: -90 },
+  { label: '[010]', math: 'k \\parallel [010]', tx: 90, ty: 0 },
 ];
+
+const PRESET_110: KPreset = { label: '[110]', math: 'k \\parallel [110]', tx: 90, ty: -45 };
+const PRESET_111: KPreset = { label: '[111]', math: 'k \\parallel [111]', tx: 45, ty: -(Math.atan(1 / Math.SQRT2) * 180 / Math.PI) };
+
+const PRESETS_BY_SYSTEM: Record<string, KPreset[]> = {
+  Cubic: [...PRINCIPAL_PRESETS, PRESET_110, PRESET_111],
+  Tetragonal: [...PRINCIPAL_PRESETS, PRESET_110],
+  Orthorhombic: PRINCIPAL_PRESETS,
+  Hexagonal: PRINCIPAL_PRESETS,
+  Trigonal: PRINCIPAL_PRESETS,
+  Monoclinic: PRINCIPAL_PRESETS,
+  Triclinic: PRINCIPAL_PRESETS,
+};
+
+export function getPresetsForSystem(crystalSystem: string): KPreset[] {
+  return PRESETS_BY_SYSTEM[crystalSystem] ?? PRINCIPAL_PRESETS;
+}
 
 export const LabFrameOrientation = ({ labFrame }: { labFrame: { X: string; Y: string; Z: string } }) => (
   <div className="flex-1 bg-ink/5 p-4 border border-ink/10 rounded-sm w-full">

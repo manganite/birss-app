@@ -20,7 +20,7 @@ import {
 import { PointGroupExplorer } from './components/PointGroupExplorer';
 import { HelpPage } from './components/HelpPage';
 import { SimulatorPage } from './components/SimulatorPage';
-import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, K_ORIENTATION_PRESETS, LabFrameOrientation } from './components/MathComponents';
+import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPresetsForSystem, LabFrameOrientation } from './components/MathComponents';
 import { InlineMath } from 'react-katex';
 
 function AxisOrientationInfo({ crystalSystem }: { crystalSystem: string }) {
@@ -581,7 +581,7 @@ export default function App() {
                             Select the direction of light propagation relative to the crystal axes
                           </p>
                           <div className="flex flex-wrap gap-3">
-                            {K_ORIENTATION_PRESETS.map((ori) => (
+                            {getPresetsForSystem(selectedGroup.crystalSystem).map((ori) => (
                               <button
                                 key={ori.label}
                                 onClick={() => {
