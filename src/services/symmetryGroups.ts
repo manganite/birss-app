@@ -303,9 +303,9 @@ export interface SettingDef {
   rotation: Matrix3x3;
 }
 
-const ORTHO_CYCLIC: Matrix3x3 = { m: [[0,0,1],[1,0,0],[0,1,0]] };
-const ORTHO_REVERSE: Matrix3x3 = { m: [[0,1,0],[0,0,1],[1,0,0]] };
-const MONO_YZ_SWAP: Matrix3x3 = { m: [[-1,0,0],[0,0,1],[0,1,0]] };
+const ORTHO_CYCLIC: Matrix3x3 = { m: [[0, 0, 1], [1, 0, 0], [0, 1, 0]] };
+const ORTHO_REVERSE: Matrix3x3 = { m: [[0, 1, 0], [0, 0, 1], [1, 0, 0]] };
+const MONO_YZ_SWAP: Matrix3x3 = { m: [[-1, 0, 0], [0, 0, 1], [0, 1, 0]] };
 
 const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   // Phase 1 — Mechanism B (time-reversal-broken equivalence)
@@ -357,7 +357,7 @@ export function getFutureSettingCount(groupName: string): number | null {
   return GROUPS_WITH_FUTURE_SETTINGS[groupName] ?? null;
 }
 
-function transpose(a: Matrix3x3): Matrix3x3 {
+export function transpose(a: Matrix3x3): Matrix3x3 {
   return {
     m: [
       [a.m[0][0], a.m[1][0], a.m[2][0]],
