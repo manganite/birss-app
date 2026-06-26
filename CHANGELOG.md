@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-26
+
 ### Added
 - Symbolic source-term expressions: Calculator and Simulator now display SHG source
   terms as trigonometric polynomials in the three rotation angles (φ_x, φ_y, ψ)
@@ -150,7 +152,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/manganite/birss-app/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/manganite/birss-app/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/manganite/birss-app/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/manganite/birss-app/compare/v0.1.1...v0.2.0
