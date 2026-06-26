@@ -58,7 +58,7 @@ export function SimulatorPage({
   const [showEquations, setShowEquations] = useState(false);
   const [verboseFormulas, setVerboseFormulas] = useState(false);
   const [showRotation, setShowRotation] = useState(phiX !== 0 || phiY !== 0 || psi !== 0);
-  const [collapsedPhases, setCollapsedPhases] = useState<Set<string>>(new Set());
+  const [phaseOverrides, setPhaseOverrides] = useState<Map<string, boolean>>(new Map());
   const [mobileSetupExpanded, setMobileSetupExpanded] = useState(false);
 
   const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
@@ -181,6 +181,8 @@ export function SimulatorPage({
 
         <div className="hidden md:block space-y-4 border-t border-ink border-opacity-10 pt-6">
           <button
+            type="button"
+            aria-expanded={showRotation}
             onClick={() => setShowRotation(!showRotation)}
             className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-50 hover:opacity-100 transition-opacity w-full"
           >
@@ -291,7 +293,8 @@ export function SimulatorPage({
             ) : (
               independentComponents.map(comp => {
                 const phaseVal = phases[comp] ?? 0;
-                const phaseExpanded = collapsedPhases.has(comp) ? false : (phaseVal !== 0);
+                const override = phaseOverrides.get(comp);
+                const phaseExpanded = override !== undefined ? override : (phaseVal !== 0);
                 return (
                   <div key={comp} className="space-y-2 border-b border-ink border-opacity-10 pb-4 last:border-0 last:pb-0">
                     <div className="flex items-center justify-between">
@@ -321,10 +324,10 @@ export function SimulatorPage({
                     </div>
 
                     <button
-                      onClick={() => setCollapsedPhases(prev => {
-                        const next = new Set(prev);
-                        if (phaseExpanded) next.add(comp);
-                        else next.delete(comp);
+                      type="button"
+                      onClick={() => setPhaseOverrides(prev => {
+                        const next = new Map(prev);
+                        next.set(comp, !phaseExpanded);
                         return next;
                       })}
                       className="flex items-center gap-1 text-xs opacity-50 hover:opacity-100 transition-opacity"

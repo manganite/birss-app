@@ -10,10 +10,10 @@
 import { type TrigPoly, trigConst, trigCos, trigSin, trigAdd, trigMul, trigScale, trigIsZero, trigSimplify, TRIG_ZERO } from './trigPoly';
 import {
   type SHGOptions, type SHGExpression,
-  rotX, rotY, rotZ, mat3mul,
+  rotX, rotY, mat3mul,
   averageTensor, getIndices, getLabel, formatCoeff, cleanupExpressionSigns,
 } from './tensorProjection';
-import { type Matrix3x3, EPSILON, GENERATORS, getCachedFullGroup, getTransformedGenerators } from './symmetryGroups';
+import { EPSILON, GENERATORS, getCachedFullGroup, getTransformedGenerators } from './symmetryGroups';
 
 export type SymPoly = Map<string, Map<string, TrigPoly>>;
 

@@ -17,8 +17,6 @@ const ANGLE_NAMES: Record<string, string> = {
   psi: '\\psi',
 };
 
-const ANGLE_ORDER = ['phiX', 'phiY', 'psi'];
-
 interface DecodedMonomial {
   cosPhiX: number; sinPhiX: number;
   cosPhiY: number; sinPhiY: number;
