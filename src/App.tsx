@@ -665,6 +665,7 @@ export default function App() {
                                 <div className="relative">
                                   <input
                                     type="text"
+                                    aria-label="Miller indices [h k l]"
                                     value={hklInput}
                                     onChange={(e) => {
                                       const val = e.target.value;

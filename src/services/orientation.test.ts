@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { hklToPresetAngles } from './MathComponents';
+import { hklToPresetAngles } from './orientation';
 
 describe('hklToPresetAngles', () => {
   const EPSILON = 1e-10;
