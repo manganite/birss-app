@@ -301,7 +301,7 @@ export function SimulatorPage({
         </div>
 
         {/* Right Column: Polar Plots */}
-        <div className="lg:col-span-8 space-y-6">
+        <div className="lg:col-span-8 lg:sticky lg:top-20 lg:self-start space-y-6">
           <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
             <Activity className="w-3 h-3" />
             SHG Intensity Polarimetry
