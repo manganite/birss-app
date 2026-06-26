@@ -162,10 +162,12 @@ export default function App() {
     EQ: { label: 'Electric Quadrupole', rank: 'RANK 4', type: 'POLAR' },
   };
 
-  const labFrame = useMemo(() => getLabFrameVectors({ thetaX, thetaY, phiX, phiY, psi }), [thetaX, thetaY, phiX, phiY, psi]);
+  const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
+
+  const labFrameBase = useMemo(() => getLabFrameVectors({ thetaX, thetaY, phiX: 0, phiY: 0, psi: 0 }), [thetaX, thetaY]);
   const currentExpressions = useMemo(
-    () => calculateSHGExpressions({ groupName: selectedGroup?.name || "", tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, setting: selectedSetting }),
-    [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, selectedSetting]
+    () => calculateSHGExpressions({ groupName: selectedGroup?.name || "", tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY, phiX: 0, phiY: 0, psi: 0, setting: selectedSetting }),
+    [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, selectedSetting]
   );
 
   const sourceTerms = currentExpressions.source;
@@ -645,9 +647,16 @@ export default function App() {
                           </div>
                         </div>
                         <div className="flex flex-col md:flex-row gap-8 items-start mt-6">
-                          <LabFrameOrientation labFrame={labFrame} />
+                          <LabFrameOrientation labFrame={labFrameBase} />
                         </div>
                       </div>
+
+                      {rotationActive && (
+                        <div className="flex items-start gap-3 p-4 border border-ink/20 bg-ink/5 text-xs leading-relaxed opacity-70">
+                          <Info className="w-4 h-4 mt-0.5 shrink-0" />
+                          <span>Rotation active in Simulator — source terms shown at base orientation. Symbolic φ-dependent expressions will arrive with a future update.</span>
+                        </div>
+                      )}
 
                       <div className="space-y-6">
                         {sourceTerms.map((expr, i) => {
