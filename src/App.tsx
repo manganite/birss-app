@@ -648,10 +648,35 @@ export default function App() {
           The Birss App &copy; 2026
         </p>
         <p className="text-[10px] uppercase tracking-[0.2em] opacity-30">
-          By Thomas Lottermoser
+          By{' '}
+          <a
+            href="https://github.com/manganite"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-100 transition-opacity"
+          >
+            Thomas Lottermoser
+          </a>
         </p>
         <p className="text-[10px] uppercase tracking-[0.2em] opacity-30">
-          v{__APP_VERSION__} &middot;{' '}
+          <a
+            href={`https://github.com/manganite/birss-app/releases/tag/v${__APP_VERSION__}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-100 transition-opacity"
+          >
+            v{__APP_VERSION__}
+          </a>
+          {' '}&middot;{' '}
+          <a
+            href={`https://github.com/manganite/birss-app/releases/tag/v${__APP_VERSION__}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-100 transition-opacity"
+          >
+            What&apos;s new
+          </a>
+          {' '}&middot;{' '}
           <a
             href="https://github.com/manganite/birss-app/blob/main/LICENSE"
             target="_blank"
