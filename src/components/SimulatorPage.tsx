@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PointGroupData } from '../data/pointGroups';
 import { TensorType, TensorTimeReversal, isCentrosymmetric } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
-import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
 import { TensorTerm, getPresetsForSystem, LabFrameOrientation } from './MathComponents';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
@@ -55,6 +55,9 @@ export function SimulatorPage({
   const [activePolarimetryTab, setActivePolarimetryTab] = useState<'anisotropy' | 'polarizer' | 'analyzer'>('anisotropy');
   const [showEquations, setShowEquations] = useState(false);
   const [verboseFormulas, setVerboseFormulas] = useState(false);
+  const [showRotation, setShowRotation] = useState(false);
+
+  const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
 
   const { labFrame, sourceTerms, sourceTermsExEy, expandedFormulas, independentComponents, simulationData } =
     useSimulatorState(selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, selectedSetting, amplitudes, setAmplitudes, phases, setPhases);
@@ -146,6 +149,70 @@ export function SimulatorPage({
           <div className="flex flex-col md:flex-row gap-8 items-start mt-6">
             <LabFrameOrientation labFrame={labFrame} />
           </div>
+        </div>
+
+        <div className="space-y-4 border-t border-ink border-opacity-10 pt-6">
+          <button
+            onClick={() => setShowRotation(!showRotation)}
+            className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-50 hover:opacity-100 transition-opacity w-full"
+          >
+            {showRotation || rotationActive ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            <span>Crystal Rotation</span>
+            {rotationActive && !showRotation && (
+              <span className="normal-case tracking-normal text-[11px] ml-2 opacity-70">
+                ({phiX !== 0 ? `φ_x = ${phiX}°` : ''}{phiX !== 0 && (phiY !== 0 || psi !== 0) ? ', ' : ''}{phiY !== 0 ? `φ_y = ${phiY}°` : ''}{(phiX !== 0 || phiY !== 0) && psi !== 0 ? ', ' : ''}{psi !== 0 ? `ψ = ${psi}°` : ''})
+              </span>
+            )}
+          </button>
+
+          {(showRotation || rotationActive) && (
+            <div className="space-y-3">
+              {([
+                { label: '\\varphi_x', value: phiX, setValue: setPhiX, min: -90, max: 90, desc: 'Tilt about lab-x' },
+                { label: '\\varphi_y', value: phiY, setValue: setPhiY, min: -90, max: 90, desc: 'Tilt about lab-y' },
+                { label: '\\psi', value: psi, setValue: setPsi, min: -180, max: 180, desc: 'Azimuth about k' },
+              ] as const).map(({ label, value, setValue, min, max, desc }) => (
+                <div key={label} className="flex items-center gap-3">
+                  <div className="w-10 shrink-0 text-right">
+                    <InlineMath math={label} />
+                  </div>
+                  <input
+                    type="range"
+                    min={min}
+                    max={max}
+                    step="1"
+                    value={value}
+                    onChange={(e) => setValue(parseFloat(e.target.value))}
+                    className="flex-1 accent-ink"
+                    title={desc}
+                  />
+                  <div className="flex items-center gap-1 shrink-0">
+                    <input
+                      type="number"
+                      min={min}
+                      max={max}
+                      step="1"
+                      value={value}
+                      onChange={(e) => {
+                        const v = parseFloat(e.target.value);
+                        if (!isNaN(v)) setValue(Math.max(min, Math.min(max, v)));
+                      }}
+                      className="w-16 text-right text-xs font-mono bg-white/50 border border-ink/20 px-2 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
+                    />
+                    <span className="text-xs opacity-50">°</span>
+                  </div>
+                </div>
+              ))}
+              <button
+                onClick={() => { setPhiX(0); setPhiY(0); setPsi(0); }}
+                disabled={!rotationActive}
+                className="flex items-center gap-1.5 text-xs opacity-50 hover:opacity-100 disabled:opacity-20 disabled:cursor-default transition-opacity mt-1"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Reset rotation
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
