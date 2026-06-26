@@ -45,10 +45,10 @@ export function PolarimetryPlot({
       <div className="text-[10px] uppercase tracking-widest opacity-50">{subtitle}</div>
       <div className="w-full aspect-square max-w-[350px]">
         <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
+          <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data} startAngle={0} endAngle={360}>
             <PolarGrid gridType="circle" stroke="#141414" strokeOpacity={0.1} />
             <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={RADAR_TICKS} tickFormatter={formatPolarAngle} stroke="#141414" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
-            <PolarRadiusAxis angle={90} domain={[0, Math.max(1e-6, domainMax) / 0.95]} tick={false} axisLine={false} />
+            <PolarRadiusAxis angle={0} domain={[0, Math.max(1e-6, domainMax) / 0.95]} tick={false} axisLine={false} />
             <Radar name={radarName} dataKey={dataKey} stroke="#141414" strokeWidth={2} fill="#141414" fillOpacity={0.1} isAnimationActive={false} />
             <Tooltip
               formatter={(value) => (typeof value === 'number' ? value.toFixed(4) : value)}
