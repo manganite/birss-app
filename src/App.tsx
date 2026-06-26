@@ -168,8 +168,6 @@ export default function App() {
     EQ: { label: 'Electric Quadrupole', rank: 'RANK 4', type: 'POLAR' },
   };
 
-  const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
-
   const labFrameBase = useMemo(() => getLabFrameVectors({ thetaX, thetaY, phiX: 0, phiY: 0, psi: 0 }), [thetaX, thetaY]);
   const currentExpressions = useMemo(
     () => calculateSHGExpressions({ groupName: selectedGroup?.name || "", tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY, phiX: 0, phiY: 0, psi: 0, setting: selectedSetting }),
@@ -466,7 +464,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Tensor Classification</p>
                       {mobileSetupExpanded && (
-                        <button onClick={() => setMobileSetupExpanded(false)} className="md:hidden opacity-50 hover:opacity-100">
+                        <button type="button" aria-label="Collapse setup controls" onClick={() => setMobileSetupExpanded(false)} className="md:hidden opacity-50 hover:opacity-100">
                           <ChevronUp className="w-3.5 h-3.5" />
                         </button>
                       )}

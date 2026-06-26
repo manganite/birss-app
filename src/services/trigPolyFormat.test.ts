@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { formatTrigPoly, formatSymbolicSourceTerm } from './trigPolyFormat';
-import { trigConst, trigCos, trigSin, trigMul, trigAdd, trigScale, TRIG_ZERO, type TrigPoly } from './trigPoly';
+import { trigConst, trigCos, trigSin, trigMul, trigAdd, trigScale, TRIG_ZERO } from './trigPoly';
 import type { SymPoly } from './symbolicProjection';
 
 describe('formatTrigPoly', () => {
