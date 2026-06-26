@@ -26,3 +26,11 @@ export {
   getLabFrameVectors,
 } from './tensorProjection';
 export { calculateTensorComponents, formatSubstitutedPolySum } from './latexFormatting';
+export {
+  type SymPoly,
+  type SymbolicSHGExpression,
+  type SymbolicSHGResult,
+  calculateSymbolicSHGExpressions,
+} from './symbolicProjection';
+export { type TrigPoly } from './trigPoly';
+export { formatTrigPoly, formatSymbolicSourceTerm } from './trigPolyFormat';
