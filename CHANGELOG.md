@@ -22,6 +22,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Calculator source terms now always display at base orientation (φ_x = φ_y = ψ = 0).
   When rotation is active in the Simulator, an info note explains this and points
   to the future symbolic φ-dependent expressions.
+- Mobile: Calculator drops tab bar, stacks Components + Induced Response on one
+  scroll page. Source Terms is behind tap-to-expand.
+- Mobile: Simulator replaces full setup panel with compact one-line summary
+  (group · tensor type · TR symmetry · k-preset) that expands on tap.
+- Mobile: Polarimetry tabs abbreviated ("Aniso" / "Pol" / "Ana") to prevent
+  truncation.
+- Mobile: Plots render above the component list with sticky positioning.
+  Classification sidebar and Tensor Notes collapse on mobile.
+- Mobile: Tensor Type / Time Reversal selectors collapse to a summary when at
+  defaults (ED + i-type).
 
 ## [0.3.0] - 2026-06-26
 
