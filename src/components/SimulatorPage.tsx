@@ -144,7 +144,13 @@ export function SimulatorPage({
             <Sliders className="w-3 h-3" />
             Independent Tensor Components
           </div>
-          
+
+          {(selectedGroup.crystalSystem === 'Triclinic' || selectedGroup.crystalSystem === 'Monoclinic') && (
+            <div className="p-3 border border-[#141414] border-opacity-10 bg-[#141414]/5 text-xs opacity-70 leading-relaxed">
+              Component values and polarimetry orientations depend on the in-plane Cartesian convention (see Help). Different monoclinic angles are represented by adjusting component values, not a separate control. Birefringence is not modeled.
+            </div>
+          )}
+
           <div className="bg-white/50 border border-[#141414] p-6 space-y-8">
             {independentComponents.length === 0 ? (
               <div className="text-sm opacity-50 italic text-center py-8">

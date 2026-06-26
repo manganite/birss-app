@@ -24,14 +24,23 @@ import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, K_ORIE
 import { InlineMath } from 'react-katex';
 
 function AxisOrientationInfo({ crystalSystem }: { crystalSystem: string }) {
-  if (crystalSystem === 'Triclinic') return null;
-
   let content = null;
   switch (crystalSystem) {
+    case 'Triclinic':
+      content = (
+        <>
+          <span className="font-mono font-medium">z</span> ∥ <InlineMath math="c" /><br/>
+          <span className="font-mono font-medium">y</span> ⊥ (<InlineMath math="c \times a" />) (∥ <InlineMath math="b^*" />)<br/>
+          <span className="font-mono font-medium">x</span> = <InlineMath math="y \times z" /> (projection of <InlineMath math="a" /> onto plane ⊥ <InlineMath math="c" />)
+        </>
+      );
+      break;
     case 'Monoclinic':
       content = (
         <>
-          <span className="font-mono font-medium">z</span> is the unique axis (parallel to the 2-fold axis or perpendicular to the mirror plane).
+          <span className="font-mono font-medium">z</span> ∥ <InlineMath math="c" /> (unique axis: ∥ 2-fold or ⊥ mirror)<br/>
+          <span className="font-mono font-medium">x</span> ∥ <InlineMath math="a" /><br/>
+          <span className="font-mono font-medium">y</span> ∥ <InlineMath math="b^*" /> (completing the right-handed frame)
         </>
       );
       break;

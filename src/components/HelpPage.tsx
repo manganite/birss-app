@@ -144,7 +144,12 @@ export function HelpPage() {
               The calculator uses the standard Cartesian coordinate system (x, y, z) for tensor components. The orientation of these axes relative to the crystallographic axes (a, b, c) depends on the crystal system:
             </p>
             <ul className="text-sm opacity-70 list-disc list-inside space-y-2 ml-4">
-              <li><strong>Monoclinic:</strong> <InlineMath math="z" /> is the unique axis (parallel to the 2-fold axis or perpendicular to the mirror plane).</li>
+              <li>
+                <strong>Triclinic:</strong> <InlineMath math="z \parallel c" />, <InlineMath math="y \perp (c \times a)" /> (∥ <InlineMath math="b^*" />), <InlineMath math="x = y \times z" /> (projection of <InlineMath math="a" /> onto the plane ⊥ <InlineMath math="c" />).
+              </li>
+              <li>
+                <strong>Monoclinic:</strong> <InlineMath math="z \parallel c" /> (unique axis: ∥ 2-fold or ⊥ mirror), <InlineMath math="x \parallel a" />, <InlineMath math="y \parallel b^*" />.
+              </li>
               <li><strong>Orthorhombic, Tetragonal, Cubic:</strong> <InlineMath math="x \parallel [100]" />, <InlineMath math="y \parallel [010]" />, <InlineMath math="z \parallel [001]" />.</li>
               <li>
                 <strong>Trigonal & Hexagonal:</strong> The Cartesian axes are orthogonal, while the crystallographic axes (<InlineMath math="a_1, a_2" />) are separated by 120°.
@@ -155,6 +160,12 @@ export function HelpPage() {
                 </ul>
               </li>
             </ul>
+            <p className="text-sm opacity-70 leading-relaxed mt-4">
+              The triclinic and monoclinic conventions follow the standard crystal-physics prescription (Hausühl 1983, based on IRE 1949): <InlineMath math="Z \perp c" />, <InlineMath math="Y \perp (c \times a)" />, <InlineMath math="X = Y \times Z" />. The set of independent and zero tensor components does <strong>not</strong> depend on this choice, but the numeric component values — and therefore the orientation of simulated polarimetry patterns — <strong>do</strong>.
+            </p>
+            <p className="text-sm opacity-70 leading-relaxed mt-2">
+              <strong>Why there is no monoclinic-angle control:</strong> The angle <InlineMath math="\beta" /> does not enter the symmetry calculation directly. A crystal with a different <InlineMath math="\beta" /> is a different material with different tensor values, so it is represented by adjusting the relevant in-plane component values — not by a separate geometric control. Linear-optical effects such as birefringence, which do depend on <InlineMath math="\beta" />, are outside the scope of this symmetry calculator.
+            </p>
           </div>
 
           <div className="space-y-3">
