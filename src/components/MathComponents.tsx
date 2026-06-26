@@ -19,9 +19,6 @@ export const K_ORIENTATION_PRESETS = [
   { label: 'k || z', math: 'k \\parallel z', tx: 0, ty: 0 },
   { label: 'k || x', math: 'k \\parallel x', tx: 0, ty: -90 },
   { label: 'k || y', math: 'k \\parallel y', tx: 90, ty: 0 },
-  { label: 'k || xy', math: 'k \\parallel xy', tx: 90, ty: -45 },
-  { label: 'k || xz', math: 'k \\parallel xz', tx: 0, ty: -45 },
-  { label: 'k || yz', math: 'k \\parallel yz', tx: 45, ty: 0 },
 ];
 
 export const LabFrameOrientation = ({ labFrame }: { labFrame: { X: string; Y: string; Z: string } }) => (
