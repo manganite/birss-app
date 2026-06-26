@@ -13,6 +13,32 @@ import { type Matrix3x3, EPSILON, AXIS_EPSILON, GENERATORS, getCachedFullGroup, 
 export type TensorType = 'ED' | 'MD' | 'EQ';
 export type TensorTimeReversal = 'i' | 'c'; // i = time-even, c = time-odd
 
+const DEG = Math.PI / 180;
+
+export function rotX(deg: number): number[][] {
+  const c = Math.cos(deg * DEG), s = Math.sin(deg * DEG);
+  return [[1, 0, 0], [0, c, -s], [0, s, c]];
+}
+
+export function rotY(deg: number): number[][] {
+  const c = Math.cos(deg * DEG), s = Math.sin(deg * DEG);
+  return [[c, 0, s], [0, 1, 0], [-s, 0, c]];
+}
+
+export function rotZ(deg: number): number[][] {
+  const c = Math.cos(deg * DEG), s = Math.sin(deg * DEG);
+  return [[c, -s, 0], [s, c, 0], [0, 0, 1]];
+}
+
+export function mat3mul(A: number[][], B: number[][]): number[][] {
+  const R: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  for (let i = 0; i < 3; i++)
+    for (let j = 0; j < 3; j++)
+      for (let k = 0; k < 3; k++)
+        R[i][j] += A[i][k] * B[k][j];
+  return R;
+}
+
 /** formatCoeff's "is this an integer / matches a simple fraction" tolerance (same value as AXIS_EPSILON, kept separate -- unrelated quantities). */
 const COEFF_EPSILON = 1e-5;
 /** formatCoeff's irrational-root (sqrt) matching tolerance. */
