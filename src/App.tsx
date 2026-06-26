@@ -87,7 +87,7 @@ const getGroupCategory = (name: string): GroupCategory => {
 };
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'calculator' | 'simulator' | 'explorer' | 'help'>('calculator');
+  const [currentView, setCurrentView] = useState<'calculator' | 'simulator' | 'explorer' | 'help'>('explorer');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -173,25 +173,25 @@ export default function App() {
 
           {/* Center: Navigation Pills */}
           <div className="flex items-center bg-white/40 border border-[#141414] border-opacity-10 rounded-full p-1 self-start lg:self-auto">
-            <button 
-              onClick={() => setCurrentView('calculator')}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'calculator' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
-            >
-              Calculator
-            </button>
-            <button 
-              onClick={() => setCurrentView('simulator')}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'simulator' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
-            >
-              Simulator
-            </button>
-            <button 
+            <button
               onClick={() => setCurrentView('explorer')}
               className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'explorer' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
             >
               Explorer
             </button>
-            <button 
+            <button
+              onClick={() => setCurrentView('calculator')}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'calculator' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+            >
+              Calculator
+            </button>
+            <button
+              onClick={() => setCurrentView('simulator')}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'simulator' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
+            >
+              Simulator
+            </button>
+            <button
               onClick={() => setCurrentView('help')}
               className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${currentView === 'help' ? 'bg-[#141414] text-[#E4E3E0]' : 'hover:bg-[#141414]/5 text-[#141414]/70'}`}
             >
