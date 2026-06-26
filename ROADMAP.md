@@ -800,8 +800,8 @@ Preset rules:
 
 ### Phase 2: free Miller-index [hkl] input
 
-- [ ] Miller-index input field ([h k l]) alongside curated presets
-- [ ] Compute R_preset from arbitrary [hkl] → lab-z alignment rotation
+- [x] Miller-index input field ([h k l]) alongside curated presets
+- [x] Compute R_preset from arbitrary [hkl] → lab-z alignment rotation
 - [ ] Under this model, the removed diagonal presets (k∥xy etc. from 1B) return as first-class [hkl] surface orientations, not slider workarounds
 
 ### Azimuth-zero convention (confirmed)
