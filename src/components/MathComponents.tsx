@@ -45,6 +45,8 @@ export function getPresetsForSystem(crystalSystem: string): KPreset[] {
   return PRESETS_BY_SYSTEM[crystalSystem] ?? PRINCIPAL_PRESETS;
 }
 
+export { hklToPresetAngles } from '../services/orientation';
+
 export const LabFrameOrientation = ({ labFrame }: { labFrame: { X: string; Y: string; Z: string } }) => (
   <div className="flex-1 bg-ink/5 p-4 border border-ink/10 rounded-sm w-full">
     <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 mb-3">Crystal Orientation in Lab Frame</h4>

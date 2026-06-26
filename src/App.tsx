@@ -24,7 +24,7 @@ import {
 import { PointGroupExplorer } from './components/PointGroupExplorer';
 import { HelpPage } from './components/HelpPage';
 import { SimulatorPage } from './components/SimulatorPage';
-import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPresetsForSystem, LabFrameOrientation, AxisOrientationInfo } from './components/MathComponents';
+import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPresetsForSystem, LabFrameOrientation, AxisOrientationInfo, hklToPresetAngles } from './components/MathComponents';
 import { InlineMath } from 'react-katex';
 
 const normalizeString = (str: string) => {
@@ -59,6 +59,7 @@ export default function App() {
   const [mobileClassificationExpanded, setMobileClassificationExpanded] = useState(false);
   const [mobileSetupExpanded, setMobileSetupExpanded] = useState(false);
   const [mobileTensorNotesExpanded, setMobileTensorNotesExpanded] = useState(false);
+  const [hklInput, setHklInput] = useState('');
 
   const filteredGroups = useMemo(() => {
     let groups = POINT_GROUPS;
@@ -641,16 +642,17 @@ export default function App() {
                             <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">
                               Select the direction of light propagation relative to the crystal axes
                             </p>
-                            <div className="flex flex-wrap gap-3">
+                            <div className="flex flex-wrap gap-3 items-center">
                               {getPresetsForSystem(selectedGroup.crystalSystem).map((ori) => (
                                 <button
                                   key={ori.label}
                                   onClick={() => {
                                     setThetaX(ori.tx);
                                     setThetaY(ori.ty);
+                                    setHklInput('');
                                   }}
                                   className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-ink ${
-                                    thetaX === ori.tx && thetaY === ori.ty
+                                    thetaX === ori.tx && thetaY === ori.ty && !hklInput
                                       ? 'bg-ink text-paper'
                                       : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
                                   }`}
@@ -658,6 +660,30 @@ export default function App() {
                                   <InlineMath math={ori.math} />
                                 </button>
                               ))}
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] uppercase tracking-[0.1em] opacity-40">or</span>
+                                <div className="relative">
+                                  <input
+                                    type="text"
+                                    aria-label="Miller indices [h k l]"
+                                    value={hklInput}
+                                    onChange={(e) => {
+                                      const val = e.target.value;
+                                      setHklInput(val);
+                                      const parts = val.trim().split(/[\s,]+/).map(Number);
+                                      if (parts.length === 3 && parts.every(n => Number.isInteger(n))) {
+                                        const angles = hklToPresetAngles(parts[0], parts[1], parts[2]);
+                                        if (angles) {
+                                          setThetaX(angles.tx);
+                                          setThetaY(angles.ty);
+                                        }
+                                      }
+                                    }}
+                                    placeholder="h k l"
+                                    className="w-24 px-3 py-2 text-[12px] tracking-[0.1em] border border-ink border-opacity-20 bg-transparent text-center placeholder:opacity-30 focus:outline-none focus:border-opacity-100"
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
                           <div className="flex flex-col md:flex-row gap-8 items-start mt-6">
