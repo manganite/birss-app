@@ -148,6 +148,9 @@ export default function App() {
 
   const [thetaX, setThetaX] = useState<number>(0);
   const [thetaY, setThetaY] = useState<number>(0);
+  const [phiX, setPhiX] = useState<number>(0);
+  const [phiY, setPhiY] = useState<number>(0);
+  const [psi, setPsi] = useState<number>(0);
 
   const tensorMeta = {
     ED: { label: 'Electric Dipole', rank: 'RANK 3', type: 'POLAR' },
@@ -155,10 +158,10 @@ export default function App() {
     EQ: { label: 'Electric Quadrupole', rank: 'RANK 4', type: 'POLAR' },
   };
 
-  const labFrame = useMemo(() => getLabFrameVectors({ thetaX, thetaY }), [thetaX, thetaY]);
+  const labFrame = useMemo(() => getLabFrameVectors({ thetaX, thetaY, phiX, phiY, psi }), [thetaX, thetaY, phiX, phiY, psi]);
   const currentExpressions = useMemo(
-    () => calculateSHGExpressions({ groupName: selectedGroup?.name || "", tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY }),
-    [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY]
+    () => calculateSHGExpressions({ groupName: selectedGroup?.name || "", tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi }),
+    [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi]
   );
 
   const sourceTerms = currentExpressions.source;
@@ -320,7 +323,7 @@ export default function App() {
             }}
           />
         ) : currentView === 'simulator' ? (
-          <SimulatorPage 
+          <SimulatorPage
             selectedGroup={selectedGroup}
             selectedTensorType={selectedTensorType}
             setSelectedTensorType={setSelectedTensorType}
@@ -330,6 +333,12 @@ export default function App() {
             setThetaX={setThetaX}
             thetaY={thetaY}
             setThetaY={setThetaY}
+            phiX={phiX}
+            setPhiX={setPhiX}
+            phiY={phiY}
+            setPhiY={setPhiY}
+            psi={psi}
+            setPsi={setPsi}
             amplitudes={amplitudes}
             setAmplitudes={setAmplitudes}
             phases={phases}

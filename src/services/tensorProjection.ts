@@ -260,11 +260,14 @@ export interface SHGOptions {
   trType: TensorTimeReversal;
   thetaX?: number;
   thetaY?: number;
+  phiX?: number;
+  phiY?: number;
+  psi?: number;
   labFrameDisplayMode?: 'EX_EY' | 'E0_THETA';
 }
 
 export function calculateSHGExpressions(options: SHGOptions): SHGResult {
-  const { groupName, tensorType, trType, thetaX = 0, thetaY = 0, labFrameDisplayMode = 'EX_EY' } = options;
+  const { groupName, tensorType, trType, thetaX = 0, thetaY = 0, phiX = 0, phiY = 0, psi = 0, labFrameDisplayMode = 'EX_EY' } = options;
   const generators = GENERATORS[groupName];
   if (!generators) return { induced: [], source: [] };
 
@@ -276,17 +279,9 @@ export function calculateSHGExpressions(options: SHGOptions): SHGResult {
 
   const tLabels = ['x', 'y', 'z'];
 
-  const cx = Math.cos(thetaX * Math.PI / 180);
-  const sx = Math.sin(thetaX * Math.PI / 180);
-  const cy = Math.cos(thetaY * Math.PI / 180);
-  const sy = Math.sin(thetaY * Math.PI / 180);
-
-  // R maps Crystal to Lab: V_lab = R * V_cryst
-  const R = [
-    [cy, sx * sy, cx * sy],
-    [0, cx, -sx],
-    [-sy, sx * cy, cx * cy]
-  ];
+  // R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset, where R_preset = Ry(thetaY) · Rx(thetaX)
+  const R_preset = mat3mul(rotY(thetaY), rotX(thetaX));
+  const R = mat3mul(rotZ(psi), mat3mul(rotY(phiY), mat3mul(rotX(phiX), R_preset)));
 
   // E_vec_lab_in_cryst maps Lab E-field (E_X, E_Y, 0) to Crystal E-field
   // E_cryst_i = R_0i E_X + R_1i E_Y
@@ -543,14 +538,13 @@ export function calculateSHGExpressions(options: SHGOptions): SHGResult {
 export interface LabFrameOptions {
   thetaX?: number;
   thetaY?: number;
+  phiX?: number;
+  phiY?: number;
+  psi?: number;
 }
 
 export function getLabFrameVectors(options: LabFrameOptions = {}) {
-  const { thetaX: tx = 0, thetaY: ty = 0 } = options;
-  const cx = Math.cos(tx * Math.PI / 180);
-  const sx = Math.sin(tx * Math.PI / 180);
-  const cy = Math.cos(ty * Math.PI / 180);
-  const sy = Math.sin(ty * Math.PI / 180);
+  const { thetaX = 0, thetaY = 0, phiX = 0, phiY = 0, psi = 0 } = options;
 
   const formatVec = (v: number[]) => {
     const terms: string[] = [];
@@ -565,15 +559,14 @@ export function getLabFrameVectors(options: LabFrameOptions = {}) {
     return terms.length > 0 ? terms.join(" ") : "0";
   };
 
-  // R maps Crystal to Lab: V_lab = R * V_cryst
-  // So V_cryst = R^T * V_lab
-  // x_crys = R_00 X_lab + R_10 Y_lab + R_20 Z_lab
-  // y_crys = R_01 X_lab + R_11 Y_lab + R_21 Z_lab
-  // z_crys = R_02 X_lab + R_12 Y_lab + R_22 Z_lab
+  // R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · Ry(thetaY) · Rx(thetaX)
+  const R_preset = mat3mul(rotY(thetaY), rotX(thetaX));
+  const R = mat3mul(rotZ(psi), mat3mul(rotY(phiY), mat3mul(rotX(phiX), R_preset)));
 
-  const x_crys = [cy, 0, -sy];
-  const y_crys = [sx * sy, cx, sx * cy];
-  const z_crys = [cx * sy, -sx, cx * cy];
+  // V_cryst = R^T · V_lab
+  const x_crys = [R[0][0], R[1][0], R[2][0]];
+  const y_crys = [R[0][1], R[1][1], R[2][1]];
+  const z_crys = [R[0][2], R[1][2], R[2][2]];
 
   return {
     X: formatVec(x_crys),
