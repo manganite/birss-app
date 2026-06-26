@@ -12,8 +12,8 @@ The `#` column is a **feature identifier** (used for cross-references throughout
 |---|---------|--------|-------|
 | 1A | Polar plot fix | **Done** (v0.2.0) | ~3-line change |
 | 1B | Rotation engine + tests | **Done** (v0.3.0) | Lab-frame rotation with phiX, phiY, psi |
-| 1C | Rotation UI + mobile | **In review** (PR #16, #17) | Desktop + mobile split |
-| 2 | Symbolic source terms | Planning | Largest feature; not blocked on 1 |
+| 1C | Rotation UI + mobile | **Done** (v0.4.0, PR #16, #17, #18) | Desktop + mobile split |
+| 2 | Symbolic source terms | **In progress** | TrigPoly algebra + symbolic pipeline + formatter + UI |
 | 3 | Alternate settings (Phase 1) | **Done** (PR #15) | 8 Mechanism-B groups |
 | 4 | Color tokens | **Done** | Housekeeping |
 | 5 | Explorer: tabs + enrichment | Deferred | Per-system tabs + enriched popups; after 1–3 settle |
@@ -51,14 +51,14 @@ Features group into four waves based on their dependencies. Within each wave, it
 | **8C** — Zero-result states | #13 | Merged |
 | **9 Phase 1** — Curated cut presets | #14 | Merged |
 | **3 Phase 1** — Alternate settings | #15 | Merged |
-| **1C** — Rotation UI (desktop) | #16 | In review |
-| **1C** — Rotation UI (mobile) | #17 | In review |
+| **1C** — Rotation UI (desktop) | #16 | Merged |
+| **1C** — Rotation UI (mobile) | #17, #18 | Merged |
 
 ### Wave 4 — after Wave 3 settles
 
 | Feature | Branch | Method | SemVer |
 |---|---|---|---|
-| **2** — Symbolic source terms | `feature/symbolic-source-terms` | PR (physics output) | MINOR |
+| **2** — Symbolic source terms | `feature/symbolic-source-terms` | PR (physics output) | MINOR (v0.5.0) |
 | **5** — Explorer restructure + enrichment | `feature/explorer-enrichment` | PR (UI changes) | MINOR |
 | **3 Phase 2** — Remaining settings | `feature/alternate-settings-p2` | PR (physics output) | MINOR |
 | **8 A/B** — Desktop layout overhaul | `feature/desktop-layout` | PR (UI changes) | MINOR |
@@ -345,10 +345,10 @@ The component-list fix (sticky plot on top, scrollable component list below, con
 
 ## 2. Symbolic Source Term Expressions (phi dependence)
 
-**Status:** Planning — spike/prototype before committing to full scope
+**Status:** In progress — core engine complete (TrigPoly algebra + symbolic projection + formatter + UI integration), pending PR review
 **Priority:** High — not blocked on Feature 1; likely the single largest feature
 
-Display source terms as symbolic expressions in phi rather than numeric coefficients. This resolves the gap from Feature 1C: the Calculator and Simulator Mathematical Model section will show proper phi-dependent formulas. This is a **new computation path** (trigonometric polynomial representation + arithmetic + simplification + LaTeX formatter), not an extension of the existing numeric pipeline. The scope warrants its own estimate and a spike before full commitment.
+Display source terms as symbolic expressions in phi rather than numeric coefficients. This resolves the gap from Feature 1C: the Calculator and Simulator Mathematical Model section now show proper phi-dependent formulas. This is a **new computation path** (trigonometric polynomial representation + arithmetic + simplification + LaTeX formatter) running in parallel with the existing numeric pipeline.
 
 ### Why this is a separate effort
 
@@ -365,14 +365,14 @@ The third angle (ψ) enlarges the trig-polynomial algebra and the formatter. Whe
 
 #### Calculator (Source Terms tab)
 - [ ] Add rotation axis selector below k-vector presets — this control lives here (not in Feature 1B) because it only becomes meaningful with symbolic output
-- [ ] Extend source term calculation to produce symbolic expressions in phi
-- [ ] Display source terms as LaTeX with phi dependence
-- [ ] Compact display for cross-terms (sin·cos products) — handle three-way cross-terms (φ_x, φ_y, ψ) when multiple rotation axes are active
+- [x] Extend source term calculation to produce symbolic expressions in phi
+- [x] Display source terms as LaTeX with phi dependence
+- [x] Compact display for cross-terms (sin·cos products) — handle three-way cross-terms (φ_x, φ_y, ψ) when multiple rotation axes are active
 - [ ] Update crystal orientation / lab frame info symbolically
-- [ ] Prepare for wide formulas on mobile: clear scroll affordance or "tap to expand" for long KaTeX expressions. Note: formula overflow already exists for the *current* numeric output in low-symmetry groups (see 1C "Current mobile defects", item C) — Feature 2 makes it worse but the fix should land with or before 1C
+- [x] Prepare for wide formulas on mobile: clear scroll affordance or "tap to expand" for long KaTeX expressions. Note: formula overflow already exists for the *current* numeric output in low-symmetry groups (see 1C "Current mobile defects", item C) — Feature 2 makes it worse but the fix should land with or before 1C
 
 #### Simulator (Mathematical Model section)
-- [ ] Simplified symbolic source terms with phi dependence in Mathematical Model section
+- [x] Simplified symbolic source terms with phi dependence in Mathematical Model section
 
 ### Verification
 

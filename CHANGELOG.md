@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Symbolic source-term expressions: Calculator and Simulator now display SHG source
+  terms as trigonometric polynomials in the three rotation angles (φ_x, φ_y, ψ)
+  instead of numeric coefficients at a fixed orientation. Substituting numeric angle
+  values into the symbolic expressions reproduces the previous numeric output exactly.
+- New `trigPoly` algebra module for trigonometric polynomial arithmetic (addition,
+  multiplication, evaluation, Pythagorean simplification) over three independent
+  angles — the symbolic engine underlying the rotation-dependent source terms.
+- Symbolic projection pipeline (`symbolicProjection.ts`) that runs in parallel with
+  the existing numeric path: crystal-frame basis computation stays numeric, while
+  lab-frame source-term contractions use symbolic rotation matrix entries.
+- LaTeX formatter for TrigPoly expressions (`trigPolyFormat.ts`) using power form
+  (cos²φ_x) with automatic coefficient formatting via the existing formatCoeff table.
+- 158 new tests: TrigPoly algebra (31), symbolic projection cross-checks against
+  numeric path (107), and LaTeX formatter (20).
+
+### Changed
+- Calculator source terms now always show symbolic φ-dependent formulas (replaces
+  the previous "rotation active in Simulator" informational note).
+- Simulator Mathematical Model section adds a symbolic subsection showing
+  φ-dependent source terms alongside the existing E_X/E_Y and θ_pol formulas.
+- `transformTensor` and `averageTensor` in tensorProjection.ts are now exported
+  (previously internal) — used by the symbolic pipeline to avoid duplication.
+
 ## [0.4.0] - 2026-06-26
 
 ### Added
