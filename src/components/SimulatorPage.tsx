@@ -17,6 +17,12 @@ interface SimulatorPageProps {
   setThetaX: (t: number) => void;
   thetaY: number;
   setThetaY: (t: number) => void;
+  phiX: number;
+  setPhiX: (v: number) => void;
+  phiY: number;
+  setPhiY: (v: number) => void;
+  psi: number;
+  setPsi: (v: number) => void;
   amplitudes: Record<string, number>;
   setAmplitudes: React.Dispatch<React.SetStateAction<Record<string, number>>>;
   phases: Record<string, number>;
@@ -33,6 +39,12 @@ export function SimulatorPage({
   setThetaX,
   thetaY,
   setThetaY,
+  phiX,
+  setPhiX,
+  phiY,
+  setPhiY,
+  psi,
+  setPsi,
   amplitudes,
   setAmplitudes,
   phases,
@@ -43,7 +55,7 @@ export function SimulatorPage({
   const [verboseFormulas, setVerboseFormulas] = useState(false);
 
   const { labFrame, sourceTerms, sourceTermsExEy, expandedFormulas, independentComponents, simulationData } =
-    useSimulatorState(selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, amplitudes, setAmplitudes, phases, setPhases);
+    useSimulatorState(selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, amplitudes, setAmplitudes, phases, setPhases);
 
   if (!selectedGroup) {
     return (
