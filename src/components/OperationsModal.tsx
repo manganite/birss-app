@@ -18,7 +18,7 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
   useDialogA11y({ onClose, containerRef });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#141414]/80 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/80 backdrop-blur-sm" onClick={onClose}>
       <motion.div
         ref={containerRef}
         role="dialog"
@@ -28,10 +28,10 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="bg-[#E4E3E0] w-full max-w-2xl border border-[#141414] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="bg-paper w-full max-w-2xl border border-ink shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-4 border-b border-[#141414] shrink-0">
+        <div className="flex items-center justify-between p-4 border-b border-ink shrink-0">
           <div className="flex items-center gap-4">
             <h2 id="operations-modal-title" className="text-xl font-medium tracking-tight">
               <FormatPointGroup name={group.name} />
@@ -45,7 +45,7 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
           <button
             onClick={onClose}
             aria-label="Close"
-            className="p-2 hover:bg-[#141414]/10 transition-colors"
+            className="p-2 hover:bg-ink/10 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -61,13 +61,13 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
         </div>
 
         {onOpenInCalculator && (
-          <div className="p-4 border-t border-[#141414] bg-[#141414]/5 flex justify-end shrink-0">
+          <div className="p-4 border-t border-ink bg-ink/5 flex justify-end shrink-0">
             <button
               onClick={() => {
                 onOpenInCalculator();
                 onClose();
               }}
-              className="px-4 py-2 bg-[#141414] text-[#E4E3E0] text-sm uppercase tracking-widest hover:bg-transparent hover:text-[#141414] border border-[#141414] transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-ink text-paper text-sm uppercase tracking-widest hover:bg-transparent hover:text-ink border border-ink transition-colors flex items-center gap-2"
             >
               <Calculator className="w-4 h-4" />
               Open in Calculator
