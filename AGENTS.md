@@ -116,11 +116,14 @@ Regularly check the GitHub repository for items that need attention:
   afterward. There is no `develop` branch.
 - Prefixes (lowercase, words separated by hyphens):
 
-  | Prefix     | Purpose                                   | Example                    |
-  |------------|--------------------------------------------|----------------------------|
-  | `feature/` | New functionality                          | `feature/domain-export`    |
-  | `fix/`     | Bug fix                                     | `fix/phase-angle-rounding` |
-  | `hotfix/`  | Urgent fix applied directly to a release   | `hotfix/crash-on-export`   |
+  | Prefix      | Purpose                                     | Example                          |
+  |-------------|---------------------------------------------|----------------------------------|
+  | `feature/`  | New functionality                           | `feature/domain-export`          |
+  | `fix/`      | Bug fix                                     | `fix/phase-angle-rounding`       |
+  | `hotfix/`   | Urgent fix applied directly to a release    | `hotfix/crash-on-export`         |
+  | `refactor/` | Behavior-preserving restructuring           | `refactor/signature-migration`   |
+  | `docs/`     | Documentation-only changes                  | `docs/oblique-axis-convention`   |
+  | `chore/`    | Tooling, CI, dependencies, non-code cleanup | `chore/color-tokens`             |
 
 ```bash
 git switch main && git pull

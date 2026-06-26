@@ -2,7 +2,11 @@
 
 Feature ideas, design decisions, and implementation notes for birss-app. This document serves as a living design notebook — it records not just what to build and in what order, but the reasoning behind decisions, verified constraints, and brainstorming context that informs future work. Items are roughly ordered by priority.
 
-## Priority overview
+This roadmap builds on the completed `services/` split (`tensorCalculator.ts` barrel + `symmetryGroups.ts` / `tensorProjection.ts` / `latexFormatting.ts`) and the golden-fixture test suite (492 tests). Both are prerequisites, not items below.
+
+## Feature index
+
+The `#` column is a **feature identifier** (used for cross-references throughout this document), not a priority rank. The actual implementation order is given in the implementation sequence below.
 
 | # | Feature | Ships independently? | Notes |
 |---|---------|---------------------|-------|
@@ -12,15 +16,112 @@ Feature ideas, design decisions, and implementation notes for birss-app. This do
 | 2 | Symbolic source terms | Yes — spike first | Largest feature; not blocked on 1 |
 | 3 | Alternate settings (Phase 1) | Yes — anytime | 8 Mechanism-B groups |
 | 4 | Color tokens | Yes — anytime | Housekeeping |
-| 5 | Explorer enrichment | Deferred | After 1–3 settle |
+| 5 | Explorer: tabs + enrichment | Deferred | Per-system tabs + enriched popups; after 1–3 settle |
 | 6 | Help & documentation | Deferred | Inline help ships with each feature |
 | 7 | Oblique-axis transparency | Yes — anytime | Docs/UX only; no engine changes |
+| 8 | Desktop layout overhaul | Deferred | Unified controls, collapsible sidebar; after 1C settles |
+| 9 | [hkl] surface orientation | Yes — after 1B | Curated presets (Phase 1), free Miller-index input (Phase 2) |
+
+## Implementation sequence
+
+Features group into four waves based on their dependencies. Within each wave, items are independent and can be worked in parallel or in any order. Branch prefixes, merge methods, and SemVer bumps follow `AGENTS.md` — summarized per item below.
+
+### Wave 1 — ship now (no dependencies, no engine changes)
+
+| Feature | Branch | Method | SemVer | Effort |
+|---|---|---|---|---|
+| **1A** — Polar plot fix | `fix/polar-plot-orientation` | PR (visual output change) | PATCH | ~1 hour |
+| **7** — Oblique-axis transparency | `docs/oblique-axis-convention` | PR (touches `App.tsx` component) | MINOR | ~1 day |
+| **8E** — Explorer as default view | `feature/explorer-default-view` | PR (UI change) | MINOR | ~1 hour |
+
+These are trivially independent. Each is its own branch + PR. 1A is a PATCH (corrects visual rendering, no change to calculated values). Feature 7 and 8E are MINOR (new UI content / behavior). Can be released together as one MINOR bump (highest wins).
+
+### Wave 2 — the engine foundation (1B)
+
+1B is physics-critical and goes through a **pull request** (`feature/rotation-engine`). The sub-steps are ordered commits within that branch, except 1B.0 which ships as a **separate PR first** (`refactor/shg-options-object`) — it's behavior-preserving and should be verified independently on `main` before the engine changes land on top.
+
+| Step | Branch | Notes |
+|---|---|---|
+| **1B.0** — Signature migration | `refactor/shg-options-object` | Separate PR. Behavior-preserving; guarded by 492 tests. Merge to `main` first. |
+| **1B.1–1B.4** — Engine extension | `feature/rotation-engine` | Single PR, ordered commits. Branches from `main` after 1B.0 is merged. |
+
+Within `feature/rotation-engine` (commit order):
+
+- 1B.4 tests written first (golden references for rotated paths)
+- 1B.1 matrix primitives
+- 1B.2 rotation composition
+- 1B.3 preset cleanup
+- 1B.4 tests verified (must still pass after engine change)
+
+SemVer: 1B.0 alone is no bump (internal refactor, no user-visible change). The full 1B (engine extension + preset removal) is MINOR — new rotation capability, diagonal presets removed (documented in changelog).
+
+**Feature 2 spike** can start during Wave 2 — the spike is research (trig-polynomial representation, formatter design), not code that depends on 1B. Starting the spike early de-risks Wave 4.
+
+### Wave 3 — parallel after 1B
+
+| Feature | Branch | Method | SemVer |
+|---|---|---|---|
+| **1C** — Rotation UI + mobile | `feature/rotation-ui-mobile` | PR (UI changes) | MINOR |
+| **3 Phase 1** — Alternate settings | `feature/alternate-settings` | PR (physics output) | MINOR |
+| **4** — Color tokens | `chore/color-tokens` | Local merge (no behavior change) | — (no bump) |
+| **9 Phase 1** — Curated cut presets | `feature/cut-presets` | PR (UI changes) | MINOR |
+| **8C** — Zero-result states | `feature/zero-result-states` | PR (UI changes) | MINOR |
+
+These are all independent of each other. 1C is the largest and should start first. Feature 3 Phase 1 is the other high-value item — it closes a correctness gap. Feature 4 is a chore with no user-visible change (same colors, different CSS classes) — local merge, no version bump. Features 9 Phase 1 and 8C are small and can fill gaps.
+
+### Wave 4 — after Wave 3 settles
+
+| Feature | Branch | Method | SemVer |
+|---|---|---|---|
+| **2** — Symbolic source terms | `feature/symbolic-source-terms` | PR (physics output) | MINOR |
+| **5** — Explorer restructure + enrichment | `feature/explorer-enrichment` | PR (UI changes) | MINOR |
+| **3 Phase 2** — Remaining settings | `feature/alternate-settings-p2` | PR (physics output) | MINOR |
+| **8 A/B** — Desktop layout overhaul | `feature/desktop-layout` | PR (UI changes) | MINOR |
+| **9 Phase 2** — Free [hkl] input | `feature/hkl-input` | PR (UI changes) | MINOR |
+| **6** — Help & documentation | `docs/help-content` | Local merge (docs-only) | — (no bump) |
+
+Feature 2 is the priority here — it's the single largest feature and unlocks the symbolic Calculator experience. Feature 5 and Feature 3 Phase 2 can proceed in parallel. Feature 8 A/B and Feature 6 are the tail.
+
+### Release cadence
+
+The app is pre-1.0 (`AGENTS.md`: "no backwards-compatibility promise"). Merging to `main` does not go live — the deployed site updates only on a `vX.Y.Z` release tag. Suggested cadence:
+
+- **After Wave 1:** release `v0.2.0` (1A fix + 7 + 8E — first user-visible improvements)
+- **After 1B:** release `v0.3.0` (rotation engine — the foundation)
+- **Wave 3 items:** release as they land, bundling related items (e.g. 1C + 9.P1 together as `v0.4.0`; Feature 3 Phase 1 as `v0.5.0` since it's a correctness-critical change worth its own release note)
+- **Wave 4:** individual releases per major feature
+
+### Dependency graph (simplified)
+
+```text
+Wave 1:  1A ──→ 1B (Wave 2)
+         7  (independent)
+         8E (independent)
+
+Wave 2:  1B.0 → 1B.1 → 1B.2 → 1B.3
+              ↗ Feature 2 spike (research, parallel)
+
+Wave 3:  1C ←── 1B
+         3.P1   (independent)
+         4      (independent)
+         9.P1 ← 1B
+         8C     (independent)
+
+Wave 4:  2 ←── Feature 2 spike
+         5      (independent, benefits from 8E)
+         3.P2 ← 7
+         8.AB ← 1C
+         9.P2 ← 9.P1
+         6      (after 1–5 settle)
+```
 
 ## Standing decisions
 
 - **Backwards compatibility:** Pre-1.0; no backwards-compatibility promise. The only output-visible change is 1A (plot orientation corrected). Removing diagonal presets does not change computed output — identical results are reachable via slider equivalences; document in changelog and help.
 - **birss-tables integration:** `birss-tables` is the project's own repo, not a third-party dependency. Build integration uses a Git submodule or pinned commit hash, a build step to typed JSON, and a CI assertion on expected row counts.
 - **Setting counts:** The settings analysis yields the *geometric* count (all distinct orientations). The *user-facing* count may be smaller when crystallographic convention restricts the allowed choices. Monoclinic: reduced from 3 to 2 (b/c; a-unique is not standard). Orthorhombic: all 3 axis orientations are standard in the ITC and exposed as-is.
+- **Mobile/desktop differentiation:** One codebase, one engine, responsive information hierarchy. Mobile is a **read-and-lookup** surface; desktop is a **manipulate-and-explore** surface. Anything requiring precise continuous control or wide symbolic rendering is desktop-first; anything answering "what does this crystal/cut do?" is mobile-core. Implementation uses pure Tailwind responsive breakpoints (`md:`, `lg:`) — no UA sniffing or `window.innerWidth` render logic. A narrow desktop window collapsing controls is correct behavior — width is the real constraint, not device class. Identical computation, state model, and URLs across viewports.
+- **Tab order and default view:** Explorer → Calculator → Simulator → Help. The Explorer is the default landing view — it shows the scope of the app (122 groups by crystal system and type) and invites browsing. The "OPEN IN CALCULATOR" button in the group popup provides the natural flow: browse → pick → analyze → simulate. Returning users who know their group use search directly (works from any tab). The current Calculator-first order with an empty "Select a point group" state is a dead landing page that communicates nothing.
 - **Oblique-axis Cartesian convention:** For triclinic and monoclinic systems the crystallographic axes are not orthogonal, but the engine works in an orthonormal Cartesian frame. The app adopts the standard crystal-physics convention (Hausühl 1983, based on IRE 1949; recommended by Matthies & Wenk 2009 for exactly these systems): **Z ⊥ c, Y ⊥ (c × a), X = Y × Z.** Combined with the app's z-unique (Birss) setting this gives: monoclinic → z ∥ c (unique axis), x ∥ a, y ∥ b*; triclinic → z ∥ c, y ∥ b* (⊥ c × a), x = projection of a onto the plane ⊥ c. The set of independent/zero components is convention-independent (verified: the symmetry group commutes with any in-plane rotation for groups 1, −1, 2, m, 2/m), but the numeric component values and simulated polarimetry orientations depend on this choice. This convention must be documented before golden fixtures for these systems are transcribed.
 
 ---
@@ -60,12 +161,12 @@ This piece covers the engine extension (lab-frame user rotations), rotated-path 
 
 - **Reference-surface model:** the crystal has a reference surface whose normal is one crystal axis (the preset). From there the user can **tilt** the surface (rotate the normal away from the beam) and **spin** it about its normal (azimuth). Preset = which crystal axis is the surface normal; tilt = φ_x, φ_y about lab-x, lab-y; azimuth = ψ about the normal = k = lab-z.
 - **Rotation frame:** user rotations are applied in the **lab frame** (left-multiplied), decoupled from the preset Euler angles. This avoids the gimbal-lock singularity that the crystal-frame composition `Ry·Rx·Rz` has at tx = 90° (the k||y preset, where φ_y and φ_z collapse onto the same axis). With lab-frame rotations, the three rotation generators are always (x̂, ŷ, ẑ) regardless of the preset — rank 3 everywhere.
-- **Eligible presets:** principal axes only (k||x, k||y, k||z) for now. The diagonal presets (k||xy, k||xz, k||yz) are removed as standalone buttons but remain reachable as tilted principal presets (k||xy = k||y + φ_y = −45°; k||xz = k||z + φ_y = −45°; k||yz = k||z + φ_x = 45°) — document this equivalence for reproducibility. The [hkl] surface generalization (parking lot) would bring diagonals back as first-class orientations; revisit the removal note when that lands.
+- **Eligible presets:** principal axes only (k||x, k||y, k||z) for now. The diagonal presets (k||xy, k||xz, k||yz) are removed as standalone buttons but remain reachable as tilted principal presets (k||xy = k||y + φ_y = −45°; k||xz = k||z + φ_y = −45°; k||yz = k||z + φ_x = 45°) — document this equivalence for reproducibility. The [hkl] surface generalization (Feature 9) would bring diagonals back as first-class orientations; revisit the removal note when that lands.
 - **Shared state:** φ_x, φ_y, ψ live in App.tsx, shared between Calculator and Simulator. Rotation state persists silently across view switches — the lab frame info already reflects the current orientation.
 
 #### Safety net: rotated-path test coverage (prerequisite)
 
-The 490+ existing tests all run at orientation (0,0) — the rotated code path has zero coverage. Before changing the rotation composition, capture golden references for rotated outputs:
+The 492 existing tests all run at orientation (0,0) — the rotated code path has zero coverage. Before changing the rotation composition, capture golden references for rotated outputs:
 
 - [ ] Add tests for k||x (0, −90) and k||y (90, 0) presets against known results
 - [ ] Ideally include at least one oblique-angle case from the literature
@@ -83,11 +184,12 @@ where R_preset = Ry(ty) · Rx(tx) aligns the chosen crystal axis with lab-z (k).
 
 Verified: rank 3 at all presets (no gimbal lock). ψ is the azimuth about lab-z (= k) uniformly for every preset; φ_x, φ_y are tilts about lab-x, lab-y.
 
-Changes required:
+Changes required (ordered — signature migration first, then engine extension):
 
-- [ ] `tensorProjection.ts`: build `R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset` (lab-frame outer rotations, not crystal-frame offset angles)
-- [ ] `calculateSHGExpressions`: add φ_x, φ_y, ψ parameters — consider switching to an options object (`{ groupName, tensorType, trType, thetaX, thetaY, phiX, phiY, psi, labFrameDisplayMode }`) to avoid positional-argument breakage (current signature has `labFrameDisplayMode` as the 6th positional arg after `thetaY`)
-- [ ] `App.tsx`: add φ_x, φ_y, ψ state (replace thetaZ)
+- [ ] **1B.0 — Signature migration (behavior-preserving).** Migrate `calculateSHGExpressions` from positional args to an options object (`{ groupName, tensorType, trType, thetaX, thetaY, labFrameDisplayMode }`) *before* adding new parameters. The current 6-positional-arg signature with `labFrameDisplayMode` as a trailing optional is already fragile; adding three more angles to it creates an 8-arg trap. This is an isolated, behavior-preserving refactor guarded by the existing 492 tests — the ideal first commit of 1B.
+- [ ] **Matrix primitives.** Introduce small, tested `rotX`/`rotY`/`rotZ` + `mat3mul` functions rather than extending the current hand-expanded inline matrix literal (`tensorProjection.ts:256-259`). The new composition `R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset` needs real matrix multiplication; hand-expanding a 4-matrix product would be error-prone. The primitives also make `R_preset` trivially swappable for the future `[hkl]` generalization.
+- [ ] `tensorProjection.ts`: build `R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset` using the new primitives
+- [ ] `App.tsx`: add φ_x, φ_y, ψ state (the lab-frame rotation angles; no `thetaZ` exists currently — these are new state alongside the existing `thetaX`/`thetaY` preset angles)
 - [ ] `useSimulatorState.ts`: pass user rotation angles through
 - [ ] `getLabFrameVectors`: update to the same lab-frame composition
 - [ ] All existing presets: (φ_x, φ_y, ψ) = (0, 0, 0) by default (no behavioral change)
@@ -131,7 +233,7 @@ With R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset, the mapping is **preset-ind
 **Status:** Planning — ship after 1B engine is green
 **Priority:** High
 
-Sliders, numeric inputs, mobile layout, and the Calculator interim state. This is where the user-facing rotation experience lives — no engine changes.
+Sliders, numeric inputs, mobile layout, the Calculator interim state, and the Simulator component-list fix. This is where the user-facing rotation experience lives — no engine changes. The component-list and slider improvements are cross-platform (they improve desktop directly) and are prerequisite for a usable mobile layout.
 
 #### Calculator interim state (1B shipped, Feature 2 not yet)
 
@@ -146,21 +248,112 @@ The Calculator does not apply the rotation and shows source terms at the base pr
 - [ ] All three rotation axes can be active simultaneously
 - [ ] Mathematical Model section shows numeric formulas for now — symbolic phi comes with Feature 2
 
-#### Mobile layout
+#### Component-list layout fix (cross-platform, prerequisite for mobile)
 
-On mobile, controls stack above plots, so adding sliders lengthens the scroll to the plots:
+A defect that is not mobile-specific but is worst on mobile: at low-symmetry groups with many independent components (>4–5), the Simulator's left-hand component list grows unbounded and pushes the polar plots out of the viewport. Adjusting a component low in the list (e.g. χ_zxx, χ_zxy) means the plot is no longer visible — the user changes a slider and cannot see the effect.
 
-- [ ] Flip mobile layout: plots above controls, or use a sticky/collapsible controls panel, so the plot remains visible while dragging sliders
-- [ ] Use existing `motion` library for accordion/collapse transitions (no new dependency); respect `prefers-reduced-motion`
+**Root cause:** each component block renders ~6 line-heights: title row + amplitude (label row + slider row) + phase (label row + slider row) + spacing + divider. The list height scales linearly and the plot column is top-anchored, so the list dictates scroll position and decouples from the (static-height) plot.
+
+**Fix:**
+
+**A — Sticky plot column.** The plot column gets `position: sticky; top: 0` so it stays in view while the component list scrolls. Structural fix for "I can't see the effect." On mobile this becomes the layout flip (plot sticky on top, list below).
+
+- [ ] Add `position: sticky; top: 0` to the plot column (desktop: right column stays visible while scrolling the left component list)
+- [ ] On mobile: plot on top (sticky), scrollable component list below
+
+**B — Condensed component blocks.** Collapse each block from ~6 line-heights to ~3:
+
+```text
+χ_xxz                    0.58
+[========O===========]        ← Amplitude, full width
+▸ Phase                       ← collapsed by default when φ = 0
+```
+
+The space saving comes from *collapsing the phase by default*, not from putting two sliders on one line — that keeps each slider at full width and avoids the too-narrow-to-drag problem. Amplitude always occupies a full-width row.
+
+- [ ] Collapse phase section by default when φ = 0
+- [ ] Show phase value in collapsed header when φ ≠ 0 (e.g. `▸ Phase: 90°`) — never hide a non-zero value
+- [ ] When φ ≠ 0, the value stays surfaced in the header (and the block may default to expanded)
+
+#### Slider behavior (applies to all slider types: amplitude, phase, rotation)
+
+Consistent behavior across amplitude, phase, and the rotation sliders:
+
+- **Soft / continuous** — no hard snapping; arbitrary values (e.g. amplitude 0.58) stay reachable
+- **Coupled numeric input** next to each slider for exact values. Slider = coarse, numeric field = exact — so 90° is trivially reachable without snap mechanics. The same pattern specified for the rotation sliders above extends to amplitude and phase
+- **Phase slider additionally shows tick marks at 90 / 180 / 270** (visual reference; optional soft-dock near ticks). Amplitude has no ticks (no privileged values)
 
 #### UI placement
 
 Place rotation controls directly below the k-vector preset buttons, in the same "Crystal Orientation" section. Toggle + slider + numeric input on one line per axis. When no rotation is active, the section looks the same as today.
 
+#### Current mobile defects (verified at 375px)
+
+Pre-existing layout problems observed at iPhone X width (375px), independent of the planned 1C layout work. These should be fixed as part of 1C or earlier.
+
+**A — Calculator tab bar: invisible third tab.** The three Calculator tabs ("TENSOR COMPONENTS", "INDUCED RESPONSE", "SOURCE TERMS") exceed 375px. The tab bar has `overflow-x: auto` with `hide-scrollbar` — technically scrollable, but with **zero visual affordance** that a third tab exists. "SOURCE TERMS" is entirely off-screen; a user who doesn't think to swipe will never find it. Affects every group, not just low-symmetry. The planned mobile Calculator redesign (single scroll page, no tabs) eliminates this, but until that ships the current state is a discoverable UX defect.
+
+- [ ] Near-term fix: either add a scroll fade/gradient affordance to the tab bar, or abbreviate tab labels on mobile ("Components" / "Induced" / "Source")
+
+**B — Simulator polarimetry tab "ANALYZER" truncates to "ANAL...".** The three polarimetry tabs ("ANISOTROPY", "POLARIZER", "ANALYZER") overflow similarly. Unlike the Calculator tabs, these polarimetry tabs are **not** removed by the planned mobile redesign — they'll still exist after 1C. The truncation is awkward at any symmetry.
+
+- [ ] Abbreviate to "Aniso" / "Pol" / "Ana" on mobile, or use icons, or add scroll affordance
+
+**C — Formula overflow on existing numeric formulas.** The induced-response formulas for low-symmetry groups already overflow the viewport — e.g. `P_x = χ_xxx E_x² + 2χ_xxy E_x E_y +` hard-clips at the right edge with the trailing `+` dangling. This is the *current* numeric output, not the future symbolic phi-dependent formulas (Feature 2). The roadmap only flags formula width as a Feature 2 concern, but it exists today for triclinic/monoclinic groups. Acceptable if scrollable with a visible affordance; the current hard-clip with no indication is the problem.
+
+- [ ] Add `overflow-x: auto` to formula containers with a visible scroll indicator (gradient fade or scrollbar)
+
+#### Mobile layout
+
+On mobile, controls stack above plots, so adding sliders lengthens the scroll to the plots. The component-list fix (sticky plot + condensed blocks) resolves the structural problem; the additional mobile-specific decisions below shape the information hierarchy.
+
+##### Mobile information hierarchy
+
+A priority order that all mobile layout decisions derive from:
+
+1. **Primary — SHG tensor components.** The core lookup; reachable with no clicks and minimal scroll.
+2. **Secondary — induced P / M / Q terms** (induced response). Directly below the components.
+3. **Desktop-primary — source terms.** Cut-dependent + wide (Feature 2). Collapsed or behind explicit tap-to-expand on mobile (see Feature 2, "prepare for wide formulas on mobile").
+4. **Bonus — coordinate-system definitions, axis conventions, symmetry operations.** Valuable (especially for students), but never in the way. Collapsed, below the result.
+5. **Bonus, but popular — the Simulator.** Mirrors the primary measurement. Keep accessible and uncluttered; the component-list fix above (sticky plot, condensed blocks) is all it needs.
+
+##### Calculator on mobile
+
+On mobile the Calculator drops the tab bar. Source terms (the cut-dependent, wide tab) is desktop-primary, leaving components and induced response — both cut-independent crystal-frame quantities — which stack on **one scroll page, components on top**. No tab-switch sits between the user and the primary lookup. (Desktop keeps the three-tab layout.)
+
+The three Calculator tabs split cleanly along cut-dependence, and that split coincides with width: the two cut-independent tabs (components, induced response) are also the narrow ones that fit a phone; the one cut-dependent tab (source terms) is also the wide one.
+
+##### Simulator on mobile
+
+The component-list fix (sticky plot on top, scrollable component list below, condensed blocks, collapsed phase) is the core mobile Simulator treatment. Rotation controls on mobile: k-vector presets only (k||x, k||y, k||z), continuous sliders hidden (desktop-only).
+
+**Compact setup summary (highest-impact mobile change).** The Simulator re-renders the full setup panel (Tensor Classification, Time Reversal, k-vector presets, Lab Frame orientation) that the Calculator already shows. The state is shared in App.tsx — only the UI is duplicated. On desktop the duplication is convenient (no tab-switching to change a preset). On mobile it means the **entire first viewport is setup controls** with zero plots or sliders visible (verified at 375px). Replace the full setup panel with a one-line summary on mobile — e.g. `3m · ED · i-type · k∥z [Change]`. Tapping "Change" either expands the full controls inline or navigates to the Calculator. This eliminates ~800px of vertical space before the first slider or plot, and stacks with the sticky-plot fix rather than competing with it.
+
+- [ ] Compact setup summary line on mobile Simulator (group · tensor type · TR symmetry · k-preset), with expand/change affordance
+- [ ] Collapse Lab Frame orientation info (`x_crys = X_LAB` etc.) on mobile — expert context, not needed for the "glance at a plot" use case; show on tap
+- [ ] Deduplicate the polarimetry explanatory note ("The angle shown in the plots represents the polarizer angle. 0° corresponds to the Lab X-axis…") — currently repeated below every plot pair; show once at the bottom or as a ⓘ tooltip on the plot heading
+
+##### Mobile slimming targets (ranked by impact)
+
+- [ ] **Compact Simulator setup summary** (see above) — largest single vertical saving on the Simulator page
+- [ ] **Setup bar — collapse at defaults.** TENSOR CLASSIFICATION (default Electric Dipole) and TIME-REVERSAL SYMMETRY (default i-Type) collapse to a compact indicator on mobile when defaults are active; expand on tap. Both defaults confirmed: Electric Dipole is the standard; i-Type is an acceptable default. Largest vertical saving on the Calculator — keeps components near the top.
+- [ ] **Classification sidebar — collapsed below result.** Point-group number, crystal system, symmetry type, operations, axis orientation are bonus info (#4 in hierarchy). On mobile they move *below* the components/induced result, inside a collapsed expandable.
+- [ ] **Tensor Notes — collapse.** The help-pointer notes box becomes a collapsed expandable on mobile.
+
+##### Layout implementation
+
+- [ ] Flip mobile layout: plots above controls (sticky plot on top, component list below)
+- [ ] Use existing `motion` library for accordion/collapse transitions (no new dependency); respect `prefers-reduced-motion`
+- [ ] `hidden md:block` for source-term tab on mobile; tab bar itself hidden on mobile (single scroll page)
+- [ ] Caveat: `hidden md:block` keeps DOM elements mounted; only if a mobile-irrelevant component is genuinely expensive (e.g. heavy KaTeX rendering) consider a breakpoint-gated lazy mount — a point optimization, not an architecture change
+
 #### Acceptance criteria (1C)
 
 - Simulator: phi sliders change the polar plots live without reload
 - Calculator shows base-orientation source terms with informational note when rotation is active
+- Sticky plot stays visible while scrolling the component list (desktop and mobile)
+- Condensed component blocks: phase collapsed at φ = 0, non-zero phase value visible in collapsed header
+- Mobile: components + induced response on one scroll page; source terms behind tap-to-expand
 - Mobile layout keeps plots visible while adjusting sliders
 
 ---
@@ -191,7 +384,7 @@ The third angle (ψ) enlarges the trig-polynomial algebra and the formatter. Whe
 - [ ] Display source terms as LaTeX with phi dependence
 - [ ] Compact display for cross-terms (sin·cos products) — handle three-way cross-terms (φ_x, φ_y, ψ) when multiple rotation axes are active
 - [ ] Update crystal orientation / lab frame info symbolically
-- [ ] Prepare for wide formulas on mobile: clear scroll affordance or "tap to expand" for long KaTeX expressions
+- [ ] Prepare for wide formulas on mobile: clear scroll affordance or "tap to expand" for long KaTeX expressions. Note: formula overflow already exists for the *current* numeric output in low-symmetry groups (see 1C "Current mobile defects", item C) — Feature 2 makes it worse but the fix should land with or before 1C
 
 #### Simulator (Mathematical Model section)
 - [ ] Simplified symbolic source terms with phi dependence in Mathematical Model section
@@ -247,7 +440,7 @@ The remaining 29 BW groups are single-setting. The 32 classical and 32 grey grou
 
 #### Phase 1 (spike): 8 time-reversal-driven groups
 
-- [ ] Implement the similarity transform approach: `G' = S · G · S⁻¹` applied to the existing, test-covered generators (not hand-written generator sets — avoids transcription errors and leverages the 490+ tests guarding the base generators). For Phase 1, S is the known geometric swap rotation: Rz(30°) for hexagonal, Rz(45°) for tetragonal — derived from the geometry, not an ITC/Litvin lookup. ITC/Litvin is used for *validating* the resulting tensor forms and for Phase 2 classical conventions.
+- [ ] Implement the similarity transform approach: `G' = S · G · S⁻¹` applied to the existing, test-covered generators (not hand-written generator sets — avoids transcription errors and leverages the 492 tests guarding the base generators). For Phase 1, S is the known geometric swap rotation: Rz(30°) for hexagonal, Rz(45°) for tetragonal — derived from the geometry, not an ITC/Litvin lookup. ITC/Litvin is used for *validating* the resulting tensor forms and for Phase 2 classical conventions.
 - [ ] Cover the 8 Mechanism B groups (4 tetragonal + 4 hexagonal)
 - [ ] UI: setting selector in the Calculator — a **labeled toggle** (e.g. "σ_v primed" / "σ_d primed") shown only when the selected group has multiple settings. Phase 1 scope: the label identifies *which* mirror set is primed; defer full visual symmetry explanations to the Explorer notation panel (Feature 5)
 - [ ] For multi-setting groups not yet implemented in Phase 1 (~21 groups): show a **passive indicator** ("N settings — selection coming") so users learn the concept exists without encountering a dead control
@@ -315,17 +508,34 @@ The two hardcoded colors (`#E4E3E0`, `#141414`) appear at ~194 occurrences (160�
 
 Extend the Explorer to surface more information from the Birss tables beyond what is currently shown. **Hermann–Mauguin remains the binding representation in the app.** Extra notations are convenience, not a replacement.
 
+### Phase 0: Explorer restructure (per-crystal-system tabs)
+
+The current Explorer is one long scroll of all seven crystal systems stacked vertically (works, but long; the narrow-window layout already stacks Type I/II/III sections cleanly). Restructure into **one tab per crystal system**, each tab containing:
+
+- [ ] The point-group grid for that system (Type I / II / III), as today
+- [ ] A crystal-system reference panel: axis-system definition (a-, b-, c-axis labeling, angles, the Cartesian convention from the oblique-axis convention in Standing decisions), reference axes, and the characteristic symmetry. This is the natural home for the oblique-axis convention text (Feature 7) and the cut-preset table from Feature 9 — one canonical place per system rather than scattered tooltips.
+
+Rationale: the per-system info (axis definitions, conventions) is currently homeless — it belongs to a *system*, not a *group*, so a tabbed Explorer gives it a home without cluttering the group popups. Mobile: tabs collapse to a system selector (dropdown or horizontally scrollable tab strip); the existing stacked grid renders below.
+
 ### Phase 1: Read-only reference info (enrichment of existing UI)
 
 Uses generators and group data already in the codebase. Symmetry operations are already shown via `OperationsModal`; `AxisOrientationInfo` exists for the calculator. Phase 1 adds generators and a notation panel, reusing existing components rather than duplicating.
 
 #### Crystal system level
-- [ ] Coordinate system information (a-axis, c-axis labeling)
-- [ ] Reference axes
+- Moved to Phase 0 (per-system reference panel in the tabbed Explorer) — coordinate system info and reference axes now live there, one canonical place per system.
 
-#### Point group level
-- [ ] Generators display (from existing GENERATORS table)
-- [ ] Notation panel: HM (binding) + Schubnikov (always) + Schoenflies (classical groups only)
+#### Point group level (enriched group popup)
+
+The group popup (currently `OperationsModal`: symmetry operations + "Open in Calculator") is enriched to surface everything derivable for a group from the Birss tables. Target content, with source table per row:
+
+- [ ] Symmetry operations (already shown)
+- [ ] Generators display (from existing GENERATORS table; cross-check against `table-3` classical / `table-6` magnetic incl. primed operations)
+- [ ] Notation panel: HM (binding) + Shubnikov (always) + Schoenflies (classical groups only) — `table-3` (classical), `table-6` (magnetic, Shubnikov only)
+- [ ] i-tensor / c-tensor symbol class — `table-7` (grey groups: i ≡ classical parent, c ≡ 0, per the repo's grey-group note; derive rather than look up)
+- [ ] Tensor forms for arbitrary rank/type (rank 0–4, polar/axial) — `table-4a` (symbol-class gateway) → `table-4b`–`4f`; distinct from the Calculator's SHG-specific contracted forms
+- [ ] Alternate-setting flag where applicable — `table-7` rows 16/37/71 (parenthesized symbols); ties into Feature 3
+
+The join key between app and tables is the HM string (verified: app's BW symbols match table-6's "International" column exactly). Normalization needed: overbar vs. leading `-`, plus the three parenthesized table-7 symbols.
 
 #### Notation coverage (from birss-tables)
 
@@ -342,13 +552,23 @@ Uses generators and group data already in the codebase. Symmetry operations are 
 - [ ] Raw tensor forms for arbitrary rank and type (distinct from Calculator, which shows SHG-specific contracted forms)
 - [ ] Axis settings via ITC (Birss conventions)
 
+### Point-group selection on mobile
+
+Two existing selection patterns; the mobile question is which carries over:
+
+1. **Search combobox** (header search field): filter tabs (ALL / ORDINARY / GRAY / BLACK & WHITE), HM notation + crystal system per row. This is the **primary mobile entry** — a combobox with filter chips works well on a phone. Caveat: typing HM notation on a phone keyboard (apostrophe for primed, overbar for 1̄) is awkward, so mobile selection should lean on **filter-chips + scroll** rather than exact text entry. The narrow-window layout already works.
+
+2. **Explorer grid** (browse by system + type): the existing narrow-window Explorer already stacks Type I/II/III sections and wraps the group chips cleanly — it works on mobile today. However, the Explorer is being restructured into per-system tabs (Phase 0 above), so the mobile Explorer flow should be derived from that restructure, not the current grid. On mobile the per-system tabs collapse to a system selector (dropdown or horizontally scrollable tab strip) with the stacked grid below.
+
+3. **Group detail popup** (`OperationsModal`): being enriched in Phase 1 above. On mobile this is a full-screen sheet rather than a centered modal; progressive disclosure (expandable detail sections) is the existing acceptance criterion.
+
+**Decision:** search combobox is the primary mobile selection path; the Explorer (mobile) is deferred to follow Phase 0. No new selection mechanism needed — both existing patterns are mobile-viable, one now, one after restructure.
+
 ### Notes
 
 - Use progressive disclosure: expandable "Details" sections to avoid clutter
-- Phase 1 data sources: existing GENERATORS table in codebase
+- Phase 1 data sources: existing GENERATORS table in codebase + birss-tables (see join key and normalization notes in Phase 1 above)
 - Phase 2 data sources: birss-tables repo (tables 3, 4a–4f, 6, 7)
-- Join key between app and tables: HM string (verified: app's BW symbols match the "International" column of table-6 exactly)
-- Normalization needed: overbar rendering vs. leading `-`, plus three parenthesized symbols in table-7 (rows 16/37/71, alternate axis setting)
 
 ---
 
@@ -456,7 +676,7 @@ Specialized to the app's actual convention. The app uses the Birss (first) setti
   - y ⊥ c × a  (the b\* direction, normal to the a–c plane)
   - x = y × z  (the projection of a onto the plane ⊥ c — i.e. *neither* a *nor* a\*, but a flattened into the plane; equals a exactly only in the monoclinic case where a ⊥ c)
 
-This decision must be made before golden fixtures for these systems are transcribed.
+This is recorded as a standing decision at the top of this document; it must be in place before golden fixtures for these systems are transcribed.
 
 **Provenance caveat for fixtures.** Two monoclinic settings exist — *first/Birss* (C₂ ∥ c, Z ∥ c) and *second/ITC* (C₂ ∥ b, Y ∥ b). The app uses the first (Birss) setting, so fixtures transcribed from Birss (1966) — the primary golden source — match the app's frame directly, with no permutation. Sources written in the ITC/b-unique (second) setting (e.g. Nye 1957) require the first↔second-setting axis permutation (Matthies & Wenk eqs. 1–4, 23) before transcription. Record the source's setting in every triclinic/monoclinic fixture note, and whether a permutation was applied.
 
@@ -502,6 +722,115 @@ This decision must be made before golden fixtures for these systems are transcri
 
 ---
 
+## 8. Desktop Layout Overhaul
+
+**Status:** Planning
+**Priority:** Medium — structural UX improvements; defer until after 1C settles (shares layout concerns)
+
+The desktop layout has several structural inefficiencies identified by visual inspection at 1440×900. These are design-level issues, not bugs — the app works, but the information hierarchy and space allocation are suboptimal. The 1C mobile work (sticky plots, condensed blocks, collapsible phase) overlaps here; this section captures the desktop-specific concerns.
+
+### Findings (verified at 1440×900)
+
+#### A — Classification sidebar permanently consumes 1/3 of the viewport
+
+The sidebar (group name, crystal system, symmetry type, operations, axis orientation) takes `lg:col-span-1` of a 3-column grid — ~450px at 1440px width. This information is consumed once and never changes while working with a group. It permanently reduces the main content area to 2/3 width.
+
+- [ ] Replace permanent sidebar with a compact persistent group indicator (e.g. `3m · Trigonal · Non-Centro`) and make the full classification available as an expandable panel. Give the main content the full width.
+
+#### B — Setup controls above the fold on every view
+
+Tensor Classification (ED/MD/EQ) + Time Reversal (i/c) render as two full-width rows of buttons at the top of both the Calculator and Simulator. Combined with k-vector presets and Lab Frame info in the Simulator, the first viewport is entirely controls — no results visible without scrolling. These controls share state via App.tsx but render independently in both views.
+
+- [ ] Unify into a single compact control strip shared across Calculator and Simulator — e.g. `3m · ED · i-type · k∥z` in a persistent bar below the header. Tapping any segment opens inline selectors. This eliminates view-switching duplication and puts results above the fold.
+
+This is the desktop counterpart to the mobile "compact Simulator setup summary" (1C). The difference: on mobile the Simulator inherits from the Calculator; on desktop both views share a single strip. Same principle, same state architecture, different visual treatment.
+
+#### C — Zero-result states are uninformative
+
+When a centrosymmetric group + ED + i-type yields zero SHG, the page shows three large lines: `S_X ∝ P_x = 0`, `S_Y ∝ P_y = 0`, `S_Z ∝ P_z = 0`. No explanation. The centrosymmetric badge is in the sidebar, but the connection to the zero result isn't drawn. Similarly, the Simulator shows "No non-zero components for this configuration" with an empty plot — no guidance on what to try instead.
+
+This is the single most important physical insight for a centrosymmetric group — ED-SHG is forbidden by symmetry — and it's presented as blank space.
+
+- [ ] When all source terms vanish, show a concise inline explanation: *"ED SHG is symmetry-forbidden for centrosymmetric groups"* + quick-action buttons: `Try c-type` / `Try EQ`
+- [ ] When the Simulator has no non-zero components, show the same explanation and quick-switch affordance
+
+#### D — No visual hierarchy among section labels
+
+The app uses `text-[10px] uppercase tracking-[0.2em]` for virtually all labels: CLASSIFICATION, TENSOR CLASSIFICATION, TIME-REVERSAL SYMMETRY, CRYSTAL ORIENTATION, INDEPENDENT TENSOR COMPONENTS, SHG INTENSITY POLARIMETRY. They all look identical — same size, weight, and opacity. There's no distinction between primary structural divisions and secondary sublabels. Everything competes equally for attention.
+
+- [ ] Two levels of label treatment: primary section headers get slightly larger or bolder styling; secondary labels stay at 10px. Improves scannability.
+
+#### E — Tab order change: Explorer as default view
+
+See Standing decisions: Explorer → Calculator → Simulator → Help. The Explorer replaces the empty "Select a point group" landing page as the default view. Implement as part of this overhaul or independently — it's a one-line change (`useState` default + tab order).
+
+- [ ] Change default view from Calculator to Explorer
+- [ ] Reorder navigation tabs: Explorer → Calculator → Simulator → Help
+
+### Relationship to other features
+
+- **1C (mobile layout):** shares the sticky-plot fix, condensed-block design, and the concept of a compact setup summary. Desktop applies the same principles with wider layout.
+- **Feature 3 (settings):** the collapsible sidebar frees space for the setting selector that Feature 3 adds to the Calculator.
+- **Feature 5 (Explorer enrichment):** the Explorer-as-landing-page decision makes the Phase 0 restructure (per-system tabs) higher value — the landing page becomes the tabbed Explorer.
+
+### Sequencing
+
+The tab-order change (E) and zero-result states (C) can ship independently at any time. The layout changes (A, B) are larger and should land after 1C to avoid conflicting layout work. Label hierarchy (D) is cosmetic and can land with the color tokens (Feature 4) or independently.
+
+---
+
+## 9. [hkl] Surface Orientation
+
+**Status:** Planning
+**Priority:** Medium — depends on Feature 1B (reference-surface model + R_preset architecture); can ship after 1B independently of Features 2 and 3
+**Depends on:** Feature 1B (R_preset must accept arbitrary alignment rotations)
+
+The reference-surface model (Feature 1B) generalizes cleanly: "align a crystal axis to k, then tilt/spin" becomes "align [hkl] to k, then tilt/spin." Only R_preset changes (from a principal-axis alignment to a general alignment rotation); the engine already accepts arbitrary rotations. Feature 1B explicitly architects R_preset for this: "near-zero cost — one rotation matrix, so the later [hkl] generalization is a UI/input change, not an engine rewrite."
+
+### Phase 1: curated cut presets
+
+Crystallographically-labeled principal-axis presets that answer the common use case "which components are excitable for my sample cut?" Derived from the app's Cartesian frame (x ∥ a, y = lab-frame perpendicular, z ∥ c):
+
+| System | [001] | x | y | [110] | [111] |
+|---|---|---|---|---|---|
+| Cubic | ✓ | [100] | [010] | ✓ | ✓ |
+| Tetragonal | ✓ | [100] | [010] | ✓ | — |
+| Orthorhombic | ✓ | [100] | [010] | — | — |
+| Hexagonal / Trigonal | ✓ | [100] | [1̄20] | — | — |
+| Monoclinic | ✓ | [100] | [010] (∥ b) | — | — |
+| Triclinic | ✓ | [100] | [010] (∥ b\*) | — | — |
+
+Preset rules:
+- [001] = default cut, parallel to the principal symmetry axis
+- x and y = lattice directions (see consistency rule above)
+- [110] = diagonal ⊥ [001], **only** cubic + tetragonal (in orthorhombic a ≠ b, so [110] is not symmetry-distinguished)
+- [111] = cubic only
+
+- [ ] Add crystallographically-labeled cut presets to `K_ORIENTATION_PRESETS` (or a new curated-preset list), replacing the abstract k∥x / k∥y / k∥z labels with [100] / [010] / [001] per system
+- [ ] Add [110] preset for cubic and tetragonal systems
+- [ ] Add [111] preset for cubic systems
+- [ ] On mobile: curated presets are the primary orientation control (continuous sliders hidden per 1C mobile spec)
+
+### Phase 2: free Miller-index [hkl] input
+
+- [ ] Miller-index input field ([h k l]) alongside curated presets
+- [ ] Compute R_preset from arbitrary [hkl] → lab-z alignment rotation
+- [ ] Under this model, the removed diagonal presets (k∥xy etc. from 1B) return as first-class [hkl] surface orientations, not slider workarounds
+
+### Azimuth-zero convention (confirmed)
+
+For principal-axis presets ([001], [100], [010]): the surface normal aligns with an app axis, so the azimuth reference is trivial — no convention needed.
+
+For non-principal surfaces ([110], [111], arbitrary [hkl]): the **projection of [001] onto the sample surface** defines azimuth = 0. This depends only on crystallographic directions, not lab geometry, so it is reproducible. This convention was originally noted in the 1B design decisions; it becomes concrete and binding here.
+
+### Scope note
+
+These presets affect only **source terms** and the polarimetry simulation (orientation-dependent quantities). Tensor components and induced response are cut-independent crystal-frame quantities and do not use the presets.
+
+For the hexagonal-manganite domain (mostly c-cut / a-cut = principal axes), the Phase 1 principal-axis presets cover the standard cases. Phase 2 is for non-standard cuts or other material systems.
+
+---
+
 ## Ideas / Parking Lot
 
 Space for ideas that aren't yet fleshed out or prioritized. Deferred pending deliberate design decisions.
@@ -511,6 +840,6 @@ Space for ideas that aren't yet fleshed out or prioritized. Deferred pending del
 - **Save/load simulator state**: persist and restore simulator configurations (point group, tensor type, orientation, amplitudes, phases) for complex or iterative workflows. Open design question: file download/upload vs. URL-encoded permalink (makes configurations citable). Schema versioning needed.
 - **Circular polarization basis**: source terms expressed in circular basis (E_± = (E_X ± iE_Y)/√2) for experiments with circularly polarized light. Unitary transformation of the existing source term polynomials — straightforward once the symbolic engine (Feature 2) exists.
 - **Transmission vs reflection geometry**: distinguish between transmission and reflection SHG geometries. Reflection introduces Fresnel coefficients and refractive indices at ω and 2ω — more complex, may be better as a separate "advanced mode" rather than the default. The current model gives the nonlinear source polarization, which is geometry-agnostic.
-- **[hkl] surface generalization**: the reference-surface model (Feature 1B) generalizes cleanly — "align a crystal axis to k, then tilt/spin" becomes "align [hkl] to k, then tilt/spin." Only R_preset changes (from a principal-axis alignment to a general alignment rotation); the engine already accepts arbitrary rotations. Two new requirements: (1) a Miller-index [hkl] input alongside curated presets, and (2) an azimuth zero convention for non-principal surfaces (which in-plane crystal direction is "up" at ψ = 0). Under this model, the removed diagonal presets (k||xy etc.) return as first-class surface orientations, not slider workarounds. For the hexagonal-manganite domain (mostly c-cut / a-cut = principal axes), the principal-axis presets cover the standard cases.
+- **Voigt notation (d-tensor)**: optional alternative display for χ^(2) tensor components using contracted Voigt notation. The SHG tensor χ^(2)_ijk is symmetric in (j,k); Voigt contracts the pair to a single index (xx→1, yy→2, zz→3, yz→4, xz→5, xy→6), giving a 3×6 matrix d_iα. This is the standard notation in nonlinear optics textbooks (Boyd, Shen) and materials databases. Pure display change — the engine already computes the full tensor; Voigt is a trivial index mapping. Open decisions: (1) whether to include the factor ½ (d = ½χ^(2), Boyd convention) or not; (2) display as a 3×6 matrix grid or as a component list (d₃₁, d₃₃, …); (3) whether to extend to rank-4 EQ tensors (Voigt contracts the last two indices, giving 9×6). Could be a toggle on the Components tab alongside the existing full-index display.
 - **Accessibility pass**: focus states for preset/toggle buttons, `aria-label`s for lucide icons, keyboard operation of sliders. Currently absent.
 - **PWA enhancement**: the app is already installable via `vite-plugin-pwa` — a discreet install hint and offline support would benefit lab use without network.

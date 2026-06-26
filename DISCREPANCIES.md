@@ -1,7 +1,7 @@
-# Discrepancy Report: birss-app vs. birss-book
+# Discrepancy Report: birss-app vs. birss-tables
 
 Tracks differences found between the app's data/logic and the authoritative transcriptions
-in [manganite/birss-book](https://github.com/manganite/birss-book).
+in [manganite/birss-tables](https://github.com/manganite/birss-tables).
 
 Each section covers one comparison pass. Items are classified as:
 - **Bug** — the app is wrong and should be fixed
@@ -12,7 +12,7 @@ Each section covers one comparison pass. Items are classified as:
 
 ## Pass 1 — 32 Classical Point Groups (names, crystal systems, symmetry operations)
 
-**Source:** `birss-book/table-3.md` vs. `src/data/pointGroups.ts` + `src/services/symmetryGroups.ts`
+**Source:** `birss-tables/table-3.md` vs. `src/data/pointGroups.ts` + `src/services/symmetryGroups.ts`
 
 ### Crystal systems
 
@@ -48,7 +48,7 @@ All three are equivalent descriptions of the same operations.
 
 ## Pass 2 — 32 Classical Point Groups (coordinate system conventions and generator definitions)
 
-**Source:** `birss-book/conventions-reference.md` §1 and §4, `birss-book/table-4a.md` (axis orientation column)
+**Source:** `birss-tables/conventions-reference.md` §1 and §4, `birss-tables/table-4a.md` (axis orientation column)
 vs. `src/services/symmetryGroups.ts` (GENERATORS table, lines 109–142)
 
 ---
@@ -212,7 +212,7 @@ vertex is "the reference vertex."
 
 ---
 
-### Internal inconsistency in birss-book for -6m2 (RESOLVED)
+### Internal inconsistency in birss-tables for -6m2 (RESOLVED)
 
 The original (printed) `table-3.md` listed generators σ(2), σ(5), σ(6) for -6m2, which was
 **inconsistent** with `table-4a.md`:
@@ -260,15 +260,15 @@ The app still carries the wrong **name** (`-62m` instead of `-6m2`) — see Find
 
 | # | Finding | Classification |
 |---|---|---|
-| 11 | `table-3.md` generator σ(2)=[2_y] for -6m2 was inconsistent with `table-4a.md` `-2//y` — misprint now corrected to σ(4)=[-2_y] | **RESOLVED** — birss-book corrected |
+| 11 | `table-3.md` generator σ(2)=[2_y] for -6m2 was inconsistent with `table-4a.md` `-2//y` — misprint now corrected to σ(4)=[-2_y] | **RESOLVED** — birss-tables corrected |
 | 12 | App generator [2_x] for `-62m` (vertex at x) now matches corrected `table-3.md`, `table-4a.md`, and ITA; differs only in choice of generating element (C₂ vs mirror) | Notation variant |
-| 13 | `table-3.md` originally listed σ(4),σ(4),σ(6) for 6mm — two identical generators cannot generate C₆v; corrected to σ(3),σ(4),σ(6) | **Resolved** — birss-book corrected; app was unaffected (used correct generators) |
+| 13 | `table-3.md` originally listed σ(4),σ(4),σ(6) for 6mm — two identical generators cannot generate C₆v; corrected to σ(3),σ(4),σ(6) | **Resolved** — birss-tables corrected; app was unaffected (used correct generators) |
 
 ---
 
 ## Pass 3 — Magnetic Point Group Names (Type II grey + Type III black-and-white)
 
-**Source:** `birss-book/table-6.md` vs. `src/data/pointGroups.ts`
+**Source:** `birss-tables/table-6.md` vs. `src/data/pointGroups.ts`
 
 ---
 
@@ -315,7 +315,7 @@ labels it `-4'2'm`. This parallels Finding 1 (`-6m2` vs. `-62m`) for the tetrago
 
 ## Pass 4 — Magnetic Point Group Generators (Type II grey + Type III black-and-white)
 
-**Source:** `birss-book/table-6.md` (columns "Generating matrices of subgroup" and "Additional
+**Source:** `birss-tables/table-6.md` (columns "Generating matrices of subgroup" and "Additional
 generating matrix") vs. `src/services/symmetryGroups.ts` (GENERATORS table, lines 144–237)
 
 ---
@@ -420,7 +420,7 @@ groups are identical.
 
 ## Pass 5 — Magnetic Point Group Symmetry Operations (Type II + Type III)
 
-**Source:** `birss-book/table-6.md` (column "Symmetry operators") vs. `src/services/symmetryGroups.ts`
+**Source:** `birss-tables/table-6.md` (column "Symmetry operators") vs. `src/services/symmetryGroups.ts`
 (`getSymmetryOperations()` output for all 90 magnetic groups)
 
 ---
@@ -448,7 +448,7 @@ group operations, with the addition of prime placement:
 
 | # | Finding | Classification |
 |---|---|---|
-| 20 | App's `6'/mmm'` and `6'/m'mm'` have their names swapped relative to the book; additionally `6'/mm'm` is missing as a name. (Note: a typo in birss-book Table 7 that wrote `6'/mmm'` instead of `6'/m'mm'` for the H=-3m group has been corrected — see Pass 6, Finding 21.) | **Bug** |
+| 20 | App's `6'/mmm'` and `6'/m'mm'` have their names swapped relative to the book; additionally `6'/mm'm` is missing as a name. (Note: a typo in birss-tables Table 7 that wrote `6'/mmm'` instead of `6'/m'mm'` for the H=-3m group has been corrected — see Pass 6, Finding 21.) | **Bug** |
 
 **Finding 20 — `6'/mmm'` / `6'/m'mm'` / `6'/mm'm` name swap**
 
@@ -509,8 +509,8 @@ the generators and operations are correct, only the name is wrong.
 ## Pass 6 — Cross-reference: ITA Table 1.5.2.3 vs Book Tables 6 and 7 (all 90 magnetic point groups)
 
 **Source:** International Tables for Crystallography Vol. D, Chapter 1.5, Table 1.5.2.3
-(Borovik-Romanov, Grimmer & Kenzelmann, 2013) vs. `birss-book/table-6.md` and
-`birss-book/table-7.md`
+(Borovik-Romanov, Grimmer & Kenzelmann, 2013) vs. `birss-tables/table-6.md` and
+`birss-tables/table-7.md`
 
 ---
 
@@ -631,7 +631,7 @@ orientations of associated classical groups A and B.
 
 *Cross-referencing: Birss, *Symmetry and Magnetism* (1964); ITC Vol. A, Chapter 3.2
 (point groups and crystal classes); ITC Vol. D, Section 1.5 (magnetic properties);
-birss-book/birss-itc-comparison.md; and the birss-app codebase.*
+birss-tables/birss-itc-comparison.md; and the birss-app codebase.*
 
 ---
 
@@ -651,13 +651,13 @@ symbols, and symmetry operator content are consistent across all sources.
 
 **Tensor symbol classes.** The 21-letter A–U tensor classification scheme (Tables 4a–4f / Table 7)
 is internally consistent between the book's tables and the 1962 paper's Table 2(a), after
-the corrections applied during the birss-book transcription passes.
+the corrections applied during the birss-tables transcription passes.
 
 ---
 
 ### Convention differences between Birss and ITC
 
-These are documented in detail in `birss-book/birss-itc-comparison.md`. The key differences:
+These are documented in detail in `birss-tables/birss-itc-comparison.md`. The key differences:
 
 | Convention | Birss | ITC | Impact on app |
 |---|---|---|---|
@@ -751,7 +751,7 @@ with the same physics. The differences between them fall into three categories:
 | 2–3 | `m3`/`m3m` (Birss) vs `m-3`/`m-3m` (app/ITC) | **Won't fix** | Notation variant; app follows ITC convention |
 | 4–6 | Trigonal secondary axis: 2_y (Birss) vs 2_x (app/ITC) | **RESOLVED** | Generators switched to y-secondary (Birss convention) — see PR #6 |
 | 7–10, 19 | σ(6)/(7)/(8)/(9) inverse/phase generator variants | **Won't fix** | Notation variant; same closed groups generated |
-| 11–13 | birss-book internal issues (now resolved in book repo) | **Resolved in birss-tables** | Table 3 misprints corrected |
+| 11–13 | birss-tables internal issues (now resolved in book repo) | **Resolved in birss-tables** | Table 3 misprints corrected |
 | 17 | 30° trigonal offset propagated to 14 additional magnetic groups | **RESOLVED** | All 17 groups now use y-secondary generators — see PR #6 |
 | 18 | Type II grey groups inherit all Type I variants | **RESOLVED** | Grey groups updated alongside Type I — see PR #6 |
 | 21 | `6'/mmm'` (ITC) vs `6'/mm'm` (Birss/app) for D₆h(D₃h) | **By design** | Convention difference between ITC x-secondary and Birss y-secondary axis assignments; app follows Birss convention for this group |
