@@ -316,44 +316,42 @@ export default function App() {
             </div>
           </div>
         ) : (
-          <motion.div 
+          <motion.div
             key={selectedGroup.name}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="grid grid-cols-1 lg:grid-cols-3 gap-12"
+            className="space-y-8"
           >
-            {/* Summary Sidebar — below results on mobile, left column on desktop */}
-            <div className="order-last lg:order-first space-y-12">
-              {/* Mobile: compact group indicator always visible */}
-              <div className="lg:hidden">
-                <button
-                  type="button"
-                  aria-expanded={mobileClassificationExpanded}
-                  onClick={() => setMobileClassificationExpanded(!mobileClassificationExpanded)}
-                  className="flex items-center justify-between w-full p-4 border border-ink border-opacity-10 bg-white/30"
-                >
-                  <div className="flex items-center gap-3">
-                    {getCrystalIcon(selectedGroup.crystalSystem)}
-                    <div className="text-left">
-                      <span className="text-lg font-serif italic"><FormatPointGroup name={selectedGroup.name} /></span>
-                      <span className="text-xs opacity-50 ml-2">{selectedGroup.crystalSystem}</span>
-                      {isCentrosymmetric(selectedGroup.name) && <span className="text-xs opacity-50 ml-2">· Centro</span>}
-                    </div>
-                  </div>
-                  {mobileClassificationExpanded ? <ChevronUp className="w-4 h-4 opacity-50" /> : <ChevronDown className="w-4 h-4 opacity-50" />}
-                </button>
+            {/* Compact group indicator — always visible, click to expand classification */}
+            <button
+              type="button"
+              aria-expanded={mobileClassificationExpanded}
+              onClick={() => setMobileClassificationExpanded(!mobileClassificationExpanded)}
+              className="flex items-center justify-between w-full p-4 border border-ink border-opacity-10 bg-white/30"
+            >
+              <div className="flex items-center gap-3">
+                {getCrystalIcon(selectedGroup.crystalSystem)}
+                <div className="text-left flex items-center flex-wrap gap-x-2 gap-y-1">
+                  <span className="text-lg font-serif italic"><FormatPointGroup name={selectedGroup.name} /></span>
+                  <span className="text-xs opacity-50">{selectedGroup.crystalSystem}</span>
+                  <span className="text-xs opacity-50">· Type {selectedGroup.type}</span>
+                  <span className="text-xs opacity-50">· {isCentrosymmetric(selectedGroup.name) ? 'Centro' : 'Non-centro'}</span>
+                </div>
               </div>
+              {mobileClassificationExpanded ? <ChevronUp className="w-4 h-4 opacity-50" /> : <ChevronDown className="w-4 h-4 opacity-50" />}
+            </button>
 
-              {/* Full classification — always on desktop, expandable on mobile */}
-              <section className={`space-y-6 ${mobileClassificationExpanded ? '' : 'hidden lg:block'}`}>
-                <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+            {/* Expandable classification panel */}
+            {mobileClassificationExpanded && (
+              <section className="space-y-4 border border-ink border-opacity-10 p-6">
+                <div className="text-xs uppercase tracking-[0.2em] opacity-50 font-semibold flex items-center gap-2">
                   <Info className="w-3 h-3" />
                   Classification
                 </div>
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div>
-                    <h2 className="text-5xl font-serif italic"><FormatPointGroup name={selectedGroup.name} /></h2>
-                    <p className="text-xs uppercase tracking-widest opacity-50 mt-1">
+                    <h2 className="text-4xl font-serif italic"><FormatPointGroup name={selectedGroup.name} /></h2>
+                    <p className="text-[10px] uppercase tracking-widest opacity-50 mt-1">
                       {selectedGroup.type === 'I' ? 'Standard' : selectedGroup.type === 'II' ? 'Gray' : 'Magnetic'} Point Group
                     </p>
                   </div>
@@ -370,23 +368,21 @@ export default function App() {
                     </p>
                     <p className="text-[10px] uppercase tracking-widest opacity-50">Symmetry Type</p>
                   </div>
-
-                  <div className="p-4 border border-ink border-opacity-10 space-y-3">
-                    <p className="text-[10px] uppercase tracking-widest opacity-50">Symmetry Operations ({currentOperations.length})</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {currentOperations.map((op, i) => (
-                        <SymmetryOperation key={i} symbol={op} />
-                      ))}
-                    </div>
-                  </div>
-
                   <AxisOrientationInfo crystalSystem={selectedGroup.crystalSystem} />
                 </div>
+                <div className="p-4 border border-ink border-opacity-10 space-y-3">
+                  <p className="text-[10px] uppercase tracking-widest opacity-50">Symmetry Operations ({currentOperations.length})</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {currentOperations.map((op, i) => (
+                      <SymmetryOperation key={i} symbol={op} />
+                    ))}
+                  </div>
+                </div>
               </section>
-            </div>
+            )}
 
-            {/* Main Content: Tensor Components */}
-            <div className="lg:col-span-2 space-y-8">
+            {/* Main Content: Tensor Components — full width */}
+            <div className="space-y-8">
               {/* Tensor Type Selector — collapsible on mobile at defaults */}
               <div className="flex flex-col gap-6 border-b border-ink border-opacity-10 pb-8">
                 {/* Mobile compact indicator when at defaults */}
@@ -520,7 +516,7 @@ export default function App() {
                   <div className={activeResultTab !== 'components' ? 'md:hidden' : ''}>
                     <div className="space-y-6">
                       <div className="flex justify-between items-center border-b border-ink border-opacity-10 pb-4">
-                        <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+                        <div className="text-xs uppercase tracking-[0.2em] opacity-50 font-semibold flex items-center gap-2">
                           <Zap className="w-3 h-3" />
                           {tensorMeta[selectedTensorType].label} Tensor ({tensorMeta[selectedTensorType].type})
                         </div>
@@ -579,7 +575,7 @@ export default function App() {
                   <div className={activeResultTab !== 'induced' ? 'md:hidden' : ''}>
                     <div className="space-y-6">
                       <div className="flex justify-between items-center border-b border-ink border-opacity-10 pb-4 pt-4 md:pt-0 border-t md:border-t-0 border-ink/10">
-                        <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+                        <div className="text-xs uppercase tracking-[0.2em] opacity-50 font-semibold flex items-center gap-2">
                           <Compass className="w-3 h-3" />
                           {selectedTensorType === 'ED' ? 'Induced Polarization' : selectedTensorType === 'MD' ? 'Induced Magnetization' : 'Induced Quadrupole'} (CRYSTAL FRAME)
                         </div>
@@ -628,7 +624,7 @@ export default function App() {
                     <div className={!mobileSourceExpanded ? 'hidden md:block' : ''}>
                       <div className="space-y-6">
                         <div className="hidden md:flex justify-between items-center border-b border-ink border-opacity-10 pb-4">
-                          <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+                          <div className="text-xs uppercase tracking-[0.2em] opacity-50 font-semibold flex items-center gap-2">
                             <Compass className="w-3 h-3" />
                             Source Term Components S (Lab Frame)
                           </div>
