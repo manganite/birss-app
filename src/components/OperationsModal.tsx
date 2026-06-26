@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion } from 'motion/react';
 import { X, Calculator } from 'lucide-react';
-import { getSymmetryOperations } from '../services/tensorCalculator';
+import { getSymmetryOperations, getGeneratorSymbols } from '../services/tensorCalculator';
 import { FormatPointGroup, SymmetryOperation } from './MathComponents';
 import { PointGroupData } from '../data/pointGroups';
 import { useDialogA11y } from '../hooks/useDialogA11y';
@@ -14,6 +14,7 @@ interface OperationsModalProps {
 
 export const OperationsModal = ({ group, onClose, onOpenInCalculator }: OperationsModalProps) => {
   const operations = getSymmetryOperations(group.name);
+  const generators = getGeneratorSymbols(group.name);
   const containerRef = useRef<HTMLDivElement>(null);
   useDialogA11y({ onClose, containerRef });
 
@@ -51,12 +52,24 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
           </button>
         </div>
         
-        <div className="p-6 overflow-y-auto">
-          <h3 className="text-xs uppercase tracking-[0.2em] opacity-50 mb-4">Symmetry Operations ({operations.length})</h3>
-          <div className="flex flex-wrap gap-2">
-            {operations.map((op, idx) => (
-              <SymmetryOperation key={idx} symbol={op} />
-            ))}
+        <div className="p-6 overflow-y-auto space-y-6">
+          {generators.length > 0 && (
+            <div>
+              <h3 className="text-xs uppercase tracking-[0.2em] opacity-50 mb-4">Generators ({generators.length})</h3>
+              <div className="flex flex-wrap gap-2">
+                {generators.map((gen, idx) => (
+                  <SymmetryOperation key={idx} symbol={gen} />
+                ))}
+              </div>
+            </div>
+          )}
+          <div>
+            <h3 className="text-xs uppercase tracking-[0.2em] opacity-50 mb-4">Symmetry Operations ({operations.length})</h3>
+            <div className="flex flex-wrap gap-2">
+              {operations.map((op, idx) => (
+                <SymmetryOperation key={idx} symbol={op} />
+              ))}
+            </div>
           </div>
         </div>
 
