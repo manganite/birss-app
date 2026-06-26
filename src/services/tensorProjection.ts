@@ -129,7 +129,7 @@ export function formatCoeff(c: number): string {
   return Number(absC.toFixed(3)).toString();
 }
 
-function transformTensor(tensor: number[], g: Matrix3x3, rank: number, isAxial: boolean, isTimeOdd: boolean): number[] {
+export function transformTensor(tensor: number[], g: Matrix3x3, rank: number, isAxial: boolean, isTimeOdd: boolean): number[] {
   const dim = tensor.length;
   const result = new Array(dim).fill(0);
   const detG = det(g);
@@ -156,7 +156,7 @@ function transformTensor(tensor: number[], g: Matrix3x3, rank: number, isAxial: 
   return result;
 }
 
-function averageTensor(tensor: number[], group: Matrix3x3[], rank: number, isAxial: boolean, isTimeOdd: boolean): number[] {
+export function averageTensor(tensor: number[], group: Matrix3x3[], rank: number, isAxial: boolean, isTimeOdd: boolean): number[] {
   const dim = tensor.length;
   const sum = new Array(dim).fill(0);
 

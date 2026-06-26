@@ -27,6 +27,9 @@ src/
     tensorCalculator.ts          # Thin barrel re-exporting the public API below
     symmetryGroups.ts            # Matrix algebra, GENERATORS table, group closure, getSymmetryOperations
     tensorProjection.ts          # Numeric tensor projection (transform/average/basis), SHG polynomials, lab-frame vectors
+    trigPoly.ts                  # Trigonometric polynomial algebra for symbolic rotation angles (phiX, phiY, psi)
+    symbolicProjection.ts        # Symbolic SHG source terms — parallel path producing TrigPoly coefficients
+    trigPolyFormat.ts            # LaTeX formatting for TrigPoly and SymPoly expressions
     latexFormatting.ts           # LaTeX rendering: calculateTensorComponents, formatSubstitutedPolySum
   components/
     MathComponents.tsx           # Shared KaTeX render helpers (TensorTerm, FormatPointGroup, SymmetryOperation)
@@ -41,15 +44,17 @@ All cross-page state (selected group, tensor type, time-reversal, rotation angle
 
 ### `services/` module dependency direction
 
-`tensorCalculator.ts` is a barrel: it only re-exports symbols from the three modules
+`tensorCalculator.ts` is a barrel: it only re-exports symbols from the modules
 below and should stay short. Dependencies flow one way —
+**`trigPolyFormat` → `symbolicProjection` → `trigPoly`** and
 **`latexFormatting` → `tensorProjection` → `symmetryGroups`** (formatting may import
-physics, never the reverse):
+physics, never the reverse). The symbolic path is a parallel layer that imports from
+the numeric path but never the other way round:
 
 - **`symmetryGroups.ts`** — `Matrix3x3`, the `GENERATORS` table, matrix algebra
   (`multiply`/`det`), group closure + caching, `isCentrosymmetric`,
   `getSymmetryOperations`, and the shared `EPSILON`/`AXIS_EPSILON` constants. No
-  dependencies on the other two modules.
+  dependencies on the other modules.
 - **`tensorProjection.ts`** — the numeric projection core
   (`calculateTensorBasisResults`, `calculateSHGExpressions`, `getLabFrameVectors`,
   `transformTensor`/`averageTensor`), plus four dependency-free leaf helpers
@@ -59,6 +64,16 @@ physics, never the reverse):
   "shared utilities live in the lower module" rule they're defined here rather than
   in `latexFormatting.ts`, so that `latexFormatting` can depend on `tensorProjection`
   without creating a reverse dependency. Depends only on `symmetryGroups`.
+- **`trigPoly.ts`** — trigonometric polynomial representation (`TrigPoly`) and
+  algebra (`trigAdd`, `trigMul`, `trigEval`, `trigSimplify`) for three rotation angles
+  (phiX, phiY, psi). No dependencies on other modules.
+- **`symbolicProjection.ts`** — `calculateSymbolicSHGExpressions`: builds a
+  symbolic rotation matrix (`TrigMat3`) with preset angles numeric and user angles
+  symbolic, then contracts source terms with `TrigPoly` coefficients. Depends on
+  `trigPoly`, `tensorProjection`, and `symmetryGroups`.
+- **`trigPolyFormat.ts`** — `formatTrigPoly` and `formatSymbolicSourceTerm`:
+  LaTeX rendering for `TrigPoly` and `SymPoly` values. Depends on
+  `trigPoly`, `symbolicProjection`, and `tensorProjection` (for `formatCoeff`).
 - **`latexFormatting.ts`** — `calculateTensorComponents` (thin wrapper around
   `calculateTensorBasisResults` + a local `formatResults`) and
   `formatSubstitutedPolySum`. Depends on `tensorProjection` and `symmetryGroups`.
