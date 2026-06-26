@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-26
+
+### Added
+- Lab-frame rotation engine with three user-defined angles (φ_x, φ_y, ψ) for
+  arbitrary crystal orientation beyond principal-axis presets. User rotations are
+  applied in the lab frame, decoupled from the k-vector preset: `R = Rz(ψ) ·
+  Ry(φ_y) · Rx(φ_x) · R_preset`. No UI controls yet — angles default to 0 and
+  will ship with Feature 1C (rotation sliders).
+- Golden reference tests for rotated SHG outputs at 8 non-zero rotation
+  configurations (k∥x, k∥y, oblique) and 3 lab-frame vector presets, ensuring
+  the engine refactor preserves rotated-path correctness.
+
+### Changed
+- Rotation matrix now composed from tested primitives (`rotX`, `rotY`, `rotZ`,
+  `mat3mul`) instead of a hand-expanded inline formula. Identical numerical
+  output at all orientations.
+- `calculateSHGExpressions` and `getLabFrameVectors` accept options objects
+  (`SHGOptions`, `LabFrameOptions`) instead of positional arguments (internal
+  API, no user-visible change).
+
+### Removed
+- Diagonal orientation presets (k∥xy, k∥xz, k∥yz). Equivalent orientations are
+  reachable via user rotation from the principal presets: k∥xy = k∥y + φ_y = −45°,
+  k∥xz = k∥z + φ_y = −45°, k∥yz = k∥z + φ_x = 45°.
+
 ## [0.2.0] - 2026-06-26
 
 ### Added
@@ -60,7 +85,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/manganite/birss-app/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/manganite/birss-app/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/manganite/birss-app/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/manganite/birss-app/releases/tag/v0.1.0

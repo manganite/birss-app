@@ -11,7 +11,7 @@ The `#` column is a **feature identifier** (used for cross-references throughout
 | # | Feature | Status | Notes |
 |---|---------|--------|-------|
 | 1A | Polar plot fix | **Done** (v0.2.0) | ~3-line change |
-| 1B | Rotation engine + tests | Planning | Correctness risk lives here |
+| 1B | Rotation engine + tests | **Done** (v0.3.0) | Lab-frame rotation with phiX, phiY, psi |
 | 1C | Rotation UI + mobile | Planning | Sliders, layout, controls |
 | 2 | Symbolic source terms | Planning | Largest feature; not blocked on 1 |
 | 3 | Alternate settings (Phase 1) | Planning | 8 Mechanism-B groups |
@@ -34,26 +34,14 @@ Features group into four waves based on their dependencies. Within each wave, it
 | **7** — Oblique-axis transparency | #10 | Merged |
 | **8E** — Explorer as default view | #8 | Merged |
 
-### Wave 2 — the engine foundation (1B)
+### Wave 2 — done (shipped in v0.3.0)
 
-1B is physics-critical and goes through a **pull request** (`feature/rotation-engine`). The sub-steps are ordered commits within that branch, except 1B.0 which ships as a **separate PR first** (`refactor/shg-options-object`) — it's behavior-preserving and should be verified independently on `main` before the engine changes land on top.
-
-| Step | Branch | Notes |
+| Feature | PR | Status |
 |---|---|---|
-| **1B.0** — Signature migration | `refactor/shg-options-object` | Separate PR. Behavior-preserving; guarded by 492 tests. Merge to `main` first. |
-| **1B.1–1B.4** — Engine extension | `feature/rotation-engine` | Single PR, ordered commits. Branches from `main` after 1B.0 is merged. |
+| **1B.0** — Signature migration | #11 | Merged |
+| **1B.1–1B.4** — Engine extension | #12 | Merged |
 
-Within `feature/rotation-engine` (commit order):
-
-- 1B.4 tests written first (golden references for rotated paths)
-- 1B.1 matrix primitives
-- 1B.2 rotation composition
-- 1B.3 preset cleanup
-- 1B.4 tests verified (must still pass after engine change)
-
-SemVer: 1B.0 alone is no bump (internal refactor, no user-visible change). The full 1B (engine extension + preset removal) is MINOR — new rotation capability, diagonal presets removed (documented in changelog).
-
-**Feature 2 spike** can start during Wave 2 — the spike is research (trig-polynomial representation, formatter design), not code that depends on 1B. Starting the spike early de-risks Wave 4.
+**Feature 2 spike** can start during Wave 3 — the spike is research (trig-polynomial representation, formatter design), not code that depends on 1B. Starting the spike early de-risks Wave 4.
 
 ### Wave 3 — parallel after 1B
 
@@ -148,7 +136,7 @@ The Recharts `RadarChart` currently uses defaults (no explicit `startAngle`/`end
 
 ### 1B. Rotation Engine + Tests
 
-**Status:** Planning
+**Status:** Done — shipped in v0.3.0 (PR #11, #12)
 **Priority:** High — this is where the correctness risk lives; ship after 1A
 
 The existing engine (`calculateSHGExpressions`) already accepts arbitrary continuous angles — the restriction to "parallel / 45°" lives solely in the fixed `K_ORIENTATION_PRESETS` buttons, not in the engine. `simulationData`, `expandedFormulas`, and `labFrame` already react to `thetaX`/`thetaY` via `useMemo`, so all downstream computations update automatically.
