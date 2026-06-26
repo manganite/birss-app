@@ -228,14 +228,17 @@ export interface SHGResult {
   source: SHGExpression[];
 }
 
-export function calculateSHGExpressions(
-  groupName: string,
-  tensorType: TensorType,
-  trType: TensorTimeReversal,
-  thetaX: number = 0,
-  thetaY: number = 0,
-  labFrameDisplayMode: 'EX_EY' | 'E0_THETA' = 'EX_EY'
-): SHGResult {
+export interface SHGOptions {
+  groupName: string;
+  tensorType: TensorType;
+  trType: TensorTimeReversal;
+  thetaX?: number;
+  thetaY?: number;
+  labFrameDisplayMode?: 'EX_EY' | 'E0_THETA';
+}
+
+export function calculateSHGExpressions(options: SHGOptions): SHGResult {
+  const { groupName, tensorType, trType, thetaX = 0, thetaY = 0, labFrameDisplayMode = 'EX_EY' } = options;
   const generators = GENERATORS[groupName];
   if (!generators) return { induced: [], source: [] };
 
@@ -511,7 +514,13 @@ export function calculateSHGExpressions(
   };
 }
 
-export function getLabFrameVectors(tx: number, ty: number) {
+export interface LabFrameOptions {
+  thetaX?: number;
+  thetaY?: number;
+}
+
+export function getLabFrameVectors(options: LabFrameOptions = {}) {
+  const { thetaX: tx = 0, thetaY: ty = 0 } = options;
   const cx = Math.cos(tx * Math.PI / 180);
   const sx = Math.sin(tx * Math.PI / 180);
   const cy = Math.cos(ty * Math.PI / 180);

@@ -12,6 +12,8 @@ export {
   type TensorTimeReversal,
   type SHGExpression,
   type SHGResult,
+  type SHGOptions,
+  type LabFrameOptions,
   formatCoeff,
   calculateSHGExpressions,
   getLabFrameVectors,
