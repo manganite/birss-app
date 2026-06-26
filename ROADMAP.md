@@ -13,7 +13,7 @@ The `#` column is a **feature identifier** (used for cross-references throughout
 | 1A | Polar plot fix | **Done** (v0.2.0) | ~3-line change |
 | 1B | Rotation engine + tests | **Done** (v0.3.0) | Lab-frame rotation with phiX, phiY, psi |
 | 1C | Rotation UI + mobile | **Done** (v0.4.0, PR #16, #17, #18) | Desktop + mobile split |
-| 2 | Symbolic source terms | **In progress** | TrigPoly algebra + symbolic pipeline + formatter + UI |
+| 2 | Symbolic source terms | **Done** (v0.5.0, PR #19) | TrigPoly algebra + symbolic pipeline + formatter + UI |
 | 3 | Alternate settings (Phase 1) | **Done** (PR #15) | 8 Mechanism-B groups |
 | 4 | Color tokens | **Done** | Housekeeping |
 | 5 | Explorer: tabs + enrichment | Deferred | Per-system tabs + enriched popups; after 1–3 settle |
@@ -345,7 +345,7 @@ The component-list fix (sticky plot on top, scrollable component list below, con
 
 ## 2. Symbolic Source Term Expressions (phi dependence)
 
-**Status:** In progress — core engine complete (TrigPoly algebra + symbolic projection + formatter + UI integration), pending PR review
+**Status:** Done — shipped in v0.5.0 (PR #19)
 **Priority:** High — not blocked on Feature 1; likely the single largest feature
 
 Display source terms as symbolic expressions in phi rather than numeric coefficients. This resolves the gap from Feature 1C: the Calculator and Simulator Mathematical Model section now show proper phi-dependent formulas. This is a **new computation path** (trigonometric polynomial representation + arithmetic + simplification + LaTeX formatter) running in parallel with the existing numeric pipeline.
