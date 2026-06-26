@@ -30,7 +30,7 @@ function AxisOrientationInfo({ crystalSystem }: { crystalSystem: string }) {
       content = (
         <>
           <span className="font-mono font-medium">z</span> ∥ <InlineMath math="c" /><br/>
-          <span className="font-mono font-medium">y</span> ⊥ (<InlineMath math="c \times a" />) (∥ <InlineMath math="b^*" />)<br/>
+          <span className="font-mono font-medium">y</span> ∥ (<InlineMath math="c \times a" />) (∥ <InlineMath math="b^*" />)<br/>
           <span className="font-mono font-medium">x</span> = <InlineMath math="y \times z" /> (projection of <InlineMath math="a" /> onto plane ⊥ <InlineMath math="c" />)
         </>
       );
