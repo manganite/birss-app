@@ -623,6 +623,55 @@ export default function App() {
                         })}
                       </div>
 
+                      {sourceTerms.length > 0 && sourceTerms.every(t => t.expression === "0") && (
+                        <div className="p-6 border border-ink border-opacity-10 bg-ink/5 space-y-4 mt-2">
+                          <div className="flex items-start gap-3">
+                            <Info className="w-4 h-4 mt-0.5 shrink-0 opacity-60" />
+                            <p className="text-sm leading-relaxed">
+                              {selectedTensorType === 'ED' && isCentrosymmetric(selectedGroup.name) && selectedTimeReversal === 'i'
+                                ? 'Electric-dipole SHG is symmetry-forbidden for centrosymmetric groups (i-type). The inversion operation forces all components of χ⁽²⁾ to zero.'
+                                : selectedGroup.type === 'II' && selectedTimeReversal === 'c'
+                                ? "c-type tensors vanish identically for grey groups (G1'). The time-reversal symmetry of the grey group requires all c-type components to be zero."
+                                : 'All source terms vanish for this configuration.'}
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap gap-2 ml-7">
+                            {selectedTimeReversal === 'i' && (
+                              <button
+                                onClick={() => setSelectedTimeReversal('c')}
+                                className="px-3 py-1.5 text-xs border border-ink border-opacity-20 hover:bg-ink hover:text-paper transition-colors"
+                              >
+                                Try c-type
+                              </button>
+                            )}
+                            {selectedTimeReversal === 'c' && (
+                              <button
+                                onClick={() => setSelectedTimeReversal('i')}
+                                className="px-3 py-1.5 text-xs border border-ink border-opacity-20 hover:bg-ink hover:text-paper transition-colors"
+                              >
+                                Try i-type
+                              </button>
+                            )}
+                            {selectedTensorType !== 'EQ' && (
+                              <button
+                                onClick={() => setSelectedTensorType('EQ')}
+                                className="px-3 py-1.5 text-xs border border-ink border-opacity-20 hover:bg-ink hover:text-paper transition-colors"
+                              >
+                                Try EQ
+                              </button>
+                            )}
+                            {selectedTensorType !== 'MD' && (
+                              <button
+                                onClick={() => setSelectedTensorType('MD')}
+                                className="px-3 py-1.5 text-xs border border-ink border-opacity-20 hover:bg-ink hover:text-paper transition-colors"
+                              >
+                                Try MD
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
                       <div className="p-4 border border-ink border-dashed text-[10px] uppercase tracking-widest opacity-60 leading-relaxed mt-8">
                         Note: The incoming light propagates along the Z-axis in the Lab Frame, meaning the electric field is purely transverse: <InlineMath math="\vec{E} = (E_X, E_Y, 0)" />.
                       </div>

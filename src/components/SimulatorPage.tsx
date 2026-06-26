@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { PointGroupData } from '../data/pointGroups';
-import { TensorType, TensorTimeReversal } from '../services/tensorCalculator';
+import { TensorType, TensorTimeReversal, isCentrosymmetric } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
-import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp } from 'lucide-react';
+import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { TensorTerm, getPresetsForSystem, LabFrameOrientation } from './MathComponents';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
@@ -165,8 +165,31 @@ export function SimulatorPage({
 
           <div className="bg-white/50 border border-ink p-6 space-y-8">
             {independentComponents.length === 0 ? (
-              <div className="text-sm opacity-50 italic text-center py-8">
-                No non-zero components for this configuration.
+              <div className="py-6 space-y-4">
+                <div className="flex items-start gap-3 p-4 border border-ink border-opacity-10 bg-ink/5">
+                  <Info className="w-4 h-4 mt-0.5 shrink-0 opacity-60" />
+                  <p className="text-sm leading-relaxed">
+                    {selectedTensorType === 'ED' && isCentrosymmetric(selectedGroup.name) && selectedTimeReversal === 'i'
+                      ? 'ED SHG is symmetry-forbidden for centrosymmetric groups (i-type).'
+                      : selectedGroup.type === 'II' && selectedTimeReversal === 'c'
+                      ? "c-type tensors vanish for grey groups (G1')."
+                      : 'No non-zero components for this configuration.'}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {selectedTimeReversal === 'i' && (
+                    <button onClick={() => setSelectedTimeReversal('c')} className="px-3 py-1.5 text-xs border border-ink border-opacity-20 hover:bg-ink hover:text-paper transition-colors">Try c-type</button>
+                  )}
+                  {selectedTimeReversal === 'c' && (
+                    <button onClick={() => setSelectedTimeReversal('i')} className="px-3 py-1.5 text-xs border border-ink border-opacity-20 hover:bg-ink hover:text-paper transition-colors">Try i-type</button>
+                  )}
+                  {selectedTensorType !== 'EQ' && (
+                    <button onClick={() => setSelectedTensorType('EQ')} className="px-3 py-1.5 text-xs border border-ink border-opacity-20 hover:bg-ink hover:text-paper transition-colors">Try EQ</button>
+                  )}
+                  {selectedTensorType !== 'MD' && (
+                    <button onClick={() => setSelectedTensorType('MD')} className="px-3 py-1.5 text-xs border border-ink border-opacity-20 hover:bg-ink hover:text-paper transition-colors">Try MD</button>
+                  )}
+                </div>
               </div>
             ) : (
               independentComponents.map(comp => (
@@ -241,8 +264,15 @@ export function SimulatorPage({
             {/* Tab Content */}
             <div className="p-6 md:p-8 min-h-[400px]">
               {independentComponents.length === 0 ? (
-                <div className="h-[400px] flex items-center justify-center text-sm opacity-50 italic">
-                  Zero intensity
+                <div className="h-[400px] flex flex-col items-center justify-center gap-4 text-sm opacity-50">
+                  <span className="italic">Zero intensity</span>
+                  <span className="text-xs">
+                    {selectedTensorType === 'ED' && isCentrosymmetric(selectedGroup.name) && selectedTimeReversal === 'i'
+                      ? 'ED SHG is symmetry-forbidden for centrosymmetric groups.'
+                      : selectedGroup.type === 'II' && selectedTimeReversal === 'c'
+                      ? "c-type tensors vanish for grey groups."
+                      : ''}
+                  </span>
                 </div>
               ) : (
                 <div className="animate-in fade-in duration-300">
