@@ -358,6 +358,68 @@ export function HelpPage() {
         </div>
       </section>
 
+      {/* Deeper Topics */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-serif italic border-b border-ink pb-2">Deeper Topics</h2>
+
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold uppercase tracking-widest">i-type vs. c-type Tensors</h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              Every magnetic point group <InlineMath math="G" /> can be written as <InlineMath math="G = H + \theta(G - H)" />, where <InlineMath math="H" /> is the halving subgroup of elements that do not include time reversal, and <InlineMath math="\theta" /> is the time-reversal operator.
+            </p>
+            <p className="text-sm opacity-70 leading-relaxed">
+              <strong>i-type (time-even):</strong> The tensor is invariant under <em>all</em> operations of <InlineMath math="G" />, including the time-reversed ones. Physically, i-type tensors describe properties that do not depend on the magnetic order — they survive even when the material is demagnetized. Example: the crystal structure contribution to SHG.
+            </p>
+            <p className="text-sm opacity-70 leading-relaxed">
+              <strong>c-type (time-odd):</strong> The tensor is invariant under <InlineMath math="H" /> but changes sign under the time-reversed operations. Physically, c-type tensors describe properties that reverse with the magnetic order. Example: the magnetization-induced SHG contribution that flips sign when the sample is demagnetized or the magnetic domains are reversed. For grey groups (<InlineMath math="G = H \times \{'{'}1, 1'{'\}'}" />), the c-type tensor is identically zero.
+            </p>
+          </div>
+
+          <div className="space-y-4 pt-4 border-t border-ink border-opacity-10">
+            <h3 className="text-sm font-bold uppercase tracking-widest">Crystal Rotation (Lab Frame)</h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              The crystal orientation in the lab frame is controlled by a preset plus three continuous rotation angles:
+            </p>
+            <div className="space-y-3 pl-4 border-l-2 border-ink border-opacity-20 my-4">
+              <p className="text-sm opacity-70 leading-relaxed">
+                <strong>Preset (<InlineMath math="k \parallel [hkl]" />):</strong> Selects which crystal direction is aligned with the beam axis (lab Z). Defines <InlineMath math="R_{\text{preset}}" />.
+              </p>
+              <p className="text-sm opacity-70 leading-relaxed">
+                <strong><InlineMath math="\varphi_x, \varphi_y" /> (tilt):</strong> Tilt the crystal surface away from normal incidence, rotating about the lab X and Y axes. Range: ±90°.
+              </p>
+              <p className="text-sm opacity-70 leading-relaxed">
+                <strong><InlineMath math="\psi" /> (azimuth):</strong> Rotate the crystal about the beam axis (lab Z). This is the in-plane rotation that sweeps the crystallographic directions through the polarizer plane. Range: ±180°.
+              </p>
+            </div>
+            <p className="text-sm opacity-70 leading-relaxed">
+              The full rotation matrix is <InlineMath math="R = R_z(\psi) \cdot R_y(\varphi_y) \cdot R_x(\varphi_x) \cdot R_{\text{preset}}" />. At <InlineMath math="\varphi_x = \varphi_y = \psi = 0" />, the result is purely the preset alignment. The Source Terms tab shows symbolic formulas as trigonometric polynomials in these angles.
+            </p>
+          </div>
+
+          <div className="space-y-4 pt-4 border-t border-ink border-opacity-10">
+            <h3 className="text-sm font-bold uppercase tracking-widest">Alternate Settings</h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              Some magnetic point groups have multiple <strong>settings</strong> — distinct orientations of the symmetry elements relative to the crystal axes that produce different tensor forms. For example, <InlineMath math="6'mm'" /> and <InlineMath math="6'm'm" /> are two settings of the same abstract group, related by a 30° rotation that swaps which mirror family is primed.
+            </p>
+            <p className="text-sm opacity-70 leading-relaxed">
+              The app implements all settings via the similarity transform <InlineMath math="G' = S \cdot G \cdot S^{-1}" /> applied to the base generators. A setting selector appears in the Calculator when a group has multiple settings. The three mechanisms are:
+            </p>
+            <div className="space-y-3 pl-4 border-l-2 border-ink border-opacity-20 my-4">
+              <p className="text-sm opacity-70 leading-relaxed">
+                <strong>Mechanism A:</strong> Classical setting ambiguity inherited from the spatial group (e.g., tetragonal <InlineMath math="\bar{4}2m" /> vs. <InlineMath math="\bar{4}m2" />).
+              </p>
+              <p className="text-sm opacity-70 leading-relaxed">
+                <strong>Mechanism B:</strong> Time-reversal-broken equivalence — the two mirror/rotation families carry identical spatial operations but different primings.
+              </p>
+              <p className="text-sm opacity-70 leading-relaxed">
+                <strong>Axis orientation:</strong> Orthorhombic groups allow c/a/b-unique axis choices; monoclinic groups allow z-unique (Birss) or b-unique (ITC) conventions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* References */}
       <section className="space-y-6">
         <h2 className="text-2xl font-serif italic border-b border-ink pb-2 flex items-center gap-3">
