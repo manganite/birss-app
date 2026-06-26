@@ -11,8 +11,9 @@ import { GOLDEN_FIXTURES } from './goldenTensors.fixtures';
  */
 describe('calculateTensorComponents - extended golden fixtures (Tier 3)', () => {
   for (const f of GOLDEN_FIXTURES) {
-    it(`${f.group} ${f.tensor} ${f.tr}-type matches the cited derivation`, () => {
-      expect(calculateTensorComponents(f.group, f.tensor, f.tr)).toEqual(f.expected);
+    const settingLabel = f.setting && f.setting > 1 ? ` setting ${f.setting}` : '';
+    it(`${f.group} ${f.tensor} ${f.tr}-type${settingLabel} matches the cited derivation`, () => {
+      expect(calculateTensorComponents(f.group, f.tensor, f.tr, f.setting)).toEqual(f.expected);
     });
   }
 });
