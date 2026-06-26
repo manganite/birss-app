@@ -7,6 +7,7 @@ export interface GoldenFixture {
   expected: string[];
   source: string;
   note?: string;
+  setting?: number;
 }
 
 /**
@@ -513,5 +514,35 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     expected: ['\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx} = \\chi_{zxy} = \\chi_{zyx}'],
     source: TABLE_4E_VERIFICATION,
     note: 'Birss Table 4e row U3 (1 independent component).',
+  },
+
+  // Alternate-setting fixtures (Mechanism B, setting 2)
+  // Similarity transform S·G·S⁻¹ swaps σ_v ↔ σ_d mirror families.
+  // i-type tensors are identical between settings (Mechanism B);
+  // only c-type tensors differ — the component families swap.
+  {
+    group: "4'mm'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xyz} = \\chi_{xzy} = \\chi_{yxz} = \\chi_{yzx}', '\\chi_{zxy} = \\chi_{zyx}'],
+    source: 'Similarity transform Rz(45°) applied to base generators; c-type family swaps from d₁₅-type to d₁₄-type.',
+  },
+  {
+    group: "4'22'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxz} = \\chi_{xzx} = -\\chi_{yyz} = -\\chi_{yzy}', '\\chi_{zxx} = -\\chi_{zyy}'],
+    source: 'Similarity transform Rz(45°); swaps d₁₄→d₁₅ family.',
+  },
+  {
+    group: "6'mm'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}'],
+    source: 'Similarity transform Rz(30°); swaps d₁₁→d₂₂ family.',
+  },
+  {
+    group: "6'22'", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}'],
+    source: 'Similarity transform Rz(30°); swaps d₂₂→d₁₁ family.',
+  },
+  {
+    group: "6'/mm'm", tensor: 'ED', tr: 'c', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}'],
+    source: 'Similarity transform Rz(30°); swaps d₁₁→d₂₂ family.',
   },
 ];

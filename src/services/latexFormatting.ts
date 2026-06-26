@@ -16,8 +16,8 @@ import {
   cleanupExpressionSigns,
 } from './tensorProjection';
 
-export function calculateTensorComponents(groupName: string, tensorType: 'ED' | 'MD' | 'EQ', trType: TensorTimeReversal): string[] {
-  const result = calculateTensorBasisResults(groupName, tensorType, trType);
+export function calculateTensorComponents(groupName: string, tensorType: 'ED' | 'MD' | 'EQ', trType: TensorTimeReversal, setting: number = 1): string[] {
+  const result = calculateTensorBasisResults(groupName, tensorType, trType, setting);
   if (!result) return ["Point group not supported."];
   return formatResults(result.basisResults, result.rank);
 }

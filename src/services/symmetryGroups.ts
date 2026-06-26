@@ -298,10 +298,72 @@ export function isCentrosymmetric(groupName: string): boolean {
   return group.some(m => isSameMatrix(m, inversion));
 }
 
-export function getSymmetryOperations(groupName: string): string[] {
-  const generators = GENERATORS[groupName];
-  if (!generators) return [];
-  const group = getCachedFullGroup(groupName, generators);
+export interface SettingDef {
+  name: string;
+  rotation: Matrix3x3;
+}
+
+const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
+  "4'mm'":    [{ name: "σ_d primed", rotation: getRotationZ(45) }],
+  "4'22'":    [{ name: "C₂' along ⟨110⟩", rotation: getRotationZ(45) }],
+  "4'/m'm'm": [{ name: "σ_d primed", rotation: getRotationZ(45) }],
+  "4'/mmm'":  [{ name: "σ_d' along ⟨110⟩", rotation: getRotationZ(45) }],
+  "6'mm'":    [{ name: "σ_d primed", rotation: getRotationZ(30) }],
+  "6'22'":    [{ name: "C₂' along ⟨210⟩", rotation: getRotationZ(30) }],
+  "6'/m'mm'": [{ name: "σ_d primed", rotation: getRotationZ(30) }],
+  "6'/mm'm":  [{ name: "σ_d' along ⟨210⟩", rotation: getRotationZ(30) }],
+};
+
+const GROUPS_WITH_FUTURE_SETTINGS: Record<string, number> = {
+  "-4'2m'": 2, "-4'm2'": 2, "-42'm'": 2,
+  "32'": 2, "3m'": 2, "-3'm": 2, "-3'm'": 2, "-3m'": 2,
+  "-6'2m'": 2, "-6'm2'": 2, "-6m'2'": 2,
+  "2'2'2": 3, "2'm'm": 3, "m'm'2": 3, "m'm'm": 3, "mmm'": 3,
+  "2'": 2, "m'": 2, "2'/m": 2, "2'/m'": 2, "2/m'": 2,
+};
+
+export function getAlternateSettings(groupName: string): SettingDef[] | null {
+  return ALTERNATE_SETTINGS[groupName] ?? null;
+}
+
+export function getFutureSettingCount(groupName: string): number | null {
+  return GROUPS_WITH_FUTURE_SETTINGS[groupName] ?? null;
+}
+
+function transpose(a: Matrix3x3): Matrix3x3 {
+  return {
+    m: [
+      [a.m[0][0], a.m[1][0], a.m[2][0]],
+      [a.m[0][1], a.m[1][1], a.m[2][1]],
+      [a.m[0][2], a.m[1][2], a.m[2][2]],
+    ],
+    isAntiUnitary: a.isAntiUnitary,
+  };
+}
+
+export function getTransformedGenerators(groupName: string, setting: number): Matrix3x3[] {
+  const baseGenerators = GENERATORS[groupName];
+  if (!baseGenerators || setting <= 1) return baseGenerators ?? [];
+
+  const settingDefs = ALTERNATE_SETTINGS[groupName];
+  if (!settingDefs || setting > settingDefs.length + 1) return baseGenerators;
+
+  const S = settingDefs[setting - 2].rotation;
+  const S_inv = transpose(S);
+
+  return baseGenerators.map(g => {
+    const transformed = multiply(multiply(S, g), S_inv);
+    return snapMatrix({ ...transformed, isAntiUnitary: g.isAntiUnitary });
+  });
+}
+
+export function getSymmetryOperations(groupName: string, setting?: number): string[] {
+  const generators = setting && setting > 1
+    ? getTransformedGenerators(groupName, setting)
+    : GENERATORS[groupName];
+  if (!generators || generators.length === 0) return [];
+  const cacheKey = setting && setting > 1 ? `${groupName}::setting${setting}` : groupName;
+  const group = getCachedFullGroup(cacheKey, generators);
 
   const symbols = group.map(m => {
     const { m: mat, isAntiUnitary } = m;

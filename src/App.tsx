@@ -7,15 +7,17 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Info, Layers, Zap, Minus, Compass, Github } from 'lucide-react';
 import { POINT_GROUPS, PointGroupData } from './data/pointGroups';
-import { 
-  calculateTensorComponents, 
-  TensorTimeReversal, 
+import {
+  calculateTensorComponents,
+  TensorTimeReversal,
   isCentrosymmetric,
   calculateSHGExpressions,
   SHGExpression,
   TensorType,
   getSymmetryOperations,
-  getLabFrameVectors
+  getLabFrameVectors,
+  getAlternateSettings,
+  getFutureSettingCount,
 } from './services/tensorCalculator';
 import { PointGroupExplorer } from './components/PointGroupExplorer';
 import { HelpPage } from './components/HelpPage';
@@ -107,6 +109,7 @@ export default function App() {
   const [activeResultTab, setActiveResultTab] = useState<'components' | 'induced' | 'source'>('components');
   const [amplitudes, setAmplitudes] = useState<Record<string, number>>({});
   const [phases, setPhases] = useState<Record<string, number>>({});
+  const [selectedSetting, setSelectedSetting] = useState<number>(1);
 
   const filteredGroups = useMemo(() => {
     let groups = POINT_GROUPS;
@@ -128,6 +131,7 @@ export default function App() {
 
   const handleSelect = (group: PointGroupData) => {
     setSelectedGroup(group);
+    setSelectedSetting(1);
     setSearchQuery('');
     setIsSearchFocused(false);
     if (currentView === 'explorer' || currentView === 'help') {
@@ -138,13 +142,13 @@ export default function App() {
 
   const currentComponents = useMemo(() => {
     if (!selectedGroup) return [];
-    return calculateTensorComponents(selectedGroup.name, selectedTensorType, selectedTimeReversal);
-  }, [selectedGroup, selectedTensorType, selectedTimeReversal]);
+    return calculateTensorComponents(selectedGroup.name, selectedTensorType, selectedTimeReversal, selectedSetting);
+  }, [selectedGroup, selectedTensorType, selectedTimeReversal, selectedSetting]);
 
   const currentOperations = useMemo(() => {
     if (!selectedGroup) return [];
-    return getSymmetryOperations(selectedGroup.name);
-  }, [selectedGroup]);
+    return getSymmetryOperations(selectedGroup.name, selectedSetting);
+  }, [selectedGroup, selectedSetting]);
 
   const [thetaX, setThetaX] = useState<number>(0);
   const [thetaY, setThetaY] = useState<number>(0);
@@ -160,8 +164,8 @@ export default function App() {
 
   const labFrame = useMemo(() => getLabFrameVectors({ thetaX, thetaY, phiX, phiY, psi }), [thetaX, thetaY, phiX, phiY, psi]);
   const currentExpressions = useMemo(
-    () => calculateSHGExpressions({ groupName: selectedGroup?.name || "", tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi }),
-    [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi]
+    () => calculateSHGExpressions({ groupName: selectedGroup?.name || "", tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, setting: selectedSetting }),
+    [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, selectedSetting]
   );
 
   const sourceTerms = currentExpressions.source;
@@ -339,6 +343,7 @@ export default function App() {
             setPhiY={setPhiY}
             psi={psi}
             setPsi={setPsi}
+            selectedSetting={selectedSetting}
             amplitudes={amplitudes}
             setAmplitudes={setAmplitudes}
             phases={phases}
@@ -444,6 +449,46 @@ export default function App() {
                     ))}
                   </div>
                 </div>
+
+                {(() => {
+                  const altSettings = getAlternateSettings(selectedGroup.name);
+                  const futureCount = getFutureSettingCount(selectedGroup.name);
+                  if (!altSettings && !futureCount) return null;
+                  return (
+                    <div className="space-y-3">
+                      <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Setting</p>
+                      {altSettings ? (
+                        <div className="flex flex-wrap gap-3">
+                          <button
+                            onClick={() => setSelectedSetting(1)}
+                            className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
+                              selectedSetting === 1
+                                ? 'bg-ink text-paper'
+                                : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
+                            }`}
+                          >
+                            Default
+                          </button>
+                          {altSettings.map((s, i) => (
+                            <button
+                              key={i}
+                              onClick={() => setSelectedSetting(i + 2)}
+                              className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
+                                selectedSetting === i + 2
+                                  ? 'bg-ink text-paper'
+                                  : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
+                              }`}
+                            >
+                              {s.name}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-xs opacity-40 italic">{futureCount} settings — selection coming</p>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
 
               <div className="bg-white/50 border border-ink overflow-hidden">

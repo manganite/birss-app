@@ -6,7 +6,14 @@
  * in latexFormatting.ts -- see AGENTS.md for the module dependency direction.
  */
 
-export { isCentrosymmetric, getSymmetryOperations } from './symmetryGroups';
+export {
+  isCentrosymmetric,
+  getSymmetryOperations,
+  getAlternateSettings,
+  getFutureSettingCount,
+  getTransformedGenerators,
+  type SettingDef,
+} from './symmetryGroups';
 export {
   type TensorType,
   type TensorTimeReversal,

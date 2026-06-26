@@ -23,6 +23,7 @@ interface SimulatorPageProps {
   setPhiY: (v: number) => void;
   psi: number;
   setPsi: (v: number) => void;
+  selectedSetting: number;
   amplitudes: Record<string, number>;
   setAmplitudes: React.Dispatch<React.SetStateAction<Record<string, number>>>;
   phases: Record<string, number>;
@@ -45,6 +46,7 @@ export function SimulatorPage({
   setPhiY,
   psi,
   setPsi,
+  selectedSetting,
   amplitudes,
   setAmplitudes,
   phases,
@@ -55,7 +57,7 @@ export function SimulatorPage({
   const [verboseFormulas, setVerboseFormulas] = useState(false);
 
   const { labFrame, sourceTerms, sourceTermsExEy, expandedFormulas, independentComponents, simulationData } =
-    useSimulatorState(selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, amplitudes, setAmplitudes, phases, setPhases);
+    useSimulatorState(selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, selectedSetting, amplitudes, setAmplitudes, phases, setPhases);
 
   if (!selectedGroup) {
     return (

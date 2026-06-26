@@ -17,6 +17,7 @@ export function useSimulatorState(
   phiX: number,
   phiY: number,
   psi: number,
+  selectedSetting: number,
   amplitudes: Record<string, number>,
   setAmplitudes: React.Dispatch<React.SetStateAction<Record<string, number>>>,
   phases: Record<string, number>,
@@ -35,9 +36,10 @@ export function useSimulatorState(
       phiX,
       phiY,
       psi,
+      setting: selectedSetting,
       labFrameDisplayMode: 'E0_THETA',
     }).source;
-  }, [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi]);
+  }, [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, selectedSetting]);
 
   const sourceTermsExEy = useMemo(() => {
     if (!selectedGroup) return [];
@@ -50,9 +52,10 @@ export function useSimulatorState(
       phiX,
       phiY,
       psi,
+      setting: selectedSetting,
       labFrameDisplayMode: 'EX_EY',
     }).source;
-  }, [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi]);
+  }, [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, selectedSetting]);
 
   const expandedFormulas = useMemo(() => {
     const sxTermTheta = sourceTerms.find(t => t.component === 'S_X')?.rawPoly;
