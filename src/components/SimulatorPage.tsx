@@ -325,6 +325,7 @@ export function SimulatorPage({
 
                     <button
                       type="button"
+                      aria-expanded={phaseExpanded}
                       onClick={() => setPhaseOverrides(prev => {
                         const next = new Map(prev);
                         next.set(comp, !phaseExpanded);
