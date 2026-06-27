@@ -21,7 +21,7 @@ import { FormatPointGroup } from './components/MathComponents';
 const normalizeString = (str: string) => {
   return str
     .toLowerCase()
-    .replace(/[''`´,]/g, "'")
+    .replace(/[‘’''`´,]/g, "'")
     .replace(/\s+/g, "");
 };
 
