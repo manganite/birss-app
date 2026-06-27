@@ -1,6 +1,7 @@
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { Box, Hexagon, Triangle, Layers, Compass } from 'lucide-react';
+import { hklToPresetAngles } from '../services/orientation';
 
 export const getCrystalIcon = (system: string) => {
   switch (system.toLowerCase()) {
@@ -20,32 +21,52 @@ export interface KPreset {
   math: string;
   tx: number;
   ty: number;
+  psi0: number;
+}
+
+function makePreset(label: string, h: number, k: number, l: number): KPreset {
+  const o = hklToPresetAngles(h, k, l)!;
+  return { label, math: `k \\parallel ${label}`, tx: o.tx, ty: o.ty, psi0: o.psi0 };
 }
 
 const PRINCIPAL_PRESETS: KPreset[] = [
-  { label: '[001]', math: 'k \\parallel [001]', tx: 0, ty: 0 },
-  { label: '[100]', math: 'k \\parallel [100]', tx: 0, ty: -90 },
-  { label: '[010]', math: 'k \\parallel [010]', tx: 90, ty: 0 },
+  makePreset('[001]', 0, 0, 1),
+  makePreset('[100]', 1, 0, 0),
+  makePreset('[010]', 0, 1, 0),
 ];
 
-const PRESET_110: KPreset = { label: '[110]', math: 'k \\parallel [110]', tx: 90, ty: -45 };
-const PRESET_111: KPreset = { label: '[111]', math: 'k \\parallel [111]', tx: 45, ty: -(Math.atan(1 / Math.SQRT2) * 180 / Math.PI) };
+const PRESET_110: KPreset = makePreset('[110]', 1, 1, 0);
+const PRESET_111: KPreset = makePreset('[111]', 1, 1, 1);
+
+const PRESET_Y = makePreset('[010]', 0, 1, 0);
+
+const HEX_TRIG_PRESETS: KPreset[] = [
+  makePreset('[001]', 0, 0, 1),
+  makePreset('[100]', 1, 0, 0),
+  { label: '[120]', math: 'k \\parallel [120]', tx: PRESET_Y.tx, ty: PRESET_Y.ty, psi0: PRESET_Y.psi0 },
+];
+
+const MONO_TRI_PRESETS: KPreset[] = [
+  makePreset('[001]', 0, 0, 1),
+  makePreset('[100]', 1, 0, 0),
+  { label: '[010] ∥ b*', math: 'k \\parallel [010] \\parallel b^*', tx: PRESET_Y.tx, ty: PRESET_Y.ty, psi0: PRESET_Y.psi0 },
+];
 
 const PRESETS_BY_SYSTEM: Record<string, KPreset[]> = {
   Cubic: [...PRINCIPAL_PRESETS, PRESET_110, PRESET_111],
   Tetragonal: [...PRINCIPAL_PRESETS, PRESET_110],
   Orthorhombic: PRINCIPAL_PRESETS,
-  Hexagonal: PRINCIPAL_PRESETS,
-  Trigonal: PRINCIPAL_PRESETS,
-  Monoclinic: PRINCIPAL_PRESETS,
-  Triclinic: PRINCIPAL_PRESETS,
+  Hexagonal: HEX_TRIG_PRESETS,
+  Trigonal: HEX_TRIG_PRESETS,
+  Monoclinic: MONO_TRI_PRESETS,
+  Triclinic: MONO_TRI_PRESETS,
 };
 
 export function getPresetsForSystem(crystalSystem: string): KPreset[] {
   return PRESETS_BY_SYSTEM[crystalSystem] ?? PRINCIPAL_PRESETS;
 }
 
-export { hklToPresetAngles } from '../services/orientation';
+export { hklToPresetAngles };
 
 export const LabFrameOrientation = ({ labFrame }: { labFrame: { X: string; Y: string; Z: string } }) => (
   <div className="flex-1 bg-ink/5 p-4 border border-ink/10 rounded-sm w-full">
