@@ -22,25 +22,28 @@ npm run deploy       # build + publish to GitHub Pages via gh-pages
 
 ```
 src/
+  types.ts                       # Shared prop interfaces (TensorConfig, OrientationState, SimulationState)
   data/pointGroups.ts            # Static registry of all 122 magnetic point groups
   services/
     tensorCalculator.ts          # Thin barrel re-exporting the public API below
     symmetryGroups.ts            # Matrix algebra, GENERATORS table, group closure, getSymmetryOperations
     tensorProjection.ts          # Numeric tensor projection (transform/average/basis), SHG polynomials, lab-frame vectors
+    orientation.ts               # Miller index → preset angles (hklToPresetAngles), azimuth-zero convention
     trigPoly.ts                  # Trigonometric polynomial algebra for symbolic rotation angles (phiX, phiY, psi)
     symbolicProjection.ts        # Symbolic SHG source terms — parallel path producing TrigPoly coefficients
     trigPolyFormat.ts            # LaTeX formatting for TrigPoly and SymPoly expressions
     latexFormatting.ts           # LaTeX rendering: calculateTensorComponents, formatSubstitutedPolySum
   components/
     MathComponents.tsx           # Shared KaTeX render helpers (TensorTerm, FormatPointGroup, SymmetryOperation)
+    CalculatorPage.tsx           # Calculator page — tensor components, induced response, source terms
     PointGroupExplorer.tsx       # Explorer page — browse & filter the 122 groups
     OperationsModal.tsx          # Modal showing symmetry operations for a selected group
     SimulatorPage.tsx            # Simulator page — radar chart polarimetry, Fourier series formulas
     HelpPage.tsx                 # Physics background & usage docs
-  App.tsx                        # Root: global state, tab routing, Calculator page UI
+  App.tsx                        # Root: global state, tab routing, header, footer
 ```
 
-All cross-page state (selected group, tensor type, time-reversal, rotation angles, amplitudes, phases) lives in `App.tsx` and is passed down as props. There is no state management library.
+All cross-page state (selected group, tensor type, time-reversal, rotation angles, amplitudes, phases) lives in `App.tsx` and is passed down via grouped prop objects (`TensorConfig`, `OrientationState`, `SimulationState` from `types.ts`). There is no state management library.
 
 ### `services/` module dependency direction
 
@@ -101,7 +104,7 @@ the numeric path but never the other way round:
 - One custom utility in `index.css`: `.overline` for text-decoration.
 
 ### Component patterns
-- All page components receive state as explicit props from `App.tsx` — no Context API or Zustand.
+- All page components receive state as grouped prop objects from `App.tsx` (`TensorConfig`, `OrientationState`, etc.) — no Context API or Zustand.
 - `useMemo` is used extensively in `SimulatorPage.tsx` and `App.tsx` for expensive tensor calculations.
 - Animations use `motion` from `motion/react` (Framer Motion v12), with `AnimatePresence` for exit animations.
 - Icons come exclusively from `lucide-react`.
