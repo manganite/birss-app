@@ -10,7 +10,7 @@
 import { type TrigPoly, trigConst, trigCos, trigSin, trigAdd, trigMul, trigScale, trigIsZero, trigSimplify, TRIG_ZERO } from './trigPoly';
 import {
   type SHGOptions, type SHGExpression,
-  rotX, rotY, mat3mul,
+  rotX, rotY, rotZ, mat3mul,
   averageTensor, getIndices, getLabel, formatCoeff, cleanupExpressionSigns,
 } from './tensorProjection';
 import { EPSILON, GENERATORS, getCachedFullGroup, getTransformedGenerators } from './symmetryGroups';
@@ -77,8 +77,8 @@ function symRotZ(): TrigMat3 {
   ];
 }
 
-export function buildSymbolicR(thetaX: number, thetaY: number): TrigMat3 {
-  const R_preset = numToTrigMat3(mat3mul(rotY(thetaY), rotX(thetaX)));
+export function buildSymbolicR(thetaX: number, thetaY: number, psi0 = 0): TrigMat3 {
+  const R_preset = numToTrigMat3(mat3mul(rotZ(psi0), mat3mul(rotY(thetaY), rotX(thetaX))));
   return trigMat3Mul(symRotZ(), trigMat3Mul(symRotY(), trigMat3Mul(symRotX(), R_preset)));
 }
 
@@ -118,7 +118,7 @@ function addPolySym(a: SymPoly, b: SymPoly, scaleB: TrigPoly): SymPoly {
 }
 
 export function calculateSymbolicSHGExpressions(options: SHGOptions): SymbolicSHGResult {
-  const { groupName, tensorType, trType, thetaX = 0, thetaY = 0, setting = 1 } = options;
+  const { groupName, tensorType, trType, thetaX = 0, thetaY = 0, psi0 = 0, setting = 1 } = options;
 
   const generators = setting > 1
     ? getTransformedGenerators(groupName, setting)
@@ -133,7 +133,7 @@ export function calculateSymbolicSHGExpressions(options: SHGOptions): SymbolicSH
   const dim = Math.pow(3, rank);
   const tLabels = ['x', 'y', 'z'];
 
-  const R_sym = buildSymbolicR(thetaX, thetaY);
+  const R_sym = buildSymbolicR(thetaX, thetaY, psi0);
 
   // E_vec_lab_in_cryst: E_cryst_i = R[0][i]*E_X + R[1][i]*E_Y (E_Z=0 transverse)
   const E_vec_lab_in_cryst_sym: TrigPoly[][] = [

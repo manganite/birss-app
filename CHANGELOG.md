@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-06-27
+
+### Fixed
+- Azimuth-zero convention for non-principal crystal cuts: preset rotation
+  now includes a beam-axis offset (psi0) that anchors azimuth 0 to the
+  projection of the crystal c-axis [001] onto the sample surface. This
+  makes polarimetry at psi=0 reproducible and lab-independent for cuts
+  like [110], [111], and arbitrary [hkl]. Principal cuts are unchanged.
+  Previously, azimuth 0 was an arbitrary byproduct of the Euler
+  decomposition order (wrong by up to 120° for some cuts since v0.7.0).
+- Preset labels for hexagonal/trigonal systems corrected from [010] to
+  [120], matching the actual crystallographic direction of the Cartesian
+  y-axis. Monoclinic/triclinic labels now show [010] ∥ b* to clarify the
+  reciprocal-space nature of that direction.
+- Free [hkl] Miller-index input restricted to cubic point groups. For
+  non-cubic systems the orthonormal-metric interpretation silently
+  produced wrong geometry (since v0.7.0). Non-cubic systems use curated
+  presets only.
+- Free [hkl] input hidden on mobile, consistent with the presets-only
+  mobile design.
+- Preset highlight comparison now includes psi0 (from the azimuth-zero
+  fix), preventing false highlights when angles match but psi0 differs.
+
+### Added
+- Always-visible mobile preset strip for crystal cut selection, placed
+  above the results panel. Previously, cut selection on mobile required
+  expanding the collapsed Source Terms section.
+- Validation feedback on the [hkl] input field: red border and hint text
+  on malformed input (previously silent no-op).
+
+### Changed
+- Calculator view extracted from App.tsx into CalculatorPage.tsx
+  (App.tsx reduced from 910 to 322 lines).
+- SimulatorPage props grouped from 24 flat props into 5 structured
+  objects (TensorConfig, OrientationState, SimulationState).
+- Spin-slow animation moved from inline `<style>` block to index.css.
+
 ## [0.7.0] - 2026-06-26
 
 ### Added
@@ -186,7 +223,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/manganite/birss-app/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/manganite/birss-app/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/manganite/birss-app/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/manganite/birss-app/compare/v0.4.0...v0.5.0

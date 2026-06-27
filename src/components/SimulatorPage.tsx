@@ -1,59 +1,31 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PointGroupData } from '../data/pointGroups';
-import { TensorType, TensorTimeReversal, isCentrosymmetric, type SymbolicSHGResult, formatSymbolicSourceTerm } from '../services/tensorCalculator';
+import { isCentrosymmetric, type SymbolicSHGResult, formatSymbolicSourceTerm } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
 import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
 import { TensorTerm, FormatPointGroup, getPresetsForSystem, LabFrameOrientation } from './MathComponents';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
+import type { TensorConfig, OrientationState, SimulationState } from '../types';
 
 interface SimulatorPageProps {
   selectedGroup: PointGroupData | null;
-  selectedTensorType: TensorType;
-  setSelectedTensorType: (t: TensorType) => void;
-  selectedTimeReversal: TensorTimeReversal;
-  setSelectedTimeReversal: (t: TensorTimeReversal) => void;
-  thetaX: number;
-  setThetaX: (t: number) => void;
-  thetaY: number;
-  setThetaY: (t: number) => void;
-  phiX: number;
-  setPhiX: (v: number) => void;
-  phiY: number;
-  setPhiY: (v: number) => void;
-  psi: number;
-  setPsi: (v: number) => void;
-  selectedSetting: number;
+  tensorConfig: TensorConfig;
+  orientation: OrientationState;
   symbolicExpressions: SymbolicSHGResult | null;
-  amplitudes: Record<string, number>;
-  setAmplitudes: React.Dispatch<React.SetStateAction<Record<string, number>>>;
-  phases: Record<string, number>;
-  setPhases: React.Dispatch<React.SetStateAction<Record<string, number>>>;
+  simulation: SimulationState;
 }
 
 export function SimulatorPage({
   selectedGroup,
-  selectedTensorType,
-  setSelectedTensorType,
-  selectedTimeReversal,
-  setSelectedTimeReversal,
-  thetaX,
-  setThetaX,
-  thetaY,
-  setThetaY,
-  phiX,
-  setPhiX,
-  phiY,
-  setPhiY,
-  psi,
-  setPsi,
-  selectedSetting,
+  tensorConfig,
+  orientation,
   symbolicExpressions,
-  amplitudes,
-  setAmplitudes,
-  phases,
-  setPhases
+  simulation,
 }: SimulatorPageProps) {
+  const { type: selectedTensorType, setType: setSelectedTensorType, timeReversal: selectedTimeReversal, setTimeReversal: setSelectedTimeReversal, setting: selectedSetting } = tensorConfig;
+  const { thetaX, setThetaX, thetaY, setThetaY, psi0, setPsi0, phiX, setPhiX, phiY, setPhiY, psi, setPsi } = orientation;
+  const { amplitudes, setAmplitudes, phases, setPhases } = simulation;
   const [activePolarimetryTab, setActivePolarimetryTab] = useState<'anisotropy' | 'polarizer' | 'analyzer'>('anisotropy');
   const [showEquations, setShowEquations] = useState(false);
   const [verboseFormulas, setVerboseFormulas] = useState(false);
@@ -63,10 +35,10 @@ export function SimulatorPage({
 
   const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
 
-  const activePreset = getPresetsForSystem(selectedGroup?.crystalSystem ?? '').find(p => p.tx === thetaX && p.ty === thetaY);
+  const activePreset = getPresetsForSystem(selectedGroup?.crystalSystem ?? '').find(p => p.tx === thetaX && p.ty === thetaY && p.psi0 === psi0);
 
   const { labFrame, sourceTerms, sourceTermsExEy, expandedFormulas, independentComponents, simulationData } =
-    useSimulatorState(selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, phiX, phiY, psi, selectedSetting, amplitudes, setAmplitudes, phases, setPhases);
+    useSimulatorState(selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, psi0, phiX, phiY, psi, selectedSetting, amplitudes, setAmplitudes, phases, setPhases);
 
   if (!selectedGroup) {
     return (
@@ -162,9 +134,10 @@ export function SimulatorPage({
                   onClick={() => {
                     setThetaX(ori.tx);
                     setThetaY(ori.ty);
+                    setPsi0(ori.psi0);
                   }}
                   className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-ink ${
-                    thetaX === ori.tx && thetaY === ori.ty
+                    thetaX === ori.tx && thetaY === ori.ty && psi0 === ori.psi0
                       ? 'bg-ink text-paper'
                       : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
                   }`}
