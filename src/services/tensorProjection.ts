@@ -263,6 +263,7 @@ export interface SHGOptions {
   trType: TensorTimeReversal;
   thetaX?: number;
   thetaY?: number;
+  psi0?: number;
   phiX?: number;
   phiY?: number;
   psi?: number;
@@ -271,7 +272,7 @@ export interface SHGOptions {
 }
 
 export function calculateSHGExpressions(options: SHGOptions): SHGResult {
-  const { groupName, tensorType, trType, thetaX = 0, thetaY = 0, phiX = 0, phiY = 0, psi = 0, setting = 1, labFrameDisplayMode = 'EX_EY' } = options;
+  const { groupName, tensorType, trType, thetaX = 0, thetaY = 0, psi0 = 0, phiX = 0, phiY = 0, psi = 0, setting = 1, labFrameDisplayMode = 'EX_EY' } = options;
   const generators = setting > 1
     ? getTransformedGenerators(groupName, setting)
     : GENERATORS[groupName];
@@ -286,8 +287,8 @@ export function calculateSHGExpressions(options: SHGOptions): SHGResult {
 
   const tLabels = ['x', 'y', 'z'];
 
-  // R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset, where R_preset = Ry(thetaY) · Rx(thetaX)
-  const R_preset = mat3mul(rotY(thetaY), rotX(thetaX));
+  // R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset, where R_preset = Rz(psi0) · Ry(thetaY) · Rx(thetaX)
+  const R_preset = mat3mul(rotZ(psi0), mat3mul(rotY(thetaY), rotX(thetaX)));
   const R = mat3mul(rotZ(psi), mat3mul(rotY(phiY), mat3mul(rotX(phiX), R_preset)));
 
   // E_vec_lab_in_cryst maps Lab E-field (E_X, E_Y, 0) to Crystal E-field
@@ -545,13 +546,14 @@ export function calculateSHGExpressions(options: SHGOptions): SHGResult {
 export interface LabFrameOptions {
   thetaX?: number;
   thetaY?: number;
+  psi0?: number;
   phiX?: number;
   phiY?: number;
   psi?: number;
 }
 
 export function getLabFrameVectors(options: LabFrameOptions = {}) {
-  const { thetaX = 0, thetaY = 0, phiX = 0, phiY = 0, psi = 0 } = options;
+  const { thetaX = 0, thetaY = 0, psi0 = 0, phiX = 0, phiY = 0, psi = 0 } = options;
 
   const formatVec = (v: number[]) => {
     const terms: string[] = [];
@@ -566,8 +568,8 @@ export function getLabFrameVectors(options: LabFrameOptions = {}) {
     return terms.length > 0 ? terms.join(" ") : "0";
   };
 
-  // R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · Ry(thetaY) · Rx(thetaX)
-  const R_preset = mat3mul(rotY(thetaY), rotX(thetaX));
+  // R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · Rz(psi0) · Ry(thetaY) · Rx(thetaX)
+  const R_preset = mat3mul(rotZ(psi0), mat3mul(rotY(thetaY), rotX(thetaX)));
   const R = mat3mul(rotZ(psi), mat3mul(rotY(phiY), mat3mul(rotX(phiX), R_preset)));
 
   // V_cryst = R^T · V_lab
