@@ -45,7 +45,7 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator, onOpenInSi
               {group.schoenflies && (
                 <>
                   <span>•</span>
-                  <span>{group.schoenflies}</span>
+                  <span className="normal-case">{group.schoenflies}</span>
                 </>
               )}
             </div>
