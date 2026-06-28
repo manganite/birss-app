@@ -2,6 +2,39 @@
 
 Scientific React SPA that calculates non-zero susceptibility tensor components (ED, MD, EQ) and SHG source terms for all 32 crystallographic and 122 magnetic point groups.
 
+## Current work (next cycle)
+
+The active backlog lives in two companion documents:
+
+- **`TODO-next.md`** — the detailed findings: per-item problem, fix, file:line
+  anchors, acceptance, and a `Status:` tag (`Decided` / `Open decision` /
+  `Derivation / verification pending`). Items have stable IDs (`A#` = bug,
+  `B#` = change). An "Open points at a glance" list near the top shows what still
+  needs a decision or derivation.
+- **`ROADMAP-next.md`** — the execution plan: items grouped into **Waves A–E** by
+  dependency and risk, with a dependency graph, release cadence, and a per-item
+  contract. Start here to decide *what to pick up next*.
+
+Working rules for this cycle:
+
+- **Orientation-(in)dependence split** is the organising principle: the Calculator
+  owns crystal-frame, orientation-free results (tensor form, induced response, source
+  term *frozen at the cut*); the Simulator owns lab-frame, orientation-dependent
+  results (*swept* source terms, polarimetry). Group / tensor type / time-reversal /
+  setting are a shared group context.
+- **Safety net first.** For any data/math item, extend the relevant golden / rotated
+  fixture (`goldenTensors.fixtures.ts`, `rotatedSHG.fixtures.ts`) **first** and require
+  it green, then change code. Fixtures come from literature, never from app output.
+- **Resolve before coding.** An item tagged *Open decision* or *Derivation /
+  verification pending* must have that resolved (and its `Status:` updated) before its
+  implementation branch opens.
+- **Verify, don't guess.** Check claims against the code (or ask) before acting;
+  several `TODO-next.md` items are marked *provisional* for exactly this reason.
+- **Ask when in doubt.** If the intent, rationale, or scope of a TODO or ROADMAP
+  item is unclear, ask for clarification rather than interpreting on your own. The
+  items encode specific design decisions and physics reasoning — guessing risks
+  implementing the wrong thing.
+
 ## Build & Dev
 
 ```bash
