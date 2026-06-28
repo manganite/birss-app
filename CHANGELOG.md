@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- `formatCoeff` recognises `1/√6` and renders it as `1/√6` instead of the
+  decimal `0.408`. The existing `√6/3` entry now displays as `2/√6` so the
+  `[111]` cubic lab-frame X-coefficients read homogeneously (display only;
+  numeric values unchanged).
+
 ## [0.8.0] - 2026-06-28
 
 ### Added

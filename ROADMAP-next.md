@@ -66,6 +66,8 @@ feature this continues. `Wave` is the execution slot defined below.
 | B25 | Note / container / emphasis styling | Decided (1 open) | 8 | **D** |
 | B26 | Spurious scroll arrows on equation rows | **Done** (v0.8.0) | 8 | **C** |
 | B27 | Group info header: optional fields | Open (which fields) | 5/8 | **D** |
+| B28 | formatCoeff: recognise 1/√6 | **Done** (v0.8.1) | 8 | **C** |
+| B29 | Context-sensitive coefficient formatter | Idea | — | **E** |
 
 ---
 

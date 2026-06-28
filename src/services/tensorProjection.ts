@@ -117,8 +117,9 @@ export function formatCoeff(c: number): string {
     { val: Math.sqrt(2) / 3, str: "\\frac{\\sqrt{2}}{3}" },
     { val: 2 * Math.sqrt(2) / 3, str: "\\frac{2\\sqrt{2}}{3}" },
     { val: Math.sqrt(6), str: "\\sqrt{6}" },
+    { val: 1 / Math.sqrt(6), str: "\\frac{1}{\\sqrt{6}}" },
     { val: Math.sqrt(6) / 2, str: "\\frac{\\sqrt{6}}{2}" },
-    { val: Math.sqrt(6) / 3, str: "\\frac{\\sqrt{6}}{3}" },
+    { val: 2 / Math.sqrt(6), str: "\\frac{2}{\\sqrt{6}}" },
     { val: Math.sqrt(6) / 4, str: "\\frac{\\sqrt{6}}{4}" },
   ];
 
