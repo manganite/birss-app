@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tensor rank badge no longer shows "RANK RANK 3" / "RANK RANK 4"; displays
   "RANK 3" / "RANK 4" as intended (since v0.4.0).
 
+### Changed
+- Crystal cut presets reduced to one representative per symmetry direction
+  family (Blickrichtungen): Cubic shows [100], [111], [110]; Tetragonal shows
+  [001], [100], [110]. Previously, symmetry-equivalent directions (e.g.
+  [001]/[100]/[010] in cubic) were listed individually.
+
+### Removed
+- Free [hkl] Miller-index input for cubic groups removed. Use the curated
+  presets instead (restricted to cubic only since v0.7.1).
+
 ## [0.7.1] - 2026-06-27
 
 ### Fixed

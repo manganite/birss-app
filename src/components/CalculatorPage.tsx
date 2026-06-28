@@ -14,7 +14,7 @@ import {
   formatSymbolicSourceTerm,
   type SymbolicSHGResult,
 } from '../services/tensorCalculator';
-import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPresetsForSystem, LabFrameOrientation, AxisOrientationInfo, hklToPresetAngles } from './MathComponents';
+import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPresetsForSystem, LabFrameOrientation, AxisOrientationInfo } from './MathComponents';
 import type { TensorConfig, PresetAnglesState } from '../types';
 
 const TENSOR_META = {
@@ -32,20 +32,10 @@ interface CalculatorPageProps {
 }
 
 export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symbolicExpressions, onNavigate }: CalculatorPageProps) {
-  const [hklInput, setHklInput] = useState('');
   const [activeResultTab, setActiveResultTab] = useState<'components' | 'induced' | 'source'>('components');
   const [mobileSourceExpanded, setMobileSourceExpanded] = useState(false);
   const [mobileClassificationExpanded, setMobileClassificationExpanded] = useState(false);
   const [mobileSetupExpanded, setMobileSetupExpanded] = useState(false);
-
-
-  const hklValidation = useMemo(() => {
-    if (!hklInput.trim()) return 'empty' as const;
-    const parts = hklInput.trim().split(/[\s,]+/).map(Number);
-    if (parts.length !== 3 || !parts.every(n => Number.isInteger(n))) return 'invalid' as const;
-    if (parts[0] === 0 && parts[1] === 0 && parts[2] === 0) return 'invalid' as const;
-    return 'valid' as const;
-  }, [hklInput]);
 
   const { thetaX, setThetaX, thetaY, setThetaY, psi0, setPsi0 } = presetAngles;
   const { type: selectedTensorType, setType: setSelectedTensorType, timeReversal: selectedTimeReversal, setTimeReversal: setSelectedTimeReversal, setting: selectedSetting, setSetting: setSelectedSetting } = tensorConfig;
@@ -269,10 +259,9 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                 setThetaX(ori.tx);
                 setThetaY(ori.ty);
                 setPsi0(ori.psi0);
-                setHklInput('');
               }}
               className={`px-3 py-1.5 text-[11px] tracking-[0.1em] transition-all border border-ink ${
-                thetaX === ori.tx && thetaY === ori.ty && psi0 === ori.psi0 && !hklInput
+                thetaX === ori.tx && thetaY === ori.ty && psi0 === ori.psi0
                   ? 'bg-ink text-paper'
                   : 'opacity-50 border-opacity-20'
               }`}
@@ -441,10 +430,9 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                               setThetaX(ori.tx);
                               setThetaY(ori.ty);
                               setPsi0(ori.psi0);
-                              setHklInput('');
                             }}
                             className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-ink ${
-                              thetaX === ori.tx && thetaY === ori.ty && psi0 === ori.psi0 && !hklInput
+                              thetaX === ori.tx && thetaY === ori.ty && psi0 === ori.psi0
                                 ? 'bg-ink text-paper'
                                 : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
                             }`}
@@ -452,40 +440,6 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                             <InlineMath math={ori.math} />
                           </button>
                         ))}
-                        {selectedGroup.crystalSystem === 'Cubic' && (
-                          <div className="hidden md:flex items-center gap-2">
-                            <span className="text-[10px] uppercase tracking-[0.1em] opacity-40">or</span>
-                            <div className="relative">
-                              <input
-                                type="text"
-                                aria-label="Miller indices [h k l]"
-                                value={hklInput}
-                                onChange={(e) => {
-                                  const val = e.target.value;
-                                  setHklInput(val);
-                                  const parts = val.trim().split(/[\s,]+/).map(Number);
-                                  if (parts.length === 3 && parts.every(n => Number.isInteger(n))) {
-                                    const angles = hklToPresetAngles(parts[0], parts[1], parts[2]);
-                                    if (angles) {
-                                      setThetaX(angles.tx);
-                                      setThetaY(angles.ty);
-                                      setPsi0(angles.psi0);
-                                    }
-                                  }
-                                }}
-                                placeholder="h k l"
-                                className={`w-24 px-3 py-2 text-[12px] tracking-[0.1em] border bg-transparent text-center placeholder:opacity-30 focus:outline-none ${
-                                  hklValidation === 'invalid'
-                                    ? 'border-red-400/60 text-red-900/70'
-                                    : 'border-ink border-opacity-20 focus:border-opacity-100'
-                                }`}
-                              />
-                              {hklValidation === 'invalid' && (
-                                <p className="absolute text-[9px] text-red-400/80 mt-0.5 w-full text-center">3 integers</p>
-                              )}
-                            </div>
-                          </div>
-                        )}
                       </div>
                     </div>
                     <div className="flex flex-col md:flex-row gap-8 items-start mt-6">
