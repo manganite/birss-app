@@ -252,6 +252,10 @@ export default function App() {
               setSelectedGroup(group);
               setCurrentView('calculator');
             }}
+            onSelectGroupForSimulator={(group) => {
+              setSelectedGroup(group);
+              setCurrentView('simulator');
+            }}
           />
         ) : currentView === 'simulator' ? (
           <SimulatorPage

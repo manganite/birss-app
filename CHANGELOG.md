@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Explorer group popup displays the Schoenflies symbol alongside the
+  Hermann-Mauguin notation for Type-I and Type-II (grey) groups.
+- Explorer group popup adds an "Open in Simulator" button alongside the
+  existing "Open in Calculator" link.
+
 ### Fixed
 - Tensor rank badge no longer shows "RANK RANK 3" / "RANK RANK 4"; displays
   "RANK 3" / "RANK 4" as intended (since v0.4.0).

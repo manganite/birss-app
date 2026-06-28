@@ -16,9 +16,10 @@ const CRYSTAL_SYSTEMS = [
 
 interface PointGroupExplorerProps {
   onSelectGroupForCalculator?: (group: PointGroupData) => void;
+  onSelectGroupForSimulator?: (group: PointGroupData) => void;
 }
 
-export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExplorerProps) => {
+export const PointGroupExplorer = ({ onSelectGroupForCalculator, onSelectGroupForSimulator }: PointGroupExplorerProps) => {
   const [selectedGroup, setSelectedGroup] = useState<PointGroupData | null>(null);
   const [activeSystem, setActiveSystem] = useState(CRYSTAL_SYSTEMS[0]);
 
@@ -157,6 +158,7 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
             group={selectedGroup}
             onClose={() => setSelectedGroup(null)}
             onOpenInCalculator={onSelectGroupForCalculator ? () => onSelectGroupForCalculator(selectedGroup) : undefined}
+            onOpenInSimulator={onSelectGroupForSimulator ? () => onSelectGroupForSimulator(selectedGroup) : undefined}
           />
         )}
       </AnimatePresence>
