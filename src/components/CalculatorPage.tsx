@@ -18,9 +18,9 @@ import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPre
 import type { TensorConfig, PresetAnglesState } from '../types';
 
 const TENSOR_META = {
-  ED: { label: 'Electric Dipole', rank: 'RANK 3', type: 'POLAR' },
-  MD: { label: 'Magnetic Dipole', rank: 'RANK 3', type: 'AXIAL' },
-  EQ: { label: 'Electric Quadrupole', rank: 'RANK 4', type: 'POLAR' },
+  ED: { label: 'Electric Dipole', rank: '3', type: 'POLAR' },
+  MD: { label: 'Magnetic Dipole', rank: '3', type: 'AXIAL' },
+  EQ: { label: 'Electric Quadrupole', rank: '4', type: 'POLAR' },
 } as const;
 
 interface CalculatorPageProps {
