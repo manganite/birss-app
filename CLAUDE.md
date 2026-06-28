@@ -11,6 +11,13 @@
 - **Merge method:** `--no-ff` for local merges; pull request for physics/tensor changes
 - **CHANGELOG.md:** Update `[Unreleased]` for user-facing changes
 
+## Current backlog
+
+Before picking up work, read **`ROADMAP-next.md`** (wave order + dependencies) and the
+referenced items in **`TODO-next.md`** (detailed findings + `Status:` tags). Honour the
+per-item contract there: fixtures-first for data/math, resolve `Open decision` /
+`Derivation pending` items before coding, gate on `npm run lint && npm run test`.
+
 ## Architecture (quick reference)
 
 - All cross-page state lives in `App.tsx`, passed via grouped prop objects (`TensorConfig`, `OrientationState`, `SimulationState` from `src/types.ts`)
