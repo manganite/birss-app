@@ -29,16 +29,13 @@ function makePreset(label: string, h: number, k: number, l: number): KPreset {
   return { label, math: `k \\parallel ${label}`, tx: o.tx, ty: o.ty, psi0: o.psi0 };
 }
 
-const PRINCIPAL_PRESETS: KPreset[] = [
-  makePreset('[001]', 0, 0, 1),
+const PRESET_Y = makePreset('[010]', 0, 1, 0);
+
+const ORTHO_PRESETS: KPreset[] = [
   makePreset('[100]', 1, 0, 0),
   makePreset('[010]', 0, 1, 0),
+  makePreset('[001]', 0, 0, 1),
 ];
-
-const PRESET_110: KPreset = makePreset('[110]', 1, 1, 0);
-const PRESET_111: KPreset = makePreset('[111]', 1, 1, 1);
-
-const PRESET_Y = makePreset('[010]', 0, 1, 0);
 
 const HEX_TRIG_PRESETS: KPreset[] = [
   makePreset('[001]', 0, 0, 1),
@@ -53,9 +50,9 @@ const MONO_TRI_PRESETS: KPreset[] = [
 ];
 
 const PRESETS_BY_SYSTEM: Record<string, KPreset[]> = {
-  Cubic: [...PRINCIPAL_PRESETS, PRESET_110, PRESET_111],
-  Tetragonal: [...PRINCIPAL_PRESETS, PRESET_110],
-  Orthorhombic: PRINCIPAL_PRESETS,
+  Cubic: [makePreset('[100]', 1, 0, 0), makePreset('[111]', 1, 1, 1), makePreset('[110]', 1, 1, 0)],
+  Tetragonal: [makePreset('[001]', 0, 0, 1), makePreset('[100]', 1, 0, 0), makePreset('[110]', 1, 1, 0)],
+  Orthorhombic: ORTHO_PRESETS,
   Hexagonal: HEX_TRIG_PRESETS,
   Trigonal: HEX_TRIG_PRESETS,
   Monoclinic: MONO_TRI_PRESETS,
@@ -63,10 +60,8 @@ const PRESETS_BY_SYSTEM: Record<string, KPreset[]> = {
 };
 
 export function getPresetsForSystem(crystalSystem: string): KPreset[] {
-  return PRESETS_BY_SYSTEM[crystalSystem] ?? PRINCIPAL_PRESETS;
+  return PRESETS_BY_SYSTEM[crystalSystem] ?? ORTHO_PRESETS;
 }
-
-export { hklToPresetAngles };
 
 export const LabFrameOrientation = ({ labFrame }: { labFrame: { X: string; Y: string; Z: string } }) => (
   <div className="flex-1 bg-ink/5 p-4 border border-ink/10 rounded-sm w-full">
