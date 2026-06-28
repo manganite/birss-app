@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion } from 'motion/react';
-import { X, Calculator } from 'lucide-react';
+import { X, Calculator, Activity } from 'lucide-react';
 import { getSymmetryOperations, getGeneratorSymbols } from '../services/tensorCalculator';
 import { FormatPointGroup, SymmetryOperation } from './MathComponents';
 import { PointGroupData } from '../data/pointGroups';
@@ -10,9 +10,10 @@ interface OperationsModalProps {
   group: PointGroupData;
   onClose: () => void;
   onOpenInCalculator?: () => void;
+  onOpenInSimulator?: () => void;
 }
 
-export const OperationsModal = ({ group, onClose, onOpenInCalculator }: OperationsModalProps) => {
+export const OperationsModal = ({ group, onClose, onOpenInCalculator, onOpenInSimulator }: OperationsModalProps) => {
   const operations = getSymmetryOperations(group.name);
   const generators = getGeneratorSymbols(group.name);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,6 +42,12 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
               <span>{group.crystalSystem}</span>
               <span>•</span>
               <span>Type {group.type}</span>
+              {group.schoenflies && (
+                <>
+                  <span>•</span>
+                  <span className="normal-case">{group.schoenflies}</span>
+                </>
+              )}
             </div>
           </div>
           <button
@@ -51,7 +58,7 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
             <X className="w-5 h-5" />
           </button>
         </div>
-        
+
         <div className="p-6 overflow-y-auto space-y-6">
           {generators.length > 0 && (
             <div>
@@ -73,18 +80,32 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator }: Operatio
           </div>
         </div>
 
-        {onOpenInCalculator && (
-          <div className="p-4 border-t border-ink bg-ink/5 flex justify-end shrink-0">
-            <button
-              onClick={() => {
-                onOpenInCalculator();
-                onClose();
-              }}
-              className="px-4 py-2 bg-ink text-paper text-sm uppercase tracking-widest hover:bg-transparent hover:text-ink border border-ink transition-colors flex items-center gap-2"
-            >
-              <Calculator className="w-4 h-4" />
-              Open in Calculator
-            </button>
+        {(onOpenInCalculator || onOpenInSimulator) && (
+          <div className="p-4 border-t border-ink bg-ink/5 flex justify-end gap-2 shrink-0">
+            {onOpenInCalculator && (
+              <button
+                onClick={() => {
+                  onOpenInCalculator();
+                  onClose();
+                }}
+                className="px-4 py-2 bg-ink text-paper text-sm uppercase tracking-widest hover:bg-transparent hover:text-ink border border-ink transition-colors flex items-center gap-2"
+              >
+                <Calculator className="w-4 h-4" />
+                Open in Calculator
+              </button>
+            )}
+            {onOpenInSimulator && (
+              <button
+                onClick={() => {
+                  onOpenInSimulator();
+                  onClose();
+                }}
+                className="px-4 py-2 bg-ink text-paper text-sm uppercase tracking-widest hover:bg-transparent hover:text-ink border border-ink transition-colors flex items-center gap-2"
+              >
+                <Activity className="w-4 h-4" />
+                Open in Simulator
+              </button>
+            )}
           </div>
         )}
       </motion.div>
