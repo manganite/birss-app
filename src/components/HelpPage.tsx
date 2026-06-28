@@ -4,14 +4,14 @@ import { BookOpen, Compass, Layers, Zap, Info, Activity, LucideIcon } from 'luci
 
 const FEATURES: { icon: LucideIcon; title: string; description: string; extra?: React.ReactNode }[] = [
   {
-    icon: Zap,
-    title: 'Calculator',
-    description: 'Calculate non-zero tensor components for various physical properties (Electric Dipole, Magnetic Dipole, Electric Quadrupole) under different point group symmetries. Supports time-reversal symmetry toggles for magnetic groups.',
-  },
-  {
     icon: Layers,
     title: 'Explorer',
     description: 'Browse all 122 crystallographic magnetic point groups. Filter by crystal system, group type (Ordinary, Gray, Black & White), and view their symmetry operations and properties.',
+  },
+  {
+    icon: Zap,
+    title: 'Calculator',
+    description: 'Calculate non-zero tensor components for various physical properties (Electric Dipole, Magnetic Dipole, Electric Quadrupole) under different point group symmetries. Supports time-reversal symmetry toggles for magnetic groups.',
   },
   {
     icon: Activity,
