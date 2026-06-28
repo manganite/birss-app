@@ -12,8 +12,7 @@ correctness; the mapping to the old feature numbers is given in the item index.
 **Prerequisites (not items below).** The `services/` split, the golden-fixture suite
 (`goldenTensors.fixtures.ts` / `.test.ts`, table-4e-verified + generator-derived),
 the rotated-path suite (`rotatedSHG.fixtures.ts` / `.test.ts`), and the per-module
-tests are assumed in place. Current version: **v0.7.1**; `CHANGELOG.md [Unreleased]`
-is empty (clean start).
+tests are assumed in place. Current version: **v0.8.1**; Wave C complete (v0.8.0 + v0.8.1).
 
 ---
 
@@ -67,7 +66,7 @@ feature this continues. `Wave` is the execution slot defined below.
 | B26 | Spurious scroll arrows on equation rows | **Done** (v0.8.0) | 8 | **C** |
 | B27 | Group info header: optional fields | Open (which fields) | 5/8 | **D** |
 | B28 | formatCoeff: recognise 1/√6 | **Done** (v0.8.1) | 8 | **C** |
-| B29 | Context-sensitive coefficient formatter | Idea | — | **E** |
+| B29 | Context-sensitive coefficient formatter | Idea | — | — |
 
 ---
 
@@ -123,6 +122,7 @@ check in `TODO-next.md`. Good for grooving the per-item workflow.
 | **B21** label wording consistency | `chore/label-consistency` | local | — |
 | **B11 / B12** Explorer popup (Schoenflies + Simulator link) | `feature/explorer-popup-fields` | PR | MINOR |
 | **B7** (remainder) preset redundancy + cubic free-input | `fix/cut-presets` | PR (geometry) | PATCH |
+| **B28** formatCoeff: recognise 1/√6 | `fix/format-coeff-sqrt6` | local | PATCH |
 
 Note on **B7**: the 0.7.1 release already restricted free `[hkl]` to cubic and hid it
 on mobile, and fixed hex/trig labels to `[120]`. **Remaining**: the cubic/tetragonal
@@ -176,7 +176,7 @@ Wave A:  golden + rotatedSHG fixtures  ── prerequisite for ──►  B, D, 
 Wave B:  A2 (rotation)  ── feeds ──►  A1, B16, B5/B8   (shared rotation/symbolic path)
          B1 (settings)  ── gates ──►  B2 / B2.3 / B2.4 ;  informs B27
 
-Wave C:  A4  B13  B23  B26  B9  B24  B21  B11/B12  B7(remainder)   (independent)
+Wave C:  A4  B13  B23  B26  B9  B24  B21  B11/B12  B7  B28   ✅ Done (v0.8.0 + v0.8.1)
 
 Wave D:  A1 ─► B5/B8 ─► B3/B27 ─► B4/B25/B20            (after A2)
          (A3, B6, B10, B17, B18 ride alongside)
@@ -184,6 +184,12 @@ Wave D:  A1 ─► B5/B8 ─► B3/B27 ─► B4/B25/B20            (after A2)
 Wave E:  B16 ◄ A2 / Feature-2     B2 ◄ B1
          B14+B22 ◄ B1, A2         B15 ◄ birss-tables repo
 ```
+
+### Unscheduled (revisit after the relevant wave lands)
+
+| Item | Revisit after | Notes |
+|---|---|---|
+| **B29** context-sensitive coefficient formatter | B16 | Open questions (grouping unit, call sites, tie-breaking) must be resolved first. B28 covers the concrete use case; B29 generalises it. Natural moment to decide is when B16 (source-term simplification) settles the rendering surface. |
 
 ---
 
