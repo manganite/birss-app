@@ -105,7 +105,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
             <span className="text-lg font-serif italic"><FormatPointGroup name={selectedGroup.name} /></span>
             <span className="text-xs opacity-50">{selectedGroup.crystalSystem}</span>
             <span className="text-xs opacity-50">· Type {selectedGroup.type}</span>
-            <span className="text-xs opacity-50">· {isCentrosymmetric(selectedGroup.name) ? 'Centro' : 'Non-centro'}</span>
+            <span className="text-xs opacity-50">· {isCentrosymmetric(selectedGroup.name) ? 'Centrosymmetric' : 'Non-Centrosymmetric'}</span>
           </div>
         </div>
         {mobileClassificationExpanded ? <ChevronUp className="w-4 h-4 opacity-50" /> : <ChevronDown className="w-4 h-4 opacity-50" />}
@@ -116,7 +116,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
         <section id="classification-panel" className="space-y-4 border border-ink border-opacity-10 p-6">
           <div className="text-xs uppercase tracking-[0.2em] opacity-50 font-semibold flex items-center gap-2">
             <Info className="w-3 h-3" />
-            Classification
+            Tensor Classification
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
@@ -421,7 +421,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                   <div className="hidden md:flex justify-between items-center border-b border-ink border-opacity-10 pb-4">
                     <div className="text-xs uppercase tracking-[0.2em] opacity-50 font-semibold flex items-center gap-2">
                       <Compass className="w-3 h-3" />
-                      Source Term Components S (Lab Frame)
+                      Source Terms (Lab Frame)
                     </div>
                     <div className="text-[10px] font-mono opacity-50">
                       {selectedTensorType === 'ED' ? <InlineMath math="S \propto P" /> : selectedTensorType === 'MD' ? <InlineMath math="S \propto \nabla \times M" /> : <InlineMath math="S \propto \nabla \cdot Q" />}
@@ -517,10 +517,10 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                         <Info className="w-4 h-4 mt-0.5 shrink-0 opacity-60" />
                         <p className="text-sm leading-relaxed">
                           {selectedTensorType === 'ED' && isCentrosymmetric(selectedGroup.name) && selectedTimeReversal === 'i'
-                            ? 'Electric-dipole SHG is symmetry-forbidden for centrosymmetric groups (i-type). The inversion operation forces all components of χ⁽²⁾ to zero.'
+                            ? 'ED SHG is symmetry-forbidden for centrosymmetric groups (i-type).'
                             : selectedGroup.type === 'II' && selectedTimeReversal === 'c'
-                            ? "c-type tensors vanish identically for grey groups (G1'). The time-reversal symmetry of the grey group requires all c-type components to be zero."
-                            : 'All source terms vanish for this configuration.'}
+                            ? "c-type tensors vanish for grey groups (G1')."
+                            : 'No non-zero components for this configuration.'}
                         </p>
                       </div>
                       <div className="flex flex-wrap gap-2 ml-7">

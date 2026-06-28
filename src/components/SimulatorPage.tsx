@@ -390,9 +390,9 @@ export function SimulatorPage({
                   <span className="italic">Zero intensity</span>
                   <span className="text-xs">
                     {selectedTensorType === 'ED' && isCentrosymmetric(selectedGroup.name) && selectedTimeReversal === 'i'
-                      ? 'ED SHG is symmetry-forbidden for centrosymmetric groups.'
+                      ? 'ED SHG is symmetry-forbidden for centrosymmetric groups (i-type).'
                       : selectedGroup.type === 'II' && selectedTimeReversal === 'c'
-                      ? "c-type tensors vanish for grey groups."
+                      ? "c-type tensors vanish for grey groups (G1')."
                       : ''}
                   </span>
                 </div>
@@ -402,7 +402,7 @@ export function SimulatorPage({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <PolarimetryPlot
                         title={<>Parallel (<InlineMath math="I_{\parallel}" />)</>}
-                        subtitle="Polarizer || Analyzer"
+                        subtitle="Polarizer ∥ Analyzer"
                         data={simulationData.data}
                         domainMax={simulationData.maxIntensity}
                         dataKey="parallel"
@@ -516,7 +516,7 @@ export function SimulatorPage({
               </div>
 
               <div className="space-y-4 md:col-span-2">
-                <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50">2. Source Terms (Current Configuration)</h4>
+                <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50">2. Source Terms (Lab Frame)</h4>
                 <p className="text-sm opacity-70 leading-relaxed">
                   For the selected point group and crystal orientation, the source terms evaluate to:
                 </p>
