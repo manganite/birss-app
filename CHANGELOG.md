@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Tensor rank badge no longer shows "RANK RANK 3" / "RANK RANK 4"; displays
+  "RANK 3" / "RANK 4" as intended (since v0.4.0).
+
 ## [0.7.1] - 2026-06-27
 
 ### Fixed
