@@ -37,7 +37,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
   const [mobileSourceExpanded, setMobileSourceExpanded] = useState(false);
   const [mobileClassificationExpanded, setMobileClassificationExpanded] = useState(false);
   const [mobileSetupExpanded, setMobileSetupExpanded] = useState(false);
-  const [mobileTensorNotesExpanded, setMobileTensorNotesExpanded] = useState(false);
+
 
   const hklValidation = useMemo(() => {
     if (!hklInput.trim()) return 'empty' as const;
@@ -570,26 +570,11 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
         </div>
 
         <div className="p-8 border border-ink border-opacity-10 space-y-4">
-          {/* Mobile: collapsible button; Desktop: static header */}
-          <div className="hidden md:block">
-            <h4 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-              <Info className="w-4 h-4" />
-              Tensor Notes
-            </h4>
-          </div>
-          <button
-            type="button"
-            aria-expanded={mobileTensorNotesExpanded}
-            onClick={() => setMobileTensorNotesExpanded(!mobileTensorNotesExpanded)}
-            className="md:hidden flex items-center justify-between w-full"
-          >
-            <h4 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-              <Info className="w-4 h-4" />
-              Tensor Notes
-            </h4>
-            {mobileTensorNotesExpanded ? <ChevronUp className="w-3.5 h-3.5 opacity-50" /> : <ChevronDown className="w-3.5 h-3.5 opacity-50" />}
-          </button>
-          <div className={mobileTensorNotesExpanded ? '' : 'hidden md:block'}>
+          <h4 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+            <Info className="w-4 h-4" />
+            Tensor Notes
+          </h4>
+          <div>
             {(selectedTensorType === 'MD' || selectedTensorType === 'EQ') && (
               <p className="text-xs opacity-60 leading-relaxed">
                 {selectedTensorType === 'MD' && "Note: Magnetic Dipole (Axial 3rd rank) tensors do not necessarily vanish in centrosymmetric groups."}
