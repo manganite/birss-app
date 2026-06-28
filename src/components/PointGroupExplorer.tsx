@@ -79,15 +79,15 @@ export const PointGroupExplorer = ({ onSelectGroupForCalculator }: PointGroupExp
           {/* Column Headers */}
           <div className="hidden md:block p-4 border-b border-ink bg-white/30">
             <h3 className="text-xs uppercase tracking-[0.2em] font-bold">Type I (Ordinary)</h3>
-            <p className="text-[10px] opacity-60 mt-1">{systemGroups.I.length} groups</p>
+            <p className="text-[10px] opacity-60 mt-1">{systemGroups.I.length} {systemGroups.I.length === 1 ? 'group' : 'groups'}</p>
           </div>
           <div className="hidden md:block p-4 border-b border-ink bg-white/30">
             <h3 className="text-xs uppercase tracking-[0.2em] font-bold">Type II (Gray)</h3>
-            <p className="text-[10px] opacity-60 mt-1">{systemGroups.II.length} groups</p>
+            <p className="text-[10px] opacity-60 mt-1">{systemGroups.II.length} {systemGroups.II.length === 1 ? 'group' : 'groups'}</p>
           </div>
           <div className="hidden md:block p-4 border-b border-ink bg-white/30">
             <h3 className="text-xs uppercase tracking-[0.2em] font-bold">Type III (Black & White)</h3>
-            <p className="text-[10px] opacity-60 mt-1">{systemGroups.III.length} groups</p>
+            <p className="text-[10px] opacity-60 mt-1">{systemGroups.III.length} {systemGroups.III.length === 1 ? 'group' : 'groups'}</p>
           </div>
 
           {/* Type I Column */}
