@@ -306,7 +306,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
           </div>
 
           {/* Content — mobile: stacked scroll, desktop: tab-controlled */}
-          <div className="p-6 md:p-8 md:min-h-[400px] space-y-8 md:space-y-0">
+          <div className="p-6 md:p-8 space-y-8 md:space-y-0">
             {/* Components */}
             <div className={activeResultTab !== 'components' ? 'md:hidden' : ''}>
               <div className="space-y-6">
