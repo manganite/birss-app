@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-06-28
+
 ### Added
 - Explorer group popup displays the Schoenflies symbol alongside the
   Hermann-Mauguin notation for Type-I and Type-II (grey) groups.
@@ -19,6 +21,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Explorer type-column subtitles now show the count for the selected crystal
   system (e.g. "7 groups" for Hexagonal Type I) instead of the global totals
   "32 / 32 / 58" (since v0.7.0).
+- Help page Feature Overview box order now matches the navigation order
+  (Explorer → Calculator → Simulator).
+- Tensor Notes section on mobile no longer requires a tap to expand
+  (content is always visible).
+- Spurious vertical scroll arrows on Calculator equation rows removed.
+- Label wording standardized across Calculator and Simulator ("Tensor
+  Classification", "Source Terms (Lab Frame)", "ED SHG", Unicode ∥/⊥,
+  "Centrosymmetric"/"Non-Centrosymmetric").
+- Tensor components panel no longer reserves excessive whitespace for
+  high-symmetry groups with few components.
 
 ### Changed
 - Crystal cut presets reduced to one representative per symmetry direction
@@ -246,7 +258,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.7.1...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/manganite/birss-app/compare/v0.7.1...v0.8.0
 [0.7.1]: https://github.com/manganite/birss-app/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/manganite/birss-app/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/manganite/birss-app/compare/v0.5.0...v0.6.0
