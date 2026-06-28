@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Tensor rank badge no longer shows "RANK RANK 3" / "RANK RANK 4"; displays
   "RANK 3" / "RANK 4" as intended (since v0.4.0).
+- Explorer type-column subtitles now show the count for the selected crystal
+  system (e.g. "7 groups" for Hexagonal Type I) instead of the global totals
+  "32 / 32 / 58" (since v0.7.0).
 
 ## [0.7.1] - 2026-06-27
 
