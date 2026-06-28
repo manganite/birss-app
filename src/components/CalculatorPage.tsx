@@ -385,7 +385,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                         <div className="w-16 font-mono text-xl">
                           <TensorTerm term={expr.component} isNull={isNull} />
                         </div>
-                        <div className="flex-1 font-mono text-xl tracking-tight overflow-x-auto whitespace-nowrap pb-2 md:pb-0">
+                        <div className="flex-1 font-mono text-xl tracking-tight overflow-x-auto overflow-y-hidden whitespace-nowrap pb-2 md:pb-0">
                           <span className="opacity-30 mr-4"><InlineMath math="=" /></span>
                           <TensorTerm term={expr.expression} isNull={isNull} />
                         </div>
@@ -502,7 +502,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                           <div className="w-16 font-mono text-xl">
                             <TensorTerm term={symExpr.component} isNull={isNull} />
                           </div>
-                          <div className="flex-1 font-mono text-xl tracking-tight overflow-x-auto whitespace-nowrap pb-2 md:pb-0">
+                          <div className="flex-1 font-mono text-xl tracking-tight overflow-x-auto overflow-y-hidden whitespace-nowrap pb-2 md:pb-0">
                             <span className="opacity-30 mr-4"><InlineMath math="\propto" /></span>
                             <TensorTerm term={formatted} isNull={isNull} />
                           </div>
