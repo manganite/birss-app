@@ -1394,6 +1394,49 @@ scrollbar** (grey thumb + ◀ ▶). Thomas: this kind of thing should be avoided
       form) and B16 (simplification); for any genuinely wide line, prefer wrapping
       or a single panel-level scroll over a scrollbar on every row.
 
+### B28 — formatCoeff: recognise 1/√6 and homogenise the √6 family
+
+**Status:** Done (v0.8.1).
+
+**Area:** Calculator + Simulator — coefficient rendering (`formatCoeff`,
+`src/services/tensorProjection.ts`).
+
+`1/√6` was missing from the `roots` lookup table, so it fell through to the decimal
+`0.408`. Added `1/√6 → \frac{1}{\sqrt{6}}` and changed the `√6/3` entry to display
+`\frac{2}{\sqrt{6}}` (same value). For the `[111]` cubic cut the X_LAB column is now
+homogeneous (`−1/√6, −1/√6, 2/√6`). Display-only; no data change. Superseded in
+principle by B29.
+
+---
+
+### B29 — Roadmap: context-sensitive coefficient formatter
+
+**Status:** Idea / not started.
+
+**Area:** Calculator + Simulator — coefficient rendering.
+**Severity:** Low–Medium (display quality) *(enhancement)*
+**Relates to:** B28 (the hand-tuned fix this would generalise), B16 (source-term
+display).
+
+**Problem.** `formatCoeff` is context-free: it sees one scalar at a time and matches
+it against a fixed table. It cannot pick the most uniform representation for a *set*
+of coefficients displayed together (a lab-frame row, a tensor row, an equation),
+because that choice depends on the other coefficients in the set. B28 hand-tunes one
+such case; the general problem remains.
+
+**Goal.** Given the set of coefficients that will appear together in one output, pick
+a common representation that reads uniformly — e.g. a shared radical denominator so
+the whole set renders as `k/√n` — falling back to the current per-scalar formatting
+when no common form applies.
+
+**Open questions.**
+- **Grouping unit:** per row, per column, or per whole expression block?
+- **Call sites:** lab-frame panel only, or also tensor-component equations and the
+  Mathematical Model box (cf. B16)?
+- **Tie-breaking:** when several common forms are possible, prefer smallest `n`?
+  denominator-only?
+- Does B28 stay as a permanent table entry, or get removed once B29 subsumes it?
+
 ---
 
 ## 8. Help page

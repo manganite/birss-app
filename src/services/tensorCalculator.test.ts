@@ -98,6 +98,8 @@ describe('formatCoeff', () => {
     [0.2, '\\frac{1}{5}'],
     [Math.SQRT2, '\\sqrt{2}'],
     [Math.sqrt(3) / 2, '\\frac{\\sqrt{3}}{2}'],
+    [1 / Math.sqrt(6), '\\frac{1}{\\sqrt{6}}'],
+    [2 / Math.sqrt(6), '\\frac{2}{\\sqrt{6}}'],
     [0.123456, '0.123'],
   ])('formatCoeff(%p) === %p', (input, expected) => {
     expect(formatCoeff(input)).toBe(expected);
