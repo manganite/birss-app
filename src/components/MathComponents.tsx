@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
-import { Box, Hexagon, Triangle, Layers, Compass, Info } from 'lucide-react';
+import { Box, Hexagon, Triangle, Layers, Compass, Info, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { hklToPresetAngles } from '../services/orientation';
+import { isCentrosymmetric, getParentGroup, getHalvingSubgroup, getSHGConsequence, getAlternateSettings } from '../services/tensorCalculator';
+import { PointGroupData } from '../data/pointGroups';
 
 export const getCrystalIcon = (system: string) => {
   switch (system.toLowerCase()) {
@@ -266,6 +268,99 @@ export function AxisOrientationInfo({ crystalSystem }: { crystalSystem: string }
       <p className="text-xs leading-relaxed opacity-70">
         {content}
       </p>
+    </div>
+  );
+}
+
+interface GroupIdentityHeaderProps {
+  group: PointGroupData;
+  setting: number;
+  onNavigate?: (view: string) => void;
+}
+
+export function GroupIdentityHeader({ group, setting, onNavigate }: GroupIdentityHeaderProps) {
+  const [expanded, setExpanded] = useState(false);
+  const centro = isCentrosymmetric(group.name);
+  const parent = getParentGroup(group.name);
+  const halvingOps = getHalvingSubgroup(group.name);
+  const shgLine = getSHGConsequence(group.name);
+  const settings = getAlternateSettings(group.name);
+  const settingCount = settings ? settings.length + 1 : 1;
+
+  return (
+    <div className="space-y-0">
+      <button
+        type="button"
+        aria-expanded={expanded}
+        aria-controls="group-identity-panel"
+        onClick={() => setExpanded(prev => !prev)}
+        className="flex items-center justify-between w-full p-4 border border-ink border-opacity-10 bg-white/30"
+      >
+        <div className="flex items-center gap-3">
+          {getCrystalIcon(group.crystalSystem)}
+          <div className="text-left flex items-center flex-wrap gap-x-2 gap-y-1">
+            <span className="text-lg font-serif italic"><FormatPointGroup name={group.name} /></span>
+            {group.schoenflies && <span className="text-xs opacity-50">({group.schoenflies})</span>}
+            <span className="text-xs opacity-50">{group.crystalSystem}</span>
+            <span className="text-xs opacity-50">· Type {group.type}</span>
+            <span className="text-xs opacity-50">· {centro ? 'Centrosymmetric' : 'Non-Centrosymmetric'}</span>
+            {settingCount > 1 && setting > 1 && (
+              <span className="text-xs opacity-50">· Setting {setting}/{settingCount}</span>
+            )}
+          </div>
+        </div>
+        {expanded ? <ChevronUp className="w-4 h-4 opacity-50" /> : <ChevronDown className="w-4 h-4 opacity-50" />}
+      </button>
+
+      {expanded && (
+        <section id="group-identity-panel" className="border border-ink border-opacity-10 border-t-0 p-6 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <h2 className="text-4xl font-serif italic"><FormatPointGroup name={group.name} /></h2>
+              {group.schoenflies && (
+                <p className="text-sm opacity-60 mt-1">{group.schoenflies}</p>
+              )}
+              <p className="text-[10px] uppercase tracking-widest opacity-50 mt-1">
+                {group.type === 'I' ? 'Standard' : group.type === 'II' ? 'Gray' : 'Magnetic'} Point Group
+              </p>
+            </div>
+            <div className="flex items-center gap-3 p-4 border border-ink border-opacity-10">
+              {getCrystalIcon(group.crystalSystem)}
+              <div>
+                <p className="text-sm font-medium">{group.crystalSystem}</p>
+                <p className="text-[10px] uppercase tracking-widest opacity-50">Crystal System</p>
+              </div>
+            </div>
+            <div className={`p-4 border border-ink ${centro ? 'bg-ink text-paper' : 'border-opacity-10'}`}>
+              <p className="text-sm font-medium">{centro ? 'Centrosymmetric' : 'Non-Centrosymmetric'}</p>
+              <p className={`text-[10px] uppercase tracking-widest ${centro ? 'opacity-70' : 'opacity-50'}`}>Symmetry Type</p>
+            </div>
+            <AxisOrientationInfo crystalSystem={group.crystalSystem} />
+          </div>
+
+          <div className="text-xs opacity-60 leading-relaxed">{shgLine}</div>
+
+          {parent && (
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs opacity-60">
+              <span>Parent group: <span className="font-serif italic"><FormatPointGroup name={parent} /></span></span>
+              {halvingOps && (
+                <span>H = {'{'}{halvingOps.join(', ')}{'}'}</span>
+              )}
+            </div>
+          )}
+
+          {onNavigate && (
+            <button
+              type="button"
+              onClick={() => onNavigate('explorer')}
+              className="flex items-center gap-1 text-xs opacity-50 hover:opacity-100 transition-opacity"
+            >
+              <ExternalLink className="w-3 h-3" />
+              Open in Explorer
+            </button>
+          )}
+        </section>
+      )}
     </div>
   );
 }

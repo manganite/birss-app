@@ -3,7 +3,7 @@ import { PointGroupData } from '../data/pointGroups';
 import { isCentrosymmetric, type SymbolicSHGResult, formatSymbolicSourceTerm } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
 import { Zap, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
-import { TensorTerm, FormatPointGroup, getPresetsForSystem, KDirectionSelector } from './MathComponents';
+import { TensorTerm, FormatPointGroup, getPresetsForSystem, KDirectionSelector, GroupIdentityHeader } from './MathComponents';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
 import type { TensorConfig, OrientationState, SimulationState } from '../types';
@@ -107,6 +107,11 @@ export function SimulatorPage({
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
+      {/* Group identity header — shared with Calculator */}
+      <div className="hidden md:block">
+        <GroupIdentityHeader group={selectedGroup} setting={selectedSetting} />
+      </div>
+
       {/* Top Controls */}
       <div className="bg-white/50 border border-ink p-6 md:p-8 space-y-8">
         {/* Mobile compact summary */}
