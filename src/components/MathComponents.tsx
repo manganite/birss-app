@@ -76,6 +76,56 @@ export const LabFrameOrientation = ({ labFrame }: { labFrame: { X: string; Y: st
   </div>
 );
 
+interface KDirectionSelectorProps {
+  crystalSystem: string;
+  thetaX: number; thetaY: number; psi0: number;
+  setThetaX: (v: number) => void;
+  setThetaY: (v: number) => void;
+  setPsi0: (v: number) => void;
+  labFrame: { X: string; Y: string; Z: string };
+  compact?: boolean;
+}
+
+export function KDirectionSelector({ crystalSystem, thetaX, thetaY, psi0, setThetaX, setThetaY, setPsi0, labFrame, compact }: KDirectionSelectorProps) {
+  const presets = getPresetsForSystem(crystalSystem);
+  return (
+    <div className="space-y-3">
+      {!compact && (
+        <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+          <Compass className="w-3 h-3" />
+          Crystal Cut (surface normal ∥ k)
+        </h4>
+      )}
+      {compact && (
+        <span className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-1">
+          <Compass className="w-3 h-3" />
+          Crystal Cut
+        </span>
+      )}
+      <div className="flex flex-wrap gap-3 items-center">
+        {presets.map((ori) => (
+          <button
+            key={ori.label}
+            onClick={() => { setThetaX(ori.tx); setThetaY(ori.ty); setPsi0(ori.psi0); }}
+            className={`${compact ? 'px-3 py-1.5 text-[11px]' : 'px-4 py-2 text-[12px]'} tracking-[0.1em] transition-all border border-ink ${
+              thetaX === ori.tx && thetaY === ori.ty && psi0 === ori.psi0
+                ? 'bg-ink text-paper'
+                : `${compact ? '' : 'hover:bg-ink hover:text-paper'} opacity-50 ${compact ? '' : 'hover:opacity-100'} border-opacity-20`
+            }`}
+          >
+            <InlineMath math={ori.math} />
+          </button>
+        ))}
+      </div>
+      {!compact && (
+        <div className="flex flex-col md:flex-row gap-8 items-start mt-3">
+          <LabFrameOrientation labFrame={labFrame} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export const TensorTerm = ({ term, isNull }: { term?: string; isNull: boolean }) => {
   if (!term) return null;
   

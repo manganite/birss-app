@@ -13,7 +13,7 @@ import {
   getFutureSettingCount,
   type SymbolicSHGResult,
 } from '../services/tensorCalculator';
-import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPresetsForSystem, LabFrameOrientation, AxisOrientationInfo } from './MathComponents';
+import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, KDirectionSelector, AxisOrientationInfo } from './MathComponents';
 import type { TensorConfig, PresetAnglesState } from '../types';
 
 const TENSOR_META = {
@@ -247,27 +247,13 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
         </div>
 
         {/* Mobile-only preset strip — always visible */}
-        <div className="md:hidden flex flex-wrap gap-2 items-center py-3">
-          <span className="text-[10px] uppercase tracking-[0.2em] opacity-50 mr-1 flex items-center gap-1">
-            <Compass className="w-3 h-3" />Cut
-          </span>
-          {getPresetsForSystem(selectedGroup.crystalSystem).map((ori) => (
-            <button
-              key={ori.label}
-              onClick={() => {
-                setThetaX(ori.tx);
-                setThetaY(ori.ty);
-                setPsi0(ori.psi0);
-              }}
-              className={`px-3 py-1.5 text-[11px] tracking-[0.1em] transition-all border border-ink ${
-                thetaX === ori.tx && thetaY === ori.ty && psi0 === ori.psi0
-                  ? 'bg-ink text-paper'
-                  : 'opacity-50 border-opacity-20'
-              }`}
-            >
-              <InlineMath math={ori.math} />
-            </button>
-          ))}
+        <div className="md:hidden py-3">
+          <KDirectionSelector compact
+            crystalSystem={selectedGroup.crystalSystem}
+            thetaX={thetaX} thetaY={thetaY} psi0={psi0}
+            setThetaX={setThetaX} setThetaY={setThetaY} setPsi0={setPsi0}
+            labFrame={labFrameBase}
+          />
         </div>
 
         <div className="bg-white/50 border border-ink overflow-hidden">
@@ -416,34 +402,13 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                     </div>
                   </div>
 
-                  <div className="space-y-6 border-b border-ink border-opacity-10 pb-6">
-                    <div className="space-y-3">
-                      <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">
-                        Select the direction of light propagation relative to the crystal axes
-                      </p>
-                      <div className="flex flex-wrap gap-3 items-center">
-                        {getPresetsForSystem(selectedGroup.crystalSystem).map((ori) => (
-                          <button
-                            key={ori.label}
-                            onClick={() => {
-                              setThetaX(ori.tx);
-                              setThetaY(ori.ty);
-                              setPsi0(ori.psi0);
-                            }}
-                            className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-ink ${
-                              thetaX === ori.tx && thetaY === ori.ty && psi0 === ori.psi0
-                                ? 'bg-ink text-paper'
-                                : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
-                            }`}
-                          >
-                            <InlineMath math={ori.math} />
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="flex flex-col md:flex-row gap-8 items-start mt-6">
-                      <LabFrameOrientation labFrame={labFrameBase} />
-                    </div>
+                  <div className="border-b border-ink border-opacity-10 pb-6">
+                    <KDirectionSelector
+                      crystalSystem={selectedGroup.crystalSystem}
+                      thetaX={thetaX} thetaY={thetaY} psi0={psi0}
+                      setThetaX={setThetaX} setThetaY={setThetaY} setPsi0={setPsi0}
+                      labFrame={labFrameBase}
+                    />
                   </div>
 
                   <div className="space-y-6">

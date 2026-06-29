@@ -2,8 +2,8 @@ import { useState, useEffect, type ReactNode } from 'react';
 import { PointGroupData } from '../data/pointGroups';
 import { isCentrosymmetric, type SymbolicSHGResult, formatSymbolicSourceTerm } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
-import { Zap, Compass, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
-import { TensorTerm, FormatPointGroup, getPresetsForSystem, LabFrameOrientation } from './MathComponents';
+import { Zap, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
+import { TensorTerm, FormatPointGroup, getPresetsForSystem, KDirectionSelector } from './MathComponents';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
 import type { TensorConfig, OrientationState, SimulationState } from '../types';
@@ -174,32 +174,13 @@ export function SimulatorPage({
             </div>
           </div>
 
-          <div className="space-y-4 border-t border-ink border-opacity-10 pt-6 mt-8">
-            <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-              <Compass className="w-3 h-3" /> Crystal Orientation (k vector)
-            </h4>
-            <div className="flex flex-wrap gap-3">
-              {getPresetsForSystem(selectedGroup.crystalSystem).map((ori) => (
-                <button
-                  key={ori.label}
-                  onClick={() => {
-                    setThetaX(ori.tx);
-                    setThetaY(ori.ty);
-                    setPsi0(ori.psi0);
-                  }}
-                  className={`px-4 py-2 text-[12px] tracking-[0.1em] transition-all border border-ink ${
-                    thetaX === ori.tx && thetaY === ori.ty && psi0 === ori.psi0
-                      ? 'bg-ink text-paper'
-                      : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
-                  }`}
-                >
-                  <InlineMath math={ori.math} />
-                </button>
-              ))}
-            </div>
-            <div className="flex flex-col md:flex-row gap-8 items-start mt-6">
-              <LabFrameOrientation labFrame={labFrame} />
-            </div>
+          <div className="border-t border-ink border-opacity-10 pt-6 mt-8">
+            <KDirectionSelector
+              crystalSystem={selectedGroup.crystalSystem}
+              thetaX={thetaX} thetaY={thetaY} psi0={psi0}
+              setThetaX={setThetaX} setThetaY={setThetaY} setPsi0={setPsi0}
+              labFrame={labFrame}
+            />
           </div>
         </div>
 
