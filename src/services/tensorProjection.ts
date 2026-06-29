@@ -557,7 +557,7 @@ export interface LabFrameOptions {
 export function getLabFrameVectors(options: LabFrameOptions = {}) {
   const { thetaX = 0, thetaY = 0, psi0 = 0, phiX = 0, phiY = 0, psi = 0 } = options;
 
-  const formatVec = (v: number[]) => {
+  const formatVecLab = (v: number[]) => {
     const terms: string[] = [];
     const labels = ['X', 'Y', 'Z'];
     for (let i = 0; i < 3; i++) {
@@ -570,18 +570,41 @@ export function getLabFrameVectors(options: LabFrameOptions = {}) {
     return terms.length > 0 ? terms.join(" ") : "0";
   };
 
+  const formatVecCryst = (v: number[]) => {
+    const terms: string[] = [];
+    const labels = ['x', 'y', 'z'];
+    for (let i = 0; i < 3; i++) {
+      if (Math.abs(v[i]) > AXIS_EPSILON) {
+        const coeff = formatCoeff(v[i]);
+        const sign = v[i] < 0 ? "-" : (terms.length > 0 ? "+" : "");
+        terms.push(`${sign}${coeff}\\mathbf{${labels[i]}}_{crys}`);
+      }
+    }
+    return terms.length > 0 ? terms.join(" ") : "0";
+  };
+
   // R = Ry(φ_y) · Rx(φ_x) · Rz(ψ) · R_preset
   const R_preset = mat3mul(rotZ(psi0), mat3mul(rotY(thetaY), rotX(thetaX)));
   const R = mat3mul(rotY(phiY), mat3mul(rotX(phiX), mat3mul(rotZ(psi), R_preset)));
 
-  // V_cryst = R^T · V_lab
+  // Forward: crystal axes in lab basis (columns of R^T)
   const x_crys = [R[0][0], R[1][0], R[2][0]];
   const y_crys = [R[0][1], R[1][1], R[2][1]];
   const z_crys = [R[0][2], R[1][2], R[2][2]];
 
+  // Inverse: lab axes in crystal basis (rows of R)
+  const X_lab = [R[0][0], R[0][1], R[0][2]];
+  const Y_lab = [R[1][0], R[1][1], R[1][2]];
+  const Z_lab = [R[2][0], R[2][1], R[2][2]];
+
   return {
-    X: formatVec(x_crys),
-    Y: formatVec(y_crys),
-    Z: formatVec(z_crys)
+    X: formatVecLab(x_crys),
+    Y: formatVecLab(y_crys),
+    Z: formatVecLab(z_crys),
+    inverse: {
+      X: formatVecCryst(X_lab),
+      Y: formatVecCryst(Y_lab),
+      Z: formatVecCryst(Z_lab),
+    },
   };
 }

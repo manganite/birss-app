@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
-import { Box, Hexagon, Triangle, Layers, Compass } from 'lucide-react';
+import { Box, Hexagon, Triangle, Layers, Compass, Info } from 'lucide-react';
 import { hklToPresetAngles } from '../services/orientation';
 
 export const getCrystalIcon = (system: string) => {
@@ -63,18 +64,54 @@ export function getPresetsForSystem(crystalSystem: string): KPreset[] {
   return PRESETS_BY_SYSTEM[crystalSystem] ?? ORTHO_PRESETS;
 }
 
-export const LabFrameOrientation = ({ labFrame }: { labFrame: { X: string; Y: string; Z: string } }) => (
-  <div className="flex-1 bg-ink/5 p-4 border border-ink/10 rounded-sm w-full">
-    <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 mb-3">Crystal Orientation in Lab Frame</h4>
-    <div className="flex flex-col gap-3 text-sm font-mono">
-      <div className="flex flex-wrap gap-x-6 gap-y-2">
-        <InlineMath math={`\\mathbf{x}_{crys} = ${labFrame.X}`} />
-        <InlineMath math={`\\mathbf{y}_{crys} = ${labFrame.Y}`} />
-        <InlineMath math={`\\mathbf{z}_{crys} = ${labFrame.Z}`} />
+export function LabFrameOrientation({ labFrame }: { labFrame: { X: string; Y: string; Z: string; inverse: { X: string; Y: string; Z: string } } }) {
+  const [showInverse, setShowInverse] = useState(false);
+  const [showLegend, setShowLegend] = useState(false);
+  const fwd = labFrame;
+  const inv = labFrame.inverse;
+
+  return (
+    <div className="flex-1 bg-ink/5 p-4 border border-ink/10 rounded-sm w-full">
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50">
+          {showInverse ? 'Lab axes in the crystal frame' : 'Crystal axes in the lab frame'}
+        </h4>
+        <div className="flex items-center gap-1">
+          <button type="button" onClick={() => setShowInverse(v => !v)}
+            className="text-[9px] opacity-40 hover:opacity-80 transition-opacity px-1.5 py-0.5 border border-ink/10 rounded-sm"
+            title={showInverse ? 'Show crystal → lab' : 'Show lab → crystal'}
+          >{showInverse ? '↔ crystal' : '↔ inverse'}</button>
+          <button type="button" onClick={() => setShowLegend(v => !v)}
+            className="opacity-40 hover:opacity-80 transition-opacity p-0.5"
+            title="Symbol legend"
+          ><Info className="w-3 h-3" /></button>
+        </div>
       </div>
+      <div className="flex flex-col gap-3 text-sm font-mono">
+        {showInverse ? (
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <InlineMath math={`\\mathbf{X}_{LAB} = ${inv.X}`} />
+            <InlineMath math={`\\mathbf{Y}_{LAB} = ${inv.Y}`} />
+            <InlineMath math={`\\mathbf{Z}_{LAB} = ${inv.Z}`} />
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <InlineMath math={`\\mathbf{x}_{crys} = ${fwd.X}`} />
+            <InlineMath math={`\\mathbf{y}_{crys} = ${fwd.Y}`} />
+            <InlineMath math={`\\mathbf{z}_{crys} = ${fwd.Z}`} />
+          </div>
+        )}
+      </div>
+      {showLegend && (
+        <div className="mt-3 pt-3 border-t border-ink/10 text-[10px] opacity-60 leading-relaxed space-y-1">
+          <p><strong>x, y, z</strong> (crys) — crystal Cartesian axes (z∥c, y∥b*, x per system convention)</p>
+          <p><strong>X, Y, Z</strong> (LAB) — lab axes: Z = beam direction (k), X/Y = polarization plane (0°/90°)</p>
+          <p>At zero tilt, the selected crystal cut normal is aligned with Z (the beam).</p>
+        </div>
+      )}
     </div>
-  </div>
-);
+  );
+}
 
 interface KDirectionSelectorProps {
   crystalSystem: string;
@@ -82,7 +119,7 @@ interface KDirectionSelectorProps {
   setThetaX: (v: number) => void;
   setThetaY: (v: number) => void;
   setPsi0: (v: number) => void;
-  labFrame: { X: string; Y: string; Z: string };
+  labFrame: { X: string; Y: string; Z: string; inverse: { X: string; Y: string; Z: string } };
   compact?: boolean;
 }
 

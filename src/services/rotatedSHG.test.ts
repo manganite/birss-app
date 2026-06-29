@@ -96,7 +96,7 @@ describe('getLabFrameVectors - rotated golden references', () => {
   for (const f of LAB_FRAME_FIXTURES) {
     it(`(${f.thetaX}, ${f.thetaY}) returns correct crystal-to-lab mapping`, () => {
       const lf = getLabFrameVectors({ thetaX: f.thetaX, thetaY: f.thetaY });
-      expect(lf).toEqual(f.expected);
+      expect({ X: lf.X, Y: lf.Y, Z: lf.Z }).toEqual(f.expected);
     });
   }
 });
