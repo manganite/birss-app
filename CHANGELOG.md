@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Alternate settings for 11 Type I (colourless) and 11 Type II (grey) point
+  groups: orthorhombic axis orientation (222, mm2, mmm — 3 settings each),
+  monoclinic axis choice (2, m, 2/m — b-unique ITC), and classical Mechanism A
+  (-42m, 32, 3m, -3m, -6m2 — alternate orientations), plus their grey 1'
+  counterparts. The setting selector now covers all groups that have multiple
+  settings. Default-setting output is unchanged.
+
 ## [0.10.1] - 2026-06-29
 
 ### Added
