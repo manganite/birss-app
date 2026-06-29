@@ -668,12 +668,15 @@ utility applied to the Calculator labels but not the Simulator buttons.
 
 ### B20 — App-wide tooltip / glossary layer
 
-**Status:** Decided (build task).
+**Status:** Deferred — build after B14.
 
 **Area:** App-wide — usability / onboarding
 **Severity:** Medium (usability) *(provisional)*
-**Relates to:** B14 (Help = single source of truth), B19 (one concrete instance),
-B2 / B7 / B8 (the notation that needs explaining).
+**Depends on:** B14 — the tooltip layer and the Help page share one term glossary
+(single source of truth), so the Help reorg must settle first; the tooltips are
+then built on top of it.
+**Relates to:** B19 (one concrete instance already shipped), B2 / B7 / B8 (the
+notation that needs explaining).
 
 **Question (Thomas, Q4).** Could the app use more tooltips to be easier to use?
 **Assessment — yes.** The UI is dense with domain notation: HM / Schoenflies /
