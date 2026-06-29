@@ -65,21 +65,24 @@ Items keep **stable IDs** (**A#** = bug, **B#** = change proposal); ordering bel
 
 ## Open points at a glance
 
-Most items are **Decided** (problem + concrete fix + action items). The exceptions —
-where a decision or a derivation is still needed before implementing — are:
+Most items are **Decided** (problem + concrete fix + action items). As of v0.12.0
+and the decisions recorded this cycle, the only item still genuinely open is **B15**:
 
-**Derivation / verification pending** (the actual solution or a fact is still open):
-- **A2** — corrected lab-fixed rotation composition (re-derive + numerically re-check).
-- **B1** — alternate-settings enumeration / mechanism count; reconcile with B22's taxonomy.
+**Resolved since the first draft** (shipped, or decided this cycle):
+- **A2** — lab-fixed rotation composition: shipped (v0.10.0).
+- **B1** — alternate-settings enumeration / mechanism count: shipped (v0.11.0).
+- **B4** — two-column header layout: shipped (v0.12.0).
+- **B25** — emphasis rule (drop chips): shipped (v0.12.0).
+- **B27** — group header optional fields: shipped (v0.12.0).
+- **A1** — Simulator source-term presentation: decided (D4) — delete the
+  φ_x, φ_y, ψ-symbolic block, keep the E and θ_pol forms; implementation pending.
+- **B2.4** — setting persists across Calculator ↔ Simulator (D1).
+- **B16** — drop the full 3-angle symbolic form; θ-only swept display, harmonic
+  preferred, power form only when strictly shorter (D4).
 
-**Open decisions** (direction clear, a specific choice still to be made):
-- **A1** — how to present the source terms in the *Simulator* (the Calculator side is decided).
-- **B2.4** — default-setting behaviour & whether the selection persists across views.
-- **B4** — the two-column header layout detail.
-- **B15** — scope & placement of the interactive Birss-table feature.
-- **B16** — whether to keep the full 3-angle symbolic form (recommendation: no).
-- **B25** — the emphasis rule (highlight chip vs none).
-- **B27** — which optional header fields to include.
+**Still open:**
+- **B15** — scope & placement of the interactive Birss-table feature (deferred to
+  its own session — D5).
 
 Everything else is **Decided**; a few Help-audit sub-points in **B22** still need a
 quick physics/source check (flagged inline).
@@ -297,7 +300,7 @@ _Making the alternate settings visible, labelled, and selectable across the thre
 
 ### B2 — Settings are under-surfaced and under-explained across all three views
 
-**Status:** Decided — except B2.4 (open decision: default-setting behaviour & persistence).
+**Status:** Decided — B2.4 resolved (D1): persist the setting across Calculator ↔ Simulator; reset to setting 1 only on first load / group change.
 
 **Area:** UI / documentation for Feature 3 (Alternate Point Group Settings)
 **Severity:** Medium (UX + docs) overall; **B2.4 is a functional gap**, not cosmetic.
@@ -356,8 +359,8 @@ HM-label rule must extend to magnetic dual-setting groups too.
 - [ ] The Simulator currently exposes **no** setting selector. Add setting
       selection with parity to the Calculator (same control, same labelling
       rules as B2.3).
-- [ ] Decide default-setting behaviour and whether the selection should persist
-      when switching Calculator ↔ Simulator.
+- [ ] Persist the selected setting across Calculator ↔ Simulator; reset to
+      setting 1 only on first load / group change (D1).
 
 #### To verify before asserting in code/docs
 
@@ -373,7 +376,7 @@ _Choosing the cut / k direction, naming it clearly, and what depends on it._
 
 ### A1 — Calculator shows source terms as a function of angles that cannot be set there
 
-**Status:** Decided for the Calculator; open decision for the Simulator source-term presentation.
+**Status:** Decided for the Calculator (shipped); Simulator resolved (D4) — delete the φ_x, φ_y, ψ-symbolic block, keep "As functions of E_X,E_Y" and "As functions of θ_pol"; implementation pending.
 
 **Area:** Calculator — Source Terms display
 **Severity:** High — presents physically meaningless output *(provisional)*
@@ -1156,7 +1159,7 @@ it, so hitting 45°, 90°, 180°, … is fiddly.
 
 ### B16 — "Mathematical Model" box: simplify the trigonometric coefficients (and present them cleanly)
 
-**Status:** Recommendation given — one open scope decision (whether to keep the full 3-angle symbolic form).
+**Status:** Decided (D4) — drop the simultaneous 3-angle symbolic block; swept display variable is θ; harmonic form preferred, power form only when strictly shorter.
 
 **Area:** Simulator — "Mathematical Model" box, Source Terms part (if it lives on
 the Help page instead, same fix — cf. B14)
@@ -1200,8 +1203,8 @@ no.)** The all-at-once symbolic dependence on φ_x, φ_y *and* ψ is the main so
 the blow-up and is rarely what the user needs. Instead:
 - Substitute the **fixed orientation angles** (current slider values) numerically,
   and show symbolic dependence only on the angle that actually **varies in the
-  current plot mode** — **θ_pol** for the standard polarimetry sweep, **ψ** for the
-  rotational-anisotropy (Anisotropy) mode. That is exactly what is plotted, and it
+  current plot mode** — **θ** in every plot mode — θ_pol for Anisotropy and Polarizer, θ_ana for
+  Analyzer (ψ and the tilts are one-time orientation inputs, never swept). That is exactly what is plotted, and it
   collapses to a short expression (Feature 2 territory).
 - The fully general all-three-angle form: **not shown by default** — drop it, or
   offer it on demand / as a static reference in the Help derivation (B14), where a
@@ -1225,7 +1228,7 @@ justifies keeping it; tidy rather than drop:
 **Action items.**
 - [ ] One line each for S_X, S_Y (no column vector); kill the horizontal scroll.
 - [ ] Feature the **numeric, orientation-substituted** form as a function of the
-      **swept angle** (θ_pol, or ψ in Anisotropy mode) — it shows the proportional
+      **swept angle θ** (θ_pol for Anisotropy/Polarizer, θ_ana for Analyzer) — it shows the proportional
       onset of components with tilt; do not feature the simultaneous 3-angle form.
 - [ ] Tidy the numeric form: drop `1·` coefficients, hide/grey exact-zero terms,
       control significant figures.

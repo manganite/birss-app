@@ -36,10 +36,10 @@ feature this continues. `Wave` is the execution slot defined below.
 |----|---------------|--------|-------|------|
 | A2 | Tilt axes lab-fixed (rotation composition) | **Done** (v0.10.0) | 1B | **B** |
 | B1 | Alternate settings for Type I/II groups | **Done** (v0.11.0) | 3 | **B** |
-| A1 | Calculator source terms must be angle-free | **Done** (v0.10.0, Calc) / open (Sim) | 2 | **D** |
+| A1 | Calculator source terms must be angle-free | **Done** (v0.10.0, Calc) / Sim decided (D4), impl pending | 2 | **D** |
 | A3 | Simulator mobile layout broken | **Done** (v0.9.0) | 1C | C/D |
 | A4 | "RANK RANK 3" duplicate word | **Done** (v0.8.0) | 8 | **C** |
-| B2 | Settings under-surfaced (B2.1–B2.4) | Decided (B2.4 open) | 3/6 | **E** |
+| B2 | Settings under-surfaced (B2.1–B2.4) | Decided | 3/6 | **E** |
 | B3 | Simulator shows no group identity | **Done** (v0.12.0) | 5/8 | **D** |
 | B4 | Unify Calculator/Simulator visual shell | **Done** (v0.12.0) | 8 | **D** |
 | B5 | One shared direction/lab-frame component | **Done** (v0.10.0) | 1C/9 | **D** |
@@ -53,7 +53,7 @@ feature this continues. `Wave` is the execution slot defined below.
 | B13 | Help Feature-Overview box order | **Done** (v0.8.0) | 6 | **C** |
 | B14 | Help reorg into tabs + expand | Decided (large) | 6 | **E** |
 | B15 | Explorer as interactive Birss table | Open (scope) | 5 | **E** |
-| B16 | Simplify symbolic source-term trig | Recommendation given | 2 | **E** |
+| B16 | Simplify symbolic source-term trig | Decided | 2 | **E** |
 | B17 | Disable sliders for single component | **Done** (v0.9.0) | 1C/2 | C/D |
 | B18 | Enlarge plots / trim whitespace | **Done** (v0.9.0) | 1C/8 | C/D |
 | B19 | Lab-frame panel title / inverse / tooltips | **Done** (v0.10.1) | 7 | **D** |
