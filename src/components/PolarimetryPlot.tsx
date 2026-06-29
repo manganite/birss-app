@@ -40,12 +40,12 @@ export function PolarimetryPlot({
   labelPrefix
 }: PolarimetryPlotProps) {
   return (
-    <div className="flex flex-col items-center space-y-4">
+    <div className="flex flex-col items-center space-y-2">
       <h3 className="text-lg font-serif italic text-center">{title}</h3>
       <div className="text-[10px] uppercase tracking-widest opacity-50">{subtitle}</div>
-      <div className="w-full aspect-square max-w-[350px]">
+      <div className="w-full aspect-square max-w-[450px]">
         <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data} startAngle={0} endAngle={360}>
+          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data} startAngle={0} endAngle={360}>
             <PolarGrid gridType="circle" stroke="var(--color-ink)" strokeOpacity={0.1} />
             <PolarAngleAxis dataKey="angle" type="number" domain={[0, 360]} ticks={RADAR_TICKS} tickFormatter={formatPolarAngle} stroke="var(--color-ink)" strokeOpacity={0.5} tick={{ fontSize: 10 }} axisLineType="circle" />
             <PolarRadiusAxis angle={0} domain={[0, Math.max(1e-6, domainMax) / 0.95]} tick={false} axisLine={false} />
