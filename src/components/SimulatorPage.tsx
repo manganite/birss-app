@@ -264,10 +264,18 @@ export function SimulatorPage({
                 </div>
               </div>
             ) : (
-              independentComponents.map(comp => {
+              <>
+              {independentComponents.length === 1 && (
+                <div className="flex items-start gap-2 p-3 border border-ink/10 bg-ink/5 text-xs leading-relaxed opacity-70">
+                  <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                  <span>Single component: amplitude is only a global scale; the phase is unobservable in intensity.</span>
+                </div>
+              )}
+              {independentComponents.map(comp => {
                 const phaseVal = phases[comp] ?? 0;
+                const singleComponent = independentComponents.length === 1;
                 return (
-                  <div key={comp} className="space-y-1.5 border-b border-ink/10 pb-3 last:border-0 last:pb-0">
+                  <div key={comp} className={`space-y-1.5 border-b border-ink/10 pb-3 last:border-0 last:pb-0 ${singleComponent ? 'opacity-40' : ''}`}>
                     <div className="flex items-center gap-2">
                       <div className="w-20 shrink-0 text-right font-mono text-sm font-medium">
                         <TensorTerm term={comp} isNull={false} />
@@ -278,6 +286,7 @@ export function SimulatorPage({
                         value={amplitudes[comp] ?? 1}
                         onChange={(e) => setAmplitudes(p => ({ ...p, [comp]: parseFloat(e.target.value) }))}
                         className="flex-1 accent-ink"
+                        disabled={singleComponent}
                       />
                       <input
                         type="number"
@@ -288,6 +297,7 @@ export function SimulatorPage({
                           if (!isNaN(v)) setAmplitudes(p => ({ ...p, [comp]: Math.max(0, Math.min(1, v)) }));
                         }}
                         className="w-14 text-right text-xs font-mono bg-white/50 border border-ink/20 px-1.5 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
+                        disabled={singleComponent}
                       />
                     </div>
                     <div className="flex items-center gap-2">
@@ -298,6 +308,7 @@ export function SimulatorPage({
                         value={phaseVal}
                         onChange={(e) => setPhases(p => ({ ...p, [comp]: parseInt(e.target.value, 10) }))}
                         className="flex-1 accent-ink"
+                        disabled={singleComponent}
                       />
                       <div className="flex items-center gap-0.5 shrink-0">
                         <input
@@ -309,13 +320,15 @@ export function SimulatorPage({
                             if (!isNaN(v)) setPhases(p => ({ ...p, [comp]: Math.max(0, Math.min(360, v)) }));
                           }}
                           className="w-14 text-right text-xs font-mono bg-white/50 border border-ink/20 px-1.5 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
+                          disabled={singleComponent}
                         />
                         <span className="text-xs opacity-50">°</span>
                       </div>
                     </div>
                   </div>
                 );
-              })
+              })}
+              </>
             )}
           </div>
         </div>
