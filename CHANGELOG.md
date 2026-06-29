@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-06-29
+
 ### Added
 - Alternate settings for 11 Type I (colourless) and 11 Type II (grey) point
   groups: orthorhombic axis orientation (222, mm2, mmm — 3 settings each),
@@ -325,7 +327,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.10.1...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/manganite/birss-app/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/manganite/birss-app/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/manganite/birss-app/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/manganite/birss-app/compare/v0.8.1...v0.9.0

@@ -35,7 +35,7 @@ feature this continues. `Wave` is the execution slot defined below.
 | ID | Title (short) | Status | Old # | Wave |
 |----|---------------|--------|-------|------|
 | A2 | Tilt axes lab-fixed (rotation composition) | **Done** (v0.10.0) | 1B | **B** |
-| B1 | Alternate settings for Type I/II groups | Derivation pending | 3 | **B** |
+| B1 | Alternate settings for Type I/II groups | **Done** (v0.11.0) | 3 | **B** |
 | A1 | Calculator source terms must be angle-free | **Done** (v0.10.0, Calc) / open (Sim) | 2 | **D** |
 | A3 | Simulator mobile layout broken | **Done** (v0.9.0) | 1C | C/D |
 | A4 | "RANK RANK 3" duplicate word | **Done** (v0.8.0) | 8 | **C** |
