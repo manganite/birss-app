@@ -56,7 +56,7 @@ feature this continues. `Wave` is the execution slot defined below.
 | B16 | Simplify symbolic source-term trig | Recommendation given | 2 | **E** |
 | B17 | Disable sliders for single component | **Done** (v0.9.0) | 1C/2 | C/D |
 | B18 | Enlarge plots / trim whitespace | **Done** (v0.9.0) | 1C/8 | C/D |
-| B19 | Lab-frame panel title / inverse / tooltips | Decided | 7 | **D** |
+| B19 | Lab-frame panel title / inverse / tooltips | **Done** (v0.10.1) | 7 | **D** |
 | B20 | App-wide tooltip / glossary | Decided | 6 | **D** |
 | B21 | Same-concept labels worded differently | **Done** (v0.8.0) | 8 | **C** |
 | B22 | Help-text content audit | Decided (minor verify) | 6 | **E** |
