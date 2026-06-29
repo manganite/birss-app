@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-06-29
+
+### Added
+- Magnetic snapping on phase (15° increments) and magnitude (0.05 increments)
+  sliders; Shift+Arrow for larger steps; clickable scale ticks for
+  jump-to-value (B10).
+
+### Changed
+- Simulator tensor-component sliders use compact inline rows with
+  always-visible phase instead of a tall vertical stack with collapsible
+  phase (B6).
+- Simulator polar plots enlarged (max 450px, outerRadius 80%); excess
+  vertical whitespace trimmed (B18).
+- Single-component groups show disabled sliders with explanatory note
+  instead of interactive controls (B17).
+
+### Fixed
+- Simulator mobile layout: single-plot view with parallel/crossed toggle,
+  component selector for one-at-a-time slider control; no longer overlaps
+  or requires scrolling past the full setup panel (A3).
+
 ## [0.8.1] - 2026-06-28
 
 ### Fixed
@@ -266,7 +287,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/manganite/birss-app/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/manganite/birss-app/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/manganite/birss-app/compare/v0.7.1...v0.8.0
 [0.7.1]: https://github.com/manganite/birss-app/compare/v0.7.0...v0.7.1

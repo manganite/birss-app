@@ -12,7 +12,7 @@ correctness; the mapping to the old feature numbers is given in the item index.
 **Prerequisites (not items below).** The `services/` split, the golden-fixture suite
 (`goldenTensors.fixtures.ts` / `.test.ts`, table-4e-verified + generator-derived),
 the rotated-path suite (`rotatedSHG.fixtures.ts` / `.test.ts`), and the per-module
-tests are assumed in place. Current version: **v0.8.1**; Wave C complete (v0.8.0 + v0.8.1).
+tests are assumed in place. Current version: **v0.9.0**; Wave C complete (v0.8.0 + v0.8.1); C/D crossover complete (v0.9.0).
 
 ---
 
@@ -37,25 +37,25 @@ feature this continues. `Wave` is the execution slot defined below.
 | A2 | Tilt axes lab-fixed (rotation composition) | Derivation pending | 1B | **B** |
 | B1 | Alternate settings for Type I/II groups | Derivation pending | 3 | **B** |
 | A1 | Calculator source terms must be angle-free | Decided (Calc) / open (Sim) | 2 | **D** |
-| A3 | Simulator mobile layout broken | Decided | 1C | C/D |
+| A3 | Simulator mobile layout broken | **Done** (v0.9.0) | 1C | C/D |
 | A4 | "RANK RANK 3" duplicate word | **Done** (v0.8.0) | 8 | **C** |
 | B2 | Settings under-surfaced (B2.1–B2.4) | Decided (B2.4 open) | 3/6 | **E** |
 | B3 | Simulator shows no group identity | Decided | 5/8 | **D** |
 | B4 | Unify Calculator/Simulator visual shell | Decided (1 open) | 8 | **D** |
 | B5 | One shared direction/lab-frame component | Decided | 1C/9 | **D** |
-| B6 | Compact Simulator sliders | Decided | 1C | C/D |
+| B6 | Compact Simulator sliders | **Done** (v0.9.0) | 1C | C/D |
 | B7 | Blickrichtung presets; free [hkl] | **Done** (v0.8.0) | 9 | **C** |
 | B8 | Name the direction selection (normal ∥ k) | Decided | 1C/9 | **D** |
 | B9 | Tensor Notes collapse pointless | **Done** (v0.8.0) | 8 | **C** |
-| B10 | Slider snapping | Decided | 1C | C/D |
+| B10 | Slider snapping | **Done** (v0.9.0) | 1C | C/D |
 | B11 | Explorer popups: Schoenflies | **Done** (v0.8.0) | 5 | **C** |
 | B12 | Explorer popups: link to Simulator | **Done** (v0.8.0) | 5 | **C** |
 | B13 | Help Feature-Overview box order | **Done** (v0.8.0) | 6 | **C** |
 | B14 | Help reorg into tabs + expand | Decided (large) | 6 | **E** |
 | B15 | Explorer as interactive Birss table | Open (scope) | 5 | **E** |
 | B16 | Simplify symbolic source-term trig | Recommendation given | 2 | **E** |
-| B17 | Disable sliders for single component | Decided | 1C/2 | C/D |
-| B18 | Enlarge plots / trim whitespace | Decided | 1C/8 | C/D |
+| B17 | Disable sliders for single component | **Done** (v0.9.0) | 1C/2 | C/D |
+| B18 | Enlarge plots / trim whitespace | **Done** (v0.9.0) | 1C/8 | C/D |
 | B19 | Lab-frame panel title / inverse / tooltips | Decided | 7 | **D** |
 | B20 | App-wide tooltip / glossary | Decided | 6 | **D** |
 | B21 | Same-concept labels worded differently | **Done** (v0.8.0) | 8 | **C** |
