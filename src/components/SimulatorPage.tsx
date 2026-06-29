@@ -8,6 +8,23 @@ import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
 import type { TensorConfig, OrientationState, SimulationState } from '../types';
 
+const PHASE_DETENTS = [
+  ...[0, 45, 90, 135, 180, 225, 270, 315, 360].map(val => ({ val, threshold: 5 })),
+  ...[15, 30, 60, 75, 105, 120, 150, 165, 195, 210, 240, 255, 285, 300, 330, 345].map(val => ({ val, threshold: 3 })),
+];
+
+const MAGNITUDE_DETENTS = [
+  ...[0, 0.25, 0.5, 0.75, 1.0].map(val => ({ val, threshold: 0.02 })),
+  ...[0.05, 0.1, 0.15, 0.2, 0.3, 0.35, 0.4, 0.45, 0.55, 0.6, 0.65, 0.7, 0.8, 0.85, 0.9, 0.95].map(val => ({ val, threshold: 0.01 })),
+];
+
+function snapValue(raw: number, detents: { val: number; threshold: number }[]): number {
+  for (const { val, threshold } of detents) {
+    if (Math.abs(raw - val) <= threshold) return val;
+  }
+  return raw;
+}
+
 interface SimulatorPageProps {
   selectedGroup: PointGroupData | null;
   tensorConfig: TensorConfig;
@@ -284,7 +301,14 @@ export function SimulatorPage({
                         type="range"
                         min="0" max="1" step="0.01"
                         value={amplitudes[comp] ?? 1}
-                        onChange={(e) => setAmplitudes(p => ({ ...p, [comp]: parseFloat(e.target.value) }))}
+                        onChange={(e) => setAmplitudes(p => ({ ...p, [comp]: snapValue(parseFloat(e.target.value), MAGNITUDE_DETENTS) }))}
+                        onKeyDown={(e) => {
+                          if (e.shiftKey && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+                            e.preventDefault();
+                            const dir = (e.key === 'ArrowRight' || e.key === 'ArrowUp') ? 1 : -1;
+                            setAmplitudes(p => ({ ...p, [comp]: Math.max(0, Math.min(1, (p[comp] ?? 1) + dir * 0.05)) }));
+                          }
+                        }}
                         className="flex-1 accent-ink"
                         disabled={singleComponent}
                       />
@@ -301,12 +325,31 @@ export function SimulatorPage({
                       />
                     </div>
                     <div className="flex items-center gap-2">
+                      <div className="w-20 shrink-0" />
+                      <div className="flex-1 flex justify-between px-0.5 -mt-1">
+                        {[0, 0.5, 1].map(tick => (
+                          <button key={tick} type="button" disabled={singleComponent}
+                            onClick={() => setAmplitudes(p => ({ ...p, [comp]: tick }))}
+                            className="text-[9px] opacity-30 hover:opacity-80 transition-opacity"
+                          >{tick}</button>
+                        ))}
+                      </div>
+                      <div className="w-14 shrink-0" />
+                    </div>
+                    <div className="flex items-center gap-2">
                       <div className="w-20 shrink-0 text-right text-xs opacity-60">Phase</div>
                       <input
                         type="range"
                         min="0" max="360" step="1"
                         value={phaseVal}
-                        onChange={(e) => setPhases(p => ({ ...p, [comp]: parseInt(e.target.value, 10) }))}
+                        onChange={(e) => setPhases(p => ({ ...p, [comp]: snapValue(parseInt(e.target.value, 10), PHASE_DETENTS) }))}
+                        onKeyDown={(e) => {
+                          if (e.shiftKey && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+                            e.preventDefault();
+                            const dir = (e.key === 'ArrowRight' || e.key === 'ArrowUp') ? 1 : -1;
+                            setPhases(p => ({ ...p, [comp]: Math.max(0, Math.min(360, (p[comp] ?? 0) + dir * 15)) }));
+                          }
+                        }}
                         className="flex-1 accent-ink"
                         disabled={singleComponent}
                       />
@@ -324,6 +367,18 @@ export function SimulatorPage({
                         />
                         <span className="text-xs opacity-50">°</span>
                       </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 shrink-0" />
+                      <div className="flex-1 flex justify-between px-0.5 -mt-1">
+                        {[0, 90, 180, 270, 360].map(tick => (
+                          <button key={tick} type="button" disabled={singleComponent}
+                            onClick={() => setPhases(p => ({ ...p, [comp]: tick }))}
+                            className="text-[9px] opacity-30 hover:opacity-80 transition-opacity"
+                          >{tick}</button>
+                        ))}
+                      </div>
+                      <div className="w-14 shrink-0" />
                     </div>
                   </div>
                 );
