@@ -39,7 +39,7 @@ function comparePolys(symPoly: Map<string, Map<string, number>>, numPoly: Map<st
 describe('buildSymbolicR', () => {
   it('evaluates to numeric R at (0,0,0) for k||z preset', () => {
     const R_sym = buildSymbolicR(0, 0);
-    const R_num = mat3mul(rotZ(0), mat3mul(rotY(0), mat3mul(rotX(0), mat3mul(rotY(0), rotX(0)))));
+    const R_num = mat3mul(rotY(0), mat3mul(rotX(0), mat3mul(rotZ(0), mat3mul(rotY(0), rotX(0)))));
     for (let i = 0; i < 3; i++)
       for (let j = 0; j < 3; j++)
         expect(Math.abs(trigEval(R_sym[i][j], 0, 0, 0) - R_num[i][j])).toBeLessThan(1e-12);
