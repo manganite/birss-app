@@ -7,13 +7,12 @@ import {
   calculateTensorComponents,
   isCentrosymmetric,
   calculateSHGExpressions,
-  getSymmetryOperations,
   getLabFrameVectors,
   getAlternateSettings,
   getFutureSettingCount,
   type SymbolicSHGResult,
 } from '../services/tensorCalculator';
-import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, KDirectionSelector, AxisOrientationInfo } from './MathComponents';
+import { TensorTerm, KDirectionSelector, GroupIdentityHeader } from './MathComponents';
 import type { TensorConfig, PresetAnglesState } from '../types';
 
 const TENSOR_META = {
@@ -33,7 +32,6 @@ interface CalculatorPageProps {
 export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symbolicExpressions, onNavigate }: CalculatorPageProps) {
   const [activeResultTab, setActiveResultTab] = useState<'components' | 'induced' | 'source'>('components');
   const [mobileSourceExpanded, setMobileSourceExpanded] = useState(false);
-  const [mobileClassificationExpanded, setMobileClassificationExpanded] = useState(false);
   const [mobileSetupExpanded, setMobileSetupExpanded] = useState(false);
 
   const { thetaX, setThetaX, thetaY, setThetaY, psi0, setPsi0 } = presetAngles;
@@ -43,11 +41,6 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
     if (!selectedGroup) return [];
     return calculateTensorComponents(selectedGroup.name, selectedTensorType, selectedTimeReversal, selectedSetting);
   }, [selectedGroup, selectedTensorType, selectedTimeReversal, selectedSetting]);
-
-  const currentOperations = useMemo(() => {
-    if (!selectedGroup) return [];
-    return getSymmetryOperations(selectedGroup.name, selectedSetting);
-  }, [selectedGroup, selectedSetting]);
 
   const labFrameBase = useMemo(() => getLabFrameVectors({ thetaX, thetaY, psi0, phiX: 0, phiY: 0, psi: 0 }), [thetaX, thetaY, psi0]);
 
@@ -80,65 +73,12 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
       animate={{ opacity: 1 }}
       className="space-y-8"
     >
-      {/* Compact group indicator — always visible, click to expand classification */}
-      <button
-        type="button"
-        aria-expanded={mobileClassificationExpanded}
-        aria-controls="classification-panel"
-        onClick={() => setMobileClassificationExpanded(prev => !prev)}
-        className="flex items-center justify-between w-full p-4 border border-ink border-opacity-10 bg-white/30"
-      >
-        <div className="flex items-center gap-3">
-          {getCrystalIcon(selectedGroup.crystalSystem)}
-          <div className="text-left flex items-center flex-wrap gap-x-2 gap-y-1">
-            <span className="text-lg font-serif italic"><FormatPointGroup name={selectedGroup.name} /></span>
-            <span className="text-xs opacity-50">{selectedGroup.crystalSystem}</span>
-            <span className="text-xs opacity-50">· Type {selectedGroup.type}</span>
-            <span className="text-xs opacity-50">· {isCentrosymmetric(selectedGroup.name) ? 'Centrosymmetric' : 'Non-Centrosymmetric'}</span>
-          </div>
-        </div>
-        {mobileClassificationExpanded ? <ChevronUp className="w-4 h-4 opacity-50" /> : <ChevronDown className="w-4 h-4 opacity-50" />}
-      </button>
-
-      {/* Expandable classification panel */}
-      {mobileClassificationExpanded && (
-        <section id="classification-panel" className="space-y-4 border border-ink border-opacity-10 p-6">
-          <div className="text-xs uppercase tracking-[0.2em] opacity-50 font-semibold flex items-center gap-2">
-            <Info className="w-3 h-3" />
-            Tensor Classification
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <h2 className="text-4xl font-serif italic"><FormatPointGroup name={selectedGroup.name} /></h2>
-              <p className="text-[10px] uppercase tracking-widest opacity-50 mt-1">
-                {selectedGroup.type === 'I' ? 'Standard' : selectedGroup.type === 'II' ? 'Gray' : 'Magnetic'} Point Group
-              </p>
-            </div>
-            <div className="flex items-center gap-3 p-4 border border-ink border-opacity-10">
-              {getCrystalIcon(selectedGroup.crystalSystem)}
-              <div>
-                <p className="text-sm font-medium">{selectedGroup.crystalSystem}</p>
-                <p className="text-[10px] uppercase tracking-widest opacity-50">Crystal System</p>
-              </div>
-            </div>
-            <div className={`p-4 border border-ink ${isCentrosymmetric(selectedGroup.name) ? 'bg-ink text-paper' : 'border-opacity-10'}`}>
-              <p className="text-sm font-medium">
-                {isCentrosymmetric(selectedGroup.name) ? 'Centrosymmetric' : 'Non-Centrosymmetric'}
-              </p>
-              <p className="text-[10px] uppercase tracking-widest opacity-50">Symmetry Type</p>
-            </div>
-            <AxisOrientationInfo crystalSystem={selectedGroup.crystalSystem} />
-          </div>
-          <div className="p-4 border border-ink border-opacity-10 space-y-3">
-            <p className="text-[10px] uppercase tracking-widest opacity-50">Symmetry Operations ({currentOperations.length})</p>
-            <div className="flex flex-wrap gap-1.5">
-              {currentOperations.map((op, i) => (
-                <SymmetryOperation key={i} symbol={op} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Group identity header — shared with Simulator */}
+      <GroupIdentityHeader
+        group={selectedGroup}
+        setting={selectedSetting}
+        onNavigate={onNavigate}
+      />
 
       {/* Main Content: Tensor Components — full width */}
       <div className="space-y-8">
