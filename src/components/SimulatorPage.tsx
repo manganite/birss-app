@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { PointGroupData } from '../data/pointGroups';
 import { isCentrosymmetric, type SymbolicSHGResult, formatSymbolicSourceTerm } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
@@ -77,7 +77,7 @@ export function SimulatorPage({
     pol_a0: simulationData.maxPolA0, pol_a90: simulationData.maxPolA90,
     ana_p0: simulationData.maxAnaP0, ana_p90: simulationData.maxAnaP90,
   };
-  const mobilePlotTitle: Record<string, { primary: React.ReactNode; secondary: React.ReactNode }> = {
+  const mobilePlotTitle: Record<string, { primary: ReactNode; secondary: ReactNode }> = {
     anisotropy: { primary: <>Parallel (<InlineMath math="I_{\parallel}" />)</>, secondary: <>Crossed (<InlineMath math="I_{\perp}" />)</> },
     polarizer: { primary: 'Analyzer at 0°', secondary: 'Analyzer at 90°' },
     analyzer: { primary: 'Polarizer at 0°', secondary: 'Polarizer at 90°' },
