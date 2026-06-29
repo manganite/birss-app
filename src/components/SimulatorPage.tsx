@@ -30,7 +30,7 @@ export function SimulatorPage({
   const [showEquations, setShowEquations] = useState(false);
   const [verboseFormulas, setVerboseFormulas] = useState(false);
   const [showRotation, setShowRotation] = useState(phiX !== 0 || phiY !== 0 || psi !== 0);
-  const [phaseOverrides, setPhaseOverrides] = useState<Map<string, boolean>>(new Map());
+
   const [mobileSetupExpanded, setMobileSetupExpanded] = useState(false);
 
   const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
@@ -235,7 +235,7 @@ export function SimulatorPage({
             </div>
           )}
 
-          <div className="bg-white/50 border border-ink p-6 space-y-8">
+          <div className="bg-white/50 border border-ink p-4 space-y-4">
             {independentComponents.length === 0 ? (
               <div className="py-6 space-y-4">
                 <div className="flex items-start gap-3 p-4 border border-ink border-opacity-10 bg-ink/5">
@@ -266,17 +266,12 @@ export function SimulatorPage({
             ) : (
               independentComponents.map(comp => {
                 const phaseVal = phases[comp] ?? 0;
-                const override = phaseOverrides.get(comp);
-                const phaseExpanded = override !== undefined ? override : (phaseVal !== 0);
                 return (
-                  <div key={comp} className="space-y-2 border-b border-ink border-opacity-10 pb-4 last:border-0 last:pb-0">
-                    <div className="flex items-center justify-between">
-                      <div className="font-mono text-lg font-medium">
+                  <div key={comp} className="space-y-1.5 border-b border-ink/10 pb-3 last:border-0 last:pb-0">
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 shrink-0 text-right font-mono text-sm font-medium">
                         <TensorTerm term={comp} isNull={false} />
                       </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
                       <input
                         type="range"
                         min="0" max="1" step="0.01"
@@ -292,57 +287,32 @@ export function SimulatorPage({
                           const v = parseFloat(e.target.value);
                           if (!isNaN(v)) setAmplitudes(p => ({ ...p, [comp]: Math.max(0, Math.min(1, v)) }));
                         }}
-                        className="w-16 text-right text-xs font-mono bg-white/50 border border-ink/20 px-2 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
+                        className="w-14 text-right text-xs font-mono bg-white/50 border border-ink/20 px-1.5 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
                       />
                     </div>
-
-                    <button
-                      type="button"
-                      aria-expanded={phaseExpanded}
-                      onClick={() => setPhaseOverrides(prev => {
-                        const next = new Map(prev);
-                        next.set(comp, !phaseExpanded);
-                        return next;
-                      })}
-                      className="flex items-center gap-1 text-xs opacity-50 hover:opacity-100 transition-opacity"
-                    >
-                      {phaseExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                      Phase{!phaseExpanded && phaseVal !== 0 ? `: ${phaseVal}°` : ''}
-                    </button>
-
-                    {phaseExpanded && (
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1 relative">
-                          <input
-                            type="range"
-                            min="0" max="360" step="1"
-                            value={phaseVal}
-                            onChange={(e) => setPhases(p => ({ ...p, [comp]: parseInt(e.target.value, 10) }))}
-                            className="w-full accent-ink"
-                          />
-                          <div className="flex justify-between text-[9px] opacity-30 px-0.5 -mt-1" aria-hidden="true">
-                            <span>0</span>
-                            <span>90</span>
-                            <span>180</span>
-                            <span>270</span>
-                            <span>360</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1 shrink-0">
-                          <input
-                            type="number"
-                            min="0" max="360" step="1"
-                            value={phaseVal}
-                            onChange={(e) => {
-                              const v = parseInt(e.target.value, 10);
-                              if (!isNaN(v)) setPhases(p => ({ ...p, [comp]: Math.max(0, Math.min(360, v)) }));
-                            }}
-                            className="w-16 text-right text-xs font-mono bg-white/50 border border-ink/20 px-2 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
-                          />
-                          <span className="text-xs opacity-50">°</span>
-                        </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 shrink-0 text-right text-xs opacity-60">Phase</div>
+                      <input
+                        type="range"
+                        min="0" max="360" step="1"
+                        value={phaseVal}
+                        onChange={(e) => setPhases(p => ({ ...p, [comp]: parseInt(e.target.value, 10) }))}
+                        className="flex-1 accent-ink"
+                      />
+                      <div className="flex items-center gap-0.5 shrink-0">
+                        <input
+                          type="number"
+                          min="0" max="360" step="1"
+                          value={phaseVal}
+                          onChange={(e) => {
+                            const v = parseInt(e.target.value, 10);
+                            if (!isNaN(v)) setPhases(p => ({ ...p, [comp]: Math.max(0, Math.min(360, v)) }));
+                          }}
+                          className="w-14 text-right text-xs font-mono bg-white/50 border border-ink/20 px-1.5 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
+                        />
+                        <span className="text-xs opacity-50">°</span>
                       </div>
-                    )}
+                    </div>
                   </div>
                 );
               })
