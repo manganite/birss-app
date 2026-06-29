@@ -12,7 +12,7 @@ correctness; the mapping to the old feature numbers is given in the item index.
 **Prerequisites (not items below).** The `services/` split, the golden-fixture suite
 (`goldenTensors.fixtures.ts` / `.test.ts`, table-4e-verified + generator-derived),
 the rotated-path suite (`rotatedSHG.fixtures.ts` / `.test.ts`), and the per-module
-tests are assumed in place. Current version: **v0.9.0**; Wave C complete (v0.8.0 + v0.8.1); C/D crossover complete (v0.9.0).
+tests are assumed in place. Current version: **v0.10.0**; Wave C done (v0.8.0–v0.8.1); C/D crossover done (v0.9.0); A2 + A1 + B5/B8 done (v0.10.0).
 
 ---
 
@@ -34,18 +34,18 @@ feature this continues. `Wave` is the execution slot defined below.
 
 | ID | Title (short) | Status | Old # | Wave |
 |----|---------------|--------|-------|------|
-| A2 | Tilt axes lab-fixed (rotation composition) | Derivation pending | 1B | **B** |
+| A2 | Tilt axes lab-fixed (rotation composition) | **Done** (v0.10.0) | 1B | **B** |
 | B1 | Alternate settings for Type I/II groups | Derivation pending | 3 | **B** |
-| A1 | Calculator source terms must be angle-free | Decided (Calc) / open (Sim) | 2 | **D** |
+| A1 | Calculator source terms must be angle-free | **Done** (v0.10.0, Calc) / open (Sim) | 2 | **D** |
 | A3 | Simulator mobile layout broken | **Done** (v0.9.0) | 1C | C/D |
 | A4 | "RANK RANK 3" duplicate word | **Done** (v0.8.0) | 8 | **C** |
 | B2 | Settings under-surfaced (B2.1–B2.4) | Decided (B2.4 open) | 3/6 | **E** |
 | B3 | Simulator shows no group identity | Decided | 5/8 | **D** |
 | B4 | Unify Calculator/Simulator visual shell | Decided (1 open) | 8 | **D** |
-| B5 | One shared direction/lab-frame component | Decided | 1C/9 | **D** |
+| B5 | One shared direction/lab-frame component | **Done** (v0.10.0) | 1C/9 | **D** |
 | B6 | Compact Simulator sliders | **Done** (v0.9.0) | 1C | C/D |
 | B7 | Blickrichtung presets; free [hkl] | **Done** (v0.8.0) | 9 | **C** |
-| B8 | Name the direction selection (normal ∥ k) | Decided | 1C/9 | **D** |
+| B8 | Name the direction selection (normal ∥ k) | **Done** (v0.10.0) | 1C/9 | **D** |
 | B9 | Tensor Notes collapse pointless | **Done** (v0.8.0) | 8 | **C** |
 | B10 | Slider snapping | **Done** (v0.9.0) | 1C | C/D |
 | B11 | Explorer popups: Schoenflies | **Done** (v0.8.0) | 5 | **C** |
