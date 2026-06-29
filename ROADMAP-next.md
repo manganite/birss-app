@@ -40,8 +40,8 @@ feature this continues. `Wave` is the execution slot defined below.
 | A3 | Simulator mobile layout broken | **Done** (v0.9.0) | 1C | C/D |
 | A4 | "RANK RANK 3" duplicate word | **Done** (v0.8.0) | 8 | **C** |
 | B2 | Settings under-surfaced (B2.1–B2.4) | Decided (B2.4 open) | 3/6 | **E** |
-| B3 | Simulator shows no group identity | Decided | 5/8 | **D** |
-| B4 | Unify Calculator/Simulator visual shell | Decided (1 open) | 8 | **D** |
+| B3 | Simulator shows no group identity | **Done** (v0.12.0) | 5/8 | **D** |
+| B4 | Unify Calculator/Simulator visual shell | **Done** (v0.12.0) | 8 | **D** |
 | B5 | One shared direction/lab-frame component | **Done** (v0.10.0) | 1C/9 | **D** |
 | B6 | Compact Simulator sliders | **Done** (v0.9.0) | 1C | C/D |
 | B7 | Blickrichtung presets; free [hkl] | **Done** (v0.8.0) | 9 | **C** |
@@ -62,9 +62,9 @@ feature this continues. `Wave` is the execution slot defined below.
 | B22 | Help-text content audit | Decided (minor verify) | 6 | **E** |
 | B23 | Explorer per-type counts (global vs system) | **Done** (v0.8.0) | 5 | **C** |
 | B24 | Calculator empty-panel whitespace | **Done** (v0.8.0) | 8 | **C** |
-| B25 | Note / container / emphasis styling | Decided (1 open) | 8 | **D** |
+| B25 | Note / container / emphasis styling | **Done** (v0.12.0) | 8 | **D** |
 | B26 | Spurious scroll arrows on equation rows | **Done** (v0.8.0) | 8 | **C** |
-| B27 | Group info header: optional fields | Open (which fields) | 5/8 | **D** |
+| B27 | Group info header: optional fields | **Done** (v0.12.0) | 5/8 | **D** |
 | B28 | formatCoeff: recognise 1/√6 | **Done** (v0.8.1) | 8 | **C** |
 | B29 | Context-sensitive coefficient formatter | Idea | — | — |
 

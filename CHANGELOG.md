@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-06-29
+
+### Added
+- Shared group-identity header in Calculator and Simulator showing: HM symbol
+  with Schoenflies, crystal system, type, centrosymmetric badge, current setting,
+  parent crystallographic group and halving subgroup H (Type III), one-line SHG
+  consequence, and "Open in Explorer" link (B3/B27).
+
+### Changed
+- Calculator setup area uses two-column layout (Tensor Classification | Time
+  Reversal side by side on md+), matching the Simulator (B4).
+- Button styling unified across Calculator and Simulator: text-xs font-medium
+  with icon-labeled section headers (B4).
+- Grey emphasis chips dropped from section labels (B25).
+
 ## [0.11.0] - 2026-06-29
 
 ### Added
@@ -327,7 +342,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/manganite/birss-app/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/manganite/birss-app/compare/v0.10.1...v0.11.0
 [0.10.1]: https://github.com/manganite/birss-app/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/manganite/birss-app/compare/v0.9.0...v0.10.0
