@@ -287,12 +287,14 @@ export function GroupIdentityHeader({ group, setting, onNavigate }: GroupIdentit
   const settings = getAlternateSettings(group.name);
   const settingCount = settings ? settings.length + 1 : 1;
 
+  const panelId = `group-identity-panel-${group.name.replace(/[^a-zA-Z0-9]/g, '')}`;
+
   return (
     <div className="space-y-0">
       <button
         type="button"
         aria-expanded={expanded}
-        aria-controls="group-identity-panel"
+        aria-controls={panelId}
         onClick={() => setExpanded(prev => !prev)}
         className="flex items-center justify-between w-full p-4 border border-ink border-opacity-10 bg-white/30"
       >
@@ -304,7 +306,7 @@ export function GroupIdentityHeader({ group, setting, onNavigate }: GroupIdentit
             <span className="text-xs opacity-50">{group.crystalSystem}</span>
             <span className="text-xs opacity-50">· Type {group.type}</span>
             <span className="text-xs opacity-50">· {centro ? 'Centrosymmetric' : 'Non-Centrosymmetric'}</span>
-            {settingCount > 1 && setting > 1 && (
+            {settingCount > 1 && (
               <span className="text-xs opacity-50">· Setting {setting}/{settingCount}</span>
             )}
           </div>
@@ -313,7 +315,7 @@ export function GroupIdentityHeader({ group, setting, onNavigate }: GroupIdentit
       </button>
 
       {expanded && (
-        <section id="group-identity-panel" className="border border-ink border-opacity-10 border-t-0 p-6 space-y-4">
+        <section id={panelId} className="border border-ink border-opacity-10 border-t-0 p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <h2 className="text-4xl font-serif italic"><FormatPointGroup name={group.name} /></h2>

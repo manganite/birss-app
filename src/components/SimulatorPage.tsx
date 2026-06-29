@@ -31,6 +31,7 @@ interface SimulatorPageProps {
   orientation: OrientationState;
   symbolicExpressions: SymbolicSHGResult | null;
   simulation: SimulationState;
+  onNavigate?: (view: string) => void;
 }
 
 export function SimulatorPage({
@@ -39,6 +40,7 @@ export function SimulatorPage({
   orientation,
   symbolicExpressions,
   simulation,
+  onNavigate,
 }: SimulatorPageProps) {
   const { type: selectedTensorType, setType: setSelectedTensorType, timeReversal: selectedTimeReversal, setTimeReversal: setSelectedTimeReversal, setting: selectedSetting } = tensorConfig;
   const { thetaX, setThetaX, thetaY, setThetaY, psi0, setPsi0, phiX, setPhiX, phiY, setPhiY, psi, setPsi } = orientation;
@@ -109,7 +111,7 @@ export function SimulatorPage({
     <div className="space-y-8 animate-in fade-in duration-500">
       {/* Group identity header — shared with Calculator */}
       <div className="hidden md:block">
-        <GroupIdentityHeader group={selectedGroup} setting={selectedSetting} />
+        <GroupIdentityHeader group={selectedGroup} setting={selectedSetting} onNavigate={onNavigate} />
       </div>
 
       {/* Top Controls */}

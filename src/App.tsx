@@ -264,6 +264,7 @@ export default function App() {
             orientation={orientation}
             symbolicExpressions={symbolicExpressions}
             simulation={simulation}
+            onNavigate={(view) => setCurrentView(view as 'calculator' | 'simulator' | 'explorer' | 'help')}
           />
         ) : (
           <CalculatorPage
