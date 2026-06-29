@@ -11,7 +11,6 @@ import {
   getLabFrameVectors,
   getAlternateSettings,
   getFutureSettingCount,
-  formatSymbolicSourceTerm,
   type SymbolicSHGResult,
 } from '../services/tensorCalculator';
 import { FormatPointGroup, SymmetryOperation, TensorTerm, getCrystalIcon, getPresetsForSystem, LabFrameOrientation, AxisOrientationInfo } from './MathComponents';
@@ -448,24 +447,23 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                   </div>
 
                   <div className="space-y-6">
-                    {symbolicExpressions?.source.map((symExpr, i) => {
-                      const formatted = formatSymbolicSourceTerm(symExpr.symbolicPoly);
-                      const isNull = formatted === '0';
+                    {sourceTerms.map((expr, i) => {
+                      const isNull = expr.expression === "0";
                       return (
                         <div key={i} className="flex flex-col md:flex-row md:items-center gap-4 border-b border-ink border-opacity-10 pb-4">
                           <div className="w-16 font-mono text-xl">
-                            <TensorTerm term={symExpr.component} isNull={isNull} />
+                            <TensorTerm term={expr.component} isNull={isNull} />
                           </div>
                           <div className="flex-1 font-mono text-xl tracking-tight overflow-x-auto overflow-y-hidden whitespace-nowrap pb-2 md:pb-0">
                             <span className="opacity-30 mr-4"><InlineMath math="\propto" /></span>
-                            <TensorTerm term={formatted} isNull={isNull} />
+                            <TensorTerm term={expr.expression} isNull={isNull} />
                           </div>
                         </div>
                       );
                     })}
                   </div>
 
-                  {symbolicExpressions && symbolicExpressions.source.length > 0 && symbolicExpressions.source.every(t => t.symbolicPoly.size === 0) && (
+                  {sourceTerms.length > 0 && sourceTerms.every(t => t.expression === '0') && (
                     <div className="p-6 border border-ink border-opacity-10 bg-ink/5 space-y-4 mt-2">
                       <div className="flex items-start gap-3">
                         <Info className="w-4 h-4 mt-0.5 shrink-0 opacity-60" />
