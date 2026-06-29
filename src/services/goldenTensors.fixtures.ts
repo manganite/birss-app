@@ -743,6 +743,16 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     source: 'Birss Table 4a: mm2 (E_n) → 2mm orientation via ORTHO_CYCLIC (axis cycle x→y→z).',
   },
   {
+    group: '222', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xyz} = \\chi_{xzy}', '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{zxy} = \\chi_{zyx}'],
+    source: 'Birss Table 4a: 222 (D_n) → axis permutation via ORTHO_CYCLIC. D_n form (3 xyz-family components) is invariant under axis permutation.',
+  },
+  {
+    group: 'm', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xxz} = \\chi_{xzx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx}', '\\chi_{zxz} = \\chi_{zzx}', '\\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Birss Table 4a: m (C_n, -2//z) → b-unique (ITC, -2//y) via MONO_YZ_SWAP.',
+  },
+  {
     group: 'mm2', tensor: 'ED', tr: 'i', setting: 3,
     expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{yxx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zyz} = \\chi_{zzy}'],
     source: 'Birss Table 4a: mm2 (E_n) → m2m orientation via ORTHO_REVERSE (reverse axis cycle).',
