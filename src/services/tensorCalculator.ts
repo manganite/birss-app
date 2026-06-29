@@ -13,6 +13,9 @@ export {
   getAlternateSettings,
   getFutureSettingCount,
   getTransformedGenerators,
+  getParentGroup,
+  getHalvingSubgroup,
+  getSHGConsequence,
   type SettingDef,
 } from './symmetryGroups';
 export {
