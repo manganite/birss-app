@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PointGroupData } from '../data/pointGroups';
 import { isCentrosymmetric, type SymbolicSHGResult, formatSymbolicSourceTerm } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
@@ -49,6 +49,8 @@ export function SimulatorPage({
   const [showRotation, setShowRotation] = useState(phiX !== 0 || phiY !== 0 || psi !== 0);
 
   const [mobileSetupExpanded, setMobileSetupExpanded] = useState(false);
+  const [mobilePlotVariant, setMobilePlotVariant] = useState<'primary' | 'secondary'>('primary');
+  const [mobileActiveComponent, setMobileActiveComponent] = useState<string | null>(null);
 
   const rotationActive = phiX !== 0 || phiY !== 0 || psi !== 0;
 
@@ -56,6 +58,38 @@ export function SimulatorPage({
 
   const { labFrame, sourceTerms, sourceTermsExEy, expandedFormulas, independentComponents, simulationData } =
     useSimulatorState(selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, psi0, phiX, phiY, psi, selectedSetting, amplitudes, setAmplitudes, phases, setPhases);
+
+  useEffect(() => {
+    if (independentComponents.length > 0 && (!mobileActiveComponent || !independentComponents.includes(mobileActiveComponent))) {
+      setMobileActiveComponent(independentComponents[0]);
+    }
+  }, [independentComponents, mobileActiveComponent]);
+
+  const mobileDataKeyMap: Record<string, { primary: string; secondary: string; primaryLabel: string; secondaryLabel: string }> = {
+    anisotropy: { primary: 'parallel', secondary: 'crossed', primaryLabel: '∥', secondaryLabel: '⊥' },
+    polarizer: { primary: 'pol_a0', secondary: 'pol_a90', primaryLabel: 'Ana 0°', secondaryLabel: 'Ana 90°' },
+    analyzer: { primary: 'ana_p0', secondary: 'ana_p90', primaryLabel: 'Pol 0°', secondaryLabel: 'Pol 90°' },
+  };
+  const mobileMap = mobileDataKeyMap[activePolarimetryTab];
+  const mobileDataKey = mobilePlotVariant === 'primary' ? mobileMap.primary : mobileMap.secondary;
+  const mobileDisplayMaxMap: Record<string, number> = {
+    parallel: simulationData.maxParallel, crossed: simulationData.maxCrossed,
+    pol_a0: simulationData.maxPolA0, pol_a90: simulationData.maxPolA90,
+    ana_p0: simulationData.maxAnaP0, ana_p90: simulationData.maxAnaP90,
+  };
+  const mobilePlotTitle: Record<string, { primary: React.ReactNode; secondary: React.ReactNode }> = {
+    anisotropy: { primary: <>Parallel (<InlineMath math="I_{\parallel}" />)</>, secondary: <>Crossed (<InlineMath math="I_{\perp}" />)</> },
+    polarizer: { primary: 'Analyzer at 0°', secondary: 'Analyzer at 90°' },
+    analyzer: { primary: 'Polarizer at 0°', secondary: 'Polarizer at 90°' },
+  };
+  const mobilePlotSubtitle: Record<string, { primary: string; secondary: string }> = {
+    anisotropy: { primary: 'Polarizer ∥ Analyzer', secondary: 'Polarizer ⊥ Analyzer' },
+    polarizer: { primary: 'Fixed Analyzer', secondary: 'Fixed Analyzer' },
+    analyzer: { primary: 'Fixed Polarizer', secondary: 'Fixed Polarizer' },
+  };
+  const mobileLabelPrefix: Record<string, 'Polarizer' | 'Analyzer'> = {
+    anisotropy: 'Polarizer', polarizer: 'Polarizer', analyzer: 'Analyzer',
+  };
 
   if (!selectedGroup) {
     return (
@@ -241,18 +275,84 @@ export function SimulatorPage({
         
         {/* Left Column: Sliders — below plots on mobile */}
         <div className="lg:col-span-4 order-last lg:order-first space-y-6">
-          <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+          <div className="hidden md:flex text-[10px] uppercase tracking-[0.2em] opacity-50 items-center gap-2">
             <Sliders className="w-3 h-3" />
             Independent Tensor Components
           </div>
 
           {(selectedGroup.crystalSystem === 'Triclinic' || selectedGroup.crystalSystem === 'Monoclinic') && (
-            <div className="p-3 border border-ink border-opacity-10 bg-ink/5 text-xs opacity-70 leading-relaxed">
+            <div className="hidden md:block p-3 border border-ink border-opacity-10 bg-ink/5 text-xs opacity-70 leading-relaxed">
               Component values and polarimetry orientations depend on the in-plane Cartesian convention (see Help). Different monoclinic angles are represented by adjusting component values, not a separate control. Birefringence is not modeled.
             </div>
           )}
 
-          <div className="bg-white/50 border border-ink p-4 space-y-4">
+          {/* Mobile: component selector + one component's sliders */}
+          {independentComponents.length > 0 && (
+            <div className="md:hidden space-y-3">
+              <div className="flex flex-wrap gap-1.5">
+                {independentComponents.map(comp => (
+                  <button
+                    key={comp}
+                    onClick={() => setMobileActiveComponent(comp)}
+                    className={`px-2 py-1 text-xs border border-ink/20 transition-colors flex items-center gap-1 ${
+                      mobileActiveComponent === comp ? 'bg-ink text-paper' : 'opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <TensorTerm term={comp} isNull={false} />
+                    <span className="font-mono text-[10px] opacity-70">
+                      {(amplitudes[comp] ?? 1).toFixed(2)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              {mobileActiveComponent && (() => {
+                const comp = mobileActiveComponent;
+                const phaseVal = phases[comp] ?? 0;
+                const singleComponent = independentComponents.length === 1;
+                return (
+                  <div className={`bg-white/50 border border-ink p-3 space-y-1.5 ${singleComponent ? 'opacity-40' : ''}`}>
+                    {singleComponent && (
+                      <div className="flex items-start gap-2 p-2 border border-ink/10 bg-ink/5 text-xs leading-relaxed opacity-70 mb-2">
+                        <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                        <span>Single component: amplitude is only a global scale; the phase is unobservable in intensity.</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2">
+                      <div className="w-16 shrink-0 text-right font-mono text-sm font-medium">
+                        <TensorTerm term={comp} isNull={false} />
+                      </div>
+                      <input type="range" min="0" max="1" step="0.01"
+                        value={amplitudes[comp] ?? 1}
+                        onChange={(e) => setAmplitudes(p => ({ ...p, [comp]: snapValue(parseFloat(e.target.value), MAGNITUDE_DETENTS) }))}
+                        className="flex-1 accent-ink" disabled={singleComponent} />
+                      <input type="number" min="0" max="1" step="0.01"
+                        value={amplitudes[comp] ?? 1}
+                        onChange={(e) => { const v = parseFloat(e.target.value); if (!isNaN(v)) setAmplitudes(p => ({ ...p, [comp]: Math.max(0, Math.min(1, v)) })); }}
+                        className="w-14 text-right text-xs font-mono bg-white/50 border border-ink/20 px-1.5 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
+                        disabled={singleComponent} />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-16 shrink-0 text-right text-xs opacity-60">Phase</div>
+                      <input type="range" min="0" max="360" step="1"
+                        value={phaseVal}
+                        onChange={(e) => setPhases(p => ({ ...p, [comp]: snapValue(parseInt(e.target.value, 10), PHASE_DETENTS) }))}
+                        className="flex-1 accent-ink" disabled={singleComponent} />
+                      <div className="flex items-center gap-0.5 shrink-0">
+                        <input type="number" min="0" max="360" step="1"
+                          value={phaseVal}
+                          onChange={(e) => { const v = parseInt(e.target.value, 10); if (!isNaN(v)) setPhases(p => ({ ...p, [comp]: Math.max(0, Math.min(360, v)) })); }}
+                          className="w-14 text-right text-xs font-mono bg-white/50 border border-ink/20 px-1.5 py-1 rounded-sm focus:border-ink/60 focus:outline-none"
+                          disabled={singleComponent} />
+                        <span className="text-xs opacity-50">°</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+
+          <div className="hidden md:block bg-white/50 border border-ink p-4 space-y-4">
             {independentComponents.length === 0 ? (
               <div className="py-6 space-y-4">
                 <div className="flex items-start gap-3 p-4 border border-ink border-opacity-10 bg-ink/5">
@@ -388,8 +488,8 @@ export function SimulatorPage({
           </div>
         </div>
 
-        {/* Right Column: Polar Plots — sticky on both mobile and desktop */}
-        <div className="lg:col-span-8 sticky top-16 md:top-20 self-start z-10 space-y-6">
+        {/* Right Column: Polar Plots — sticky on tablet/desktop */}
+        <div className="lg:col-span-8 md:sticky md:top-20 self-start z-10 space-y-6">
           <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
             <Activity className="w-3 h-3" />
             SHG Intensity Polarimetry
@@ -436,8 +536,33 @@ export function SimulatorPage({
                 </div>
               ) : (
                 <div className="animate-in fade-in duration-300">
+                  {/* Mobile: ∥/⊥ toggle + single plot */}
+                  <div className="md:hidden space-y-4">
+                    <div className="flex justify-center border border-ink/20 rounded-sm overflow-hidden w-fit mx-auto">
+                      <button
+                        onClick={() => setMobilePlotVariant('primary')}
+                        className={`px-3 py-1.5 text-xs transition-colors ${mobilePlotVariant === 'primary' ? 'bg-ink text-paper' : 'opacity-50 hover:opacity-100'}`}
+                      >{mobileMap.primaryLabel}</button>
+                      <button
+                        onClick={() => setMobilePlotVariant('secondary')}
+                        className={`px-3 py-1.5 text-xs border-l border-ink/20 transition-colors ${mobilePlotVariant === 'secondary' ? 'bg-ink text-paper' : 'opacity-50 hover:opacity-100'}`}
+                      >{mobileMap.secondaryLabel}</button>
+                    </div>
+                    <PolarimetryPlot
+                      title={mobilePlotTitle[activePolarimetryTab][mobilePlotVariant]}
+                      subtitle={mobilePlotSubtitle[activePolarimetryTab][mobilePlotVariant]}
+                      data={simulationData.data}
+                      domainMax={simulationData.maxIntensity}
+                      dataKey={mobileDataKey}
+                      radarName={mobilePlotVariant === 'primary' ? 'Primary' : 'Secondary'}
+                      displayMax={mobileDisplayMaxMap[mobileDataKey]}
+                      labelPrefix={mobileLabelPrefix[activePolarimetryTab]}
+                    />
+                  </div>
+
+                  {/* Desktop: two plots side by side */}
                   {activePolarimetryTab === 'anisotropy' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div className="hidden md:grid md:grid-cols-2 gap-4 md:gap-6">
                       <PolarimetryPlot
                         title={<>Parallel (<InlineMath math="I_{\parallel}" />)</>}
                         subtitle="Polarizer ∥ Analyzer"
@@ -462,7 +587,7 @@ export function SimulatorPage({
                   )}
 
                   {activePolarimetryTab === 'polarizer' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div className="hidden md:grid md:grid-cols-2 gap-4 md:gap-6">
                       <PolarimetryPlot
                         title="Analyzer at 0°"
                         subtitle="Fixed Analyzer"
@@ -487,7 +612,7 @@ export function SimulatorPage({
                   )}
 
                   {activePolarimetryTab === 'analyzer' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div className="hidden md:grid md:grid-cols-2 gap-4 md:gap-6">
                       <PolarimetryPlot
                         title="Polarizer at 0°"
                         subtitle="Fixed Polarizer"
@@ -512,7 +637,7 @@ export function SimulatorPage({
                   )}
 
                   {independentComponents.length > 0 && (
-                    <div className="mt-8 text-center text-xs opacity-50">
+                    <div className="mt-6 text-center text-xs opacity-50">
                       Note: The angle shown in the plots represents the {activePolarimetryTab === 'analyzer' ? 'analyzer' : 'polarizer'} angle. 0° corresponds to the Lab X-axis, and 90° corresponds to the Lab Y-axis.
                     </div>
                   )}
