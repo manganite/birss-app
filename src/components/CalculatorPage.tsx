@@ -158,49 +158,55 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
           )}
 
           {/* Full setup controls — always on desktop, expandable on mobile */}
-          <div className={selectedTensorType === 'ED' && selectedTimeReversal === 'i' && !mobileSetupExpanded ? 'hidden md:flex flex-col gap-6' : 'flex flex-col gap-6'}>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Tensor Classification</p>
-                {mobileSetupExpanded && (
-                  <button type="button" aria-label="Collapse setup controls" onClick={() => setMobileSetupExpanded(false)} className="md:hidden opacity-50 hover:opacity-100">
-                    <ChevronUp className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {(['ED', 'MD', 'EQ'] as const).map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => setSelectedTensorType(type)}
-                    className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
-                      selectedTensorType === type
-                        ? 'bg-ink text-paper'
-                        : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
-                    }`}
-                  >
-                    {TENSOR_META[type].label}
-                  </button>
-                ))}
-              </div>
+          <div className={selectedTensorType === 'ED' && selectedTimeReversal === 'i' && !mobileSetupExpanded ? 'hidden md:block' : ''}>
+            <div className="flex items-center justify-between md:hidden mb-4">
+              {mobileSetupExpanded && (
+                <button type="button" aria-label="Collapse setup controls" onClick={() => setMobileSetupExpanded(false)} className="opacity-50 hover:opacity-100">
+                  <ChevronUp className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
+            <div className="flex flex-col md:flex-row gap-8">
+              <div className="flex-1 space-y-4">
+                <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+                  <Zap className="w-3 h-3" /> Tensor Classification
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {(['ED', 'MD', 'EQ'] as const).map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setSelectedTensorType(type)}
+                      className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
+                        selectedTensorType === type
+                          ? 'bg-ink text-paper'
+                          : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
+                      }`}
+                    >
+                      {TENSOR_META[type].label}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            <div className="space-y-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Time-Reversal Symmetry</p>
-              <div className="flex gap-3">
-                {(['i', 'c'] as const).map((tr) => (
-                  <button
-                    key={tr}
-                    onClick={() => setSelectedTimeReversal(tr)}
-                    className={`px-6 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
-                      selectedTimeReversal === tr
-                        ? 'bg-ink text-paper'
-                        : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
-                    }`}
-                  >
-                    {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
-                  </button>
-                ))}
+              <div className="flex-1 space-y-4">
+                <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+                  <Info className="w-3 h-3" /> Time-Reversal Symmetry
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {(['i', 'c'] as const).map((tr) => (
+                    <button
+                      key={tr}
+                      onClick={() => setSelectedTimeReversal(tr)}
+                      className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
+                        selectedTimeReversal === tr
+                          ? 'bg-ink text-paper'
+                          : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
+                      }`}
+                    >
+                      {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
