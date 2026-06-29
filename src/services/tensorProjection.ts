@@ -288,9 +288,10 @@ export function calculateSHGExpressions(options: SHGOptions): SHGResult {
 
   const tLabels = ['x', 'y', 'z'];
 
-  // R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · R_preset, where R_preset = Rz(psi0) · Ry(thetaY) · Rx(thetaX)
+  // R = Ry(φ_y) · Rx(φ_x) · Rz(ψ) · R_preset, where R_preset = Rz(psi0) · Ry(thetaY) · Rx(thetaX)
+  // Tilts (φ_x, φ_y) are lab-fixed; azimuth (ψ) is crystal-tied about the surface normal.
   const R_preset = mat3mul(rotZ(psi0), mat3mul(rotY(thetaY), rotX(thetaX)));
-  const R = mat3mul(rotZ(psi), mat3mul(rotY(phiY), mat3mul(rotX(phiX), R_preset)));
+  const R = mat3mul(rotY(phiY), mat3mul(rotX(phiX), mat3mul(rotZ(psi), R_preset)));
 
   // E_vec_lab_in_cryst maps Lab E-field (E_X, E_Y, 0) to Crystal E-field
   // E_cryst_i = R_0i E_X + R_1i E_Y
@@ -569,9 +570,9 @@ export function getLabFrameVectors(options: LabFrameOptions = {}) {
     return terms.length > 0 ? terms.join(" ") : "0";
   };
 
-  // R = Rz(ψ) · Ry(φ_y) · Rx(φ_x) · Rz(psi0) · Ry(thetaY) · Rx(thetaX)
+  // R = Ry(φ_y) · Rx(φ_x) · Rz(ψ) · R_preset
   const R_preset = mat3mul(rotZ(psi0), mat3mul(rotY(thetaY), rotX(thetaX)));
-  const R = mat3mul(rotZ(psi), mat3mul(rotY(phiY), mat3mul(rotX(phiX), R_preset)));
+  const R = mat3mul(rotY(phiY), mat3mul(rotX(phiX), mat3mul(rotZ(psi), R_preset)));
 
   // V_cryst = R^T · V_lab
   const x_crys = [R[0][0], R[1][0], R[2][0]];

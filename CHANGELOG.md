@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Simulator tilt axes (φ_x, φ_y) are now lab-fixed: spinning the crystal
+  (ψ) no longer drags the tilt axes. The rotation composition changes from
+  R = Rz(ψ)·Ry(φ_y)·Rx(φ_x)·R_preset to R = Ry(φ_y)·Rx(φ_x)·Rz(ψ)·R_preset.
+  Previously, tilts were crystal-fixed, producing wrong geometry when ψ and
+  tilts were combined (since v0.3.0). At zero tilt (the default), results
+  are unchanged.
+
 ## [0.9.0] - 2026-06-29
 
 ### Added

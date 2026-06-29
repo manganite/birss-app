@@ -79,7 +79,8 @@ function symRotZ(): TrigMat3 {
 
 export function buildSymbolicR(thetaX: number, thetaY: number, psi0 = 0): TrigMat3 {
   const R_preset = numToTrigMat3(mat3mul(rotZ(psi0), mat3mul(rotY(thetaY), rotX(thetaX))));
-  return trigMat3Mul(symRotZ(), trigMat3Mul(symRotY(), trigMat3Mul(symRotX(), R_preset)));
+  // R = Ry(φ_y) · Rx(φ_x) · Rz(ψ) · R_preset — tilts lab-fixed, azimuth crystal-tied
+  return trigMat3Mul(symRotY(), trigMat3Mul(symRotX(), trigMat3Mul(symRotZ(), R_preset)));
 }
 
 function multiplyLinearSym(A: TrigPoly[], B: TrigPoly[]): Record<string, TrigPoly> {

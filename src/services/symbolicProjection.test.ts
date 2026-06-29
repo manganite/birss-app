@@ -48,7 +48,7 @@ describe('buildSymbolicR', () => {
   it('evaluates to numeric R at (30, 45, 60) for k||z', () => {
     const R_sym = buildSymbolicR(0, 0);
     const R_preset = mat3mul(rotY(0), rotX(0));
-    const R_num = mat3mul(rotZ(60), mat3mul(rotY(45), mat3mul(rotX(30), R_preset)));
+    const R_num = mat3mul(rotY(45), mat3mul(rotX(30), mat3mul(rotZ(60), R_preset)));
     for (let i = 0; i < 3; i++)
       for (let j = 0; j < 3; j++)
         expect(Math.abs(trigEval(R_sym[i][j], 30, 45, 60) - R_num[i][j])).toBeLessThan(1e-10);
@@ -57,7 +57,7 @@ describe('buildSymbolicR', () => {
   it('evaluates to numeric R at (30, 45, 60) for k||x preset', () => {
     const R_sym = buildSymbolicR(0, -90);
     const R_preset = mat3mul(rotY(-90), rotX(0));
-    const R_num = mat3mul(rotZ(60), mat3mul(rotY(45), mat3mul(rotX(30), R_preset)));
+    const R_num = mat3mul(rotY(45), mat3mul(rotX(30), mat3mul(rotZ(60), R_preset)));
     for (let i = 0; i < 3; i++)
       for (let j = 0; j < 3; j++)
         expect(Math.abs(trigEval(R_sym[i][j], 30, 45, 60) - R_num[i][j])).toBeLessThan(1e-10);
@@ -66,7 +66,7 @@ describe('buildSymbolicR', () => {
   it('evaluates to numeric R at (15, -20, 75) for k||y preset', () => {
     const R_sym = buildSymbolicR(90, 0);
     const R_preset = mat3mul(rotY(0), rotX(90));
-    const R_num = mat3mul(rotZ(75), mat3mul(rotY(-20), mat3mul(rotX(15), R_preset)));
+    const R_num = mat3mul(rotY(-20), mat3mul(rotX(15), mat3mul(rotZ(75), R_preset)));
     for (let i = 0; i < 3; i++)
       for (let j = 0; j < 3; j++)
         expect(Math.abs(trigEval(R_sym[i][j], 15, -20, 75) - R_num[i][j])).toBeLessThan(1e-10);
