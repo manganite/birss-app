@@ -712,4 +712,78 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{xyz} = \\chi_{xzy}', '\\chi_{yxx}', '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zxy} = \\chi_{zyx}', '\\chi_{zyz} = \\chi_{zzy}'],
     source: 'Monoclinic y↔z swap; c-type rotates 2-fold from z to y.',
   },
+
+  // --- B1: Type I (colourless) alternate-setting fixtures ---
+  // Mechanism A (classical setting ambiguity) — Rz(45°/30°)
+  {
+    group: '-42m', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxz} = \\chi_{xzx} = -\\chi_{yyz} = -\\chi_{yzy}', '\\chi_{zxx} = -\\chi_{zyy}'],
+    source: 'Birss Table 4a: -42m (J_n) → -4m2 orientation via Rz(45°). Verified: d₁₅-type form (xxz/yyz antisymmetric).',
+  },
+  {
+    group: '32', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}', '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}'],
+    source: 'Birss Table 4a: 32 (L_n, 2//y) → 312 orientation via Rz(30°). Swaps d₂₂→d₁₁ family.',
+  },
+  {
+    group: '3m', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}', '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Birss Table 4a: 3m (M_n, -2//y) → 31m orientation via Rz(30°). Swaps d₁₁→d₂₂ family.',
+  },
+  {
+    group: '-6m2', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}'],
+    source: 'Birss Table 4a: -6m2 (R_n) → -62m orientation via Rz(30°). Swaps d₁₁→d₂₂ family.',
+  },
+
+  // Orthorhombic axis orientation (cyclic/reverse permutation)
+  {
+    group: 'mm2', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{zxz} = \\chi_{zzx}'],
+    source: 'Birss Table 4a: mm2 (E_n) → 2mm orientation via ORTHO_CYCLIC (axis cycle x→y→z).',
+  },
+  {
+    group: '222', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xyz} = \\chi_{xzy}', '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{zxy} = \\chi_{zyx}'],
+    source: 'Birss Table 4a: 222 (D_n) → axis permutation via ORTHO_CYCLIC. D_n form (3 xyz-family components) is invariant under axis permutation.',
+  },
+  {
+    group: 'm', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xxz} = \\chi_{xzx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx}', '\\chi_{zxz} = \\chi_{zzx}', '\\chi_{zyy}', '\\chi_{zzz}'],
+    source: 'Birss Table 4a: m (C_n, -2//z) → b-unique (ITC, -2//y) via MONO_YZ_SWAP.',
+  },
+  {
+    group: 'mm2', tensor: 'ED', tr: 'i', setting: 3,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{yxx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Birss Table 4a: mm2 (E_n) → m2m orientation via ORTHO_REVERSE (reverse axis cycle).',
+  },
+
+  // Monoclinic axis choice (z-unique Birss → b-unique ITC)
+  {
+    group: '2', tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{xyz} = \\chi_{xzy}', '\\chi_{yxx}', '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zxy} = \\chi_{zyx}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Birss Table 4a: 2 (B_n, 2//z) → b-unique (ITC, 2//y) via MONO_YZ_SWAP.',
+  },
+
+  // --- B1: Type II (grey) — i-type must equal colourless parent ---
+  {
+    group: "-42m1'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxz} = \\chi_{xzx} = -\\chi_{yyz} = -\\chi_{yzy}', '\\chi_{zxx} = -\\chi_{zyy}'],
+    source: 'Grey derivative of -42m: i-type equals colourless parent (ε preserved through S·G·S⁻¹).',
+  },
+  {
+    group: "321'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}', '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}'],
+    source: 'Grey derivative of 32: i-type equals colourless parent.',
+  },
+  {
+    group: "mm21'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{zxz} = \\chi_{zzx}'],
+    source: 'Grey derivative of mm2: i-type equals colourless parent.',
+  },
+  {
+    group: "21'", tensor: 'ED', tr: 'i', setting: 2,
+    expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{xyz} = \\chi_{xzy}', '\\chi_{yxx}', '\\chi_{yxz} = \\chi_{yzx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zxy} = \\chi_{zyx}', '\\chi_{zyz} = \\chi_{zzy}'],
+    source: 'Grey derivative of 2: i-type equals colourless parent.',
+  },
 ];

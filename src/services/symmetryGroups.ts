@@ -344,6 +344,35 @@ const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   "2'/m":   [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
   "2'/m'":  [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
   "2/m'":   [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+
+  // --- B1: Type I (colourless) ---
+  // Orthorhombic axis orientation (3 settings)
+  "222":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  "mm2":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  "mmm":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  // Monoclinic axis choice (z/c-unique Birss → b-unique ITC)
+  "2":     [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "m":     [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "2/m":   [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  // Mechanism A (classical setting ambiguity)
+  "-42m":  [{ name: "-4m2", rotation: getRotationZ(45) }],
+  "32":    [{ name: "312",  rotation: getRotationZ(30) }],
+  "3m":    [{ name: "31m",  rotation: getRotationZ(30) }],
+  "-3m":   [{ name: "-31m", rotation: getRotationZ(30) }],
+  "-6m2":  [{ name: "-62m", rotation: getRotationZ(30) }],
+
+  // --- B1: Type II (grey) — same transforms; ε preserved automatically ---
+  "2221'":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  "mm21'":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  "mmm1'":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  "21'":    [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "m1'":    [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "2/m1'":  [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "-42m1'": [{ name: "-4m2", rotation: getRotationZ(45) }],
+  "321'":   [{ name: "312",  rotation: getRotationZ(30) }],
+  "3m1'":   [{ name: "31m",  rotation: getRotationZ(30) }],
+  "-3m1'":  [{ name: "-31m", rotation: getRotationZ(30) }],
+  "-6m21'": [{ name: "-62m", rotation: getRotationZ(30) }],
 };
 
 const GROUPS_WITH_FUTURE_SETTINGS: Record<string, number> = {
