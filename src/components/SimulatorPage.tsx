@@ -367,7 +367,7 @@ export function SimulatorPage({
             </div>
 
             {/* Tab Content */}
-            <div className="p-6 md:p-8 min-h-[400px]">
+            <div className="p-4 md:p-6">
               {independentComponents.length === 0 ? (
                 <div className="h-[400px] flex flex-col items-center justify-center gap-4 text-sm opacity-50">
                   <span className="italic">Zero intensity</span>
@@ -382,7 +382,7 @@ export function SimulatorPage({
               ) : (
                 <div className="animate-in fade-in duration-300">
                   {activePolarimetryTab === 'anisotropy' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                       <PolarimetryPlot
                         title={<>Parallel (<InlineMath math="I_{\parallel}" />)</>}
                         subtitle="Polarizer ∥ Analyzer"
@@ -407,7 +407,7 @@ export function SimulatorPage({
                   )}
 
                   {activePolarimetryTab === 'polarizer' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                       <PolarimetryPlot
                         title="Analyzer at 0°"
                         subtitle="Fixed Analyzer"
@@ -432,7 +432,7 @@ export function SimulatorPage({
                   )}
 
                   {activePolarimetryTab === 'analyzer' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                       <PolarimetryPlot
                         title="Polarizer at 0°"
                         subtitle="Fixed Polarizer"
