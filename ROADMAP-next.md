@@ -57,7 +57,7 @@ feature this continues. `Wave` is the execution slot defined below.
 | B17 | Disable sliders for single component | **Done** (v0.9.0) | 1C/2 | C/D |
 | B18 | Enlarge plots / trim whitespace | **Done** (v0.9.0) | 1C/8 | C/D |
 | B19 | Lab-frame panel title / inverse / tooltips | **Done** (v0.10.1) | 7 | **D** |
-| B20 | App-wide tooltip / glossary | Decided | 6 | **D** |
+| B20 | App-wide tooltip / glossary | Deferred (after B14) | 6 | — |
 | B21 | Same-concept labels worded differently | **Done** (v0.8.0) | 8 | **C** |
 | B22 | Help-text content audit | Decided (minor verify) | 6 | **E** |
 | B23 | Explorer per-type counts (global vs system) | **Done** (v0.8.0) | 5 | **C** |
@@ -145,8 +145,9 @@ Suggested order (each builds on the previous):
    physics ("crystal cut / surface normal ∥ k", naming owned by B8).
 3. **B3 / B27** — the shared **group-identity header**, reused in the Simulator and
    enriched (notations, halving subgroup, SHG-allowedness).
-4. **B4 / B25 / B20** — the shared **design tokens**: section headers (B4),
-   note/container/emphasis components (B25), tooltip/glossary layer (B20).
+4. **B4 / B25** — the shared **design tokens**: section headers (B4),
+   note/container/emphasis components (B25). The tooltip/glossary layer (B20)
+   was pulled out of this wave and deferred behind B14 (see Unscheduled).
 
 A3, B6, B10, B17, B18 (Simulator layout/sliders/plots) can ride alongside D or close
 out C, as convenient — they share the slider/plot surface.
@@ -178,7 +179,7 @@ Wave B:  A2 (rotation)  ── feeds ──►  A1, B16, B5/B8   (shared rotatio
 
 Wave C:  A4  B13  B23  B26  B9  B24  B21  B11/B12  B7  B28   ✅ Done (v0.8.0 + v0.8.1)
 
-Wave D:  A1 ─► B5/B8 ─► B3/B27 ─► B4/B25/B20            (after A2)
+Wave D:  A1 ─► B5/B8 ─► B3/B27 ─► B4/B25               (after A2)
          (A3, B6, B10, B17, B18 ride alongside)
 
 Wave E:  B16 ◄ A2 / Feature-2     B2 ◄ B1
@@ -190,6 +191,7 @@ Wave E:  B16 ◄ A2 / Feature-2     B2 ◄ B1
 | Item | Revisit after | Notes |
 |---|---|---|
 | **B29** context-sensitive coefficient formatter | B16 | Open questions (grouping unit, call sites, tie-breaking) must be resolved first. B28 covers the concrete use case; B29 generalises it. Natural moment to decide is when B16 (source-term simplification) settles the rendering surface. |
+| **B20** app-wide tooltip / glossary layer | B14 | Deferred so the tooltips can build on the reorganised Help page: the tooltip layer and the Help page share one term glossary (single source of truth), so B14 must settle the Help structure first. Pulled out of Wave D. |
 
 ---
 
