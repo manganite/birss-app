@@ -298,6 +298,32 @@ export function isCentrosymmetric(groupName: string): boolean {
   return group.some(m => isSameMatrix(m, inversion));
 }
 
+export function getParentGroup(groupName: string): string | null {
+  if (groupName.endsWith("1'")) return null; // Type II (grey) — no parent distinction
+  if (!groupName.includes("'")) return null; // Type I — no parent
+  const parent = groupName.replace(/'/g, '');
+  return GENERATORS[parent] ? parent : null;
+}
+
+export function getHalvingSubgroup(groupName: string): string[] | null {
+  if (!groupName.includes("'") || groupName.endsWith("1'")) return null;
+  const generators = GENERATORS[groupName];
+  if (!generators) return null;
+  const group = getCachedFullGroup(groupName, generators);
+  const unitary = group.filter(m => !m.isAntiUnitary);
+  return unitary.map(formatMatrixSymbol).sort((a, b) => {
+    const order = ["1", "-1", "2", "3", "4", "6", "-3", "-4", "-6", "m"];
+    const getBase = (s: string) => s.replace(/_.*$/, '').replace(/[⁺⁻']/g, '');
+    return order.indexOf(getBase(a)) - order.indexOf(getBase(b));
+  });
+}
+
+export function getSHGConsequence(groupName: string): string {
+  return isCentrosymmetric(groupName)
+    ? 'Centrosymmetric → ED SHG forbidden (bulk); EQ/MD can contribute'
+    : 'Non-centrosymmetric → ED SHG allowed';
+}
+
 export interface SettingDef {
   name: string;
   rotation: Matrix3x3;
