@@ -1,7 +1,7 @@
 {
   "name": "birss-app",
   "private": true,
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Calculates non-zero susceptibility tensor components (Electric Dipole, Magnetic Dipole, Electric Quadrupole) and induced transverse SHG source terms for all 32 crystallographic and 122 magnetic point groups.",
   "author": "Thomas Lottermoser",
   "license": "MIT",
