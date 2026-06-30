@@ -69,37 +69,37 @@ export const GLOSSARY_TERMS: GlossaryTerm[] = [
   {
     id: 'crystal-rotation',
     term: 'Crystal Rotation',
-    brief: 'Additional tilt applied after aligning the crystal cut: phi_x and phi_y tilt the crystal about the lab X/Y axes; psi rotates it about the beam (azimuth).',
+    brief: 'Additional tilt applied after aligning the crystal cut: φx and φy tilt the crystal about the lab X/Y axes; ψ rotates it about the beam (azimuth).',
     helpTab: 'simulation',
   },
   {
     id: 'chi-components',
-    term: 'Independent chi Components',
+    term: 'Independent χ Components',
     brief: 'Non-zero tensor components after applying group symmetry. Subscripts (e.g. xxz) give the crystal-frame polarization directions; relative amplitudes and phases are tunable.',
     helpTab: 'simulation',
   },
   {
     id: 'shg-polarimetry',
-    term: 'SHG Polarimetry',
+    term: 'SHG Intensity Polarimetry',
     brief: 'SHG intensity measured as a function of light polarization angles. The resulting polar pattern encodes the tensor symmetry and is the primary experimental observable.',
     helpTab: 'simulation',
   },
   {
     id: 'anisotropy-config',
     term: 'Anisotropy',
-    brief: 'Parallel (I_par) and crossed (I_perp) SHG intensity vs. polarizer angle -- both plotted together. Probes the full orientational dependence of the tensor.',
+    brief: 'Parallel (I∥) and crossed (I⊥) SHG intensity vs. polarizer angle -- both plotted together. Probes the full orientational dependence of the tensor.',
     helpTab: 'simulation',
   },
   {
     id: 'polarizer-config',
     term: 'Polarizer Scan',
-    brief: 'SHG intensity vs. incoming polarizer angle at a fixed analyzer (0 deg or 90 deg). Shows how input polarization direction selects among tensor components.',
+    brief: 'SHG intensity vs. incoming polarizer angle at a fixed analyzer (0° or 90°). Shows how input polarization direction selects among tensor components.',
     helpTab: 'simulation',
   },
   {
     id: 'analyzer-config',
     term: 'Analyzer Scan',
-    brief: 'SHG intensity vs. outgoing analyzer angle at a fixed polarizer (0 deg or 90 deg). Shows which output polarization directions the tensor generates.',
+    brief: 'SHG intensity vs. outgoing analyzer angle at a fixed polarizer (0° or 90°). Shows which output polarization directions the tensor generates.',
     helpTab: 'simulation',
   },
 ];

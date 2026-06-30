@@ -245,7 +245,7 @@ export function SimulatorPage({
               type="button"
               aria-expanded={showRotation}
               onClick={() => setShowRotation(!showRotation)}
-              className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-50 hover:opacity-100 transition-opacity"
+              className="flex flex-1 items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-50 hover:opacity-100 transition-opacity"
             >
               {showRotation ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
               <span>Crystal Rotation</span>
