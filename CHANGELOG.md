@@ -30,6 +30,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   alternate-setting buttons now read "First (c-unique, Birss)" / "Second
   (b-unique, ITC)" instead of "Default" / "b-unique (ITC)" for consistency with
   the Help/Explorer wording (B2.3, complete).
+- Simulator's "Source Terms (Lab Frame)" panel no longer shows the redundant
+  "Symbolic (φ_x, φ_y, ψ dependence)" block — it duplicated "As functions of
+  E_X, E_Y" and made the panel unnecessarily long. "As functions of E_X, E_Y" and
+  "As functions of θ_pol" are unchanged (A1-Sim).
+- The θ_pol-swept formulas in the Simulator's "As functions of θ_pol" block and
+  the expanded "Detected Intensity Formulas" now prefer the harmonic
+  (Fourier-series) form over the power form by default, using the power form only
+  when it is strictly shorter for that component; previously it was the other way
+  around. Purely a display-form re-expression — every power↔harmonic mapping is
+  mathematically exact (verified independently before the change), so no computed
+  value changes. For the common case (a single tensor component contributing to
+  one polarizer-angle term) the rendered output is unchanged, since the power form
+  is always the shorter of the two there (B16).
 
 ### Fixed
 - **Data:** the `-3'm'` magnetic point group's generator encoded the wrong unitary

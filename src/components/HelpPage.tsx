@@ -350,7 +350,7 @@ export function HelpPage() {
                   The expanded intensity formulas displayed in the simulator are mathematically simplified using power reduction and multiple-angle trigonometric identities (e.g., <InlineMath math="\sin^2\theta = \frac{1}{2}(1 - \cos 2\theta)" /> and <InlineMath math="\cos^3\theta = \frac{1}{4}(3\cos\theta + \cos 3\theta)" />).
                 </p>
                 <p className="text-sm opacity-70 leading-relaxed mt-2">
-                  This converts the trigonometric polynomials into a harmonic Fourier series representation, making the rotational symmetries of the crystal lattice (like 2-fold, 3-fold, or 4-fold symmetry) immediately obvious. A smart grouping algorithm automatically selects the most elegant representation (power vs. harmonic) to minimize the number of terms, and unnecessary minus signs are factored out of the absolute value expressions.
+                  This converts the trigonometric polynomials into a harmonic Fourier series representation, making the rotational symmetries of the crystal lattice (like 2-fold, 3-fold, or 4-fold symmetry) immediately obvious. The harmonic form is preferred by default; the power form is used only when it is strictly shorter (fewer terms) for that particular component, and unnecessary minus signs are factored out of the absolute value expressions.
                 </p>
               </div>
             </div>
@@ -393,7 +393,7 @@ export function HelpPage() {
               </p>
             </div>
             <p className="text-sm opacity-70 leading-relaxed">
-              The full rotation matrix is <InlineMath math="R = R_z(\psi) \cdot R_y(\varphi_y) \cdot R_x(\varphi_x) \cdot R_{\text{preset}}" />. At <InlineMath math="\varphi_x = \varphi_y = \psi = 0" />, the result is purely the preset alignment. The Source Terms tab shows symbolic formulas as trigonometric polynomials in these angles.
+              The full rotation matrix is <InlineMath math="R = R_z(\psi) \cdot R_y(\varphi_y) \cdot R_x(\varphi_x) \cdot R_{\text{preset}}" />. At <InlineMath math="\varphi_x = \varphi_y = \psi = 0" />, the result is purely the preset alignment.
             </p>
           </div>
 

@@ -154,11 +154,10 @@ export function formatSubstitutedPolySum(
 
     if (mergedPower.length === 0 && mergedHarmonic.length === 0) continue;
 
-    let mergedChiTerms = mergedPower;
-    if (mergedHarmonic.length < mergedPower.length) {
-      mergedChiTerms = mergedHarmonic;
-    } else if (mergedHarmonic.length === mergedPower.length && mergedHarmonic.length === 1) {
-      mergedChiTerms = mergedHarmonic;
+    // D4: harmonic form preferred; power form only when strictly shorter (fewer terms).
+    let mergedChiTerms = mergedHarmonic;
+    if (mergedPower.length < mergedHarmonic.length) {
+      mergedChiTerms = mergedPower;
     }
 
     const harmonicWeight = (h: string) => {

@@ -10,7 +10,6 @@ import { POINT_GROUPS, PointGroupData } from './data/pointGroups';
 import {
   TensorTimeReversal,
   TensorType,
-  calculateSymbolicSHGExpressions,
 } from './services/tensorCalculator';
 import { PointGroupExplorer } from './components/PointGroupExplorer';
 import { HelpPage } from './components/HelpPage';
@@ -67,11 +66,6 @@ export default function App() {
     }
     return groups;
   }, [searchQuery, activeCategory]);
-
-  const symbolicExpressions = useMemo(
-    () => selectedGroup ? calculateSymbolicSHGExpressions({ groupName: selectedGroup.name, tensorType: selectedTensorType, trType: selectedTimeReversal, thetaX, thetaY, psi0, setting: selectedSetting }) : null,
-    [selectedGroup, selectedTensorType, selectedTimeReversal, thetaX, thetaY, psi0, selectedSetting]
-  );
 
   const handleSelect = (group: PointGroupData) => {
     setSelectedGroup(group);
@@ -262,7 +256,6 @@ export default function App() {
             selectedGroup={selectedGroup}
             tensorConfig={tensorConfig}
             orientation={orientation}
-            symbolicExpressions={symbolicExpressions}
             simulation={simulation}
             onNavigate={(view) => setCurrentView(view as 'calculator' | 'simulator' | 'explorer' | 'help')}
           />
@@ -271,7 +264,6 @@ export default function App() {
             selectedGroup={selectedGroup}
             tensorConfig={tensorConfig}
             presetAngles={{ thetaX, setThetaX, thetaY, setThetaY, psi0, setPsi0 }}
-            symbolicExpressions={symbolicExpressions}
             onNavigate={(view) => setCurrentView(view as 'calculator' | 'simulator' | 'explorer' | 'help')}
           />
         )}
