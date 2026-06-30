@@ -354,21 +354,19 @@ const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   "-42'm'":  [{ name: "-4m'2'", rotation: getRotationZ(45) }],
   "32'":     [{ name: "312'", rotation: getRotationZ(30) }],
   "3m'":     [{ name: "31m'", rotation: getRotationZ(30) }],
-  // -3'm, -3'm', -3m' (trigonal D3d family) labels pending fix/trigonal-3m-prime-pattern
-  // (PR #37) — -3'm' duplicated -3'm's generator until that fix lands; deriving these
-  // three labels now would be against the still-buggy generator. TODO after merge.
-  "-3'm":    [{ name: "σ_d mirrors", rotation: getRotationZ(30) }],
-  // -3'm' label derived from its own (corrected) operations, by the same digit-
-  // insertion convention as the existing "-3m" -> "-31m" pair: the mirror token
-  // stays primed across both settings (m_150/30/y' here -> m_120/60/x' there), only
-  // the disambiguating digit changes. -3'm and -3m' (siblings, unaffected by the
-  // generator fix) still carry mechanism-jargon labels pending the broader B2.3 pass.
+  // -3'm, -3'm', -3m' (trigonal D3d family) — labels derived from each entry's own
+  // operations, by the digit-insertion convention of the existing "-3m" -> "-31m"
+  // pair: the mirror token's prime status is fixed per entry, only the disambiguating
+  // digit changes (e.g. -3'm: mirror stays unprimed at both settings -> -3'1m).
+  "-3'm":    [{ name: "-3'1m", rotation: getRotationZ(30) }],
   "-3'm'":   [{ name: "-3'1m'", rotation: getRotationZ(30) }],
-  "-3m'":    [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(30) }],
-  // -6'2m', -6'm2', -6m'2' (hexagonal D3h family) — not yet derived, see TODO-next.md B2.3.
-  "-6'2m'":  [{ name: "C₂ along ⟨100⟩", rotation: getRotationZ(30) }],
-  "-6'm2'":  [{ name: "σ_d mirrors", rotation: getRotationZ(30) }],
-  "-6m'2'":  [{ name: "σ_d' mirrors", rotation: getRotationZ(30) }],
+  "-3m'":    [{ name: "-31m'", rotation: getRotationZ(30) }],
+  // -6'2m', -6'm2', -6m'2' (hexagonal D3h family) — labels derived the same way,
+  // using the slot convention confirmed against the existing "-6m2" -> "-62m" pair
+  // (position 2 = the {150°,30°,y} mirror/2-fold family, position 3 = {120°,60°,x}).
+  "-6'2m'":  [{ name: "-6'm'2", rotation: getRotationZ(30) }],
+  "-6'm2'":  [{ name: "-6'2'm", rotation: getRotationZ(30) }],
+  "-6m'2'":  [{ name: "-62'm'", rotation: getRotationZ(30) }],
 
   // Phase 2 — Orthorhombic axis orientation (3 settings)
   "2'2'2":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],

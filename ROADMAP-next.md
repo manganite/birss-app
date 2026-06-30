@@ -39,7 +39,7 @@ feature this continues. `Wave` is the execution slot defined below.
 | A1 | Calculator source terms must be angle-free | **Done** (v0.10.0, Calc) / Sim decided (D4), impl pending | 2 | **D** |
 | A3 | Simulator mobile layout broken | **Done** (v0.9.0) | 1C | C/D |
 | A4 | "RANK RANK 3" duplicate word | **Done** (v0.8.0) | 8 | **C** |
-| B2 | Settings under-surfaced (B2.1–B2.4) | **In progress** (PR #38 open) | 3/6 | **E** |
+| B2 | Settings under-surfaced (B2.1–B2.4) | **Done** (PR #38 + #39, both merged — #38 left B2.3's trigonal/hex labels for the #39 follow-up) | 3/6 | **E** |
 | B3 | Simulator shows no group identity | **Done** (v0.12.0) | 5/8 | **D** |
 | B4 | Unify Calculator/Simulator visual shell | **Done** (v0.12.0) | 8 | **D** |
 | B5 | One shared direction/lab-frame component | **Done** (v0.10.0) | 1C/9 | **D** |
@@ -67,7 +67,7 @@ feature this continues. `Wave` is the execution slot defined below.
 | B27 | Group info header: optional fields | **Done** (v0.12.0) | 5/8 | **D** |
 | B28 | formatCoeff: recognise 1/√6 | **Done** (v0.8.1) | 8 | **C** |
 | B29 | Context-sensitive coefficient formatter | Idea | — | — |
-| B30 | Trigonal `-3'm'` generator bug (unitary subgroup was 3m, should be 32) | **Done** (PR #37 open) | — | — |
+| B30 | Trigonal `-3'm'` generator bug (unitary subgroup was 3m, should be 32) | **Done** (PR #37, merged) | — | — |
 
 ---
 
@@ -162,10 +162,10 @@ out C, as convenient — they share the slider/plot surface.
 | **B14 + B22** Help reorg + content corrections (Feature 6 cont.) | `docs/help-tabs` (+ `fix/` for the physics corrections in B22) | B1 (settings text), A2 (rotation text) | MINOR |
 | **B15** Explorer interactive Birss table (Feature 5 cont.) | `feature/birss-table-explorer` | `birss-tables` repo as golden source | MINOR |
 
-**B2 status:** PR #38 open. B2.1/B2.2/B2.4 complete; B2.3 (button labels) done for
-13/19 magnetic dual-setting groups (`4mm`/`422`/`6mm`/`622`- and `-42m`-derived
-families, `32'`/`3m'`). Remaining: trigonal `-3'm`/`-3'm'`/`-3m'` (blocked on **B30**
-below) and hexagonal `-6'2m'`/`-6'm2'`/`-6m'2'` (not yet attempted).
+**B2 status:** Done. #37 and #38 merged; the remaining trigonal/hexagonal B2.3
+labels (gated on **B30** below) landed in PR #39 (`feature/settings-surfacing-
+trigonal-hex`, merged) once #37 was on `main`. All 19 magnetic dual-setting groups
+now show their distinct HM symbol instead of mechanism jargon.
 
 **B30 (unplanned, discovered mid-cycle):** while deriving B2.3's trigonal labels,
 found `-3'm'`'s generator encoded the wrong unitary subgroup (`3m` instead of `32`),
@@ -174,8 +174,9 @@ canonical Cr₂O₃ magnetoelectric SHG fixture. Fixed and verified against four
 independent sources (Birss table-6/7, printed ITC, an independent group-theoretic
 re-derivation, and the primary Fiebig et al. 2005 paper itself — see
 `FINDING-trigonal-3m-prime-bug.md` and `verification-trigonal-magnetic-groups.md`).
-**Data flag**, PR #37 open. **B2.3's trigonal labels in B2 depend on this merging
-first** — deriving them against the pre-fix generator would bake in the bug.
+**Data flag**, PR #37 (merged). B2.3's trigonal labels were blocked on this and
+landed once #37 was on `main` (PR #39, merged) — deriving them against the pre-fix
+generator would have baked in the bug.
 
 ### Release cadence
 

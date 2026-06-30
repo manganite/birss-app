@@ -21,14 +21,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Calculator and the Simulator (B2.1).
 
 ### Changed
-- Calculator/Simulator setting buttons for non-monoclinic dual-setting magnetic
-  groups now show the distinct magnetic HM symbol (e.g. `6'm'm`, `4'm'm`, `-4'm'2`)
-  instead of internal mechanism labels (e.g. "σ_d primed", "C₂' along ⟨100⟩").
-  13 entries relabeled; trigonal `-3'm`/`-3'm'`/`-3m'` and hexagonal `-6'2m'`/
-  `-6'm2'`/`-6m'2'` are not yet relabeled (tracked separately, the former blocked
-  on the `-3'm'` generator fix in #37). Monoclinic alternate-setting buttons now
-  read "Second (b-unique, ITC)" instead of "b-unique (ITC)" for consistency with
-  the Help/Explorer wording (B2.3, partial).
+- Calculator/Simulator setting buttons for all 19 non-monoclinic dual-setting
+  magnetic groups now show the distinct magnetic HM symbol (e.g. `6'm'm`, `4'm'm`,
+  `-4'm'2`, `-3'1m'`, `-6'm'2`) instead of internal mechanism labels (e.g. "σ_d
+  primed", "C₂' along ⟨100⟩"). The trigonal and hexagonal entries were derived
+  from each group's own computed symmetry operations, using the slot convention
+  confirmed against the existing `-3m`→`-31m` and `-6m2`→`-62m` pairs. Monoclinic
+  alternate-setting buttons now read "First (c-unique, Birss)" / "Second
+  (b-unique, ITC)" instead of "Default" / "b-unique (ITC)" for consistency with
+  the Help/Explorer wording (B2.3, complete).
 
 ### Fixed
 - **Data:** the `-3'm'` magnetic point group's generator encoded the wrong unitary
