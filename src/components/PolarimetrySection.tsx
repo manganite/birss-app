@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Activity } from 'lucide-react';
 import { InlineMath } from 'react-katex';
 import { isCentrosymmetric } from '../services/tensorCalculator';
+import { SectionHeader } from './MathComponents';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { TermInfo } from './TermInfo';
 import type { PointGroupData } from '../data/pointGroups';
@@ -55,11 +56,10 @@ export function PolarimetrySection({
 
   return (
     <div className="md:sticky md:top-20 self-start z-10 space-y-6">
-      <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-        <Activity className="w-3 h-3" />
+      <SectionHeader icon={<Activity className="w-3 h-3" />}>
         SHG Intensity Polarimetry
         <TermInfo id="shg-polarimetry" onNavigate={onNavigate} />
-      </div>
+      </SectionHeader>
 
       <div className="bg-white/50 border border-ink overflow-hidden">
         {/* Tab Menu */}

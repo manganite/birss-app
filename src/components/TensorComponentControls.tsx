@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Sliders, Info } from 'lucide-react';
 import { isCentrosymmetric } from '../services/tensorCalculator';
-import { TensorTerm } from './MathComponents';
+import { TensorTerm, SectionHeader } from './MathComponents';
 import { TermInfo } from './TermInfo';
 import type { PointGroupData } from '../data/pointGroups';
 import type { TensorConfig, SimulationState } from '../types';
@@ -50,10 +50,11 @@ export function TensorComponentControls({
 
   return (
     <div className="space-y-6">
-      <div className="hidden md:flex text-[10px] uppercase tracking-[0.2em] opacity-50 items-center gap-2">
-        <Sliders className="w-3 h-3" />
-        Independent Tensor Components
-        <TermInfo id="chi-components" onNavigate={onNavigate} />
+      <div className="hidden md:block">
+        <SectionHeader icon={<Sliders className="w-3 h-3" />}>
+          Independent Tensor Components
+          <TermInfo id="chi-components" onNavigate={onNavigate} />
+        </SectionHeader>
       </div>
 
       {(selectedGroup.crystalSystem === 'Triclinic' || selectedGroup.crystalSystem === 'Monoclinic') && (
