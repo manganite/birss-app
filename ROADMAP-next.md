@@ -36,7 +36,7 @@ feature this continues. `Wave` is the execution slot defined below.
 |----|---------------|--------|-------|------|
 | A2 | Tilt axes lab-fixed (rotation composition) | **Done** (v0.10.0) | 1B | **B** |
 | B1 | Alternate settings for Type I/II groups | **Done** (v0.11.0) | 3 | **B** |
-| A1 | Calculator source terms must be angle-free | **Done** (v0.10.0, Calc) / Sim decided (D4), impl pending | 2 | **D** |
+| A1 | Calculator source terms must be angle-free | **Done** (v0.10.0, Calc; PR #41, Sim) | 2 | **D** |
 | A3 | Simulator mobile layout broken | **Done** (v0.9.0) | 1C | C/D |
 | A4 | "RANK RANK 3" duplicate word | **Done** (v0.8.0) | 8 | **C** |
 | B2 | Settings under-surfaced (B2.1–B2.4) | **Done** (PR #38 + #39, both merged — #38 left B2.3's trigonal/hex labels for the #39 follow-up) | 3/6 | **E** |
@@ -51,15 +51,15 @@ feature this continues. `Wave` is the execution slot defined below.
 | B11 | Explorer popups: Schoenflies | **Done** (v0.8.0) | 5 | **C** |
 | B12 | Explorer popups: link to Simulator | **Done** (v0.8.0) | 5 | **C** |
 | B13 | Help Feature-Overview box order | **Done** (v0.8.0) | 6 | **C** |
-| B14 | Help reorg into tabs + expand | Decided (large) | 6 | **E** |
+| B14 | Help reorg into tabs + expand | **Done** (PR #40) | 6 | **E** |
 | B15 | Explorer as interactive Birss table | Open (scope) | 5 | **E** |
-| B16 | Simplify symbolic source-term trig | Decided | 2 | **E** |
+| B16 | Simplify symbolic source-term trig | **Done** (PR #41) | 2 | **E** |
 | B17 | Disable sliders for single component | **Done** (v0.9.0) | 1C/2 | C/D |
 | B18 | Enlarge plots / trim whitespace | **Done** (v0.9.0) | 1C/8 | C/D |
 | B19 | Lab-frame panel title / inverse / tooltips | **Done** (v0.10.1) | 7 | **D** |
-| B20 | App-wide tooltip / glossary | **Done** Wave 1 (PR #42) | 6 | **E** |
+| B20 | App-wide tooltip / glossary | **Done** (PR #42 + #43) | 6 | **E** |
 | B21 | Same-concept labels worded differently | **Done** (v0.8.0) | 8 | **C** |
-| B22 | Help-text content audit | Decided (minor verify) | 6 | **E** |
+| B22 | Help-text content audit | **Done** (PR #40) | 6 | **E** |
 | B23 | Explorer per-type counts (global vs system) | **Done** (v0.8.0) | 5 | **C** |
 | B24 | Calculator empty-panel whitespace | **Done** (v0.8.0) | 8 | **C** |
 | B25 | Note / container / emphasis styling | **Done** (v0.12.0) | 8 | **D** |
@@ -207,10 +207,9 @@ B30 (unplanned):  -3'm' generator fix (PR #37)  ── gates ──►  B2.3's t
 
 ### Unscheduled (revisit after the relevant wave lands)
 
-| Item | Revisit after | Notes |
-|---|---|---|
-| **B29** context-sensitive coefficient formatter | B16 | Open questions (grouping unit, call sites, tie-breaking) must be resolved first. B28 covers the concrete use case; B29 generalises it. Natural moment to decide is when B16 (source-term simplification) settles the rendering surface. |
-| **B20** fast-follow (k-selection, χ-components, polarimetry, angles) | next session | Wave 1 merged (PR #42); remaining areas deferred. |
+- **B29** — context-sensitive coefficient formatter. Revisit after B16 (done, PR #41).
+  Open questions (grouping unit, call sites, tie-breaking) still need resolution before
+  starting. B28 covers the concrete use case; B29 generalises it.
 
 ---
 
