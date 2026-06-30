@@ -30,6 +30,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   read "Second (b-unique, ITC)" instead of "b-unique (ITC)" for consistency with
   the Help/Explorer wording (B2.3, partial).
 
+### Fixed
+- **Data:** the `-3'm'` magnetic point group's generator encoded the wrong unitary
+  (halving) subgroup — `3m` instead of the literature-correct `32` (Birss
+  *Symmetry and Magnetism* Table 6/7 row 82; independently confirmed against the
+  printed International Tables for Crystallography trigonal listing). This made
+  `-3'm'` collapse to a duplicate of the unrelated `-3'm` group (identical computed
+  symmetry operations and tensor forms at both crystal settings). Corrected the
+  generator in `symmetryGroups.ts`. **Affects previously-computed output**: the
+  canonical Cr₂O₃ magnetoelectric SHG c-type ED tensor (`-3'm'`, the most-cited
+  fixture in the golden-tensor suite) changes from the `M₃`-class form (nonzero
+  `χ_zzz`, no `χ_xyz` term) to the literature-correct `L₃`-class form (`χ_zzz = 0`,
+  `χ_xyz`-family present) — versions before this fix reported the wrong nonvanishing
+  components for this group at both the default and alternate crystal setting, and
+  in any rotated/lab-frame source-term display referencing it. `-3'm` and `-3m'`
+  (the other two members of the trigonal `-3m` magnetic family) were verified
+  unaffected. See `FINDING-trigonal-3m-prime-bug.md` and
+  `verification-trigonal-magnetic-groups.md` for the full derivation.
+
 ## [0.12.0] - 2026-06-29
 
 ### Added

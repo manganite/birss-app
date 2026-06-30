@@ -208,7 +208,7 @@ export const GENERATORS: Record<string, Matrix3x3[]> = {
   "-3'": [getRotationZ(120), multiply(inversion, timeReversal)],
   "32'": [getRotationZ(120), multiply(getRotationY(180), timeReversal)],
   "3m'": [getRotationZ(120), multiply({ m: [[1, 0, 0], [0, -1, 0], [0, 0, 1]] }, timeReversal)],
-  "-3'm'": [getRotationZ(120), multiply(getRotationY(180), timeReversal), multiply(inversion, timeReversal)],
+  "-3'm'": [getRotationZ(120), getRotationY(180), multiply(inversion, timeReversal)],
   "-3'm": [getRotationZ(120), { m: [[1, 0, 0], [0, -1, 0], [0, 0, 1]] }, multiply(inversion, timeReversal)],
   "-3m'": [getRotationZ(120), inversion, multiply(getRotationY(180), timeReversal)],
   "6'": [multiply(getRotationZ(60), timeReversal)],
@@ -358,7 +358,12 @@ const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   // (PR #37) — -3'm' duplicated -3'm's generator until that fix lands; deriving these
   // three labels now would be against the still-buggy generator. TODO after merge.
   "-3'm":    [{ name: "σ_d mirrors", rotation: getRotationZ(30) }],
-  "-3'm'":   [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(30) }],
+  // -3'm' label derived from its own (corrected) operations, by the same digit-
+  // insertion convention as the existing "-3m" -> "-31m" pair: the mirror token
+  // stays primed across both settings (m_150/30/y' here -> m_120/60/x' there), only
+  // the disambiguating digit changes. -3'm and -3m' (siblings, unaffected by the
+  // generator fix) still carry mechanism-jargon labels pending the broader B2.3 pass.
+  "-3'm'":   [{ name: "-3'1m'", rotation: getRotationZ(30) }],
   "-3m'":    [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(30) }],
   // -6'2m', -6'm2', -6m'2' (hexagonal D3h family) — not yet derived, see TODO-next.md B2.3.
   "-6'2m'":  [{ name: "C₂ along ⟨100⟩", rotation: getRotationZ(30) }],
