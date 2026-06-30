@@ -60,4 +60,46 @@ export const GLOSSARY_TERMS: GlossaryTerm[] = [
     brief: 'A halving subgroup H of G, with the remaining cosets combined with time reversal. Both i-type and c-type tensors can be non-zero.',
     helpTab: 'physics',
   },
+  {
+    id: 'crystal-cut',
+    term: 'Crystal Cut',
+    brief: 'The crystal surface normal, aligned with the incident beam direction k. [hkl] labels use Miller-index notation -- e.g. [001] means the c-axis faces the beam.',
+    helpTab: 'simulation',
+  },
+  {
+    id: 'crystal-rotation',
+    term: 'Crystal Rotation',
+    brief: 'Additional tilt applied after aligning the crystal cut: phi_x and phi_y tilt the crystal about the lab X/Y axes; psi rotates it about the beam (azimuth).',
+    helpTab: 'simulation',
+  },
+  {
+    id: 'chi-components',
+    term: 'Independent chi Components',
+    brief: 'Non-zero tensor components after applying group symmetry. Subscripts (e.g. xxz) give the crystal-frame polarization directions; relative amplitudes and phases are tunable.',
+    helpTab: 'simulation',
+  },
+  {
+    id: 'shg-polarimetry',
+    term: 'SHG Polarimetry',
+    brief: 'SHG intensity measured as a function of light polarization angles. The resulting polar pattern encodes the tensor symmetry and is the primary experimental observable.',
+    helpTab: 'simulation',
+  },
+  {
+    id: 'anisotropy-config',
+    term: 'Anisotropy',
+    brief: 'Parallel (I_par) and crossed (I_perp) SHG intensity vs. polarizer angle -- both plotted together. Probes the full orientational dependence of the tensor.',
+    helpTab: 'simulation',
+  },
+  {
+    id: 'polarizer-config',
+    term: 'Polarizer Scan',
+    brief: 'SHG intensity vs. incoming polarizer angle at a fixed analyzer (0 deg or 90 deg). Shows how input polarization direction selects among tensor components.',
+    helpTab: 'simulation',
+  },
+  {
+    id: 'analyzer-config',
+    term: 'Analyzer Scan',
+    brief: 'SHG intensity vs. outgoing analyzer angle at a fixed polarizer (0 deg or 90 deg). Shows which output polarization directions the tensor generates.',
+    helpTab: 'simulation',
+  },
 ];
