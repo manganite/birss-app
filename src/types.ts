@@ -1,6 +1,12 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { TensorType, TensorTimeReversal } from './services/tensorCalculator';
 
+export const TENSOR_META = {
+  ED: { label: 'Electric Dipole', rank: '3', type: 'POLAR' },
+  MD: { label: 'Magnetic Dipole', rank: '3', type: 'AXIAL' },
+  EQ: { label: 'Electric Quadrupole', rank: '4', type: 'POLAR' },
+} as const satisfies Record<TensorType, { label: string; rank: string; type: string }>;
+
 export interface TensorConfig {
   type: TensorType;
   setType: (t: TensorType) => void;

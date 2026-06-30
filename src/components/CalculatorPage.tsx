@@ -8,18 +8,12 @@ import {
   isCentrosymmetric,
   calculateSHGExpressions,
   getLabFrameVectors,
-  getAlternateSettings,
-  getFutureSettingCount,
 } from '../services/tensorCalculator';
 import { TensorTerm, KDirectionSelector, GroupIdentityHeader } from './MathComponents';
+import { TensorClassificationControl, TimeReversalControl, CrystalSettingControl } from './TensorSetupControls';
 import { TermInfo } from './TermInfo';
+import { TENSOR_META } from '../types';
 import type { TensorConfig, PresetAnglesState } from '../types';
-
-const TENSOR_META = {
-  ED: { label: 'Electric Dipole', rank: '3', type: 'POLAR' },
-  MD: { label: 'Magnetic Dipole', rank: '3', type: 'AXIAL' },
-  EQ: { label: 'Electric Quadrupole', rank: '4', type: 'POLAR' },
-} as const;
 
 interface CalculatorPageProps {
   selectedGroup: PointGroupData | null;
@@ -106,97 +100,26 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNa
               )}
             </div>
             <div className="flex flex-col md:flex-row gap-8">
-              <div className="flex-1 space-y-4">
-                <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-                  <Zap className="w-3 h-3" /> Tensor Classification
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {(['ED', 'MD', 'EQ'] as const).map((type) => (
-                    <div key={type} className="flex items-center gap-1">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedTensorType(type)}
-                        className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                          selectedTensorType === type
-                            ? 'bg-ink text-paper'
-                            : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
-                        }`}
-                      >
-                        {TENSOR_META[type].label}
-                      </button>
-                      <TermInfo id={type.toLowerCase()} onNavigate={onNavigate} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex-1 space-y-4">
-                <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-                  <Info className="w-3 h-3" /> Time-Reversal Symmetry
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {(['i', 'c'] as const).map((tr) => (
-                    <div key={tr} className="flex items-center gap-1">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedTimeReversal(tr)}
-                        className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                          selectedTimeReversal === tr
-                            ? 'bg-ink text-paper'
-                            : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
-                        }`}
-                      >
-                        {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
-                      </button>
-                      <TermInfo id={`${tr}-type`} onNavigate={onNavigate} />
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <TensorClassificationControl
+                value={selectedTensorType}
+                onChange={setSelectedTensorType}
+                onNavigate={onNavigate}
+              />
+              <TimeReversalControl
+                value={selectedTimeReversal}
+                onChange={setSelectedTimeReversal}
+                onNavigate={onNavigate}
+              />
             </div>
           </div>
 
-          {(() => {
-            const altSettings = getAlternateSettings(selectedGroup.name);
-            const futureCount = getFutureSettingCount(selectedGroup.name);
-            if (!altSettings && !futureCount) return null;
-            return (
-              <div className="space-y-3">
-                <p className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-1.5">
-                  Crystal Setting <TermInfo id="crystal-setting" onNavigate={onNavigate} />
-                </p>
-                {altSettings ? (
-                  <div className="flex flex-wrap gap-3">
-                    <button
-                      onClick={() => setSelectedSetting(1)}
-                      className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
-                        selectedSetting === 1
-                          ? 'bg-ink text-paper'
-                          : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
-                      }`}
-                    >
-                      {selectedGroup.crystalSystem === 'Monoclinic' ? 'First (c-unique, Birss)' : 'Default'}
-                    </button>
-                    {altSettings.map((s, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setSelectedSetting(i + 2)}
-                        className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
-                          selectedSetting === i + 2
-                            ? 'bg-ink text-paper'
-                            : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
-                        }`}
-                      >
-                        {s.name}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-xs opacity-40 italic">{futureCount} settings — selection coming</p>
-                )}
-              </div>
-            );
-          })()}
+          <CrystalSettingControl
+            groupName={selectedGroup.name}
+            crystalSystem={selectedGroup.crystalSystem}
+            value={selectedSetting}
+            onChange={setSelectedSetting}
+            onNavigate={onNavigate}
+          />
         </div>
 
         {/* Mobile-only preset strip — always visible */}

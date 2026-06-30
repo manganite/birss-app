@@ -1,9 +1,10 @@
 import { useState, useEffect, type ReactNode } from 'react';
 import { PointGroupData } from '../data/pointGroups';
-import { isCentrosymmetric, getAlternateSettings, getFutureSettingCount } from '../services/tensorCalculator';
+import { isCentrosymmetric } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
-import { Zap, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
+import { Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
 import { TensorTerm, FormatPointGroup, getPresetsForSystem, KDirectionSelector, GroupIdentityHeader } from './MathComponents';
+import { TensorClassificationControl, TimeReversalControl, CrystalSettingControl } from './TensorSetupControls';
 import { TermInfo } from './TermInfo';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
@@ -137,96 +138,26 @@ export function SimulatorPage({
         {/* Full controls — always on desktop, expandable on mobile */}
         <div className={mobileSetupExpanded ? '' : 'hidden md:block'}>
           <div className="flex flex-col md:flex-row gap-8">
-            <div className="flex-1 space-y-4">
-              <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-                <Zap className="w-3 h-3" /> Tensor Classification
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {(['ED', 'MD', 'EQ'] as const).map((type) => (
-                  <div key={type} className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedTensorType(type)}
-                      className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                        selectedTensorType === type
-                          ? 'bg-ink text-paper'
-                          : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
-                      }`}
-                    >
-                      {type === 'ED' ? 'Electric Dipole' : type === 'MD' ? 'Magnetic Dipole' : 'Electric Quadrupole'}
-                    </button>
-                    <TermInfo id={type.toLowerCase()} onNavigate={onNavigate} />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex-1 space-y-4">
-              <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-                <Activity className="w-3 h-3" /> Time Reversal Symmetry
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {(['i', 'c'] as const).map((tr) => (
-                  <div key={tr} className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedTimeReversal(tr)}
-                      className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                        selectedTimeReversal === tr
-                          ? 'bg-ink text-paper'
-                          : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
-                      }`}
-                    >
-                      {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
-                    </button>
-                    <TermInfo id={`${tr}-type`} onNavigate={onNavigate} />
-                  </div>
-                ))}
-              </div>
-            </div>
+            <TensorClassificationControl
+              value={selectedTensorType}
+              onChange={setSelectedTensorType}
+              onNavigate={onNavigate}
+            />
+            <TimeReversalControl
+              value={selectedTimeReversal}
+              onChange={setSelectedTimeReversal}
+              onNavigate={onNavigate}
+            />
           </div>
 
-          {(() => {
-            const altSettings = getAlternateSettings(selectedGroup.name);
-            const futureCount = getFutureSettingCount(selectedGroup.name);
-            if (!altSettings && !futureCount) return null;
-            return (
-              <div className="space-y-3 border-t border-ink border-opacity-10 pt-6 mt-8">
-                <p className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-1.5">
-                  Crystal Setting <TermInfo id="crystal-setting" onNavigate={onNavigate} />
-                </p>
-                {altSettings ? (
-                  <div className="flex flex-wrap gap-3">
-                    <button
-                      onClick={() => setSelectedSetting(1)}
-                      className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
-                        selectedSetting === 1
-                          ? 'bg-ink text-paper'
-                          : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
-                      }`}
-                    >
-                      {selectedGroup.crystalSystem === 'Monoclinic' ? 'First (c-unique, Birss)' : 'Default'}
-                    </button>
-                    {altSettings.map((s, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setSelectedSetting(i + 2)}
-                        className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
-                          selectedSetting === i + 2
-                            ? 'bg-ink text-paper'
-                            : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
-                        }`}
-                      >
-                        {s.name}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-xs opacity-40 italic">{futureCount} settings — selection coming</p>
-                )}
-              </div>
-            );
-          })()}
+          <CrystalSettingControl
+            groupName={selectedGroup.name}
+            crystalSystem={selectedGroup.crystalSystem}
+            value={selectedSetting}
+            onChange={setSelectedSetting}
+            onNavigate={onNavigate}
+            className="border-t border-ink border-opacity-10 pt-6 mt-8"
+          />
 
           <div className="border-t border-ink border-opacity-10 pt-6 mt-8">
             <KDirectionSelector

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { Box, Hexagon, Triangle, Layers, Compass, Info, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
@@ -6,6 +6,15 @@ import { hklToPresetAngles } from '../services/orientation';
 import { isCentrosymmetric, getParentGroup, getHalvingSubgroup, getSHGConsequence, getAlternateSettings } from '../services/tensorCalculator';
 import { PointGroupData } from '../data/pointGroups';
 import { TermInfo } from './TermInfo';
+
+export function SectionHeader({ icon, children }: { icon?: ReactNode; children: ReactNode }) {
+  return (
+    <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
+      {icon}
+      {children}
+    </h4>
+  );
+}
 
 export const getCrystalIcon = (system: string) => {
   switch (system.toLowerCase()) {
@@ -76,9 +85,9 @@ export function LabFrameOrientation({ labFrame }: { labFrame: { X: string; Y: st
   return (
     <div className="flex-1 bg-ink/5 p-4 border border-ink/10 rounded-sm w-full">
       <div className="flex items-center justify-between mb-3">
-        <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50">
+        <SectionHeader>
           {showInverse ? 'Lab axes in the crystal frame' : 'Crystal axes in the lab frame'}
-        </h4>
+        </SectionHeader>
         <div className="flex items-center gap-1">
           <button type="button" onClick={() => setShowInverse(v => !v)}
             className="text-[9px] opacity-40 hover:opacity-80 transition-opacity px-1.5 py-0.5 border border-ink/10 rounded-sm"
@@ -132,11 +141,10 @@ export function KDirectionSelector({ crystalSystem, thetaX, thetaY, psi0, setThe
   return (
     <div className="space-y-3">
       {!compact && (
-        <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
-          <Compass className="w-3 h-3" />
+        <SectionHeader icon={<Compass className="w-3 h-3" />}>
           Crystal Cut (surface normal ∥ k)
           <TermInfo id="crystal-cut" onNavigate={onNavigate} />
-        </h4>
+        </SectionHeader>
       )}
       {compact && (
         <span className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-1">
