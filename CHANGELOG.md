@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Help page reorganized into 5 tabs (Feature Overview, Notations & Conventions,
+  Physics & Group Theory, Simulation, Deeper Topics), matching the Calculator's
+  tab-strip pattern on desktop and a horizontally-scrollable strip on mobile.
+  References now live inside Deeper Topics. The "Symmetry Operations" block was
+  brought in line with the rest of the page's key-terms-grid style (B14).
 - Simulator now has a "Crystal Setting" selector with full parity to the Calculator's
   (same control, same labels); the selected setting persists across Calculator ↔
   Simulator navigation, resetting to the default only on group change (B2.4).
@@ -48,6 +53,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (the other two members of the trigonal `-3m` magnetic family) were verified
   unaffected. See `FINDING-trigonal-3m-prime-bug.md` and
   `verification-trigonal-magnetic-groups.md` for the full derivation.
+- Help page content audit (B22): Neumann's-principle equation now shows the
+  `det(R)` (axial) and time-reversal-sign (c-type) factors it was previously
+  missing; dropped the misleading "provided time-reversal symmetry is broken"
+  qualifier on the magnetic-dipole description (axial-tensor survival in
+  centrosymmetric groups is a parity effect, independent of time reversal);
+  fixed "Hausühl" → "Haussühl"; corrected the lab-frame rotation-matrix formula,
+  which had drifted out of sync with the shipped order
+  (`Rz(ψ)·Ry(φy)·Rx(φx)` → the actual `Ry(φy)·Rx(φx)·Rz(ψ)`); marked the
+  already-open-access references and added Fiebig, Pavlov & Pisarev, JOSA B 22,
+  96 (2005) to the references list. UI/docs-only — no computed values change.
 
 ## [0.12.0] - 2026-06-29
 
