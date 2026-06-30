@@ -1,5 +1,7 @@
 # Roadmap — next cycle (post-v0.7.1)
 
+> Historical / per-item detail. For current status see [STATUS.md](../../STATUS.md) (root).
+
 Execution plan for the next development cycle: **what order, in what waves, with which
 gates**. It is the companion to `TODO-next.md`, which holds the detailed per-item
 findings (problem, fix, file:line anchors, acceptance, status). This document does
@@ -12,7 +14,7 @@ correctness; the mapping to the old feature numbers is given in the item index.
 **Prerequisites (not items below).** The `services/` split, the golden-fixture suite
 (`goldenTensors.fixtures.ts` / `.test.ts`, table-4e-verified + generator-derived),
 the rotated-path suite (`rotatedSHG.fixtures.ts` / `.test.ts`), and the per-module
-tests are assumed in place. Current version: **v0.10.0**; Wave C done (v0.8.0–v0.8.1); C/D crossover done (v0.9.0); A2 + A1 + B5/B8 done (v0.10.0).
+tests are assumed in place. Wave C done (v0.8.0–v0.8.1); C/D crossover done (v0.9.0); A2 + A1 + B5/B8 done (v0.10.0). See STATUS.md (root) for the current release.
 
 ---
 

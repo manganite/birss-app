@@ -1,5 +1,7 @@
 # Roadmap
 
+> Historical / per-item detail. For current status see [STATUS.md](../../STATUS.md) (root).
+
 Feature ideas, design decisions, and implementation notes for birss-app. This document serves as a living design notebook — it records not just what to build and in what order, but the reasoning behind decisions, verified constraints, and brainstorming context that informs future work. Items are roughly ordered by priority.
 
 This roadmap builds on the completed `services/` split (`tensorCalculator.ts` barrel + `symmetryGroups.ts` / `tensorProjection.ts` / `latexFormatting.ts`) and the golden-fixture test suite (517 tests). Both are prerequisites, not items below.

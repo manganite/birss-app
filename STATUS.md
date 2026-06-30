@@ -1,8 +1,8 @@
 # Roadmap Status
 
-_Last updated: 2026-06-30. Synthesises open points from `ROADMAP-next.md`,
-`TODO-next.md`, and the original `ROADMAP.md`. See those files for derivation
-details, file:line anchors, and acceptance criteria._
+_Last updated: 2026-06-30. Synthesises open points from `docs/planning/ROADMAP-next.md`,
+`docs/planning/TODO-next.md`, and the original `docs/planning/ROADMAP.md`. See those
+files for derivation details, file:line anchors, and acceptance criteria._
 
 ---
 
