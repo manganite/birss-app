@@ -300,14 +300,12 @@ _Making the alternate settings visible, labelled, and selectable across the thre
 
 ### B2 — Settings are under-surfaced and under-explained across all three views
 
-**Status:** Mostly Done (`feature/settings-surfacing`, pending merge) — B2.1 (plain-language
-intro), B2.2 (Explorer popup hint + monoclinic tab text), B2.4 (Simulator parity +
-persistence, resolved per D1) all complete. B2.3 (Calculator/Simulator button labels)
-done for 13 of 19 magnetic dual-setting groups (the `4mm`/`422`/`6mm`/`622`-derived and
-`-42m`-derived families, plus `32'`/`3m'`); the trigonal `-3'm`/`-3'm'`/`-3m'` and
-hexagonal `-6'2m'`/`-6'm2'`/`-6m'2'` families remain — the former blocked on the
-`-3'm'` generator fix (PR #37, `fix/trigonal-3m-prime-pattern`), the latter not yet
-attempted. Monoclinic labels also tightened to "Second (b-unique, ITC)".
+**Status:** Done (PR #37, #38 merged to `main`) — B2.1, B2.2, B2.3, B2.4 all complete.
+B2.3 covers all 19 magnetic dual-setting groups, each label derived from the group's
+own computed symmetry operations (the trigonal/hexagonal entries were the last,
+landed in `feature/settings-surfacing-trigonal-hex` after #37's `-3'm'` generator fix
+unblocked them). Monoclinic labels read "First (c-unique, Birss)" / "Second
+(b-unique, ITC)" on both the button and the Help/Explorer text.
 
 **Area:** UI / documentation for Feature 3 (Alternate Point Group Settings)
 **Severity:** Medium (UX + docs) overall; **B2.4 is a functional gap**, not cosmetic.
