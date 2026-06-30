@@ -5,6 +5,7 @@ import { Box, Hexagon, Triangle, Layers, Compass, Info, ChevronDown, ChevronUp, 
 import { hklToPresetAngles } from '../services/orientation';
 import { isCentrosymmetric, getParentGroup, getHalvingSubgroup, getSHGConsequence, getAlternateSettings } from '../services/tensorCalculator';
 import { PointGroupData } from '../data/pointGroups';
+import { TermInfo } from './TermInfo';
 
 export const getCrystalIcon = (system: string) => {
   switch (system.toLowerCase()) {
@@ -282,7 +283,7 @@ export function AxisOrientationInfo({ crystalSystem }: { crystalSystem: string }
 interface GroupIdentityHeaderProps {
   group: PointGroupData;
   setting: number;
-  onNavigate?: (view: string) => void;
+  onNavigate?: (view: string, tab?: string) => void;
 }
 
 export function GroupIdentityHeader({ group, setting, onNavigate }: GroupIdentityHeaderProps) {
@@ -329,8 +330,9 @@ export function GroupIdentityHeader({ group, setting, onNavigate }: GroupIdentit
               {group.schoenflies && (
                 <p className="text-sm opacity-60 mt-1">{group.schoenflies}</p>
               )}
-              <p className="text-[10px] uppercase tracking-widest opacity-50 mt-1">
+              <p className="text-[10px] uppercase tracking-widest opacity-50 mt-1 flex items-center gap-1">
                 {group.type === 'I' ? 'Standard' : group.type === 'II' ? 'Gray' : 'Magnetic'} Point Group
+                <TermInfo id={`type-${group.type.toLowerCase()}`} onNavigate={onNavigate} />
               </p>
             </div>
             <div className="flex items-center gap-3 p-4 border border-ink border-opacity-10">

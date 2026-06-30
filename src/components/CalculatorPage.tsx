@@ -12,6 +12,7 @@ import {
   getFutureSettingCount,
 } from '../services/tensorCalculator';
 import { TensorTerm, KDirectionSelector, GroupIdentityHeader } from './MathComponents';
+import { TermInfo } from './TermInfo';
 import type { TensorConfig, PresetAnglesState } from '../types';
 
 const TENSOR_META = {
@@ -24,7 +25,7 @@ interface CalculatorPageProps {
   selectedGroup: PointGroupData | null;
   tensorConfig: TensorConfig;
   presetAngles: PresetAnglesState;
-  onNavigate: (view: string) => void;
+  onNavigate: (view: string, tab?: string) => void;
 }
 
 export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNavigate }: CalculatorPageProps) {
@@ -111,17 +112,20 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNa
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {(['ED', 'MD', 'EQ'] as const).map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => setSelectedTensorType(type)}
-                      className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                        selectedTensorType === type
-                          ? 'bg-ink text-paper'
-                          : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
-                      }`}
-                    >
-                      {TENSOR_META[type].label}
-                    </button>
+                    <div key={type} className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedTensorType(type)}
+                        className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
+                          selectedTensorType === type
+                            ? 'bg-ink text-paper'
+                            : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
+                        }`}
+                      >
+                        {TENSOR_META[type].label}
+                      </button>
+                      <TermInfo id={type.toLowerCase()} onNavigate={onNavigate} />
+                    </div>
                   ))}
                 </div>
               </div>
@@ -132,17 +136,20 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNa
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {(['i', 'c'] as const).map((tr) => (
-                    <button
-                      key={tr}
-                      onClick={() => setSelectedTimeReversal(tr)}
-                      className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                        selectedTimeReversal === tr
-                          ? 'bg-ink text-paper'
-                          : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
-                      }`}
-                    >
-                      {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
-                    </button>
+                    <div key={tr} className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedTimeReversal(tr)}
+                        className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
+                          selectedTimeReversal === tr
+                            ? 'bg-ink text-paper'
+                            : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
+                        }`}
+                      >
+                        {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
+                      </button>
+                      <TermInfo id={`${tr}-type`} onNavigate={onNavigate} />
+                    </div>
                   ))}
                 </div>
               </div>
@@ -155,7 +162,9 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNa
             if (!altSettings && !futureCount) return null;
             return (
               <div className="space-y-3">
-                <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Setting</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-1.5">
+                  Crystal Setting <TermInfo id="crystal-setting" onNavigate={onNavigate} />
+                </p>
                 {altSettings ? (
                   <div className="flex flex-wrap gap-3">
                     <button
