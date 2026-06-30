@@ -335,24 +335,32 @@ const MONO_YZ_SWAP: Matrix3x3 = { m: [[-1, 0, 0], [0, 0, 1], [0, 1, 0]] };
 
 const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   // Phase 1 — Mechanism B (time-reversal-broken equivalence)
-  "4'mm'":    [{ name: "σ_d primed", rotation: getRotationZ(45) }],
-  "4'22'":    [{ name: "C₂' along ⟨110⟩", rotation: getRotationZ(45) }],
-  "4'/m'm'm": [{ name: "σ_d primed", rotation: getRotationZ(45) }],
-  "4'/mmm'":  [{ name: "σ_d' along ⟨110⟩", rotation: getRotationZ(45) }],
-  "6'mm'":    [{ name: "σ_d primed", rotation: getRotationZ(30) }],
-  "6'22'":    [{ name: "C₂' along ⟨210⟩", rotation: getRotationZ(30) }],
-  "6'/m'mm'": [{ name: "σ_d primed", rotation: getRotationZ(30) }],
-  "6'/mm'm":  [{ name: "σ_d' along ⟨210⟩", rotation: getRotationZ(30) }],
+  // Labels are the distinct magnetic HM symbol for the alternate setting, derived from
+  // each entry's own computed operations (getSymmetryOperations) — see B2.3 derivation
+  // in WORKORDER-close-open-items.md; cross-checked for name collisions against the
+  // canonical 122-group list (pointGroups.ts).
+  "4'mm'":    [{ name: "4'm'm", rotation: getRotationZ(45) }],
+  "4'22'":    [{ name: "4'2'2", rotation: getRotationZ(45) }],
+  "4'/m'm'm": [{ name: "4'/m'mm'", rotation: getRotationZ(45) }],
+  "4'/mmm'":  [{ name: "4'/mm'm", rotation: getRotationZ(45) }],
+  "6'mm'":    [{ name: "6'm'm", rotation: getRotationZ(30) }],
+  "6'22'":    [{ name: "6'2'2", rotation: getRotationZ(30) }],
+  "6'/m'mm'": [{ name: "6'/m'm'm", rotation: getRotationZ(30) }],
+  "6'/mm'm":  [{ name: "6'/mmm'", rotation: getRotationZ(30) }],
 
   // Phase 2 — Mechanism A (classical setting ambiguity)
-  "-4'2m'":  [{ name: "σ' along ⟨100⟩", rotation: getRotationZ(45) }],
-  "-4'm2'":  [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(45) }],
-  "-42'm'":  [{ name: "C₂' along ⟨110⟩", rotation: getRotationZ(45) }],
-  "32'":     [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(30) }],
-  "3m'":     [{ name: "σ_d' mirrors", rotation: getRotationZ(30) }],
+  "-4'2m'":  [{ name: "-4'm'2", rotation: getRotationZ(45) }],
+  "-4'm2'":  [{ name: "-4'2'm", rotation: getRotationZ(45) }],
+  "-42'm'":  [{ name: "-4m'2'", rotation: getRotationZ(45) }],
+  "32'":     [{ name: "312'", rotation: getRotationZ(30) }],
+  "3m'":     [{ name: "31m'", rotation: getRotationZ(30) }],
+  // -3'm, -3'm', -3m' (trigonal D3d family) labels pending fix/trigonal-3m-prime-pattern
+  // (PR #37) — -3'm' duplicated -3'm's generator until that fix lands; deriving these
+  // three labels now would be against the still-buggy generator. TODO after merge.
   "-3'm":    [{ name: "σ_d mirrors", rotation: getRotationZ(30) }],
   "-3'm'":   [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(30) }],
   "-3m'":    [{ name: "C₂' along ⟨100⟩", rotation: getRotationZ(30) }],
+  // -6'2m', -6'm2', -6m'2' (hexagonal D3h family) — not yet derived, see TODO-next.md B2.3.
   "-6'2m'":  [{ name: "C₂ along ⟨100⟩", rotation: getRotationZ(30) }],
   "-6'm2'":  [{ name: "σ_d mirrors", rotation: getRotationZ(30) }],
   "-6m'2'":  [{ name: "σ_d' mirrors", rotation: getRotationZ(30) }],
@@ -365,11 +373,11 @@ const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   "mmm'":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
 
   // Phase 2 — Monoclinic axis choice (z-unique Birss → b-unique ITC)
-  "2'":     [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
-  "m'":     [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
-  "2'/m":   [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
-  "2'/m'":  [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
-  "2/m'":   [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "2'":     [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
+  "m'":     [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
+  "2'/m":   [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
+  "2'/m'":  [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
+  "2/m'":   [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
 
   // --- B1: Type I (colourless) ---
   // Orthorhombic axis orientation (3 settings)
@@ -377,9 +385,9 @@ const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   "mm2":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
   "mmm":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
   // Monoclinic axis choice (z/c-unique Birss → b-unique ITC)
-  "2":     [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
-  "m":     [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
-  "2/m":   [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "2":     [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
+  "m":     [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
+  "2/m":   [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
   // Mechanism A (classical setting ambiguity)
   "-42m":  [{ name: "-4m2", rotation: getRotationZ(45) }],
   "32":    [{ name: "312",  rotation: getRotationZ(30) }],
@@ -391,9 +399,9 @@ const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   "2221'":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
   "mm21'":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
   "mmm1'":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
-  "21'":    [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
-  "m1'":    [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
-  "2/m1'":  [{ name: "b-unique (ITC)", rotation: MONO_YZ_SWAP }],
+  "21'":    [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
+  "m1'":    [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
+  "2/m1'":  [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
   "-42m1'": [{ name: "-4m2", rotation: getRotationZ(45) }],
   "321'":   [{ name: "312",  rotation: getRotationZ(30) }],
   "3m1'":   [{ name: "31m",  rotation: getRotationZ(30) }],

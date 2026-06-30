@@ -232,7 +232,14 @@ export function AxisOrientationInfo({ crystalSystem }: { crystalSystem: string }
         <>
           <span className="font-mono font-medium">z</span> ∥ <InlineMath math="c" /> (unique axis: ∥ 2-fold or ⊥ mirror)<br/>
           <span className="font-mono font-medium">x</span> ∥ <InlineMath math="a" /><br/>
-          <span className="font-mono font-medium">y</span> ∥ <InlineMath math="b^*" /> (completing the right-handed frame)
+          <span className="font-mono font-medium">y</span> ∥ <InlineMath math="b^*" /> (completing the right-handed frame)<br/>
+          <span className="block mt-2 opacity-80">
+            Every monoclinic group below has two <strong>settings</strong> — not two
+            different groups, but two conventions for the same one: <em>First</em>{' '}
+            (<InlineMath math="c" />-unique, Birss, shown above) and <em>Second</em>{' '}
+            (<InlineMath math="b" />-unique, ITC). Pick whichever matches the
+            convention your crystal data was published in.
+          </span>
         </>
       );
       break;

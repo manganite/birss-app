@@ -1,6 +1,6 @@
 import { useState, useEffect, type ReactNode } from 'react';
 import { PointGroupData } from '../data/pointGroups';
-import { isCentrosymmetric, type SymbolicSHGResult, formatSymbolicSourceTerm } from '../services/tensorCalculator';
+import { isCentrosymmetric, type SymbolicSHGResult, formatSymbolicSourceTerm, getAlternateSettings, getFutureSettingCount } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
 import { Zap, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
 import { TensorTerm, FormatPointGroup, getPresetsForSystem, KDirectionSelector, GroupIdentityHeader } from './MathComponents';
@@ -42,7 +42,7 @@ export function SimulatorPage({
   simulation,
   onNavigate,
 }: SimulatorPageProps) {
-  const { type: selectedTensorType, setType: setSelectedTensorType, timeReversal: selectedTimeReversal, setTimeReversal: setSelectedTimeReversal, setting: selectedSetting } = tensorConfig;
+  const { type: selectedTensorType, setType: setSelectedTensorType, timeReversal: selectedTimeReversal, setTimeReversal: setSelectedTimeReversal, setting: selectedSetting, setSetting: setSelectedSetting } = tensorConfig;
   const { thetaX, setThetaX, thetaY, setThetaY, psi0, setPsi0, phiX, setPhiX, phiY, setPhiY, psi, setPsi } = orientation;
   const { amplitudes, setAmplitudes, phases, setPhases } = simulation;
   const [activePolarimetryTab, setActivePolarimetryTab] = useState<'anisotropy' | 'polarizer' | 'analyzer'>('anisotropy');
@@ -180,6 +180,46 @@ export function SimulatorPage({
               </div>
             </div>
           </div>
+
+          {(() => {
+            const altSettings = getAlternateSettings(selectedGroup.name);
+            const futureCount = getFutureSettingCount(selectedGroup.name);
+            if (!altSettings && !futureCount) return null;
+            return (
+              <div className="space-y-3 border-t border-ink border-opacity-10 pt-6 mt-8">
+                <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Setting</p>
+                {altSettings ? (
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      onClick={() => setSelectedSetting(1)}
+                      className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
+                        selectedSetting === 1
+                          ? 'bg-ink text-paper'
+                          : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
+                      }`}
+                    >
+                      Default
+                    </button>
+                    {altSettings.map((s, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setSelectedSetting(i + 2)}
+                        className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
+                          selectedSetting === i + 2
+                            ? 'bg-ink text-paper'
+                            : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
+                        }`}
+                      >
+                        {s.name}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs opacity-40 italic">{futureCount} settings — selection coming</p>
+                )}
+              </div>
+            );
+          })()}
 
           <div className="border-t border-ink border-opacity-10 pt-6 mt-8">
             <KDirectionSelector

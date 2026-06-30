@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion } from 'motion/react';
 import { X, Calculator, Activity } from 'lucide-react';
-import { getSymmetryOperations, getGeneratorSymbols } from '../services/tensorCalculator';
+import { getSymmetryOperations, getGeneratorSymbols, getAlternateSettings, getFutureSettingCount } from '../services/tensorCalculator';
 import { FormatPointGroup, SymmetryOperation } from './MathComponents';
 import { PointGroupData } from '../data/pointGroups';
 import { useDialogA11y } from '../hooks/useDialogA11y';
@@ -16,6 +16,8 @@ interface OperationsModalProps {
 export const OperationsModal = ({ group, onClose, onOpenInCalculator, onOpenInSimulator }: OperationsModalProps) => {
   const operations = getSymmetryOperations(group.name);
   const generators = getGeneratorSymbols(group.name);
+  const altSettings = getAlternateSettings(group.name);
+  const futureSettingCount = getFutureSettingCount(group.name);
   const containerRef = useRef<HTMLDivElement>(null);
   useDialogA11y({ onClose, containerRef });
 
@@ -46,6 +48,21 @@ export const OperationsModal = ({ group, onClose, onOpenInCalculator, onOpenInSi
                 <>
                   <span>•</span>
                   <span className="normal-case">{group.schoenflies}</span>
+                </>
+              )}
+              {altSettings && (
+                <>
+                  <span>•</span>
+                  <span className="normal-case">
+                    {altSettings.length + 1} settings — also expressible as{' '}
+                    {altSettings.map(s => s.name).join(', ')}
+                  </span>
+                </>
+              )}
+              {!altSettings && futureSettingCount && (
+                <>
+                  <span>•</span>
+                  <span className="normal-case">{futureSettingCount} settings — selection coming</span>
                 </>
               )}
             </div>
