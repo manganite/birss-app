@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Info } from 'lucide-react';
 import { GLOSSARY_TERMS } from '../data/glossary';
 
@@ -10,6 +10,14 @@ interface TermInfoProps {
 export function TermInfo({ id, onNavigate }: TermInfoProps) {
   const [open, setOpen] = useState(false);
   const term = GLOSSARY_TERMS.find(t => t.id === id);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [open]);
+
   if (!term) return null;
 
   return (

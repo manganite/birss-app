@@ -114,6 +114,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNa
                   {(['ED', 'MD', 'EQ'] as const).map((type) => (
                     <div key={type} className="flex items-center gap-1">
                       <button
+                        type="button"
                         onClick={() => setSelectedTensorType(type)}
                         className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
                           selectedTensorType === type
@@ -137,6 +138,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNa
                   {(['i', 'c'] as const).map((tr) => (
                     <div key={tr} className="flex items-center gap-1">
                       <button
+                        type="button"
                         onClick={() => setSelectedTimeReversal(tr)}
                         className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
                           selectedTimeReversal === tr
