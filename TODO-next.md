@@ -381,7 +381,13 @@ _Choosing the cut / k direction, naming it clearly, and what depends on it._
 
 ### A1 — Calculator shows source terms as a function of angles that cannot be set there
 
-**Status:** Decided for the Calculator (shipped); Simulator resolved (D4) — delete the φ_x, φ_y, ψ-symbolic block, keep "As functions of E_X,E_Y" and "As functions of θ_pol"; implementation pending.
+**Status:** Done (`feature/simplify-source-terms`, pending merge) — Calculator was
+already shipped; Simulator now matches D4: deleted the φ_x, φ_y, ψ-symbolic block
+from `SimulatorPage.tsx`, keeping "As functions of E_X,E_Y" and "As functions of
+θ_pol". The now-fully-dead `symbolicExpressions` prop chain (App → Calculator,
+Simulator — it turned out to already be unused in the Calculator too) was removed;
+`symbolicProjection.ts`/`trigPolyFormat.ts` were deliberately left in place
+(unused but not deleted, per Thomas).
 
 **Area:** Calculator — Source Terms display
 **Severity:** High — presents physically meaningless output *(provisional)*
@@ -1164,7 +1170,17 @@ it, so hitting 45°, 90°, 180°, … is fiddly.
 
 ### B16 — "Mathematical Model" box: simplify the trigonometric coefficients (and present them cleanly)
 
-**Status:** Decided (D4) — drop the simultaneous 3-angle symbolic block; swept display variable is θ; harmonic form preferred, power form only when strictly shorter.
+**Status:** Done (`feature/simplify-source-terms`, pending merge) — the 3-angle
+symbolic block is dropped (A1-Sim); the harmonic/power tie-break in
+`latexFormatting.ts`'s `formatSubstitutedPolySum` flipped from "power preferred,
+harmonic only if strictly shorter" to "harmonic preferred, power only if strictly
+shorter" per D4. Verified anti-circularly: a from-scratch numeric check confirmed
+every power↔harmonic mapping is an exact trig-identity re-expression (same value,
+different basis) before the flip landed — no computed value changes, display-only.
+For single-pair-per-component cases (the common case) the rendered output is
+unchanged from before, since power is always ≤ harmonic in term count there; the
+flip's effect is confined to the rarer multi-pair-merge case. Closed the held
+`HelpPage.tsx:353` sentence with harmonic-biased wording.
 
 **Area:** Simulator — "Mathematical Model" box, Source Terms part (if it lives on
 the Help page instead, same fix — cf. B14)

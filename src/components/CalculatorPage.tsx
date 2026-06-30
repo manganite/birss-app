@@ -10,7 +10,6 @@ import {
   getLabFrameVectors,
   getAlternateSettings,
   getFutureSettingCount,
-  type SymbolicSHGResult,
 } from '../services/tensorCalculator';
 import { TensorTerm, KDirectionSelector, GroupIdentityHeader } from './MathComponents';
 import type { TensorConfig, PresetAnglesState } from '../types';
@@ -25,11 +24,10 @@ interface CalculatorPageProps {
   selectedGroup: PointGroupData | null;
   tensorConfig: TensorConfig;
   presetAngles: PresetAnglesState;
-  symbolicExpressions: SymbolicSHGResult | null;
   onNavigate: (view: string) => void;
 }
 
-export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symbolicExpressions, onNavigate }: CalculatorPageProps) {
+export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNavigate }: CalculatorPageProps) {
   const [activeResultTab, setActiveResultTab] = useState<'components' | 'induced' | 'source'>('components');
   const [mobileSourceExpanded, setMobileSourceExpanded] = useState(false);
   const [mobileSetupExpanded, setMobileSetupExpanded] = useState(false);

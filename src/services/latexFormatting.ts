@@ -154,10 +154,18 @@ export function formatSubstitutedPolySum(
 
     if (mergedPower.length === 0 && mergedHarmonic.length === 0) continue;
 
-    let mergedChiTerms = mergedPower;
-    if (mergedHarmonic.length < mergedPower.length) {
+    // D4: harmonic form preferred; power form only when strictly shorter (fewer
+    // terms). Never select an empty representation while the other is non-empty
+    // (both represent the same value -- one being empty here would mean EPSILON
+    // filtering happened to zero out every term in just that basis).
+    let mergedChiTerms: typeof mergedPower;
+    if (mergedHarmonic.length === 0) {
+      mergedChiTerms = mergedPower;
+    } else if (mergedPower.length === 0) {
       mergedChiTerms = mergedHarmonic;
-    } else if (mergedHarmonic.length === mergedPower.length && mergedHarmonic.length === 1) {
+    } else if (mergedPower.length < mergedHarmonic.length) {
+      mergedChiTerms = mergedPower;
+    } else {
       mergedChiTerms = mergedHarmonic;
     }
 
