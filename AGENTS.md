@@ -4,7 +4,11 @@ Scientific React SPA that calculates non-zero susceptibility tensor components (
 
 ## Current work (next cycle)
 
-The active backlog lives in two companion documents:
+**Start with `STATUS.md` (root)** — the canonical index for the current cycle:
+what is done, what is open, and what the standing decisions are.
+
+The detailed backlog lives in two companion documents (derivation and per-item
+detail):
 
 - **`docs/planning/TODO-next.md`** — the detailed findings: per-item problem, fix,
   file:line anchors, acceptance, and a `Status:` tag (`Decided` / `Open decision` /
@@ -135,6 +139,7 @@ the numeric path but never the other way round:
 - Global palette: background `#E4E3E0`, foreground/text `#141414`.
 - No CSS Modules, no Styled Components. All styling is inline Tailwind utility classes.
 - One custom utility in `index.css`: `.overline` for text-decoration.
+- **Section header pattern**: `text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2` — use the shared `SectionHeader` component from `MathComponents.tsx` rather than inlining this string.
 
 ### Component patterns
 - All page components receive state as grouped prop objects from `App.tsx` (`TensorConfig`, `OrientationState`, etc.) — no Context API or Zustand.

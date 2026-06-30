@@ -1,5 +1,6 @@
 # Birss App — TODO for the next version (working draft)
 
+> Historical / per-item detail. For current status see [STATUS.md](../../STATUS.md) (root).
 > New items only — does **not** track the still-open items from `TODO-v0.7-audit.md`.
 > Assembled iteratively from review notes. Each item is **provisional** until
 > verified against source (ITC Vol. A, Birss 1966) and/or the codebase, and
