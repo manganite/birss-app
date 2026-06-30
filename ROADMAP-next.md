@@ -173,7 +173,7 @@ making it compute as a duplicate of the unrelated `-3'm` group — including the
 canonical Cr₂O₃ magnetoelectric SHG fixture. Fixed and verified against four
 independent sources (Birss table-6/7, printed ITC, an independent group-theoretic
 re-derivation, and the primary Fiebig et al. 2005 paper itself — see
-`FINDING-trigonal-3m-prime-bug.md` and `verification-trigonal-magnetic-groups.md`).
+`docs/findings/FINDING-trigonal-3m-prime-bug.md` and `docs/findings/verification-trigonal-magnetic-groups.md`).
 **Data flag**, PR #37 (merged). B2.3's trigonal labels were blocked on this and
 landed once #37 was on `main` (PR #39, merged) — deriving them against the pre-fix
 generator would have baked in the bug.

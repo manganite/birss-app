@@ -76,8 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   components for this group at both the default and alternate crystal setting, and
   in any rotated/lab-frame source-term display referencing it. `-3'm` and `-3m'`
   (the other two members of the trigonal `-3m` magnetic family) were verified
-  unaffected. See `FINDING-trigonal-3m-prime-bug.md` and
-  `verification-trigonal-magnetic-groups.md` for the full derivation.
+  unaffected. See `docs/findings/FINDING-trigonal-3m-prime-bug.md` and
+  `docs/findings/verification-trigonal-magnetic-groups.md` for the full derivation.
 - Help page content audit (B22): Neumann's-principle equation now shows the
   `det(R)` (axial) and time-reversal-sign (c-type) factors it was previously
   missing; dropped the misleading "provided time-reversal symmetry is broken"
