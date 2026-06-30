@@ -300,7 +300,14 @@ _Making the alternate settings visible, labelled, and selectable across the thre
 
 ### B2 — Settings are under-surfaced and under-explained across all three views
 
-**Status:** Decided — B2.4 resolved (D1): persist the setting across Calculator ↔ Simulator; reset to setting 1 only on first load / group change.
+**Status:** Mostly Done (`feature/settings-surfacing`, pending merge) — B2.1 (plain-language
+intro), B2.2 (Explorer popup hint + monoclinic tab text), B2.4 (Simulator parity +
+persistence, resolved per D1) all complete. B2.3 (Calculator/Simulator button labels)
+done for 13 of 19 magnetic dual-setting groups (the `4mm`/`422`/`6mm`/`622`-derived and
+`-42m`-derived families, plus `32'`/`3m'`); the trigonal `-3'm`/`-3'm'`/`-3m'` and
+hexagonal `-6'2m'`/`-6'm2'`/`-6m'2'` families remain — the former blocked on the
+`-3'm'` generator fix (PR #37, `fix/trigonal-3m-prime-pattern`), the latter not yet
+attempted. Monoclinic labels also tightened to "Second (b-unique, ITC)".
 
 **Area:** UI / documentation for Feature 3 (Alternate Point Group Settings)
 **Severity:** Medium (UX + docs) overall; **B2.4 is a functional gap**, not cosmetic.

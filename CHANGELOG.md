@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Simulator now has a "Crystal Setting" selector with full parity to the Calculator's
+  (same control, same labels); the selected setting persists across Calculator ↔
+  Simulator navigation, resetting to the default only on group change (B2.4).
+- Explorer group popup shows the number of available settings and the alternate
+  setting's symbol/convention name (e.g. "2 settings — also expressible as 6'm'm");
+  the Monoclinic tab explains the First/Second (c-unique Birss / b-unique ITC)
+  convention (B2.2).
+- Help page's "Alternate Settings" section opens with a plain-language explanation
+  of what a setting is and why a group can have more than one, before the formal
+  mechanism breakdown; clarifies the setting selector now appears in both the
+  Calculator and the Simulator (B2.1).
+
+### Changed
+- Calculator/Simulator setting buttons for non-monoclinic dual-setting magnetic
+  groups now show the distinct magnetic HM symbol (e.g. `6'm'm`, `4'm'm`, `-4'm'2`)
+  instead of internal mechanism labels (e.g. "σ_d primed", "C₂' along ⟨100⟩").
+  13 entries relabeled; trigonal `-3'm`/`-3'm'`/`-3m'` and hexagonal `-6'2m'`/
+  `-6'm2'`/`-6m'2'` are not yet relabeled (tracked separately, the former blocked
+  on the `-3'm'` generator fix in #37). Monoclinic alternate-setting buttons now
+  read "Second (b-unique, ITC)" instead of "b-unique (ITC)" for consistency with
+  the Help/Explorer wording (B2.3, partial).
+
 ### Fixed
 - **Data:** the `-3'm'` magnetic point group's generator encoded the wrong unitary
   (halving) subgroup — `3m` instead of the literature-correct `32` (Birss

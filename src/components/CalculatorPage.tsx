@@ -168,7 +168,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, symb
                           : 'hover:bg-ink hover:text-paper opacity-50 hover:opacity-100 border-opacity-20'
                       }`}
                     >
-                      Default
+                      {selectedGroup.crystalSystem === 'Monoclinic' ? 'First (c-unique, Birss)' : 'Default'}
                     </button>
                     {altSettings.map((s, i) => (
                       <button

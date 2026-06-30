@@ -400,22 +400,31 @@ export function HelpPage() {
           <div className="space-y-4 pt-4 border-t border-ink border-opacity-10">
             <h3 className="text-sm font-bold uppercase tracking-widest">Alternate Settings</h3>
             <p className="text-sm opacity-70 leading-relaxed">
-              Some magnetic point groups have multiple <strong>settings</strong> — distinct orientations of the symmetry elements relative to the crystal axes that produce different tensor forms. For example, <InlineMath math="6'mm'" /> and <InlineMath math="6'm'm" /> are two settings of the same abstract group, related by a 30° rotation that swaps which mirror family is primed.
+              A handful of crystals don't have a single "natural" way to line their symmetry elements up with the <InlineMath math="x,y,z" /> axes — there are two or three equally valid choices, and which one matches your sample depends on which convention your crystal data was published in. The app calls each valid choice a <strong>setting</strong>. Picking a different setting never changes which tensor components are independent or zero, only which axis label they're attached to — so getting it right matters for comparing to a specific paper's numbers, but never changes whether a given effect is allowed at all.
             </p>
             <p className="text-sm opacity-70 leading-relaxed">
-              The app implements all settings via the similarity transform <InlineMath math="G' = S \cdot G \cdot S^{-1}" /> applied to the base generators. A setting selector appears in the Calculator when a group has multiple settings. The three mechanisms are:
+              Some magnetic point groups have multiple settings — distinct orientations of the symmetry elements relative to the crystal axes that produce different tensor forms. For example, <InlineMath math="6'mm'" /> and <InlineMath math="6'm'm" /> are two settings of the same abstract group, related by a 30° rotation that swaps which mirror family is primed.
+            </p>
+            <p className="text-sm opacity-70 leading-relaxed">
+              The app implements all settings via the similarity transform <InlineMath math="G' = S \cdot G \cdot S^{-1}" /> applied to the base generators. A setting selector appears in the Calculator and the Simulator whenever a group has multiple settings, and the choice persists between the two views. No group has more than 3 settings. The mechanisms, and how each labels its buttons, are:
             </p>
             <div className="space-y-3 pl-4 border-l-2 border-ink border-opacity-20 my-4">
               <p className="text-sm opacity-70 leading-relaxed">
-                <strong>Mechanism A:</strong> Classical setting ambiguity inherited from the spatial group (e.g., tetragonal <InlineMath math="\bar{4}2m" /> vs. <InlineMath math="\bar{4}m2" />).
+                <strong>Mechanism A (classical setting ambiguity):</strong> inherited from the spatial group — the two in-plane symmetry-direction sets carry <em>different</em> element types (e.g. 2-folds vs. mirrors in tetragonal <InlineMath math="\bar{4}2m" /> vs. <InlineMath math="\bar{4}m2" />). Buttons are labelled with the distinct HM symbol for each setting.
               </p>
               <p className="text-sm opacity-70 leading-relaxed">
-                <strong>Mechanism B:</strong> Time-reversal-broken equivalence — the two mirror/rotation families carry identical spatial operations but different primings.
+                <strong>Mechanism B (time-reversal-broken equivalence):</strong> the two in-plane direction sets carry the <em>same</em> element type, so the non-magnetic parent has only one setting; priming one set but not the other (e.g. <InlineMath math="6'mm'" /> vs. <InlineMath math="6'm'm" />) breaks that equivalence. Buttons are labelled with the distinct magnetic HM symbol, same as Mechanism A.
               </p>
               <p className="text-sm opacity-70 leading-relaxed">
-                <strong>Axis orientation:</strong> Orthorhombic groups allow c/a/b-unique axis choices; monoclinic groups allow z-unique (Birss) or b-unique (ITC) conventions.
+                <strong>Axis orientation (orthorhombic, 3 settings):</strong> a/b/c-unique choices for which axis carries the unique (polar or 2-fold) element.
+              </p>
+              <p className="text-sm opacity-70 leading-relaxed">
+                <strong>Axis convention (monoclinic, 2 settings):</strong> not a different orientation but a different naming convention for the same physical axis choice — <em>First</em> (<InlineMath math="c" />-unique, Birss) and <em>Second</em> (<InlineMath math="b" />-unique, ITC). Buttons keep these convention names rather than an HM symbol, since both settings share the same symbol.
               </p>
             </div>
+            <p className="text-sm opacity-70 leading-relaxed">
+              Mechanisms A and B never co-occur in the same group (one requires the two direction sets to differ in element type, the other requires them to match), and the orthorhombic/monoclinic axis mechanisms are unrelated to time reversal entirely — so the maximum is 3 settings, never 4.
+            </p>
           </div>
         </div>
       </section>
