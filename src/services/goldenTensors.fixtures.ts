@@ -41,18 +41,24 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     tensor: 'ED',
     tr: 'c',
     expected: [
-      '\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}',
-      '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}',
-      '\\chi_{zxx} = \\chi_{zyy}',
-      '\\chi_{zzz}',
+      '\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}',
+      '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}',
     ],
     source: GENERATOR_DERIVATION,
     note:
       "The canonical magnetic-SHG group: Cr2O3 below T_N is -3'm' and this c-type ED " +
       'tensor is the textbook magnetoelectric SHG source term (Fiebig et al., JOSA B 22, ' +
-      "96 (2005)). Cross-check: -3'm' = H u theta*i*H with unitary subgroup H = 3m, and " +
-      "for c-type ED this decomposition predicts -3'm'(ED,c) = 3m(ED,i) -- the relation " +
-      'above is exactly the 3m i-type ED form.',
+      "96 (2005)). Unitary (halving) subgroup H = 32 (Birss table-6 row 82, ITC D3d(D3); " +
+      "confirmed independently against the printed Birss 1962 Table 2(a) source and " +
+      "cross-checked group-theoretically via M = H u theta*i*H -- see " +
+      'verification-trigonal-magnetic-groups.md). For c-type ED this decomposition ' +
+      "predicts -3'm'(ED,c) = 32(ED,i) = symbol class L3 (table-4e.md): " +
+      'chi_zzz = 0, no xxz/zxx-family term, and the xyz-family component survives ' +
+      '(group-averaged from the literal table-6 operator list, jk-presymmetrized per ' +
+      "the app's own tensor convention -- see check_3mprime_v2.mjs derivation). " +
+      "Previously this fixture used H = 3m (wrong -- that is -3'm's halving subgroup, " +
+      "not -3'm''s) and asserted the M3 form instead; fixed alongside the -3'm' " +
+      'generator correction (symmetryGroups.ts).',
   },
   {
     group: "-3'm'",
@@ -600,8 +606,8 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
   },
   {
     group: "-3'm'", tensor: 'ED', tr: 'c', setting: 2,
-    expected: ['\\chi_{xxy} = \\chi_{xyx} = \\chi_{yxx} = -\\chi_{yyy}', '\\chi_{xxz} = \\chi_{xzx} = \\chi_{yyz} = \\chi_{yzy}', '\\chi_{zxx} = \\chi_{zyy}', '\\chi_{zzz}'],
-    source: 'Similarity transform Rz(30°); c-type acquires 3m-like 4-component tensor.',
+    expected: ['\\chi_{xxx} = -\\chi_{xyy} = -\\chi_{yxy} = -\\chi_{yyx}', '\\chi_{xyz} = \\chi_{xzy} = -\\chi_{yxz} = -\\chi_{yzx}'],
+    source: "Similarity transform Rz(30°) applied to the corrected (H=32, symbol class L3) setting-1 form; matches the \"3m'\" setting-2 fixture's form exactly, as expected since both reduce to an i-type-of-32 relation.",
   },
 
   // Hexagonal Mechanism A — Rz(30°)
