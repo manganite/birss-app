@@ -3,7 +3,7 @@ import { PointGroupData } from '../data/pointGroups';
 import { isCentrosymmetric } from '../services/tensorCalculator';
 import { InlineMath, BlockMath } from 'react-katex';
 import { Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
-import { TensorTerm, FormatPointGroup, getPresetsForSystem, KDirectionSelector, GroupIdentityHeader, SectionHeader } from './MathComponents';
+import { TensorTerm, FormatPointGroup, getPresetsForSystem, KDirectionSelector, GroupIdentityHeader } from './MathComponents';
 import { TensorClassificationControl, TimeReversalControl, CrystalSettingControl } from './TensorSetupControls';
 import { TermInfo } from './TermInfo';
 import { PolarimetryPlot } from './PolarimetryPlot';

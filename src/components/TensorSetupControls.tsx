@@ -25,6 +25,7 @@ export function TensorClassificationControl({
           <div key={type} className="flex items-center gap-1">
             <button
               type="button"
+              aria-pressed={value === type}
               onClick={() => onChange(type)}
               className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
                 value === type
@@ -58,6 +59,7 @@ export function TimeReversalControl({
           <div key={tr} className="flex items-center gap-1">
             <button
               type="button"
+              aria-pressed={value === tr}
               onClick={() => onChange(tr)}
               className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
                 value === tr
@@ -94,12 +96,14 @@ export function CrystalSettingControl({
   if (!altSettings && !futureCount) return null;
   return (
     <div className={`space-y-3${className ? ` ${className}` : ''}`}>
-      <p className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-1.5">
+      <SectionHeader>
         Crystal Setting <TermInfo id="crystal-setting" onNavigate={onNavigate} />
-      </p>
+      </SectionHeader>
       {altSettings ? (
         <div className="flex flex-wrap gap-3">
           <button
+            type="button"
+            aria-pressed={value === 1}
             onClick={() => onChange(1)}
             className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
               value === 1
@@ -111,7 +115,9 @@ export function CrystalSettingControl({
           </button>
           {altSettings.map((s, i) => (
             <button
-              key={i}
+              key={s.name}
+              type="button"
+              aria-pressed={value === i + 2}
               onClick={() => onChange(i + 2)}
               className={`px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition-all border border-ink ${
                 value === i + 2
