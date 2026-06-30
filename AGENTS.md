@@ -6,12 +6,12 @@ Scientific React SPA that calculates non-zero susceptibility tensor components (
 
 The active backlog lives in two companion documents:
 
-- **`TODO-next.md`** — the detailed findings: per-item problem, fix, file:line
-  anchors, acceptance, and a `Status:` tag (`Decided` / `Open decision` /
+- **`docs/planning/TODO-next.md`** — the detailed findings: per-item problem, fix,
+  file:line anchors, acceptance, and a `Status:` tag (`Decided` / `Open decision` /
   `Derivation / verification pending`). Items have stable IDs (`A#` = bug,
   `B#` = change). An "Open points at a glance" list near the top shows what still
   needs a decision or derivation.
-- **`ROADMAP-next.md`** — the execution plan: items grouped into **Waves A–E** by
+- **`docs/planning/ROADMAP-next.md`** — the execution plan: items grouped into **Waves A–E** by
   dependency and risk, with a dependency graph, release cadence, and a per-item
   contract. Start here to decide *what to pick up next*.
 
@@ -29,7 +29,7 @@ Working rules for this cycle:
   verification pending* must have that resolved (and its `Status:` updated) before its
   implementation branch opens.
 - **Verify, don't guess.** Check claims against the code (or ask) before acting;
-  several `TODO-next.md` items are marked *provisional* for exactly this reason.
+  several `docs/planning/TODO-next.md` items are marked *provisional* for exactly this reason.
 - **Ask when in doubt.** If the intent, rationale, or scope of a TODO or ROADMAP
   item is unclear, ask for clarification rather than interpreting on your own. The
   items encode specific design decisions and physics reasoning — guessing risks

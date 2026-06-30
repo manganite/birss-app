@@ -13,8 +13,8 @@
 
 ## Current backlog
 
-Before picking up work, read **`ROADMAP-next.md`** (wave order + dependencies) and the
-referenced items in **`TODO-next.md`** (detailed findings + `Status:` tags). Honour the
+Before picking up work, read **`docs/planning/ROADMAP-next.md`** (wave order + dependencies) and the
+referenced items in **`docs/planning/TODO-next.md`** (detailed findings + `Status:` tags). Honour the
 per-item contract there: fixtures-first for data/math, resolve `Open decision` /
 `Derivation pending` items before coding, gate on `npm run lint && npm run test`.
 
