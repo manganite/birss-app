@@ -135,14 +135,14 @@ export const ROTATED_SHG_FIXTURES: RotatedSHGFixture[] = [
     thetaY: -90,
     note: 'k||x, magnetic BW c-type',
     expectedInduced: [
-      { component: 'P_x', expression: '\\chi_{xxx}(E_x^2 - E_y^2) + 2\\chi_{xxz}E_x E_z' },
-      { component: 'P_y', expression: '-2\\chi_{xxx}E_x E_y + 2\\chi_{xxz}E_y E_z' },
-      { component: 'P_z', expression: '\\chi_{zxx}(E_x^2 + E_y^2) + \\chi_{zzz}E_z^2' },
+      { component: 'P_x', expression: '2\\chi_{xxy}E_x E_y + 2\\chi_{xyz}E_y E_z' },
+      { component: 'P_y', expression: '\\chi_{xxy}(E_x^2 - E_y^2) - 2\\chi_{xyz}E_x E_z' },
+      { component: 'P_z', expression: '0' },
     ],
     expectedSource: [
-      { component: 'S_X', expression: '-\\chi_{zxx}E_Y^2 - \\chi_{zzz}E_X^2' },
-      { component: 'S_Y', expression: '-2\\chi_{xxz}E_X E_Y' },
-      { component: 'S_Z', expression: '-\\chi_{xxx}E_Y^2' },
+      { component: 'S_X', expression: '0' },
+      { component: 'S_Y', expression: '-\\chi_{xxy}E_Y^2' },
+      { component: 'S_Z', expression: '-2\\chi_{xyz}E_X E_Y' },
     ],
   },
   // R7: mm2 ED i-type at oblique (30, 45)
