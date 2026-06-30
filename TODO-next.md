@@ -710,7 +710,7 @@ attributes are plot titles (`PolarimetryPlot.tsx`, `SimulatorPage.tsx` plot prop
 
 ### B25 — Inconsistent "note / container / emphasis" styling across the app
 
-**Status:** Decided in direction — open decision: the emphasis rule (highlight chip vs none).
+**Status:** Done (v0.12.0) — resolved to **no chip**: grey emphasis chips dropped from section labels, unifying Calculator / Simulator / Explorer.
 
 **Area:** App-wide — notes, grouping containers, emphasis (shared design vocabulary)
 **Severity:** Low–Medium (visual consistency) *(provisional)*
@@ -757,7 +757,7 @@ several different ways:
 
 ### B27 — Group info header: optional additional fields
 
-**Status:** Open decision — which optional fields to include (enhancement, not a defect).
+**Status:** Done (v0.12.0) — high-value fields shipped in the shared header (Schoenflies, parent crystallographic group, halving subgroup H for Type III, one-line SHG consequence; B3/B27). Remaining lower-priority candidates (property flags, etc.) are future enhancements, not blocking.
 
 **Area:** Calculator (expanded info header) — and, via B3, the shared Simulator header
 **Severity:** Low (enhancement, not a defect) *(provisional)*
