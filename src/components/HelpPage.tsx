@@ -490,7 +490,7 @@ export function HelpPage() {
                 <ul className="text-sm opacity-70 space-y-4 list-none">
                   {REFERENCES.map((reference) => (
                     <li key={reference.href} className="p-4 border border-ink border-opacity-10 hover:bg-ink/5 transition-colors">
-                      <a href={reference.href} target="_blank" rel="noreferrer" className="block space-y-1">
+                      <a href={reference.href} target="_blank" rel="noopener noreferrer" className="block space-y-1">
                         <span className="font-medium underline">
                           {reference.title}
                           {reference.openAccess && (
