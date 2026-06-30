@@ -234,25 +234,29 @@ export function SimulatorPage({
               thetaX={thetaX} thetaY={thetaY} psi0={psi0}
               setThetaX={setThetaX} setThetaY={setThetaY} setPsi0={setPsi0}
               labFrame={labFrame}
+              onNavigate={onNavigate}
             />
           </div>
         </div>
 
         <div className="hidden md:block space-y-4 border-t border-ink border-opacity-10 pt-6">
-          <button
-            type="button"
-            aria-expanded={showRotation}
-            onClick={() => setShowRotation(!showRotation)}
-            className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-50 hover:opacity-100 transition-opacity w-full"
-          >
-            {showRotation ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-            <span>Crystal Rotation</span>
-            {rotationActive && !showRotation && (
-              <span className="normal-case tracking-normal text-[11px] ml-2 opacity-70">
-                ({phiX !== 0 ? `φ_x = ${phiX}°` : ''}{phiX !== 0 && (phiY !== 0 || psi !== 0) ? ', ' : ''}{phiY !== 0 ? `φ_y = ${phiY}°` : ''}{(phiX !== 0 || phiY !== 0) && psi !== 0 ? ', ' : ''}{psi !== 0 ? `ψ = ${psi}°` : ''})
-              </span>
-            )}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              aria-expanded={showRotation}
+              onClick={() => setShowRotation(!showRotation)}
+              className="flex flex-1 items-center gap-2 text-[10px] uppercase tracking-[0.2em] opacity-50 hover:opacity-100 transition-opacity"
+            >
+              {showRotation ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+              <span>Crystal Rotation</span>
+              {rotationActive && !showRotation && (
+                <span className="normal-case tracking-normal text-[11px] ml-2 opacity-70">
+                  ({phiX !== 0 ? `φ_x = ${phiX}°` : ''}{phiX !== 0 && (phiY !== 0 || psi !== 0) ? ', ' : ''}{phiY !== 0 ? `φ_y = ${phiY}°` : ''}{(phiX !== 0 || phiY !== 0) && psi !== 0 ? ', ' : ''}{psi !== 0 ? `ψ = ${psi}°` : ''})
+                </span>
+              )}
+            </button>
+            <TermInfo id="crystal-rotation" onNavigate={onNavigate} />
+          </div>
 
           {showRotation && (
             <div className="space-y-3">
@@ -313,6 +317,7 @@ export function SimulatorPage({
           <div className="hidden md:flex text-[10px] uppercase tracking-[0.2em] opacity-50 items-center gap-2">
             <Sliders className="w-3 h-3" />
             Independent Tensor Components
+            <TermInfo id="chi-components" onNavigate={onNavigate} />
           </div>
 
           {(selectedGroup.crystalSystem === 'Triclinic' || selectedGroup.crystalSystem === 'Monoclinic') && (
@@ -528,32 +533,42 @@ export function SimulatorPage({
           <div className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
             <Activity className="w-3 h-3" />
             SHG Intensity Polarimetry
+            <TermInfo id="shg-polarimetry" onNavigate={onNavigate} />
           </div>
 
           <div className="bg-white/50 border border-ink overflow-hidden">
             {/* Tab Menu */}
             <div className="flex overflow-x-auto border-b border-ink border-opacity-20 bg-white/30 hide-scrollbar">
-              <button
-                onClick={() => setActivePolarimetryTab('anisotropy')}
-                className={`px-4 md:px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activePolarimetryTab === 'anisotropy' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
-              >
-                <span className="md:hidden">Aniso</span>
-                <span className="hidden md:inline">Anisotropy</span>
-              </button>
-              <button
-                onClick={() => setActivePolarimetryTab('polarizer')}
-                className={`px-4 md:px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activePolarimetryTab === 'polarizer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
-              >
-                <span className="md:hidden">Pol</span>
-                <span className="hidden md:inline">Polarizer</span>
-              </button>
-              <button
-                onClick={() => setActivePolarimetryTab('analyzer')}
-                className={`px-4 md:px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors border-l border-ink border-opacity-10 ${activePolarimetryTab === 'analyzer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
-              >
-                <span className="md:hidden">Ana</span>
-                <span className="hidden md:inline">Analyzer</span>
-              </button>
+              <div className="flex items-center">
+                <button
+                  onClick={() => setActivePolarimetryTab('anisotropy')}
+                  className={`px-4 md:px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activePolarimetryTab === 'anisotropy' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
+                >
+                  <span className="md:hidden">Aniso</span>
+                  <span className="hidden md:inline">Anisotropy</span>
+                </button>
+                <span className="px-1"><TermInfo id="anisotropy-config" onNavigate={onNavigate} /></span>
+              </div>
+              <div className="flex items-center border-l border-ink border-opacity-10">
+                <button
+                  onClick={() => setActivePolarimetryTab('polarizer')}
+                  className={`px-4 md:px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activePolarimetryTab === 'polarizer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
+                >
+                  <span className="md:hidden">Pol</span>
+                  <span className="hidden md:inline">Polarizer</span>
+                </button>
+                <span className="px-1"><TermInfo id="polarizer-config" onNavigate={onNavigate} /></span>
+              </div>
+              <div className="flex items-center border-l border-ink border-opacity-10">
+                <button
+                  onClick={() => setActivePolarimetryTab('analyzer')}
+                  className={`px-4 md:px-6 py-4 text-xs font-medium uppercase tracking-wider whitespace-nowrap transition-colors ${activePolarimetryTab === 'analyzer' ? 'bg-ink text-paper' : 'hover:bg-ink/5 text-ink/70'}`}
+                >
+                  <span className="md:hidden">Ana</span>
+                  <span className="hidden md:inline">Analyzer</span>
+                </button>
+                <span className="px-1"><TermInfo id="analyzer-config" onNavigate={onNavigate} /></span>
+              </div>
             </div>
 
             {/* Tab Content */}

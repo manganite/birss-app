@@ -206,6 +206,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNa
             thetaX={thetaX} thetaY={thetaY} psi0={psi0}
             setThetaX={setThetaX} setThetaY={setThetaY} setPsi0={setPsi0}
             labFrame={labFrameBase}
+            onNavigate={onNavigate}
           />
         </div>
 
@@ -361,6 +362,7 @@ export function CalculatorPage({ selectedGroup, tensorConfig, presetAngles, onNa
                       thetaX={thetaX} thetaY={thetaY} psi0={psi0}
                       setThetaX={setThetaX} setThetaY={setThetaY} setPsi0={setPsi0}
                       labFrame={labFrameBase}
+                      onNavigate={onNavigate}
                     />
                   </div>
 

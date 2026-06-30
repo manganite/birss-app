@@ -124,9 +124,10 @@ interface KDirectionSelectorProps {
   setPsi0: (v: number) => void;
   labFrame: { X: string; Y: string; Z: string; inverse: { X: string; Y: string; Z: string } };
   compact?: boolean;
+  onNavigate?: (view: string, tab?: string) => void;
 }
 
-export function KDirectionSelector({ crystalSystem, thetaX, thetaY, psi0, setThetaX, setThetaY, setPsi0, labFrame, compact }: KDirectionSelectorProps) {
+export function KDirectionSelector({ crystalSystem, thetaX, thetaY, psi0, setThetaX, setThetaY, setPsi0, labFrame, compact, onNavigate }: KDirectionSelectorProps) {
   const presets = getPresetsForSystem(crystalSystem);
   return (
     <div className="space-y-3">
@@ -134,12 +135,14 @@ export function KDirectionSelector({ crystalSystem, thetaX, thetaY, psi0, setThe
         <h4 className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-2">
           <Compass className="w-3 h-3" />
           Crystal Cut (surface normal ∥ k)
+          <TermInfo id="crystal-cut" onNavigate={onNavigate} />
         </h4>
       )}
       {compact && (
         <span className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-1">
           <Compass className="w-3 h-3" />
           Crystal Cut
+          <TermInfo id="crystal-cut" onNavigate={onNavigate} />
         </span>
       )}
       <div className="flex flex-wrap gap-3 items-center">

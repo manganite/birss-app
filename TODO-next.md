@@ -682,8 +682,7 @@ utility applied to the Calculator labels but not the Simulator buttons.
 
 ### B20 — App-wide tooltip / glossary layer
 
-**Status:** Wave 1 Done (PR #42). Fast-follow (k-selection, χ-components,
-polarimetry configs, lab-frame angles) deferred to a separate session.
+**Status:** Done (PR #42 + #43). Wave 1 and fast-follow complete.
 
 **Area:** App-wide — usability / onboarding
 **Severity:** Medium (usability)
@@ -691,11 +690,9 @@ polarimetry configs, lab-frame angles) deferred to a separate session.
 **Relates to:** B19 (one concrete instance already shipped), B2 / B7 / B8 (the
 notation that needs explaining).
 
-**Shipped in Wave 1.**
+**Shipped in Wave 1 (PR #42).**
 
-- `src/data/glossary.ts` — `GLOSSARY_TERMS` array (9 entries: ED, MD, EQ,
-  i-type, c-type, crystal-setting, type-I, type-II, type-III) as the single
-  source of truth.
+- `src/data/glossary.ts` — `GLOSSARY_TERMS` array as the single source of truth.
 - `src/components/TermInfo.tsx` — reusable click-to-toggle component (B19
   pattern); invisible backdrop for outside-click dismiss; "Learn more →" deep-
   links to the relevant Help tab via the lifted `helpActiveTab` state in App.tsx.
@@ -704,12 +701,14 @@ notation that needs explaining).
 - `GroupIdentityHeader` expanded panel: TermInfo on the "Standard/Gray/Magnetic
   Point Group" sub-label.
 
-**Action items (fast-follow, not started).**
+**Shipped in fast-follow (PR #43).**
 
-- [ ] k-selection / Crystal Cut preset info icons.
-- [ ] χ-component subscript notation tooltips.
-- [ ] Anisotropy/Polarizer/Analyzer configuration tooltips (Simulator).
-- [ ] Lab-frame rotation angles (φx, φy, ψ) inline explanations.
+- [x] k-selection / Crystal Cut TermInfo (compact + desktop KDirectionSelector).
+- [x] Crystal Rotation toggle TermInfo (sibling pattern, avoids button-in-button).
+- [x] Independent Tensor Components heading TermInfo (χ-components).
+- [x] SHG Intensity Polarimetry heading TermInfo.
+- [x] Per-tab TermInfos: Anisotropy, Polarizer Scan, Analyzer Scan.
+- Glossary extended to 16 terms (added 7 simulation-domain entries).
 
 ---
 

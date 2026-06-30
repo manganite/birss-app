@@ -10,12 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Glossary tooltip layer (B20): click-to-reveal ⓘ info icons on the Tensor
-  Classification (ED/MD/EQ), Time-Reversal (i-type/c-type), and Crystal Setting
-  controls in the Calculator and Simulator; the expanded GroupIdentityHeader panel
-  shows a type-definition tooltip (Type I/II/III). Each tooltip shows a 1–2 line
-  definition and a "Learn more →" link that deep-links to the relevant Help tab.
-  Source of truth lives in `src/data/glossary.ts`; the reusable `<TermInfo>`
-  component follows the established B19 click-toggle pattern (no hover, mobile-safe).
+  Classification (ED/MD/EQ), Time-Reversal (i-type/c-type), Crystal Setting,
+  Crystal Cut, Crystal Rotation, Independent Tensor Components, SHG Intensity
+  Polarimetry, and the per-tab Anisotropy/Polarizer/Analyzer controls; the
+  expanded GroupIdentityHeader panel shows a type-definition tooltip (Type
+  I/II/III). Each tooltip shows a 1–2 line definition and a "Learn more →" link
+  that deep-links to the relevant Help tab. Source of truth lives in
+  `src/data/glossary.ts` (16 terms); the reusable `<TermInfo>` component follows
+  the established B19 click-toggle pattern (no hover, mobile-safe).
 - Help page reorganized into 5 tabs (Feature Overview, Notations & Conventions,
   Physics & Group Theory, Simulation, Deeper Topics), matching the Calculator's
   tab-strip pattern on desktop and a horizontally-scrollable strip on mobile.
