@@ -1,11 +1,13 @@
 # Finding: `-3'm'` generator bug (and a likely-wrong canonical Cr₂O₃ fixture)
 
-**Status:** Diagnosed and cross-checked against three independent sources. **Not yet
-fixed in code** — the canonical-fixture implication (§5) needs Thomas's sign-off
-before any file changes land. No code has been modified for this finding; it surfaced
-as a side effect of deriving B2.3's alternate-setting button labels
-(`feature/settings-surfacing`, paused) and was investigated on its own branch
-(`fix/trigonal-3m-prime-pattern`, currently empty).
+**Status:** Fixed and committed (`fix/trigonal-3m-prime-pattern`, commit `d17671c`).
+Cross-checked against four independent sources (Birss table-6/7, the printed ITC
+trigonal listing, an independent group-theoretic re-derivation against the original
+Birss 1962 source — see `verification-trigonal-magnetic-groups.md` — and, after the
+fix landed, the actual Fiebig et al. 2005 paper the canonical fixture cites as its
+source, which gives the corrected form verbatim — see §8). It surfaced as a side
+effect of deriving B2.3's alternate-setting button labels (`feature/settings-surfacing`,
+paused).
 
 ---
 
@@ -242,24 +244,37 @@ bug is that it isn't also used where the H=3m assumption was applied instead.
 
 ---
 
-## 8. What still needs Thomas's confirmation before any code change
+## 8. Resolution
 
-1. **Generator fix** (§6) — high confidence, double-literature-confirmed
-   (Birss table-6 + printed ITC), low risk.
-2. **Canonical Cr₂O₃ fixture correction** (§7) — same root cause, high confidence
-   structurally (L₃ vs M₃ is unambiguous from Table 4a/4e), but this is the project's
-   most-cited fixture and deserves explicit sign-off rather than a unilateral rewrite.
-   In particular: I have not re-derived the precise full equality list (e.g. whether
-   `χ_zxx` in Table 4e's permutation-bundled columns literally equals `χ_xxz` or some
-   other relation) from a from-scratch tensor-projection calculation — I'm relying on
-   reading Table 4e's columns plus the corroborating sibling fixture in §7. Worth a
-   `.mjs` numeric check against the corrected generators before finalizing the exact
-   fixture text, per the project's established anti-circular method.
-3. **Scope check**: are there other groups in the same "Mechanism A, trigonal/hexagonal"
-   family that should be re-verified the same way, given this family was independently
-   flagged as error-prone in birss-tables' own changelog? (`-3m'`, `-6'2m'`, `-6'm2'`,
-   `-6m'2'` were spot-checked against their own Table 6 rows during this session and
-   appear consistent — only `-3'm'` showed a mismatch.)
+1. **Generator fix** (§6) — implemented exactly as proposed
+   (`symmetryGroups.ts:211`, commit `d17671c`).
+2. **Canonical Cr₂O₃ fixture correction** (§7) — implemented. The precise component
+   relations were independently re-derived from scratch (a standalone group-average
+   projector script, built from the literal Table 6 operator list, mirroring the
+   app's own jk-presymmetrized tensor convention read out of `tensorProjection.ts`
+   — not assumed from Table 4e's columns alone), resolving the `χ_zxy`/`χ_zyx`
+   ambiguity flagged below: those come out identically **zero** under the app's
+   actual convention, leaving exactly the 2-parameter form. **Independently
+   confirmed against the primary source**: Thomas supplied the actual Fiebig et al.
+   (2005) JOSA B paper (the same paper the fixture's `note` field already cited).
+   Section 4.A.3 (p. 100) states the result verbatim, citing Birss as its source:
+   *"This leads to two independent components each for MD SHG and ED SHG which are
+   given by χ^m(i) ≡ χ_yyy = −χ_yxx = −χ_xyx = −χ_xxy, χ_xyz = χ_xzy = −χ_yxz =
+   −χ_yzx and χ^e(c) ≡ χ_yyy = −χ_yxx = −χ_xyx = −χ_xxy, χ_xyz = χ_xzy = −χ_yxz =
+   −χ_yzx, respectively."* — an exact match, sign for sign, to the corrected
+   fixture, and a direct contradiction of the old (wrong) M₃ form. This closes the
+   loop the work order had flagged as a separate, non-blocking follow-up.
+   The `rotatedSHG.fixtures.ts` R6 fixture (k‖x, downstream of the same crystal
+   tensor) also needed updating — caught by the full `vitest run` gate, not
+   anticipated by the original work order; corrected the same way (hand-derived
+   the lab-frame substitution, then matched against the computed output rather
+   than copying it blind).
+3. **Scope check** (still open, not blocking): are there other groups in the same
+   "Mechanism A, trigonal/hexagonal" family that should be re-verified the same way,
+   given this family was independently flagged as error-prone in birss-tables' own
+   changelog? (`-3m'`, `-6'2m'`, `-6'm2'`, `-6m'2'` were spot-checked against their
+   own Table 6 rows during this session and appear consistent — only `-3'm'` showed
+   a mismatch.) Left for a separate session per the work order's §6.
 
 ## References
 
@@ -276,9 +291,19 @@ bug is that it isn't also used where the H=3m assumption was applied instead.
 - International Tables for Crystallography, trigonal magnetic point-group listing
   (printed table, supplied by Thomas as a screenshot in-session; not re-fetched from
   a URL).
-- Fiebig, M. et al., *Second harmonic generation and magnetic-dipole-electric-dipole
-  interference in antiferromagnetic Cr2O3*, J. Opt. Soc. Am. B **22**, 96 (2005) —
-  cited by the existing (possibly-wrong) fixture comment; not independently re-read
-  in this session.
-- This repo: `src/services/symmetryGroups.ts:211-213` (generators),
-  `src/services/goldenTensors.fixtures.ts:38-72, 596-605` (fixtures under discussion).
+- Fiebig, M., Pavlov, V. V., Pisarev, R. V., *Second-harmonic generation as a tool
+  for studying electronic and magnetic structures of crystals: review*, J. Opt. Soc.
+  Am. B **22**, 96 (2005) — supplied by Thomas as a PDF (`2005JOSA-96.pdf`) and
+  independently re-read in this session; Section 4.A.3 (p. 100) gives the c-type ED
+  SHG tensor of Cr2O3's magnetic point group `3̄m` (= `-3'm'`) verbatim, citing
+  Birss (their ref. 50) as the source, confirming the corrected (L3) fixture form
+  exactly. (Note: the FINDING's original citation conflated this review with the
+  1994 PRL it cites as ref. 46, Fiebig/Fröhlich/Krichevtsov/Pisarev, *Second harmonic
+  generation and magnetic-dipole-electric-dipole interference in antiferromagnetic
+  Cr2O3*, Phys. Rev. Lett. 73, 2127 — a different, earlier paper by an overlapping
+  author list; the JOSA B 22, 96 review is the one actually cited by this app's
+  fixture and the one Thomas supplied.)
+- This repo: `src/services/symmetryGroups.ts:211` (generator fix),
+  `src/services/goldenTensors.fixtures.ts:38-56, 607-611` (corrected fixtures),
+  `src/services/rotatedSHG.fixtures.ts` R6 (corrected rotated-frame fixture),
+  commit `d17671c`.

@@ -58,7 +58,11 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
       "the app's own tensor convention -- see check_3mprime_v2.mjs derivation). " +
       "Previously this fixture used H = 3m (wrong -- that is -3'm's halving subgroup, " +
       "not -3'm''s) and asserted the M3 form instead; fixed alongside the -3'm' " +
-      'generator correction (symmetryGroups.ts).',
+      'generator correction (symmetryGroups.ts). Independently confirmed against the ' +
+      'primary source itself (Fiebig, Pavlov, Pisarev, JOSA B 22, 96 (2005), Sec. ' +
+      '4.A.3, p.100, citing Birss): "chi^e(c) === chi_yyy = -chi_yxx = -chi_xyx = ' +
+      '-chi_xxy, chi_xyz = chi_xzy = -chi_yxz = -chi_yzx" -- an exact match to this ' +
+      'fixture and a direct contradiction of the old M3 form.',
   },
   {
     group: "-3'm'",
