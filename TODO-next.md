@@ -1495,7 +1495,13 @@ Calculator (`:129`), Simulator (`:135`).
 
 ### B14 — Reorganize the Help page into tabs; expand and add topics
 
-**Status:** Decided in structure (large scope).
+**Status:** Done (`docs/help-tabs`, pending merge) — 5 tabs per D2 (Feature Overview,
+Notations & Conventions, Physics & Group Theory, Simulation, Deeper Topics), each
+existing section migrated 1:1; References folded into Deeper Topics (D2 didn't list
+it as its own tab). Style/depth alignment pass (D3) applied to the one section that
+was a structural outlier (Symmetry Operations, now a 2-card grid matching the rest
+of the page); everything else already matched the exemplar pattern. No new
+derivations.
 
 **Area:** Help page — structure & content
 **Severity:** Medium — structure + documentation surface *(provisional)*
@@ -1557,7 +1563,15 @@ Help works both as an operating manual and as a reference. Content criteria:
 
 ### B22 — Help-text content audit (v0.7.1): math precision, Help↔implementation sync, references
 
-**Status:** Decided — a few sub-points need a quick physics/source verification (flagged inline).
+**Status:** Done (`docs/help-tabs`, pending merge). All sub-points resolved: Neumann
+eq now includes the `det(R)`/time-reversal factors; MD time-reversal qualifier
+dropped (parity effect, not time-reversal-gated); "Hausühl"→"Haussühl" fixed;
+re-verifying the tilt-axis/rotation-matrix text against `tensorProjection.ts`
+**found real drift** (the shipped order is `Ry(φy)·Rx(φx)·Rz(ψ)·R_preset`, the Help
+text said `Rz(ψ)·Ry(φy)·Rx(φx)·R_preset`) — corrected. Settings taxonomy and the
+"appears in the Calculator" line were already fixed as a side effect of B2.1.
+Open-access references marked; Fiebig, Pavlov & Pisarev (2005) added. The held
+`:353` "smart grouping" sentence stays open for B16.
 
 **Area:** Help page — content correctness & consistency
 **Severity:** Medium — several statements are imprecise or out of sync with the app
