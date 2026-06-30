@@ -4,6 +4,7 @@ import { isCentrosymmetric, getAlternateSettings, getFutureSettingCount } from '
 import { InlineMath, BlockMath } from 'react-katex';
 import { Zap, Sliders, Activity, ChevronDown, ChevronUp, Info, RotateCcw } from 'lucide-react';
 import { TensorTerm, FormatPointGroup, getPresetsForSystem, KDirectionSelector, GroupIdentityHeader } from './MathComponents';
+import { TermInfo } from './TermInfo';
 import { PolarimetryPlot } from './PolarimetryPlot';
 import { useSimulatorState } from '../hooks/useSimulatorState';
 import type { TensorConfig, OrientationState, SimulationState } from '../types';
@@ -30,7 +31,7 @@ interface SimulatorPageProps {
   tensorConfig: TensorConfig;
   orientation: OrientationState;
   simulation: SimulationState;
-  onNavigate?: (view: string) => void;
+  onNavigate?: (view: string, tab?: string) => void;
 }
 
 export function SimulatorPage({
@@ -142,17 +143,19 @@ export function SimulatorPage({
               </h4>
               <div className="flex flex-wrap gap-2">
                 {(['ED', 'MD', 'EQ'] as const).map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => setSelectedTensorType(type)}
-                    className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                      selectedTensorType === type
-                        ? 'bg-ink text-paper'
-                        : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
-                    }`}
-                  >
-                    {type === 'ED' ? 'Electric Dipole' : type === 'MD' ? 'Magnetic Dipole' : 'Electric Quadrupole'}
-                  </button>
+                  <div key={type} className="flex items-center gap-1">
+                    <button
+                      onClick={() => setSelectedTensorType(type)}
+                      className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
+                        selectedTensorType === type
+                          ? 'bg-ink text-paper'
+                          : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
+                      }`}
+                    >
+                      {type === 'ED' ? 'Electric Dipole' : type === 'MD' ? 'Magnetic Dipole' : 'Electric Quadrupole'}
+                    </button>
+                    <TermInfo id={type.toLowerCase()} onNavigate={onNavigate} />
+                  </div>
                 ))}
               </div>
             </div>
@@ -163,17 +166,19 @@ export function SimulatorPage({
               </h4>
               <div className="flex flex-wrap gap-2">
                 {(['i', 'c'] as const).map((tr) => (
-                  <button
-                    key={tr}
-                    onClick={() => setSelectedTimeReversal(tr)}
-                    className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
-                      selectedTimeReversal === tr
-                        ? 'bg-ink text-paper'
-                        : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
-                    }`}
-                  >
-                    {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
-                  </button>
+                  <div key={tr} className="flex items-center gap-1">
+                    <button
+                      onClick={() => setSelectedTimeReversal(tr)}
+                      className={`px-4 py-2 text-xs font-medium transition-colors border border-ink ${
+                        selectedTimeReversal === tr
+                          ? 'bg-ink text-paper'
+                          : 'hover:bg-ink/5 opacity-50 hover:opacity-100 border-opacity-20'
+                      }`}
+                    >
+                      {tr === 'i' ? 'i-type (Time-Even)' : 'c-type (Time-Odd)'}
+                    </button>
+                    <TermInfo id={`${tr}-type`} onNavigate={onNavigate} />
+                  </div>
                 ))}
               </div>
             </div>
@@ -185,7 +190,9 @@ export function SimulatorPage({
             if (!altSettings && !futureCount) return null;
             return (
               <div className="space-y-3 border-t border-ink border-opacity-10 pt-6 mt-8">
-                <p className="text-[10px] uppercase tracking-[0.2em] opacity-50">Crystal Setting</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] opacity-50 flex items-center gap-1.5">
+                  Crystal Setting <TermInfo id="crystal-setting" onNavigate={onNavigate} />
+                </p>
                 {altSettings ? (
                   <div className="flex flex-wrap gap-3">
                     <button

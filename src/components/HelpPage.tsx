@@ -118,8 +118,18 @@ const TABS: { id: HelpTab; label: string }[] = [
   { id: 'deeper', label: 'Deeper Topics' },
 ];
 
-export function HelpPage() {
-  const [activeTab, setActiveTab] = useState<HelpTab>('overview');
+interface HelpPageProps {
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
+}
+
+export function HelpPage({ activeTab: externalTab, onTabChange }: HelpPageProps = {}) {
+  const [internalTab, setInternalTab] = useState<HelpTab>('overview');
+  const activeTab: HelpTab = (externalTab && TABS.some(t => t.id === externalTab) ? externalTab as HelpTab : internalTab);
+  const setActiveTab = (tab: HelpTab) => {
+    setInternalTab(tab);
+    onTabChange?.(tab);
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-24">

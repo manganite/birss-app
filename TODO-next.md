@@ -682,40 +682,34 @@ utility applied to the Calculator labels but not the Simulator buttons.
 
 ### B20 — App-wide tooltip / glossary layer
 
-**Status:** Deferred — build after B14.
+**Status:** Wave 1 Done (PR #42). Fast-follow (k-selection, χ-components,
+polarimetry configs, lab-frame angles) deferred to a separate session.
 
 **Area:** App-wide — usability / onboarding
-**Severity:** Medium (usability) *(provisional)*
-**Depends on:** B14 — the tooltip layer and the Help page share one term glossary
-(single source of truth), so the Help reorg must settle first; the tooltips are
-then built on top of it.
+**Severity:** Medium (usability)
+**Depends on:** B14 ✓ (merged)
 **Relates to:** B19 (one concrete instance already shipped), B2 / B7 / B8 (the
 notation that needs explaining).
 
-**Question (Thomas, Q4).** Could the app use more tooltips to be easier to use?
-**Assessment — yes.** The UI is dense with domain notation: HM / Schoenflies /
-Shubnikov symbols, i-/c-type, ED/MD/EQ, χ-components, lab vs crystal frames,
-settings, Blickrichtungen. A systematic, concise tooltip layer gives just-in-time
-explanation without cluttering the UI and complements the Help page.
+**Shipped in Wave 1.**
 
-**Guard-rails.**
-- **Concise** — one or two lines; link deeper content to the relevant Help tab
-  (B14) instead of duplicating it.
-- **Single source of truth** — one term glossary, reused by every tooltip *and* by
-  the Help page, so a term always reads the same.
-- **Mobile-friendly** — hover doesn't exist on touch; use info-icons / tap-to-reveal.
-- **Consistent placement** — info-icon next to section headers and unfamiliar
-  symbols.
+- `src/data/glossary.ts` — `GLOSSARY_TERMS` array (9 entries: ED, MD, EQ,
+  i-type, c-type, crystal-setting, type-I, type-II, type-III) as the single
+  source of truth.
+- `src/components/TermInfo.tsx` — reusable click-to-toggle component (B19
+  pattern); invisible backdrop for outside-click dismiss; "Learn more →" deep-
+  links to the relevant Help tab via the lifted `helpActiveTab` state in App.tsx.
+- Calculator + Simulator: TermInfo icons next to ED/MD/EQ buttons, i-type/c-type
+  buttons, and the Crystal Setting heading.
+- `GroupIdentityHeader` expanded panel: TermInfo on the "Standard/Gray/Magnetic
+  Point Group" sub-label.
 
-**Audit (v0.7.1).** No term-explanation tooltips exist; the only `title=`
-attributes are plot titles (`PolarimetryPlot.tsx`, `SimulatorPage.tsx` plot props).
+**Action items (fast-follow, not started).**
 
-**Action items.**
-- [ ] Build a small term glossary (single source of truth), shared with the Help
-      page (B14).
-- [ ] Add concise tooltips / info-icons across the dense areas (classification,
-      time-reversal, settings, k-selection, frames, χ-components, lab-frame panel).
-- [ ] Tap-to-reveal on mobile; "more" links to the relevant Help tab.
+- [ ] k-selection / Crystal Cut preset info icons.
+- [ ] χ-component subscript notation tooltips.
+- [ ] Anisotropy/Polarizer/Analyzer configuration tooltips (Simulator).
+- [ ] Lab-frame rotation angles (φx, φy, ψ) inline explanations.
 
 ---
 

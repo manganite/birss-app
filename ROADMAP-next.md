@@ -57,7 +57,7 @@ feature this continues. `Wave` is the execution slot defined below.
 | B17 | Disable sliders for single component | **Done** (v0.9.0) | 1C/2 | C/D |
 | B18 | Enlarge plots / trim whitespace | **Done** (v0.9.0) | 1C/8 | C/D |
 | B19 | Lab-frame panel title / inverse / tooltips | **Done** (v0.10.1) | 7 | **D** |
-| B20 | App-wide tooltip / glossary | Deferred (after B14) | 6 | — |
+| B20 | App-wide tooltip / glossary | **Done** Wave 1 (PR #42) | 6 | **E** |
 | B21 | Same-concept labels worded differently | **Done** (v0.8.0) | 8 | **C** |
 | B22 | Help-text content audit | Decided (minor verify) | 6 | **E** |
 | B23 | Explorer per-type counts (global vs system) | **Done** (v0.8.0) | 5 | **C** |
@@ -210,7 +210,7 @@ B30 (unplanned):  -3'm' generator fix (PR #37)  ── gates ──►  B2.3's t
 | Item | Revisit after | Notes |
 |---|---|---|
 | **B29** context-sensitive coefficient formatter | B16 | Open questions (grouping unit, call sites, tie-breaking) must be resolved first. B28 covers the concrete use case; B29 generalises it. Natural moment to decide is when B16 (source-term simplification) settles the rendering surface. |
-| **B20** app-wide tooltip / glossary layer | B14 | Deferred so the tooltips can build on the reorganised Help page: the tooltip layer and the Help page share one term glossary (single source of truth), so B14 must settle the Help structure first. Pulled out of Wave D. |
+| **B20** fast-follow (k-selection, χ-components, polarimetry, angles) | next session | Wave 1 merged (PR #42); remaining areas deferred. |
 
 ---
 

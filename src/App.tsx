@@ -34,6 +34,7 @@ const getGroupCategory = (name: string): GroupCategory => {
 
 export default function App() {
   const [currentView, setCurrentView] = useState<'calculator' | 'simulator' | 'explorer' | 'help'>('explorer');
+  const [helpActiveTab, setHelpActiveTab] = useState<string>('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -75,6 +76,11 @@ export default function App() {
     if (currentView === 'explorer' || currentView === 'help') {
       setCurrentView('calculator');
     }
+  };
+
+  const handleNavigate = (view: string, tab?: string) => {
+    setCurrentView(view as 'calculator' | 'simulator' | 'explorer' | 'help');
+    if (view === 'help' && tab) setHelpActiveTab(tab);
   };
 
   const tensorConfig = {
@@ -239,7 +245,7 @@ export default function App() {
 
       <main className="max-w-7xl mx-auto p-8 md:p-12">
         {currentView === 'help' ? (
-          <HelpPage />
+          <HelpPage activeTab={helpActiveTab} onTabChange={setHelpActiveTab} />
         ) : currentView === 'explorer' ? (
           <PointGroupExplorer
             onSelectGroupForCalculator={(group) => {
@@ -257,14 +263,14 @@ export default function App() {
             tensorConfig={tensorConfig}
             orientation={orientation}
             simulation={simulation}
-            onNavigate={(view) => setCurrentView(view as 'calculator' | 'simulator' | 'explorer' | 'help')}
+            onNavigate={handleNavigate}
           />
         ) : (
           <CalculatorPage
             selectedGroup={selectedGroup}
             tensorConfig={tensorConfig}
             presetAngles={{ thetaX, setThetaX, thetaY, setThetaY, psi0, setPsi0 }}
-            onNavigate={(view) => setCurrentView(view as 'calculator' | 'simulator' | 'explorer' | 'help')}
+            onNavigate={handleNavigate}
           />
         )}
       </main>
