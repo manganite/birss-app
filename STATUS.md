@@ -1,12 +1,24 @@
 # Roadmap Status
 
-_Last updated: 2026-06-30. Synthesises open points from `docs/planning/ROADMAP-next.md`,
+_Last updated: 2026-07-01. Synthesises open points from `docs/planning/ROADMAP-next.md`,
 `docs/planning/TODO-next.md`, and the original `docs/planning/ROADMAP.md`. See those
 files for derivation details, file:line anchors, and acceptance criteria._
 
 ---
 
-## Current release: v0.13.0 (2026-06-30)
+## Current release: v0.13.1 (2026-07-01)
+
+Patch on top of v0.13.0: corrected two orthorhombic Type-III data bugs — `mmm'`/
+`m'm'm` had each other's generator/operator sets (unprimed vs. primed inversion
+swapped), and `2'm'm`'s Default orientation was rotated 90° from its own HM symbol.
+Also removed the spurious a-/b-unique settings selector on `222`, `mmm`, `2221'`,
+`mmm1'` (all three axes are symmetry-equivalent for them). Scoped from an external
+work order (`WORKORDER-orthorhombic-naming-fix.md`), not a ROADMAP-next item — see
+`CHANGELOG.md` `[0.13.1]` for the literature anchors. Supersedes the "no change
+needed" note under §1's Settings taxonomy in `TODO-next.md` re: orthorhombic
+settings — that note predates this fix and missed both bugs.
+
+### v0.13.0 (2026-06-30)
 
 Ships: B2 (settings fully surfaced), B14 (Help tabs), B16 + A1-Sim (source-term
 simplification), B20 (glossary tooltip layer, 16 terms), B22 (Help audit), B30
