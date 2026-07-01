@@ -184,7 +184,7 @@ export const GENERATORS: Record<string, Matrix3x3[]> = {
   "2'/m": [multiply(getRotationZ(180), timeReversal), multiply(inversion, timeReversal)],
   "2'2'2": [getRotationZ(180), multiply(getRotationX(180), timeReversal)],
   "m'm'2": [getRotationZ(180), multiply({ m: [[-1, 0, 0], [0, 1, 0], [0, 0, 1]] }, timeReversal)],
-  "2'm'm": [multiply(getRotationZ(180), timeReversal), multiply({ m: [[-1, 0, 0], [0, 1, 0], [0, 0, 1]] }, timeReversal)],
+  "2'm'm": [{ m: [[1, 0, 0], [0, 1, 0], [0, 0, -1]] }, multiply(getRotationX(180), timeReversal)],
   "m'm'm'": [getRotationZ(180), getRotationX(180), multiply(inversion, timeReversal)],
   "mmm'": [getRotationZ(180), { m: [[-1, 0, 0], [0, 1, 0], [0, 0, 1]] }, multiply(inversion, timeReversal)],
   "m'm'm": [getRotationZ(180), inversion, multiply(getRotationX(180), timeReversal)],
