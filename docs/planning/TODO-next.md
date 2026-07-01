@@ -1612,11 +1612,20 @@ targeted corrections, not a rewrite._
   vs non-monoclinic orientation; A/B mutually exclusive, max 3 settings). Align
   the naming and the count so Help and roadmap agree.
 - Verify the claim that **orthorhombic groups allow c/a/b-unique axis choices**
-  (`:416`) — **verified (code): correct.** `ALTERNATE_SETTINGS` in
-  `symmetryGroups.ts` gives the magnetic orthorhombic groups (`2'2'2`, `m'm'2`,
-  `m'm'm`, `mmm'`, `2'm'm`) two alternate settings via `ORTHO_CYCLIC` / `ORTHO_REVERSE`
-  (a-unique, b-unique) on top of the default (c-unique) → three settings, matching the
-  `ROADMAP.md` standing decision. (The Help wording stands; no change needed there.)
+  (`:416`) — **superseded by v0.13.1.** The original check here only confirmed
+  that `ALTERNATE_SETTINGS` *existed* for `2'2'2`, `m'm'2`, `m'm'm`, `mmm'`,
+  `2'm'm` (three-settings mechanism count correct), but didn't check whether the
+  Default operator set each mechanism rotates from actually matched its own HM
+  symbol, or whether every orthorhombic group with an entry genuinely has 3
+  *distinct* settings. v0.13.1 (`WORKORDER-orthorhombic-naming-fix.md`, see
+  `STATUS.md` and `CHANGELOG.md`) found both gaps: `mmm'`/`m'm'm` had swapped
+  generator sets, `2'm'm`'s Default was rotated 90° off its symbol, and `222`/
+  `mmm`/`2221'`/`mmm1'` had spurious settings entries (all three axes equivalent
+  for them, so the "alternate" settings were identical to the Default) — now
+  removed. Current, verified state: exactly 7 orthorhombic groups have 3
+  meaningful settings (`mm2`, `mm21'`, `2'2'2`, `m'm'2`, `mmm'`, `m'm'm`,
+  `2'm'm`); the other 5 (`222`, `mmm`, `m'm'm'`, `2221'`, `mmm1'`) have one. The
+  Help wording (generalized in the same release) now matches.
 
 **Terminology / citations.**
 - **"Hausühl" → "Haussühl"** (`:164`) — correct double-s spelling (also in B7).
