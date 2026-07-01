@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.1] - 2026-07-01
+
+### Fixed
+
+- Corrected two orthorhombic Type-III (black-and-white) magnetic point-group data
+  errors, verified against Birss, *Symmetry and Magnetism* (1966) and cross-checked
+  against ITC Vol. D Table 1.5.2.3:
+  - `mmm'` and `m'm'm` had each other's generator/operator sets (unprimed vs.
+    primed inversion swapped): selecting `mmm'` incorrectly gave `ED c = 0`
+    (should be 7 independent components) and `m'm'm` incorrectly allowed ED-`c`
+    SHG (should be forbidden). Wrong since v0.1.1.
+  - `2'm'm`'s Default orientation was rotated 90° from its own HM symbol
+    (`{1, m_y, 2'_z, m'_x}` instead of the Birss Table-6 form
+    `{1, m_z, 2'_x, m'_y}`), affecting which axis its ED `i`- and `c`-tensor
+    components are attached to in the Default setting and the corresponding
+    a-/b-unique settings. Wrong since v0.1.1.
+- Removed the spurious 3-setting (a-/b-unique) selector shown for `222`, `mmm`,
+  `2221'`, and `mmm1'` — all three crystal axes are symmetry-equivalent for these
+  groups, so the "alternate" settings were identical to the Default and offered no
+  real choice. Wrong since v0.10.0.
+- Generalized the orthorhombic "Axis orientation" help text to explain the
+  time-reversal-driven distinguishing cases (e.g. the un-primed 2-fold in
+  `2'2'2`, the primed mirror in `mmm'`), not just the classical polar/2-fold case.
+
 ## [0.13.0] - 2026-06-30
 
 ### Added
@@ -424,7 +448,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help & Documentation page covering physics background, math derivations, and usage instructions.
 - MIT license, repository description, topics, and homepage link.
 
-[Unreleased]: https://github.com/manganite/birss-app/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/manganite/birss-app/compare/v0.13.1...HEAD
+[0.13.1]: https://github.com/manganite/birss-app/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/manganite/birss-app/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/manganite/birss-app/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/manganite/birss-app/compare/v0.10.1...v0.11.0
