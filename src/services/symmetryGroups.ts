@@ -383,10 +383,10 @@ const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   "2/m'":   [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
 
   // --- B1: Type I (colourless) ---
-  // Orthorhombic axis orientation (3 settings)
-  "222":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  // Orthorhombic axis orientation (3 settings). 222 and mmm have no entry: all three
+  // axes are symmetry-equivalent for them, so the rotated "settings" are byte-identical
+  // to the Default and the selector would be spurious.
   "mm2":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
-  "mmm":   [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
   // Monoclinic axis choice (z/c-unique Birss → b-unique ITC)
   "2":     [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
   "m":     [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
@@ -399,9 +399,8 @@ const ALTERNATE_SETTINGS: Record<string, SettingDef[]> = {
   "-6m2":  [{ name: "-62m", rotation: getRotationZ(30) }],
 
   // --- B1: Type II (grey) — same transforms; ε preserved automatically ---
-  "2221'":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
+  // 2221' and mmm1' have no entry for the same reason as 222/mmm above.
   "mm21'":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
-  "mmm1'":  [{ name: "a-unique", rotation: ORTHO_CYCLIC }, { name: "b-unique", rotation: ORTHO_REVERSE }],
   "21'":    [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
   "m1'":    [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
   "2/m1'":  [{ name: "Second (b-unique, ITC)", rotation: MONO_YZ_SWAP }],
