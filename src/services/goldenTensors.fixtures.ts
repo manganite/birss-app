@@ -180,9 +180,9 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     note: "Monoclinic Type-III family check (axial branch, mirror plane normal to z carries the prime).",
   },
 
-  // --- Orthorhombic family: mmm' / m'm'2 --------------------------------------------
+  // --- Orthorhombic family: m'm'm / m'm'2 --------------------------------------------
   {
-    group: "mmm'",
+    group: "m'm'm",
     tensor: 'MD',
     tr: 'c',
     expected: [
@@ -192,7 +192,7 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
       '\\chi_{zyy}',
       '\\chi_{zzz}',
     ],
-    source: GENERATOR_DERIVATION,
+    source: TABLE_4E_VERIFICATION,
     note: "Orthorhombic Type-III family check, centrosymmetric member (axial c-type branch).",
   },
   {
@@ -680,14 +680,14 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
     source: 'Reverse cyclic axis permutation; i-type rotates to b-unique.',
   },
   {
-    group: "m'm'm", tensor: 'ED', tr: 'c', setting: 2,
+    group: "mmm'", tensor: 'ED', tr: 'c', setting: 2,
     expected: ['\\chi_{xxx}', '\\chi_{xyy}', '\\chi_{xzz}', '\\chi_{yxy} = \\chi_{yyx}', '\\chi_{zxz} = \\chi_{zzx}'],
-    source: 'Cyclic axis permutation; c-type rotates to a-unique.',
+    source: TABLE_4E_VERIFICATION,
   },
   {
-    group: "m'm'm", tensor: 'ED', tr: 'c', setting: 3,
+    group: "mmm'", tensor: 'ED', tr: 'c', setting: 3,
     expected: ['\\chi_{xxy} = \\chi_{xyx}', '\\chi_{yxx}', '\\chi_{yyy}', '\\chi_{yzz}', '\\chi_{zyz} = \\chi_{zzy}'],
-    source: 'Reverse cyclic axis permutation; c-type rotates to b-unique.',
+    source: TABLE_4E_VERIFICATION,
   },
 
   // Alternate-setting fixtures — Phase 2, Monoclinic axis choice (z→b unique)
