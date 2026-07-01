@@ -192,8 +192,8 @@ export const GOLDEN_FIXTURES: GoldenFixture[] = [
       '\\chi_{zyy}',
       '\\chi_{zzz}',
     ],
-    source: TABLE_4E_VERIFICATION,
-    note: "Orthorhombic Type-III family check, centrosymmetric member (axial c-type branch).",
+    source: GENERATOR_DERIVATION,
+    note: "Orthorhombic Type-III family check, centrosymmetric member (axial c-type branch). TABLE_4E_VERIFICATION is scoped to rank-3 polar (ED) components only, so this axial (MD) fixture stays generator-derived.",
   },
   {
     group: "m'm'2",
