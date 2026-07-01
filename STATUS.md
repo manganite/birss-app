@@ -219,3 +219,8 @@ Carried from `ROADMAP.md` and `ROADMAP-next.md`. These constrain future work.
 - **Anti-circular fixtures:** golden fixtures come from literature; never from app
   output. For any data/math item, extend the relevant fixture first and require it
   green, then change the code.
+- **Authoritative convention references:** `docs/references/BIRSS-APP-CONVENTIONS-REFERENCE.md`
+  (convention contract & verification ladder) and `docs/references/table-nomenclature.md`
+  (122-group nomenclature + operators/generators) are the two central, cross-linked
+  references. Any change to group keys, generators, or tensor forms is validated against
+  them and their Birss/ITC table anchors, not against app output.
