@@ -31,7 +31,7 @@ Each step below states: **the contract**, **the source table**, and **the test**
 ### Contract
 The app's group **key set** must equal the Birss symbol set for all 122 groups, in a single fixed notation variant, in the Birss axis setting (Step 2).
 
-- **90 groups** (32 classical Type I + 58 black-white Type III): names taken **verbatim** from Table 3 (classical) / Table 6 (black-white).
+- **90 groups** (32 classical Type I + 58 black-white Type III): names taken from Table 3 (classical) / Table 6 (black-white), **in the app notation variant** — identical to Birss except the cubic short-symbol convention below (app keeps `-3`/`-3'` where Birss Table 6 prints the bar-less `m3` form).
 - **32 grey groups** (Type II) are **absent from Table 6** and are derived from the 32 classical by the fixed rule **grey = 𝒢 ⊗ {1, 1′}**, symbol = classical symbol **+ `1'`** (e.g. `mmm` → `mmm1'`, `222` → `2221'`). Their tensors follow trivially (Step 5: i-tensor = parent's, c-tensor ≡ 0).
 
 ### Birss-over-ITC invariant (the one orthorhombic divergence)
@@ -75,21 +75,21 @@ Each Default group's reference axes follow **Birss Table 4a** ("Orientation of r
 1. **Monoclinic:** Birss first setting **z ∥ c** (y ∥ b\*, x ∥ a). ITC second-setting (b-unique) sources need permutation. App follows **Birss (z ∥ c)**.
 2. **Bracketed / rotated groups — component-critical for the app.** A parenthesized symbol denotes the **same abstract group** as the unparenthesized version, but in a **non-standard axis orientation** within the crystal frame (it inherits the frame of the magnetic group it was derived from, without re-orienting to the standard HM setting). Because tensor components are tied to the fixed crystal axes, such a group **suppresses different specific components** than the standard-orientation group — so for the app's component-level work the rotated orientation **must** be honoured. (For the coarser Table-4a *symbol-class* lookup the two are equivalent, which is why Birss's own tables treat them interchangeably there.) They are:
 
-| group / assoc. | abstract group | Birss orientation (non-standard) |
-|---|---|---|
-| `(2'm'm)` | C₂ᵥ + time reversal | 2-fold ∥ **a** (not c); operators `1, -2_z, 2'_x, -2'_y` (Table 6) = {m_z, 2′_x, m′_y} |
-| `(-4'm2')` | D₂d + time reversal | rotated setting of D₂d |
-| `(-6'2m')` | D₃h + time reversal | rotated setting of D₃h |
-| `-4m2` vs `-42m` | D₂d | axes rotated by **π/4** relative to `-42m` |
-| `-62m` vs `-6m2` | D₃h | axes rotated by **π/6** relative to `-6m2` |
+**Default bracketed magnetic groups** — these *are* Default (Table A) keys; the **Table-6 operator list is the authority** for their orientation (read the axes off the actual operators, not off a naive x-y-z reading of a re-derived symbol):
 
-For every bracketed group the **Table-6 operator list is the authority** for the orientation — read the axes off the actual operators, not off a naive x-y-z reading of a re-derived associated symbol.
+| Default key | abstract group | Birss orientation (non-standard) |
+|---|---|---|
+| `2'm'm` | C₂ᵥ + time reversal | 2-fold ∥ **a** (not c); operators `1, -2_z, 2'_x, -2'_y` (Table 6) = {m_z, 2′_x, m′_y} |
+| `-4'm2'` | D₂d + time reversal | rotated setting of D₂d |
+| `-6'2m'` | D₃h + time reversal | rotated setting of D₃h |
+
+**Alternate-setting pairs** (context only — *not* Default keys, and alternate settings are out of scope here): the classical `-4m2`/`-42m` (D₂d) differ by a **π/4** rotation and `-62m`/`-6m2` (D₃h) by **π/6**. The app's Default key is `-42m` (D₂d) and `-6m2` (D₃h); the other member of each pair is an alternate setting, not tabulated as a Default.
 
 ### x-y-z positional rule (orthorhombic and generally)
 Within an HM symbol, position 1 → x, position 2 → y, position 3 → z (Birss Ch. 2). For orthorhombic groups this rule *is* the orientation, and the Default operator set must equal the x-y-z reading of the symbol. The bracketed groups are the cases where the symbol's own axis setting is non-standard, so the rule is applied to the **Birss symbol in its Birss setting** (Table 6), not to a normalized symbol.
 
 ### Test
-For each group, assert the intended element→axis assignment equals Table 4a. For the five bracketed/rotated groups, assert the Default operator directions equal the Table-6 operator list (this subsumes the x-y-z check).
+For each group, assert the intended element→axis assignment equals Table 4a. For the **three default bracketed groups** (`2'm'm`, `-4'm2'`, `-6'2m'`), assert the Default operator directions equal the Table-6 operator list (this subsumes the x-y-z check). The alternate-setting pairs (`-4m2`/`-42m`, `-62m`/`-6m2`) are **not** Default keys and are out of scope for this test.
 
 ---
 

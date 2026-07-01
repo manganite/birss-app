@@ -1,14 +1,17 @@
 # Magnetic Point-Group Nomenclature & Generator Reference (`birss-app`)
 
-A self-contained reference for all **122** magnetic point groups: the app's group key, the ITC **Schoenflies** and **full Hermann–Mauguin** notation (the two variants absent from `birss-tables`), the Birss **Shubnikov** symbol, and the Birss **symmetry operators** and **generating matrices** from Table 6. Table A is the nomenclature; Table B lists operators/generators separately so neither table wraps badly.
+A self-contained reference for all **122** magnetic point groups: the app's group key, the ITC **Schoenflies** and **full Hermann–Mauguin** notation (the two variants absent from `birss-tables`), the Birss **Shubnikov** symbol, and the Birss **symmetry operators** and **generating matrices** (from Table 6 for the 90 non-grey groups; derived by the ⊗{1,1′} rule for the 32 grey). Table A is the nomenclature; Table B lists operators/generators separately so neither table wraps badly.
 
 This table is one of the **two central convention references** for `birss-app`; its companion is **[`BIRSS-APP-CONVENTIONS-REFERENCE.md`](./BIRSS-APP-CONVENTIONS-REFERENCE.md)** (the convention contract & verification ladder). The operator/generator notation and the σ(N) pool are explained there and in the Reading guide below.
 
 ## Reading guide
 
 **Operator notation (Birss).** `1` identity · `-1` inversion (1̄) · `N_a` = N-fold rotation about axis *a* (`2_z`, `4_z`) · `-N_a` = rotoinversion N̄ about *a*; note `-2_a` is the **mirror** ⊥ *a* (so `-2_z` = m_z) · `±N` = both senses (N and N⁻¹) · trailing `'` = **time reversal** (antiunitary/primed operation).
+
 **Multiplicity for high-symmetry axes.** `k(op)` = *k* symmetry-equivalent operations of that type. `⊥` = perpendicular to the principal axis. Examples: `3(2⊥)` = three 2-folds ⊥ c; `3(m⊥)` = three vertical mirrors; `4(±3)` = the four body-diagonal 3-fold axes (both senses); `9(2)` = nine 2-fold axes; `3(±4)` = three 4-fold axes (both senses).
+
 **Generators `σ(N)` / `σ'(N)`.** Indices into the catalogue of generating matrices in **Birss Table 3** (`birss-tables`): `σ` unitary, `σ'` antiunitary (time-reversing). Closing the listed generators reproduces the full operator set. `—` in the σ' column = no antiunitary generator (colourless group).
+
 **Shubnikov.** Given in the **Birss** dot/colon form with `'` for time reversal (app convention). ITC uses **underlining** for the antisymmetric element instead (e.g. ITC `4:2̲` = Birss `4:2'`); see the comparison below.
 
 ## Type / colour scheme
@@ -23,13 +26,13 @@ Colour names are primary; the BC and ITC **numbers are swapped** for I/II (BC-I 
 
 ## Notation at a glance — where App, Birss and ITC differ
 
-Join is always by the **abstract group (Schoenflies `G(H)`)**, never the HM string. The rows below are the *only* places the printed symbols diverge; everywhere else the three agree.
+Join is always by the **abstract group (Schoenflies `G(H)`)**, never the HM string. The categories below cover every kind of printed-symbol divergence; each spans a **family** of groups (the monoclinic, cubic-bar and grey rows are representatives of their whole families). Everywhere else the three notations agree.
 
 | Abstract group | App key (Birss setting) | Birss Table 6 | ITC 1.5.2.3 | What differs |
 |---|---|---|---|---|
 | D<sub>2h</sub>(C<sub>2h</sub>) | `m'm'm` (2_z) | `m'm'm` | `mm'm'` (2_x) | **HM symbol**: which axis is the unprimed 2-fold (setting choice) |
 | C<sub>2</sub> (all monoclinic) | full `112` (z∥c) | z∥c (first setting) | full `121` (b-unique) | **full-HM position**: unique axis c vs b |
-| O<sub>h</sub>(O) (cubic) | `m'-3'm'` | `m'3m'` (barless) | `m'3̄'m'` | **short-form style**: app keeps the 3-bar+prime; Birss drops it |
+| O<sub>h</sub>(O) — cubic bar family (6 groups) | `m'-3'm'` | `m'3m'` (barless) | `m'3̄'m'` | **short-form style**: app keeps the 3-bar (and its prime); Birss Table 6 drops both. Family: `m-3`, `m'-3'`, `m-3m`, `m-3m'`, `m'-3'm'`, `m'-3'm` |
 | C<sub>2v</sub>(C<sub>s</sub>) = `(2'm'm)` | 2-fold ∥ a | 2-fold ∥ a (rotated) | standard | **axis setting** (same symbol, rotated frame) |
 | D<sub>4R</sub> (grey, e.g. of D<sub>4</sub>) | `4221'` | `4221'` | Schoenflies `D`<sub>`4R`</sub>, HM `4221'` | grey **Schoenflies** = subscript R; HM = `…1'` |
 
