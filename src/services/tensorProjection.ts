@@ -6,6 +6,9 @@
  * polynomials and lab-frame basis vectors. Also hosts a handful of small,
  * dependency-free label/formatting helpers (getIndices, getLabel, formatCoeff,
  * cleanupExpressionSigns) shared by both this module and latexFormatting.ts.
+ *
+ * @see docs/references/BIRSS-APP-CONVENTIONS-REFERENCE.md, Step 5 (tensor forms &
+ *      particularization: intrinsic symmetry = last two indices only).
  */
 
 import { type Matrix3x3, EPSILON, AXIS_EPSILON, GENERATORS, getCachedFullGroup, det, getTransformedGenerators } from './symmetryGroups';

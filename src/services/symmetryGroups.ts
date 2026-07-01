@@ -4,6 +4,10 @@
  * Group theory: 3x3 matrix algebra, the hand-curated GENERATORS table for all 122
  * magnetic point groups, group closure (with caching), and centrosymmetry / symmetry
  * operation queries derived from the closed groups.
+ *
+ * @see docs/references/BIRSS-APP-CONVENTIONS-REFERENCE.md — axis / generator conventions
+ *      (Steps 2–4) and docs/references/table-nomenclature.md — per-group operators &
+ *      generators σ(N)/σ'(N). Birss wins over ITC where they diverge.
  */
 
 /** General tolerance for tensor/coefficient/matrix comparisons. */

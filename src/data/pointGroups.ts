@@ -1,3 +1,11 @@
+/**
+ * pointGroups.ts — the point-group records (32 classical + 122 magnetic).
+ *
+ * @see docs/references/table-nomenclature.md for each group's app key → Schoenflies →
+ *      full HM → Shubnikov → operators → generators → type, and
+ *      docs/references/BIRSS-APP-CONVENTIONS-REFERENCE.md for the naming/axis conventions
+ *      (e.g. orthorhombic D₂ₕ(C₂ₕ) = `m'm'm`, not ITC `mm'm'`; grey = parent + `1'`).
+ */
 export interface PointGroupData {
   name: string;
   crystalSystem: string;

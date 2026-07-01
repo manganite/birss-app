@@ -120,6 +120,21 @@ the numeric path but never the other way round:
 
 ## Key Conventions
 
+### Convention references (authoritative — read before touching group data or tensor logic)
+Two cross-linked documents in `docs/references/` are the single source of truth for how the
+app maps onto the Birss/ITC conventions:
+- **`docs/references/BIRSS-APP-CONVENTIONS-REFERENCE.md`** — the convention contract &
+  verification ladder. Self-contained: axis orientation per crystal system, the σ(0)–σ(9)
+  generator pool, bracketed/rotated groups, tensor particularization, and a per-step
+  anti-circular test. Where Birss and ITC diverge, **Birss wins**.
+- **`docs/references/table-nomenclature.md`** — the 122-group table: app key → Schoenflies
+  → full HM → Shubnikov → symmetry operators → generators σ(N)/σ'(N) → type, with every
+  App↔Birss↔ITC divergence flagged.
+
+Together they trace the chain **app key → Schoenflies / full HM → operators / generators →
+tensor form**. All expected values are anchored to the frozen Birss tables (`birss-tables`)
+or ITC 1.5.2.3 — **never** derived from the app's own output (anti-circularity).
+
 ### Physics / Domain
 - **Tensor types**: `'ED'` (Electric Dipole, χ²), `'MD'` (Magnetic Dipole), `'EQ'` (Electric Quadrupole).
 - **Time-reversal**: `'i'` = time-even (i-type), `'c'` = time-odd (c-type). Represented by `TensorTimeReversal` in `tensorCalculator.ts`.
