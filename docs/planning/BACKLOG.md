@@ -270,13 +270,22 @@ full `npm audit`, which does not filter by scope.
 *Provenance: maintainer decision 2026-11-07, recorded in `STATUS.md` § 5 and in
 [manganite/crystallography-common#99](https://github.com/manganite/crystallography-common/issues/99).*
 
-Extract the calculations in `src/services/` (group generation, settings, property flags, tensor
-forms and their reference tests) into the shared TypeScript core, then make this app import them
-from there. Gated on the core repository existing. First step, before any extraction: an automated
-comparison of the 32 crystallographic point groups between this app and
-[manganite/stereography](https://github.com/manganite/stereography) (operations, settings, axis
-conventions, symbols), so that a convention break shows up before the core is designed. Open
-design questions live in the linked issue, not here.
+Committed, not scheduled. Extract the calculations into the shared TypeScript core, then make this
+app import them from there. Gated on the core repository existing.
+
+Scope boundary: calculations go to the core, presentation stays here. Calculations means, e.g.,
+group generation and settings (`symmetryGroups`, `linalg`), property flags, tensor forms and
+projections (`tensorForms`, `tensorProjection`, `symbolicProjection`, `trigPoly`), orientation and
+the simulator engine, together with the data modules they depend on in `src/data/` (`pointGroups`,
+`groupNotation`, `table7Data`, `sharingPartitions` …). Presentation means LaTeX formatting
+(`latexFormatting`, `trigPolyFormat`), view models (`nyeScheme`, `orientationScene`), the Explorer
+filter (`groupSearch`) and display names. The reference tests in `src/services/` and `src/data/`
+move with the code, and so do the files they re-parse at test time (`birss-tables/`,
+`docs/references/ITC-table-*.md`).
+
+Precondition, tracked in the linked issue and not here: the automated comparison of the 32
+crystallographic point groups with [manganite/stereography](https://github.com/manganite/stereography),
+run before the core is designed. Open design questions also live in the linked issue.
 
 ---
 
