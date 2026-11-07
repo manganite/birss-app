@@ -160,6 +160,16 @@ from BACKLOG gets picked up, it moves into section 1.
 
 Carried from `ROADMAP.md` and `ROADMAP-next.md`. These constrain future work.
 
+- **Shared computational core (maintainer decision, 2026-11-07).** A shared TypeScript core will
+  hold all calculations of this app and of the crystallography teaching apps
+  ([manganite/crystallography-common#99](https://github.com/manganite/crystallography-common/issues/99)):
+  own repository, English throughout, easily extensible, built so it can be distributed as a
+  standalone library. This app's `services/` layer is the starting point, because it is the most
+  complete and best verified. This app will be moved onto that core; otherwise it continues as its
+  own project. Until the core exists nothing changes here; the migration is BACKLOG § C
+  ("Move onto the shared core"). The reference tests and fixtures travel with the calculations and
+  keep their provenance rules.
+
 - **Pre-1.0 / no backwards-compatibility promise.** SemVer: MINOR for features +
   data corrections; PATCH for display-only fixes. Data-affecting changes take a
   CHANGELOG data flag.

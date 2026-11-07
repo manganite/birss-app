@@ -265,6 +265,19 @@ still holds — it was re-checked on 2026-07-31 and is clean. These 11 advisorie
 **development-scope only**, GitHub reports **0 open Dependabot alerts**, and they appear only in a
 full `npm audit`, which does not filter by scope.
 
+### Move onto the shared core — `needs-design-session`
+
+*Provenance: maintainer decision 2026-11-07, recorded in `STATUS.md` § 5 and in
+[manganite/crystallography-common#99](https://github.com/manganite/crystallography-common/issues/99).*
+
+Extract the calculations in `src/services/` (group generation, settings, property flags, tensor
+forms and their reference tests) into the shared TypeScript core, then make this app import them
+from there. Gated on the core repository existing. First step, before any extraction: an automated
+comparison of the 32 crystallographic point groups between this app and
+[manganite/stereography](https://github.com/manganite/stereography) (operations, settings, axis
+conventions, symbols), so that a convention break shows up before the core is designed. Open
+design questions live in the linked issue, not here.
+
 ---
 
 ## D. External-audit consequences
