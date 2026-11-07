@@ -158,7 +158,20 @@ from BACKLOG gets picked up, it moves into section 1.
 
 ## 5. Standing decisions (still binding)
 
-Carried from `ROADMAP.md` and `ROADMAP-next.md`. These constrain future work.
+Carried from `ROADMAP.md` and `ROADMAP-next.md`, plus later dated maintainer decisions. These
+constrain future work.
+
+- **Shared computational core (maintainer decision, 2026-11-07).** A shared TypeScript core will
+  hold the calculations of this app and of the crystallography teaching apps
+  ([manganite/crystallography-common#99](https://github.com/manganite/crystallography-common/issues/99)):
+  own repository, English throughout, easily extensible, built so it can be distributed as a
+  standalone library. In the maintainer's assessment this app's calculation layer is the most
+  complete and best verified, so it is the starting point. This app will be moved onto that core;
+  otherwise it stays a separate project and does not join the teaching-app family. **This app is on
+  hold until the core is finished** (maintainer, 2026-11-07): no new feature or calculation work
+  here in the meantime; the next step is the migration, BACKLOG § C ("Move onto the shared core"). The
+  reference tests and fixtures travel with the calculations, together with the source files they
+  re-parse, and keep their provenance rules.
 
 - **Pre-1.0 / no backwards-compatibility promise.** SemVer: MINOR for features +
   data corrections; PATCH for display-only fixes. Data-affecting changes take a
