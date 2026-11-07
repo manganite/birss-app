@@ -167,8 +167,9 @@ constrain future work.
   own repository, English throughout, easily extensible, built so it can be distributed as a
   standalone library. In the maintainer's assessment this app's calculation layer is the most
   complete and best verified, so it is the starting point. This app will be moved onto that core;
-  otherwise it stays a separate project and does not join the teaching-app family. Until the core
-  exists nothing changes here; the migration is BACKLOG § C ("Move onto the shared core"). The
+  otherwise it stays a separate project and does not join the teaching-app family. **This app is on
+  hold until the core is finished** (maintainer, 2026-11-07): no new feature or calculation work
+  here in the meantime; the next step is the migration, BACKLOG § C ("Move onto the shared core"). The
   reference tests and fixtures travel with the calculations, together with the source files they
   re-parse, and keep their provenance rules.
 
