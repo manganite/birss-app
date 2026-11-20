@@ -66,10 +66,10 @@ black-and-white (primed) rows from Table 3.
 | Tetragonal | -42'm' | -4.m' | -4 | -4 | 1, 2_z, ±-4_z, 2'_x, 2'_y, -2'_xy, -2'_-xy | σ(8) | σ'(2) |
 | Tetragonal | 4/mmm | m.4:m | - | - | 1, -1, 2_x, 2_y, 2_z, 2_xy, 2_-xy, -2_x, -2_y, -2_z, -2_xy, -2_-xy, ±4_z, ±-4_z | σ(1), σ(2), σ(7) | - |
 | Tetragonal | 4'/mmm' | m.4':m | mmm | m.2:m | 1, -1, 2_x, 2_y, 2_z, -2_x, -2_y, -2_z, 2'_xy, 2'_-xy, -2'_xy, -2'_-xy, ±4'_z, ±-4'_z | σ(1), σ(2), σ(3) | σ'(7) |
-| Tetragonal | 4/mm'm' | m.4:m' | 4/m | 4:m | 1, -1, 2_z, -2_z, ±4_z, ±-4_z, 2'_x, 2'_y, 2'_xy, 2'_-xy, -2'_x, -2'_y, -2'_xy, -2'_-xy | σ(1), σ(7) | σ'(2) |
+| Tetragonal | 4/mm'm' | m'.4:m | 4/m | 4:m | 1, -1, 2_z, -2_z, ±4_z, ±-4_z, 2'_x, 2'_y, 2'_xy, 2'_-xy, -2'_x, -2'_y, -2'_xy, -2'_-xy | σ(1), σ(7) | σ'(2) |
 | Tetragonal | 4/m'm'm' | m'.4:m' | 422 | 4:2 | 1, 2_x, 2_y, 2_z, 2_xy, 2_-xy, ±4_z, -1', -2'_x, -2'_y, -2'_z, -2'_xy, -2'_-xy, ±-4'_z | σ(2), σ(7) | σ'(1) |
-| Tetragonal | 4/m'mm | m'.4:m | 4mm | 4.m | 1, 2_z, -2_x, -2_y, -2_xy, -2_-xy, ±4_z, -1', 2'_x, 2'_y, -2'_z, 2'_xy, 2'_-xy, ±-4'_z | σ(4), σ(7) | σ'(1) |
-| Tetragonal | 4'/m'm'm | m'.4':m' | -42m | -4.m | 1, 2_x, 2_y, 2_z, -2_xy, -2_-xy, ±-4_z, -1', -2'_x, -2'_y, -2'_z, 2'_xy, 2'_-xy, ±4'_z | σ(2), σ(8) | σ'(1) |
+| Tetragonal | 4/m'mm | m.4:m' | 4mm | 4.m | 1, 2_z, -2_x, -2_y, -2_xy, -2_-xy, ±4_z, -1', 2'_x, 2'_y, -2'_z, 2'_xy, 2'_-xy, ±-4'_z | σ(4), σ(7) | σ'(1) |
+| Tetragonal | 4'/m'm'm | m.4':m' | -42m | -4.m | 1, 2_x, 2_y, 2_z, -2_xy, -2_-xy, ±-4_z, -1', -2'_x, -2'_y, -2'_z, 2'_xy, 2'_-xy, ±4'_z | σ(2), σ(8) | σ'(1) |
 | Trigonal | 3 | 3 | - | - | 1, ±3_z | σ(6) | - |
 | Trigonal | -3 | -6 | - | - | 1, -1, ±3_z, ±-3_z | σ(1), σ(6) | - |
 | Trigonal | -3' | -6' | 3 | 3 | 1, ±3_z, -1', ±-3'_z | σ(6) | σ'(1) |
@@ -100,7 +100,7 @@ black-and-white (primed) rows from Table 3.
 | Hexagonal | -6'm2' | m.3:m' | 3m | 3.m | 1, 3(-2⊥), ±3_z, 3(2'⊥), -2'_z, ±-6'_z | σ(4), σ(6) | σ'(5) |
 | Hexagonal | -6m'2' | m'.3:m | -6 | 3:m | 1, -2_z, ±3_z, ±-6_z, 3(2'⊥), 3(-2'⊥) | σ(5), σ(6) | σ'(4) |
 | Hexagonal | 6/mmm | m.6:m | - | - | 1, -1, 6(2⊥), 2_z, 6(-2⊥), -2_z, ±3_z, ±-3_z, ±6_z, ±-6_z | σ(1), σ(2), σ(3), σ(6) | - |
-| Hexagonal | 6'/m'mm' | m'.6':m' | -3m | -6.m | 1, -1, 3(2⊥), 3(-2⊥), ±3_z, ±-3_z, 3(2'⊥), 2'_z, 3(-2'⊥), -2'_z, ±6'_z, ±-6'_z | σ(1), σ(2), σ(6) | σ'(3) |
+| Hexagonal | 6'/m'mm' | m.6':m' | -3m | -6.m | 1, -1, 3(2⊥), 3(-2⊥), ±3_z, ±-3_z, 3(2'⊥), 2'_z, 3(-2'⊥), -2'_z, ±6'_z, ±-6'_z | σ(1), σ(2), σ(6) | σ'(3) |
 | Hexagonal | 6/mm'm' | m'.6:m | 6/m | 6:m | 1, -1, 2_z, -2_z, ±3_z, ±-3_z, ±6_z, ±-6_z, 6(2'⊥), 6(-2'⊥) | σ(1), σ(3), σ(6) | σ'(2) |
 | Hexagonal | 6/m'm'm' | m'.6:m' | 622 | 6:2 | 1, 6(2⊥), 2_z, ±3_z, ±6_z, -1', -2'_z, ±-3'_z, ±-6'_z, 6(-2'⊥) | σ(2), σ(3), σ(6) | σ'(1) |
 | Hexagonal | 6/m'mm | m.6:m' | 6mm | 6.m | 1, 2_z, 6(-2⊥), ±3_z, ±6_z, -1', -2'_z, 6(2'⊥), ±-3'_z, ±-6'_z | σ(3), σ(4), σ(6) | σ'(1) |
@@ -114,8 +114,8 @@ black-and-white (primed) rows from Table 3.
 | Cubic | -4'3m' | 3/-4' | 23 | 3/2 | 1, 3(2), 4(±3), 6(-2'), 3(±-4') | σ(3), σ(9) | σ'(8) |
 | Cubic | m3m | -6/4 | - | - | 1, -1, 9(2), 9(-2), 4(±3), 4(±-3), 3(±4), 3(±-4) | σ(1), σ(7), σ(9) | - |
 | Cubic | m3m' | -6/4' | m3 | -6/2 | 1, -1, 3(2), 3(-2), 4(±3), 4(±-3), 6(2'), 6(-2'), 3(±4'), 3(±-4') | σ(1), σ(3), σ(9) | σ'(7) |
-| Cubic | m'3m' | -6'/4' | 432 | 3/4 | 1, 9(2), 4(±3), 3(±4), -1', 9(-2'), 4(±-3'), 3(±-4') | σ(7), σ(9) | σ'(1) |
-| Cubic | m'3m | -6'/4 | -43m | 3/4 | 1, 3(2), 6(-2), 4(±3), 3(±-4), -1', 3(-2'), 6(2'), 4(±-3'), 3(±4') | σ(8), σ(9) | σ'(1) |
+| Cubic | m'3m' | -6'/4 | 432 | 3/4 | 1, 9(2), 4(±3), 3(±4), -1', 9(-2'), 4(±-3'), 3(±-4') | σ(7), σ(9) | σ'(1) |
+| Cubic | m'3m | -6'/4' | -43m | 3/-4 | 1, 3(2), 6(-2), 4(±3), 3(±-4), -1', 3(-2'), 6(2'), 4(±-3'), 3(±4') | σ(8), σ(9) | σ'(1) |
 
 ---
 
@@ -280,6 +280,40 @@ match both the group-theoretic derivation and the original source. This confirms
 the "2026-06 pass 3" derivation above (which covers the same rows), that the trigonal block needs no
 correction.
 
+**2026-11 pass 6 (Shubnikov columns against the print and against ITC Vol. D; one further book
+misprint)**: While the table was taken over into `symcrys` (manganite/symcrys#42, #43), all 90 rows
+were compared column by column with the scanned pages (2026-11-19). The International symbols of
+the groups and of their classical subgroups and the operator lists agree with the print in content.
+Seven Shubnikov entries did not. Birss underlines the element that is combined with time reversal;
+in these entries a prime stood on the wrong element, was superfluous or was missing, and in one an
+overbar was missing:
+- `4/mm'm'` (printed p. 94): `m.4:m'` → `m'.4:m` (book m̲·4:m), and `4/m'mm` (p. 94): `m'.4:m` →
+  `m.4:m'` (book m·4:m̲). The two symbols had been exchanged.
+- `4'/m'm'm` (p. 94): `m'.4':m'` → `m.4':m'` (book m·4̲:m̲).
+- `6'/m'mm'` (p. 96): `m'.6':m'` → `m.6':m'` (book m·6̲:m̲). The "systematic priming rules for the
+  `6/mmm` family's Shubnikov slots" of the 2026-06 pass do not give the print for this row.
+- `m'3m'` (p. 98): `-6'/4'` → `-6'/4` (book 6̲̄/4), and `m'3m` (p. 98): `-6'/4` → `-6'/4'` (book
+  6̲̄/4̲). The two symbols had been exchanged; this supersedes the two cubic entries listed under the
+  2026-06 pass above.
+- `m'3m`, classical subgroup (Shubnikov): `3/4` → `3/-4` (book 3/4̄, the symbol of `-43m`, as in
+  that group's own row and in Table 3).
+
+Independent check: with these corrections the Shubnikov symbols of all 90 rows equal those of
+ITC Vol. D (2nd ed., 2013), Table 1.5.2.3 (printed pp. 111–112), and the Shubnikov symbol of every
+classical subgroup equals that of the subgroup's own row. The ITC table is not transcribed in this
+repository; the comparison uses the transcription from page images in `manganite/symcrys`
+(`references/itc/vol-d-table-1.5.2.3.md`), where a test repeats it. No operator and no generator changed, so
+no tensor form depends on these entries.
+
+Book misprint found in the same pass (documentation only, no change):
+- `4/m'mm`, symmetry operators (p. 94): the book prints ±4̲_z (underlined, without overbar) as the
+  last operator; the table has `±-4'_z`. As printed, the row lists ±4_z twice, once among the
+  operations of its classical subgroup `4mm` and once with time reversal, which cannot happen in a
+  black-and-white group, and it has no fourfold rotoinversion although it contains `-1'` and
+  `±4_z`. The row's own generators σ(4), σ(7), σ'(1) give `±-4'_z`. The table has held the correct
+  value since the 2026-06 passes, without a record that the print differs. Sixth documented book
+  error (see `conventions-reference.md`).
+
 ## References
 
 - **Classical 32 point groups**: See Table 3
@@ -302,6 +336,10 @@ correction.
   `6'22'`, `6'mm'`, `-6m'2'`, `6'/m'mm'`.
 - **2026-07-02** (`bbe2355`): Folded a standalone independent verification of the 11 trigonal rows
   (no errors found) into this section as an inline pass note; removed the redundant standalone file.
-- **2026-07-04** (PR pending): Corrected `6'/mm'm` generator column σ(4)→σ(2), reversing the
+- **2026-07-04** (birss-app `fd4f838`): Corrected `6'/mm'm` generator column σ(4)→σ(2), reversing the
   2026-07-02 pass-5 override; book scan re-verified 2026-07-04; see rewritten pass-5 note
   (evidence: Table 7 A=(-62m), (R_n), printed σ(2)).
+- **2026-11-20** (PR #4): Book-scan verification of the Shubnikov columns (pass 6,
+  above) corrected 7 entries in 6 rows: `4/mm'm'`, `4/m'mm`, `4'/m'm'm`, `6'/m'mm'`, `m'3m'`,
+  `m'3m` (symbol and classical subgroup). Documented the book misprint in the operators of
+  `4/m'mm`.

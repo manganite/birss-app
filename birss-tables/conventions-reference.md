@@ -354,6 +354,12 @@ re-verified first-hand against maintainer-provided book scans on 2026-07-04: Tab
 the unprimed 2_y ∈ H = `-3m`, closing the printed generators wrongly yields the grey group
 `-3m1'`; see `table-6.md`'s own note); Table 7 `(-6'2m')` i-cells; Table 7 `-6m'2'` A- and c-cells.
 
+**A sixth book error, in Table 6 (found 2026-11-19).** `4/m'mm`, symmetry operators (printed
+p. 94): the book prints ±4̲_z (underlined, without overbar) as the last operator, where the row's
+generators σ(4), σ(7), σ'(1) give `±-4'_z`. As printed, ±4_z would occur with and without time
+reversal, and the row would have no fourfold rotoinversion although it contains `-1'` and `±4_z`.
+`table-6.md` has the correct value; see its pass-6 note.
+
 **Relation to Point Group Symbols:** The generating matrices provide the actual mathematical
 implementation of the symmetry operations denoted by Hermann–Mauguin and Schoenflies symbols.
 
@@ -1021,8 +1027,10 @@ materials).
 
 ## Changelog
 
-- **2026-07-04** (PR pending): Extended the documented-misprint inventory with two further book
+- **2026-07-04** (birss-app `b500e63`): Extended the documented-misprint inventory with two further book
   errors found by a full 58-row Table 7 rank-3 audit (rows `(-6'2m')` and `-6m'2'`), the
   bracket-spelling caveat (`(-4m2)` vs `(-42m)` for the identical group), and the methodological
   lesson that generator disputes must be arbitrated by Table 7's own parenthesization. All five
   documented book errors re-verified against maintainer book scans.
+- **2026-11-20** (PR #4): Added the sixth documented book error, the operator
+  ±4̲_z printed for `4/m'mm` in Table 6 (correct: `±-4'_z`).
