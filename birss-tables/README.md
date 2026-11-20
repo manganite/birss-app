@@ -30,6 +30,24 @@ This project digitises the key reference tables into clean, cross-referenced Mar
 | `table-7.md` | Magnetic point groups mapped to i-tensor and c-tensor symbol classes (extensions of the Table 4a scheme to magnetically ordered materials). |
 | `birss-itc-comparison.md` | Comparison of Birss's tables with the corresponding International Tables for Crystallography (ITC) entries. |
 
+## Corrections and book errors
+
+This repository is a reference: the tables are meant to be correct, and every difference from the
+printed book can be traced.
+
+- **Transcription errors** are corrected against the print. The file concerned records each
+  correction: a dated pass note says what was read on which printed page and why the entry
+  changed, and the file's `Changelog` section lists the change with its commit or pull request.
+- **Errors of the book itself** (misprints) are documented where they occur, with what the book
+  prints, the printed page and the evidence. In Tables 3 and 6 the table holds the corrected value;
+  in Table 7 two cells are kept as printed and marked as book errors in the notes below the table.
+  The inventory of all documented book errors is in `conventions-reference.md`.
+- A verification that found nothing is recorded as well, as a pass note with its date.
+
+The copy vendored in [birss-app](https://github.com/manganite/birss-app) (`birss-tables/`) holds
+the same tables and reference texts; the generators and generated files that sit beside them there
+(`tools/`, `table-nomenclature.md`) belong to the app and are not part of this reference.
+
 ## How to use
 
 1. Start with `conventions-reference.md` to understand the notation.

@@ -270,7 +270,7 @@ to a case where three independent book-internal signals (the printed generator, 
   correct spelling of the same group.
 - **2026-07-02** (`bbe2355`): Folded a standalone independent verification of the 11 trigonal rows
   (no errors found) into this section as an inline pass note; removed the redundant standalone file.
-- **2026-07-04** (PR pending): Added precise bracket-semantics + propagation-rule section
+- **2026-07-04** (birss-app `b500e63`): Added precise bracket-semantics + propagation-rule section
   (verified against all 58 BW rows at rank 3). Documented two book-misprint findings from that
   audit as notes (rows `(-6'2m')` and `-6m'2'`); cells left as printed (faithful transcription of
   the book's own errors, not app or transcription faults).

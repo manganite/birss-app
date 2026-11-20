@@ -92,10 +92,10 @@ Join is always by the **abstract group (Schoenflies `G(H)`)**, never the HM stri
 | Tetragonal | D<sub>2d</sub>(S<sub>4</sub>) | `-42'm'` | -42'm' | `-4.m'` | black-white (III / MP3) |  |
 | Tetragonal | D<sub>4h</sub> | `4/mmm` | 4/m 2/m 2/m | `m.4:m` | colourless (I / MP2) |  |
 | Tetragonal | D<sub>4h</sub>(D<sub>2h</sub>) | `4'/mmm'` | 4'/m 2/m 2'/m' | `m.4':m` | black-white (III / MP3) |  |
-| Tetragonal | D<sub>4h</sub>(C<sub>4h</sub>) | `4/mm'm'` | 4/m 2'/m' 2'/m' | `m.4:m'` | black-white (III / MP3) |  |
+| Tetragonal | D<sub>4h</sub>(C<sub>4h</sub>) | `4/mm'm'` | 4/m 2'/m' 2'/m' | `m'.4:m` | black-white (III / MP3) |  |
 | Tetragonal | D<sub>4h</sub>(D<sub>4</sub>) | `4/m'm'm'` | 4/m' 2/m' 2/m' | `m'.4:m'` | black-white (III / MP3) |  |
-| Tetragonal | D<sub>4h</sub>(C<sub>4v</sub>) | `4/m'mm` | 4/m' 2'/m 2'/m | `m'.4:m` | black-white (III / MP3) |  |
-| Tetragonal | D<sub>4h</sub>(D<sub>2d</sub>) | `4'/m'm'm` | 4'/m' 2/m' 2'/m | `m'.4':m'` | black-white (III / MP3) |  |
+| Tetragonal | D<sub>4h</sub>(C<sub>4v</sub>) | `4/m'mm` | 4/m' 2'/m 2'/m | `m.4:m'` | black-white (III / MP3) |  |
+| Tetragonal | D<sub>4h</sub>(D<sub>2d</sub>) | `4'/m'm'm` | 4'/m' 2/m' 2'/m | `m.4':m'` | black-white (III / MP3) |  |
 | Trigonal | C<sub>3</sub> | `3` | 3 | `3` | colourless (I / MP2) |  |
 | Trigonal | C<sub>3i</sub> | `-3` | -3 | `-6` | colourless (I / MP2) | Schoenflies: app/Birss C3i; ITC spells it S6 (S6≡C3i) |
 | Trigonal | C<sub>3i</sub>(C<sub>3</sub>) | `-3'` | -3' | `-6'` | black-white (III / MP3) | Schoenflies: ITC S6(C3) |
@@ -126,7 +126,7 @@ Join is always by the **abstract group (Schoenflies `G(H)`)**, never the HM stri
 | Hexagonal | D<sub>3h</sub>(C<sub>3v</sub>) | `-6'm2'` | -6'm2' | `m.3:m'` | black-white (III / MP3) |  |
 | Hexagonal | D<sub>3h</sub>(C<sub>3h</sub>) | `-6m'2'` | -6m'2' | `m'.3:m` | black-white (III / MP3) |  |
 | Hexagonal | D<sub>6h</sub> | `6/mmm` | 6/m 2/m 2/m | `m.6:m` | colourless (I / MP2) |  |
-| Hexagonal | D<sub>6h</sub>(D<sub>3d</sub>) | `6'/m'mm'` | 6'/m' 2/m 2'/m' | `m'.6':m'` | black-white (III / MP3) |  |
+| Hexagonal | D<sub>6h</sub>(D<sub>3d</sub>) | `6'/m'mm'` | 6'/m' 2/m 2'/m' | `m.6':m'` | black-white (III / MP3) |  |
 | Hexagonal | D<sub>6h</sub>(C<sub>6h</sub>) | `6/mm'm'` | 6/m 2'/m' 2'/m' | `m'.6:m` | black-white (III / MP3) |  |
 | Hexagonal | D<sub>6h</sub>(D<sub>6</sub>) | `6/m'm'm'` | 6/m' 2/m' 2/m' | `m'.6:m'` | black-white (III / MP3) |  |
 | Hexagonal | D<sub>6h</sub>(C<sub>6v</sub>) | `6/m'mm` | 6/m' 2'/m 2'/m | `m.6:m'` | black-white (III / MP3) |  |
@@ -140,8 +140,8 @@ Join is always by the **abstract group (Schoenflies `G(H)`)**, never the HM stri
 | Cubic | T<sub>d</sub>(T) | `-4'3m'` | -4'3m' | `3/-4'` | black-white (III / MP3) |  |
 | Cubic | O<sub>h</sub> | `m-3m` | 4/m -3 2/m | `-6/4` | colourless (I / MP2) | Birss Table 6 short = m3m (barless); app keeps bar |
 | Cubic | O<sub>h</sub>(T<sub>h</sub>) | `m-3m'` | 4'/m -3 2'/m' | `-6/4'` | black-white (III / MP3) | Birss Table 6 short = m3m'; app keeps bar |
-| Cubic | O<sub>h</sub>(O) | `m'-3'm'` | 4/m' -3' 2/m' | `-6'/4'` | black-white (III / MP3) | Birss Table 6 short = m'3m'; app keeps bar+prime |
-| Cubic | O<sub>h</sub>(T<sub>d</sub>) | `m'-3'm` | 4'/m' -3' 2'/m | `-6'/4` | black-white (III / MP3) | Birss Table 6 short = m'3m; app keeps bar+prime |
+| Cubic | O<sub>h</sub>(O) | `m'-3'm'` | 4/m' -3' 2/m' | `-6'/4` | black-white (III / MP3) | Birss Table 6 short = m'3m'; app keeps bar+prime |
+| Cubic | O<sub>h</sub>(T<sub>d</sub>) | `m'-3'm` | 4'/m' -3' 2'/m | `-6'/4'` | black-white (III / MP3) | Birss Table 6 short = m'3m; app keeps bar+prime |
 
 ## Table B — Symmetry operators & generators (Birss Table 6)
 

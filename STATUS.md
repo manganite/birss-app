@@ -127,7 +127,11 @@ snapping — A-series ledger in `TODO-next.md`).
 Series closed since the last release cut. Each release absorbs them into its own block above, so
 this list is empty immediately after a cut and grows again as work closes.
 
-_Nothing closed since v0.25.0._
+- **TBL6-S** (closed 2026-11-20) — seven Shubnikov entries of Birss Table 6 corrected against
+  the print, six of them shown in the Explorer popup since v0.18.0 (`src/data/groupNotation.ts`);
+  `birss-tables/` brought in line with manganite/birss-tables#4, which also documents a sixth
+  misprint of the book. Display only, no calculated output changed. Done during the hold of § 5 on
+  the maintainer's word (2026-11-20). Ledger: `docs/planning/LEDGER.md`, "TBL6-S".
 
 Further Tables refinements are **unscoped**, not pending: nothing is queued behind these, and
 candidates live in `docs/planning/BACKLOG.md` (the deprioritized LaTeX-copy item among them).

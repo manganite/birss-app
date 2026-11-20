@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Explorer group popup: the **Shubnikov symbol of six black-and-white groups** was wrong in every
+  version from v0.18.0, where the popup first showed it. In each the mark for time reversal sat on
+  the wrong element, was superfluous or was missing: `4/mm'm'` is `m'.4:m` (shown `m.4:m'`),
+  `4/m'mm` is `m.4:m'` (shown `m'.4:m`), `4'/m'm'm` is `m.4':m'` (shown `m'.4':m'`), `6'/m'mm'` is
+  `m.6':m'` (shown `m'.6':m'`), `m'-3'm'` is `-6'/4` (shown `-6'/4'`), and `m'-3'm` is `-6'/4'`
+  (shown `-6'/4`). The symbols now agree with the print (Birss, Table 6, pp. 94, 96, 98) and with
+  ITC Vol. D, Table 1.5.2.3. Display only: no operator, generator or tensor form depends on a
+  Shubnikov symbol, so no calculated output changes.
+- Reference tables (`birss-tables/`): Table 6 carries the same corrections with a dated note, and
+  in addition the Shubnikov symbol of the classical subgroup of `m'3m` (`3/-4`, was `3/4`). The
+  LaTeX source and the PDF now have the book's generators σ(2), σ(5), σ(6) for `6'/mm'm`, which the
+  Markdown table has had since v0.14.1, and the PDF includes the five Table 4f corrections of
+  2026-07-09. A sixth misprint of the book is documented: Table 6 prints the last operator of
+  `4/m'mm` as a fourfold rotation with time reversal where it is the rotoinversion `-4'_z`, which
+  the table already had.
+
 ## [0.25.0] - 2026-08-03
 
 ### Added
