@@ -29,6 +29,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `4/m'mm` as a fourfold rotation with time reversal where it is the rotoinversion `-4'_z`, which
   the table already had.
 
+### Security
+
+- Formula rendering upgraded from KaTeX 0.16.44 to 0.19.1, which closes
+  [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7) (prototype pollution
+  could switch on KaTeX's `trust` option). The app was not exposed — it renders only its own
+  formulas and never enables `trust` — but the vulnerable version shipped in the bundle. Formulas
+  render as before.
+
 ## [0.25.0] - 2026-08-03
 
 ### Added
