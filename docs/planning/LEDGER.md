@@ -1069,6 +1069,49 @@ is not a check.
 
 ---
 
+## Table 6 Shubnikov corrections — TBL6-S (2026-11-20)
+
+*A correction, not a series of planned work: found from outside the app, while Table 6 was taken
+over into `symcrys` (manganite/symcrys#42, #43) and compared again with the print. The maintainer
+asked for it to be corrected here during the hold of `STATUS.md` § 5 (2026-11-20); it is neither
+feature nor calculation work.*
+
+### Completed
+
+- **What was wrong.** Seven Shubnikov entries of `birss-tables/table-6.md`, in six rows: the
+  symbols of `4/mm'm'` and `4/m'mm` were exchanged, as were those of `m'3m'` and `m'3m`;
+  `4'/m'm'm` and `6'/m'mm'` had one prime too many; the classical subgroup of `m'3m` read `3/4`
+  for `3/-4`. Six of them reached the Explorer popup through `src/data/groupNotation.ts`
+  (`SHUBNIKOV`), from v0.18.0 on. Print: Birss, Table 6, pp. 94, 96, 98; second print: ITC Vol. D,
+  Table 1.5.2.3. Details and readings in `birss-tables/table-6.md`, pass-6 note.
+- **What changed.** `birss-tables/` is byte-identical with manganite/birss-tables#4 for the tables,
+  the reference texts, the LaTeX source and the PDF; `table-nomenclature.md` regenerated
+  (`npm run check:nomenclature`); the six entries of `SHUBNIKOV`; `CHANGELOG.md`. No operator, no
+  generator, no tensor form: no calculated output changed.
+- **A sixth book error.** Table 6 prints the last operator of `4/m'mm` as a fourfold rotation with
+  time reversal; the row's generators give the rotoinversion `-4'_z`, which the table had held
+  since its first commit without a record that the print differs. Now in the inventory of
+  `birss-tables/conventions-reference.md`.
+- **Also brought in line.** `birss-tables.tex` still had σ(4) for `6'/mm'm`, against
+  `table-6.md`, which has had the book's σ(2) since 2026-07-04 (`fd4f838`); and the PDF predated
+  the Table 4f corrections of 2026-07-09.
+- **Why the guards did not see it.** `groupNotation.test.ts` compares `SHUBNIKOV` with
+  `table-nomenclature.md`, which is generated from `table-6.md`: a closed loop inside the vendored
+  tables, which detects drift between them and the app, not an error they share. Only a comparison
+  with a print outside that loop finds such an error. The earlier passes over Table 6 (2026-06,
+  pass 5) had concentrated on operators and generators, where a wrong entry changes calculated
+  output; the Shubnikov column had been filled in part by "systematic priming rules", which do not
+  give the print for the `6/mmm` family.
+
+### Open
+
+- **A print gate for the Shubnikov column** (observation point, not scheduled): symcrys holds a
+  transcription of ITC Vol. D Table 1.5.2.3 and tests the Shubnikov symbols of Birss Table 6
+  against it for all 90 groups. When the app moves onto symcrys (`STATUS.md` § 5), its Shubnikov
+  symbols should come under that gate instead of the closed loop above (manganite/symcrys#19).
+
+---
+
 ## Releases
 
 *One line per release cut from 2026-07-31 on. The detail lives in `CHANGELOG.md` and in the series
