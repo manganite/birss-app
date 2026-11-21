@@ -368,7 +368,8 @@ a release (see "Cutting a release" below). **Never commit directly to `main`.**
 
 ### GitHub hygiene
 Regularly check the GitHub repository for items that need attention:
-- **PR review findings** (independent agent review, human reviewers) — address before merging.
+- **PR review findings** (independent agent review, human reviewers, and any automated reviewer
+  comments that still appear) — address before merging.
 - **Code scanning alerts** — fix promptly; CodeQL runs on every push to `main` and weekly.
 - **Dependabot alerts and PRs** — review vulnerability alerts and routine version-update PRs.
 - **Open issues** — triage and respond.
@@ -402,13 +403,15 @@ Use the merge method that fits the risk level of the change:
 |---|---|---|
 | Physics output (generators, tensor logic, group data) | **Pull request** | Gets an independent agent review, CodeQL runs pre-merge, creates auditable record for changes that affect calculated results |
 | New features, UI changes, refactors touching multiple files | **Pull request** | Benefits from an independent agent review and a visible diff summary |
+| Process or normative docs (`AGENTS.md`, `STATUS.md` § 5, `DECISION-*`, convention references) | **Pull request** | Changes the rules every later change is judged by; gets an independent agent review |
 | Chores (CI config, dependency bumps, doc formatting, typos) | **Local merge** | Low risk, no review needed, faster |
 
 **Pull request workflow:**
 ```bash
 git push -u origin feature/<short-name>
 gh pr create --title "..." --body "..."
-# Run the independent agent review (below) + wait for CI checks; address findings
+# Run the independent agent review (below); address its findings and add them with their
+# disposition to the PR body (gh pr edit --body ...); wait for CI checks
 # Merge via GitHub UI (use "Create a merge commit", not squash)
 # Delete remote branch via GitHub UI
 git switch main && git pull
@@ -416,14 +419,22 @@ git branch -d feature/<short-name>
 ```
 
 **Independent agent review** (maintainer, 2026-11-21; replaces the Copilot review, which runs into
-its usage limits too quickly to be practical). Every pull request gets one before it is reported
-or merged. The agent that did the work starts a separate agent that does not know the work: it
-gets only the repository, the branch and the purpose of the change — not the author's reasoning
-or conclusions — and checks the diff for errors, edge cases, contradictions with this file, and
-domain claims (physics, conventions, provenance) against the code and the sources. Every finding
-is verified before acting on it, then fixed or answered, and the PR description lists the findings
-and their disposition under a **Review** heading. The post-verdict rule below applies to this
-review as it did to any other.
+its usage limits too quickly to be practical; switch Copilot review off in the repository settings
+rather than leave it half-running). Every pull request gets one before the PR is handed to the
+maintainer or merged. Whoever did the work (agent or maintainer) starts a separate agent that does
+not know the work: it gets only the repository, the branch and the purpose of the change — not the
+author's reasoning or conclusions — and checks the diff for errors, edge cases, contradictions with
+this file, the standing decisions in `STATUS.md` § 5 and the convention references, and domain
+claims (physics, conventions, provenance) against the code and the sources. Every finding is
+verified before acting on it, then fixed or answered, and the PR description lists the findings
+and their disposition under a **Review** heading.
+
+How this review meets the post-verdict rule below: the branch has a **clean verdict** when the
+review leaves no unresolved *important* finding (nits may be answered instead of fixed). Fixes
+made in answer to findings are post-verdict commits — they merge without another round only under
+the four conditions below; otherwise a **fresh** independent agent reviews the delta, given the
+same three inputs plus the previous findings. The PR description's **Review** section is the
+review ledger (condition 3) and the place for the merge report (condition 4).
 
 **Post-verdict commits on an already-reviewed branch.** Once a branch has a clean review verdict,
 a further commit normally needs a delta re-review before merging. It may merge without that second
