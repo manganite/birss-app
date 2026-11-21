@@ -368,7 +368,7 @@ a release (see "Cutting a release" below). **Never commit directly to `main`.**
 
 ### GitHub hygiene
 Regularly check the GitHub repository for items that need attention:
-- **PR review comments** (Copilot, human reviewers) — address before merging.
+- **PR review findings** (independent agent review, human reviewers) — address before merging.
 - **Code scanning alerts** — fix promptly; CodeQL runs on every push to `main` and weekly.
 - **Dependabot alerts and PRs** — review vulnerability alerts and routine version-update PRs.
 - **Open issues** — triage and respond.
@@ -400,20 +400,30 @@ Use the merge method that fits the risk level of the change:
 
 | Change type | Method | Why |
 |---|---|---|
-| Physics output (generators, tensor logic, group data) | **Pull request** | Gets Copilot review, CodeQL runs pre-merge, creates auditable record for changes that affect calculated results |
-| New features, UI changes, refactors touching multiple files | **Pull request** | Benefits from automated review and a visible diff summary |
+| Physics output (generators, tensor logic, group data) | **Pull request** | Gets an independent agent review, CodeQL runs pre-merge, creates auditable record for changes that affect calculated results |
+| New features, UI changes, refactors touching multiple files | **Pull request** | Benefits from an independent agent review and a visible diff summary |
 | Chores (CI config, dependency bumps, doc formatting, typos) | **Local merge** | Low risk, no review needed, faster |
 
 **Pull request workflow:**
 ```bash
 git push -u origin feature/<short-name>
 gh pr create --title "..." --body "..."
-# Wait for Copilot review + CI checks; address comments
+# Run the independent agent review (below) + wait for CI checks; address findings
 # Merge via GitHub UI (use "Create a merge commit", not squash)
 # Delete remote branch via GitHub UI
 git switch main && git pull
 git branch -d feature/<short-name>
 ```
+
+**Independent agent review** (maintainer, 2026-11-21; replaces the Copilot review, which runs into
+its usage limits too quickly to be practical). Every pull request gets one before it is reported
+or merged. The agent that did the work starts a separate agent that does not know the work: it
+gets only the repository, the branch and the purpose of the change — not the author's reasoning
+or conclusions — and checks the diff for errors, edge cases, contradictions with this file, and
+domain claims (physics, conventions, provenance) against the code and the sources. Every finding
+is verified before acting on it, then fixed or answered, and the PR description lists the findings
+and their disposition under a **Review** heading. The post-verdict rule below applies to this
+review as it did to any other.
 
 **Post-verdict commits on an already-reviewed branch.** Once a branch has a clean review verdict,
 a further commit normally needs a delta re-review before merging. It may merge without that second
