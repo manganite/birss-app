@@ -5,7 +5,7 @@
 > **Authority:** authoritative for the current cycle. Section 1 is the ONLY list of open,
 > in-scope work; deferred ideas live in `docs/planning/BACKLOG.md`.
 
-_Last updated: 2026-08-03. Synthesises open points from the planning documents in
+_Last updated: 2026-11-21. Synthesises open points from the planning documents in
 `docs/planning/` (`ROADMAP.md` and `ROADMAP-next.md` are closed out; `TODO-next.md` is the
 frozen working-draft archive of series closed before 2026-07-31; `LEDGER.md` is the append-only
 record from that date on). See those files for derivation details, file:line anchors, and
@@ -19,7 +19,25 @@ is described in `AGENTS.md`._
 
 ---
 
-## Current release: v0.25.0 (2026-08-03)
+## Current release: v0.25.1 (2026-11-21)
+
+**The Shubnikov-symbol patch** — a PATCH cut during the hold of § 5, carrying one display
+correction and dependency maintenance. No calculated output changed.
+
+- **TBL6-S** — the **Shubnikov symbols of six black-and-white groups** in the Explorer popup were
+  wrong since v0.18.0 and now agree with the print (Birss Table 6) and ITC Vol. D Table 1.5.2.3;
+  `birss-tables/` carries the same corrections plus a seventh entry and a sixth documented misprint
+  of the book (manganite/birss-tables#4). Done during the hold on the maintainer's word
+  (2026-11-20).
+- **Dependency maintenance** (PR #134) — `npm audit` from 19 findings to 0, within the current
+  majors except **KaTeX 0.16.44 → 0.19.1** (GHSA-238p-pmpm-9mq7; the app was not exposed, but the
+  vulnerable version shipped in the bundle). Formula rendering verified pixel-identical on four of
+  five pages, sub-pixel anti-aliasing only on the fifth.
+
+Suite 2480 green. See `CHANGELOG.md` `[0.25.1]` for the user-facing detail and the TBL6-S entry in
+`docs/planning/LEDGER.md`.
+
+### v0.25.0 (2026-08-03)
 
 **The sample-orientation release** — a MINOR carrying one new capability. No calculated output
 changed.
@@ -127,11 +145,7 @@ snapping — A-series ledger in `TODO-next.md`).
 Series closed since the last release cut. Each release absorbs them into its own block above, so
 this list is empty immediately after a cut and grows again as work closes.
 
-- **TBL6-S** (closed 2026-11-20) — seven Shubnikov entries of Birss Table 6 corrected against
-  the print, six of them shown in the Explorer popup since v0.18.0 (`src/data/groupNotation.ts`);
-  `birss-tables/` brought in line with manganite/birss-tables#4, which also documents a sixth
-  misprint of the book. Display only, no calculated output changed. Done during the hold of § 5 on
-  the maintainer's word (2026-11-20). Ledger: `docs/planning/LEDGER.md`, "TBL6-S".
+_Nothing closed since v0.25.1._
 
 Further Tables refinements are **unscoped**, not pending: nothing is queued behind these, and
 candidates live in `docs/planning/BACKLOG.md` (the deprioritized LaTeX-copy item among them).
