@@ -368,8 +368,8 @@ a release (see "Cutting a release" below). **Never commit directly to `main`.**
 
 ### GitHub hygiene
 Regularly check the GitHub repository for items that need attention:
-- **PR review findings** (independent agent review, human reviewers, and any automated reviewer
-  comments that still appear) — address before merging.
+- **PR review findings** (independent agent review, human reviewers, and any comments from
+  automated reviewers such as Copilot) — address before merging.
 - **Code scanning alerts** — fix promptly; CodeQL runs on every push to `main` and weekly.
 - **Dependabot alerts and PRs** — review vulnerability alerts and routine version-update PRs.
 - **Open issues** — triage and respond.
@@ -418,11 +418,9 @@ git switch main && git pull
 git branch -d feature/<short-name>
 ```
 
-**Independent agent review** (maintainer, 2026-11-21; replaces the Copilot review, which runs into
-its usage limits too quickly to be practical). Copilot review may stay enabled in the repository
-settings; nobody requests it or waits for it, and if it does comment, its comments are handled
-like any other review finding. Every pull request gets one before the PR is handed to the
-maintainer or merged. Whoever did the work (agent or maintainer) starts a separate agent that does
+**Independent agent review** (maintainer, 2026-11-21; replaces the Copilot review as the required
+review, because Copilot runs into its usage limits too quickly to be practical). Every pull request
+gets an independent agent review before the PR is handed to the maintainer or merged. Whoever did the work (agent or maintainer) starts a separate agent that does
 not know the work: it gets only the repository, the branch and the purpose of the change — not the
 author's reasoning or conclusions — and checks the diff for errors, edge cases, contradictions with
 this file, the standing decisions in `STATUS.md` § 5 and the convention references, and domain
@@ -436,6 +434,12 @@ made in answer to findings are post-verdict commits — they merge without anoth
 the four conditions below; otherwise a **fresh** independent agent reviews the delta, given the
 same three inputs plus the previous findings. The PR description's **Review** section is the
 review ledger (condition 3) and the place for the merge report (condition 4).
+
+Copilot review may stay enabled in the repository settings, but it is not the required review:
+nobody requests it or waits for it. Any comment it does leave is handled like any other review
+finding — verified, then fixed or answered, and recorded in the **Review** section; a comment that
+arrives after a clean verdict is treated as a verdict note, and any fix for it is a post-verdict
+commit.
 
 **Post-verdict commits on an already-reviewed branch.** Once a branch has a clean review verdict,
 a further commit normally needs a delta re-review before merging. It may merge without that second
