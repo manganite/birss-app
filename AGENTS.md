@@ -419,8 +419,9 @@ git branch -d feature/<short-name>
 ```
 
 **Independent agent review** (maintainer, 2026-11-21; replaces the Copilot review, which runs into
-its usage limits too quickly to be practical; switch Copilot review off in the repository settings
-rather than leave it half-running). Every pull request gets one before the PR is handed to the
+its usage limits too quickly to be practical). Copilot review may stay enabled in the repository
+settings; nobody requests it or waits for it, and if it does comment, its comments are handled
+like any other review finding. Every pull request gets one before the PR is handed to the
 maintainer or merged. Whoever did the work (agent or maintainer) starts a separate agent that does
 not know the work: it gets only the repository, the branch and the purpose of the change — not the
 author's reasoning or conclusions — and checks the diff for errors, edge cases, contradictions with
